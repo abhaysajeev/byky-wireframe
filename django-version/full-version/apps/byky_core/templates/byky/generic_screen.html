@@ -1,0 +1,191 @@
+{% extends layout_path %}
+{% load static %}
+{% load humanize %}
+{% load byky %}
+
+{% block title %}{{ screen_title }} - {{ module_label }}{% endblock title %}
+
+{% comment %}
+Spec-driven screen. Filters, grid columns and drawer fields come from the module's
+declaration in apps/byky_core/screens.py, which mirrors the FSD field table.
+
+Rendering every list screen through one template is what keeps spacing, markup and
+behaviour identical across all 16 modules.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% if show_map %}<link rel="stylesheet" href="{% static 'vendor/libs/leaflet/leaflet.css' %}" />{% endif %}
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% if show_map %}<script src="{% static 'vendor/libs/leaflet/leaflet.js' %}"></script>{% endif %}
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
+{% if show_map %}<script src="{% static 'js/byky-map.js' %}"></script>{% endif %}
+{% endblock page_js %}
+
+{% block content %}
+{% if spec.add_label %}
+  {% include "byky/partials/page_header.html" with title=screen_title parent=module_label subtitle=purpose action_label=spec.add_label action_url=drawer_href %}
+{% else %}
+  {% include "byky/partials/page_header.html" with title=screen_title parent=module_label subtitle=purpose %}
+{% endif %}
+
+{% if show_map %}
+  {% include "byky/partials/station_map.html" with title=map_title subtitle=map_subtitle height="360px" %}
+{% endif %}
+
+{% if spec.kpis %}
+  {% include "byky/partials/kpi_row.html" with kpis=spec.kpis %}
+{% endif %}
+
+<div class="card">
+  {% if spec.filters %}
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      {% for f in spec.filters %}
+      <div class="col-md-4">
+        {% if f.kind == "text" %}
+          <input type="text" class="form-control" placeholder="{{ f.placeholder }}" />
+        {% elif f.kind == "date" %}
+          <input type="text" class="form-control byky-date" placeholder="{{ f.placeholder }}" />
+        {% else %}
+          <select class="form-select">
+            <option value="">{{ f.label }}</option>
+            {% for o in f.resolved %}<option>{{ o }}</option>{% endfor %}
+          </select>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+
+  {% if spec.columns %}
+  <div class="card-datatable table-responsive">
+    <table class="{% if rows %}datatables-generic {% endif %}table" data-search-label="Search">
+      <thead class="border-top">
+        <tr>
+          {% for c in spec.columns %}<th class="{% if c.align %}text-{{ c.align }}{% endif %}">{{ c.label }}</th>{% endfor %}
+          {% if spec.row_actions %}<th class="text-center">Actions</th>{% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in rows %}
+        <tr>
+          {% for c in spec.columns %}
+            {% with v=r|get:c.key %}
+            <td class="{% if c.align %}text-{{ c.align }}{% endif %}">
+              {% if c.style == "strong" %}<span class="fw-medium">{{ v }}</span>
+              {% elif c.style == "code" %}<code>{{ v }}</code>
+              {% elif c.style == "muted" %}<small class="text-body-secondary">{{ v }}</small>
+              {% elif c.style == "badge" %}<span class="badge bg-label-secondary">{{ v }}</span>
+              {% elif c.style == "status" %}{% include "byky/partials/status_badge.html" with status=v %}
+              {% else %}{{ v }}{% endif %}
+            </td>
+            {% endwith %}
+          {% endfor %}
+          {% if spec.row_actions %}
+          <td class="text-center">
+            <div class="d-inline-block">
+              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-end">
+                {% for a in spec.row_actions %}
+                  {% if a == "Delete" %}<div class="dropdown-divider"></div><a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+                  {% elif a == "Edit" and spec.add_label %}<a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="{{ drawer_href }}">Edit</a>
+                  {% else %}<a href="javascript:void(0);" class="dropdown-item">{{ a }}</a>{% endif %}
+                {% endfor %}
+              </div>
+            </div>
+          </td>
+          {% endif %}
+        </tr>
+        {% empty %}
+        {% comment %}
+        Columns render even with no rows, so the client can see the grid the FSD
+        specifies; the empty state names the data still needed.
+        {% endcomment %}
+        <tr>
+          <td colspan="{{ spec.columns|length|add:1 }}" class="p-0">
+            {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="card-body">
+    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+  </div>
+  {% endif %}
+
+  {% if spec.add_label %}
+  <div class="offcanvas offcanvas-end{% if spec.wide %} offcanvas-wide{% endif %}" tabindex="-1" id="{{ spec.drawer_id }}">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">{{ spec.add_label }}</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <form onsubmit="return false">
+        {% for sec in spec.sections %}
+          {% if sec.title %}<h6 class="text-body-secondary text-uppercase small mb-4">{{ sec.title }}</h6>{% endif %}
+          <div class="row g-4 mb-6">
+            {% for f in sec.fields %}
+            <div class="col-md-{{ f.width }}">
+              <label class="form-label" for="{{ f.id }}">{{ f.label }}{% if f.required %} <span class="text-danger">*</span>{% endif %}</label>
+              {% if f.kind == "select" %}
+                <select id="{{ f.id }}" class="select2 form-select">
+                  <option value="">Select</option>
+                  {% for o in f.resolved %}<option>{{ o }}</option>{% endfor %}
+                </select>
+              {% elif f.kind == "textarea" %}
+                <textarea class="form-control" id="{{ f.id }}" rows="3" placeholder="{{ f.placeholder }}"></textarea>
+              {% elif f.kind == "checkbox" %}
+                <div class="form-check mt-2">
+                  <input class="form-check-input" type="checkbox" id="{{ f.id }}" />
+                  <label class="form-check-label" for="{{ f.id }}">{{ f.placeholder|default:"Enabled" }}</label>
+                </div>
+              {% elif f.kind == "file" %}
+                <input type="file" class="form-control" id="{{ f.id }}" />
+              {% elif f.kind == "date" %}
+                <input type="text" class="form-control byky-date" id="{{ f.id }}" placeholder="{{ f.placeholder }}" />
+              {% elif f.kind == "number" %}
+                <input type="number" step="any" class="form-control" id="{{ f.id }}" placeholder="{{ f.placeholder }}" />
+              {% else %}
+                <input type="text" class="form-control" id="{{ f.id }}" placeholder="{{ f.placeholder }}" />
+              {% endif %}
+              {% if f.help %}<div class="form-text">{{ f.help }}</div>{% endif %}
+            </div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        <div class="form-check mb-6">
+          <input class="form-check-input" type="checkbox" id="{{ spec.drawer_id }}-active" checked />
+          <label class="form-check-label" for="{{ spec.drawer_id }}-active">Is Active</label>
+        </div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

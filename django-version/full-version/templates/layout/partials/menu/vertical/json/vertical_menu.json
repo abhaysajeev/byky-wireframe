@@ -1,0 +1,740 @@
+{
+ "menu": [
+  {
+   "url": "index",
+   "icon": "menu-icon icon-base ti tabler-smart-home",
+   "name": "Dashboard",
+   "slug": "index"
+  },
+  {
+   "menu_header": "Operations"
+  },
+  {
+   "name": "Company Management",
+   "icon": "menu-icon icon-base ti tabler-building",
+   "slug": "cms",
+   "badge": [
+    "label-secondary",
+    "9"
+   ],
+   "submenu": [
+    {
+     "url": "cms-company-details",
+     "name": "Company Details",
+     "slug": "cms-company-details"
+    },
+    {
+     "url": "cms-country-state-management",
+     "name": "Country & State Management",
+     "slug": "cms-country-state-management"
+    },
+    {
+     "url": "cms-core-location-management",
+     "name": "Core Location Management",
+     "slug": "cms-core-location-management"
+    },
+    {
+     "url": "cms-branch-management",
+     "name": "Branch Management",
+     "slug": "cms-branch-management"
+    },
+    {
+     "url": "cms-department-management",
+     "name": "Department Management",
+     "slug": "cms-department-management"
+    },
+    {
+     "url": "cms-branch-department-mapping",
+     "name": "Branch Department Mapping",
+     "slug": "cms-branch-department-mapping"
+    },
+    {
+     "url": "cms-station-address-mapping",
+     "name": "Station Address Mapping",
+     "slug": "cms-station-address-mapping"
+    },
+    {
+     "url": "cms-station-working-time",
+     "name": "Station Working Time",
+     "slug": "cms-station-working-time"
+    },
+    {
+     "url": "cms-cms-privilege-management",
+     "name": "CMS Privilege Management",
+     "slug": "cms-cms-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Human Resources",
+   "icon": "menu-icon icon-base ti tabler-users",
+   "slug": "hrms",
+   "badge": [
+    "label-secondary",
+    "6"
+   ],
+   "submenu": [
+    {
+     "url": "hrms-employee-personal-data",
+     "name": "Employee Personal Data",
+     "slug": "hrms-employee-personal-data"
+    },
+    {
+     "url": "hrms-employee-temporary-address",
+     "name": "Employee Temporary Address",
+     "slug": "hrms-employee-temporary-address"
+    },
+    {
+     "url": "hrms-employee-designation-master",
+     "name": "Employee Designation Master",
+     "slug": "hrms-employee-designation-master"
+    },
+    {
+     "url": "hrms-employee-grade-master",
+     "name": "Employee Grade Master",
+     "slug": "hrms-employee-grade-master"
+    },
+    {
+     "url": "hrms-employee-block-unblock",
+     "name": "Employee Block / Unblock",
+     "slug": "hrms-employee-block-unblock"
+    },
+    {
+     "url": "hrms-hrms-privileges",
+     "name": "HRMS Privileges",
+     "slug": "hrms-hrms-privileges"
+    }
+   ]
+  },
+  {
+   "name": "Inventory",
+   "icon": "menu-icon icon-base ti tabler-package",
+   "slug": "ims",
+   "badge": [
+    "label-secondary",
+    "20"
+   ],
+   "submenu": [
+    {
+     "url": "ims-inventory-stock-item-management",
+     "name": "Inventory Stock Item Management",
+     "slug": "ims-inventory-stock-item-management"
+    },
+    {
+     "url": "ims-inventory-category-master",
+     "name": "Inventory Category Master",
+     "slug": "ims-inventory-category-master"
+    },
+    {
+     "url": "ims-inventory-sub-category-master",
+     "name": "Inventory Sub-Category Master",
+     "slug": "ims-inventory-sub-category-master"
+    },
+    {
+     "url": "ims-inventory-brand-master",
+     "name": "Inventory Brand Master",
+     "slug": "ims-inventory-brand-master"
+    },
+    {
+     "url": "ims-inventory-unit-of-measure",
+     "name": "Inventory Unit of Measure",
+     "slug": "ims-inventory-unit-of-measure"
+    },
+    {
+     "url": "ims-vehicle-station-mapping",
+     "name": "Vehicle Station Mapping",
+     "slug": "ims-vehicle-station-mapping"
+    },
+    {
+     "url": "ims-vehicle-transfer-relocation",
+     "name": "Vehicle Transfer & Relocation",
+     "slug": "ims-vehicle-transfer-relocation"
+    },
+    {
+     "url": "ims-e-commerce-category-master",
+     "name": "E-Commerce Category Master",
+     "slug": "ims-e-commerce-category-master"
+    },
+    {
+     "url": "ims-e-commerce-stock-item-catalog",
+     "name": "E-Commerce Stock Item Catalog",
+     "slug": "ims-e-commerce-stock-item-catalog"
+    },
+    {
+     "url": "ims-vehicle-item-features-master",
+     "name": "Vehicle & Item Features Master",
+     "slug": "ims-vehicle-item-features-master"
+    },
+    {
+     "url": "ims-order-status-management",
+     "name": "Order Status Management",
+     "slug": "ims-order-status-management"
+    },
+    {
+     "url": "ims-promotional-coupon-discount-code",
+     "name": "Promotional Coupon & Discount Code",
+     "slug": "ims-promotional-coupon-discount-code"
+    },
+    {
+     "url": "ims-loyalty-rewards-profile",
+     "name": "Loyalty Rewards Profile",
+     "slug": "ims-loyalty-rewards-profile"
+    },
+    {
+     "url": "ims-loyalty-redemption-profile",
+     "name": "Loyalty Redemption Profile",
+     "slug": "ims-loyalty-redemption-profile"
+    },
+    {
+     "url": "ims-wallet-refund-request-management",
+     "name": "Wallet Refund Request Management",
+     "slug": "ims-wallet-refund-request-management"
+    },
+    {
+     "url": "ims-newsletter-marketing-dispatch",
+     "name": "Newsletter & Marketing Dispatch",
+     "slug": "ims-newsletter-marketing-dispatch"
+    },
+    {
+     "url": "ims-push-notification-dispatch",
+     "name": "Push Notification Dispatch",
+     "slug": "ims-push-notification-dispatch"
+    },
+    {
+     "url": "ims-live-rfid-antenna-fleet-monitoring",
+     "name": "Live RFID & Antenna Fleet Monitoring",
+     "slug": "ims-live-rfid-antenna-fleet-monitoring"
+    },
+    {
+     "url": "ims-inventory-system-alerts-exception-monitoring",
+     "name": "Inventory System Alerts & Exception Monitoring",
+     "slug": "ims-inventory-system-alerts-exception-monitoring"
+    },
+    {
+     "url": "ims-ims-security-privilege-management",
+     "name": "IMS Security Privilege Management",
+     "slug": "ims-ims-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Rental Management",
+   "icon": "menu-icon icon-base ti tabler-receipt",
+   "slug": "rms",
+   "badge": [
+    "label-secondary",
+    "9"
+   ],
+   "submenu": [
+    {
+     "url": "rms-customer-details-registration",
+     "name": "Customer Details & Registration",
+     "slug": "rms-customer-details-registration"
+    },
+    {
+     "url": "rms-customer-card-rfid-mapping",
+     "name": "Customer Card & RFID Mapping",
+     "slug": "rms-customer-card-rfid-mapping"
+    },
+    {
+     "url": "rms-customer-sanction-blacklist-management",
+     "name": "Customer Sanction & Blacklist Management",
+     "slug": "rms-customer-sanction-blacklist-management"
+    },
+    {
+     "url": "rms-vehicle-delivery-pickup-location",
+     "name": "Vehicle Delivery & Pickup Location",
+     "slug": "rms-vehicle-delivery-pickup-location"
+    },
+    {
+     "url": "rms-rental-tariff-fare-setup",
+     "name": "Rental Tariff & Fare Setup",
+     "slug": "rms-rental-tariff-fare-setup"
+    },
+    {
+     "url": "rms-sale-rates-accessory-pricing",
+     "name": "Sale Rates & Accessory Pricing",
+     "slug": "rms-sale-rates-accessory-pricing"
+    },
+    {
+     "url": "rms-vehicle-fleet-order-allocation",
+     "name": "Vehicle Fleet Order Allocation",
+     "slug": "rms-vehicle-fleet-order-allocation"
+    },
+    {
+     "url": "rms-rental-price-updates-tariff-adjustments",
+     "name": "Rental Price Updates & Tariff Adjustments",
+     "slug": "rms-rental-price-updates-tariff-adjustments"
+    },
+    {
+     "url": "rms-rms-security-privilege-management",
+     "name": "RMS Security Privilege Management",
+     "slug": "rms-rms-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Tracking & Telematics",
+   "icon": "menu-icon icon-base ti tabler-gps",
+   "slug": "tracking",
+   "badge": [
+    "label-secondary",
+    "4"
+   ],
+   "submenu": [
+    {
+     "url": "tracking-gps-iot-hardware-device-registration",
+     "name": "GPS & IoT Hardware Device Registration",
+     "slug": "tracking-gps-iot-hardware-device-registration"
+    },
+    {
+     "url": "tracking-vehicle-fleet-telematics-registry",
+     "name": "Vehicle Fleet Telematics Registry",
+     "slug": "tracking-vehicle-fleet-telematics-registry"
+    },
+    {
+     "url": "tracking-vehicle-type-specification-master",
+     "name": "Vehicle Type & Specification Master",
+     "slug": "tracking-vehicle-type-specification-master"
+    },
+    {
+     "url": "tracking-tracking-security-privilege-management",
+     "name": "TRACKING Security Privilege Management",
+     "slug": "tracking-tracking-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "RFID Gates",
+   "icon": "menu-icon icon-base ti tabler-radar",
+   "slug": "rfid",
+   "badge": [
+    "label-secondary",
+    "5"
+   ],
+   "submenu": [
+    {
+     "url": "rfid-station-antenna-gate-setup-ip-configuration",
+     "name": "Station Antenna Gate Setup & IP Configuration",
+     "slug": "rfid-station-antenna-gate-setup-ip-configuration"
+    },
+    {
+     "url": "rfid-rfid-tag-epc-encoding-vehicle-tagging",
+     "name": "RFID Tag EPC Encoding & Vehicle Tagging",
+     "slug": "rfid-rfid-tag-epc-encoding-vehicle-tagging"
+    },
+    {
+     "url": "rfid-antenna-gate-power-frequency-calibration",
+     "name": "Antenna Gate Power & Frequency Calibration",
+     "slug": "rfid-antenna-gate-power-frequency-calibration"
+    },
+    {
+     "url": "rfid-rfid-gate-event-telemetry-security-monitor",
+     "name": "RFID Gate Event Telemetry & Security Monitor",
+     "slug": "rfid-rfid-gate-event-telemetry-security-monitor"
+    },
+    {
+     "url": "rfid-rfid-security-privilege-management",
+     "name": "RFID Security Privilege Management",
+     "slug": "rfid-rfid-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "menu_header": "Business"
+  },
+  {
+   "name": "Reports",
+   "icon": "menu-icon icon-base ti tabler-report-analytics",
+   "slug": "reports",
+   "badge": [
+    "label-secondary",
+    "8"
+   ],
+   "submenu": [
+    {
+     "url": "reports-daily-rental-transaction-revenue-report",
+     "name": "Daily Rental Transaction & Revenue Report",
+     "slug": "reports-daily-rental-transaction-revenue-report"
+    },
+    {
+     "url": "reports-station-stock-inventory-valuation-report",
+     "name": "Station Stock & Inventory Valuation Report",
+     "slug": "reports-station-stock-inventory-valuation-report"
+    },
+    {
+     "url": "reports-customer-rental-history-ledger-report",
+     "name": "Customer Rental History & Ledger Report",
+     "slug": "reports-customer-rental-history-ledger-report"
+    },
+    {
+     "url": "reports-vehicle-fleet-utilization-performance-report",
+     "name": "Vehicle Fleet Utilization & Performance Report",
+     "slug": "reports-vehicle-fleet-utilization-performance-report"
+    },
+    {
+     "url": "reports-vehicle-maintenance-overhaul-audit-report",
+     "name": "Vehicle Maintenance & Overhaul Audit Report",
+     "slug": "reports-vehicle-maintenance-overhaul-audit-report"
+    },
+    {
+     "url": "reports-wallet-settlement-refund-audit-report",
+     "name": "Wallet Settlement & Refund Audit Report",
+     "slug": "reports-wallet-settlement-refund-audit-report"
+    },
+    {
+     "url": "reports-rfid-antenna-gate-read-telemetry-report",
+     "name": "RFID Antenna Gate Read Telemetry Report",
+     "slug": "reports-rfid-antenna-gate-read-telemetry-report"
+    },
+    {
+     "url": "reports-reports-security-privilege-management",
+     "name": "REPORTS Security Privilege Management",
+     "slug": "reports-reports-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Sales Force",
+   "icon": "menu-icon icon-base ti tabler-chart-line",
+   "slug": "sfa",
+   "badge": [
+    "label-secondary",
+    "6"
+   ],
+   "submenu": [
+    {
+     "url": "sfa-sales-lead-opportunity-management",
+     "name": "Sales Lead & Opportunity Management",
+     "slug": "sfa-sales-lead-opportunity-management"
+    },
+    {
+     "url": "sfa-corporate-b2b-rental-contract-setup",
+     "name": "Corporate B2B Rental Contract Setup",
+     "slug": "sfa-corporate-b2b-rental-contract-setup"
+    },
+    {
+     "url": "sfa-commercial-quotation-proposal-generator",
+     "name": "Commercial Quotation & Proposal Generator",
+     "slug": "sfa-commercial-quotation-proposal-generator"
+    },
+    {
+     "url": "sfa-sales-agent-commission-incentive-setup",
+     "name": "Sales Agent Commission & Incentive Setup",
+     "slug": "sfa-sales-agent-commission-incentive-setup"
+    },
+    {
+     "url": "sfa-sales-pipeline-target-tracking",
+     "name": "Sales Pipeline & Target Tracking",
+     "slug": "sfa-sales-pipeline-target-tracking"
+    },
+    {
+     "url": "sfa-sfa-security-privilege-management",
+     "name": "SFA Security Privilege Management",
+     "slug": "sfa-sfa-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Mobile App",
+   "icon": "menu-icon icon-base ti tabler-device-mobile",
+   "slug": "mobile",
+   "badge": [
+    "label-secondary",
+    "7"
+   ],
+   "submenu": [
+    {
+     "url": "mobile-mobile-app-home-vehicle-catalog",
+     "name": "Mobile App Home & Vehicle Catalog",
+     "slug": "mobile-mobile-app-home-vehicle-catalog"
+    },
+    {
+     "url": "mobile-mobile-vehicle-booking-station-selection",
+     "name": "Mobile Vehicle Booking & Station Selection",
+     "slug": "mobile-mobile-vehicle-booking-station-selection"
+    },
+    {
+     "url": "mobile-mobile-customer-wallet-payment-checkout",
+     "name": "Mobile Customer Wallet & Payment Checkout",
+     "slug": "mobile-mobile-customer-wallet-payment-checkout"
+    },
+    {
+     "url": "mobile-mobile-active-rental-telemetry-unlock",
+     "name": "Mobile Active Rental Telemetry & Unlock",
+     "slug": "mobile-mobile-active-rental-telemetry-unlock"
+    },
+    {
+     "url": "mobile-mobile-loyalty-rewards-coupon-redemption",
+     "name": "Mobile Loyalty Rewards & Coupon Redemption",
+     "slug": "mobile-mobile-loyalty-rewards-coupon-redemption"
+    },
+    {
+     "url": "mobile-mobile-customer-account-document-upload",
+     "name": "Mobile Customer Account & Document Upload",
+     "slug": "mobile-mobile-customer-account-document-upload"
+    },
+    {
+     "url": "mobile-rmsresponsive-mobile-app-privilege-management",
+     "name": "RmsResponsive Mobile App Privilege Management",
+     "slug": "mobile-rmsresponsive-mobile-app-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Notifications",
+   "icon": "menu-icon icon-base ti tabler-bell",
+   "slug": "notification",
+   "badge": [
+    "label-secondary",
+    "5"
+   ],
+   "submenu": [
+    {
+     "url": "notification-notification-broadcasting-template-master",
+     "name": "Notification Broadcasting & Template Master",
+     "slug": "notification-notification-broadcasting-template-master"
+    },
+    {
+     "url": "notification-system-security-alert-dispatch-monitoring",
+     "name": "System Security Alert Dispatch & Monitoring",
+     "slug": "notification-system-security-alert-dispatch-monitoring"
+    },
+    {
+     "url": "notification-sms-gateway-provider-gateway-configuration",
+     "name": "SMS Gateway Provider & Gateway Configuration",
+     "slug": "notification-sms-gateway-provider-gateway-configuration"
+    },
+    {
+     "url": "notification-email-smtp-server-html-template-setup",
+     "name": "Email SMTP Server & HTML Template Setup",
+     "slug": "notification-email-smtp-server-html-template-setup"
+    },
+    {
+     "url": "notification-notification-security-privilege-management",
+     "name": "Notification Security Privilege Management",
+     "slug": "notification-notification-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Wallet & Payments",
+   "icon": "menu-icon icon-base ti tabler-wallet",
+   "slug": "wallet",
+   "badge": [
+    "label-secondary",
+    "5"
+   ],
+   "submenu": [
+    {
+     "url": "wallet-wallet-refund-request-approval-management",
+     "name": "Wallet Refund Request & Approval Management",
+     "slug": "wallet-wallet-refund-request-approval-management"
+    },
+    {
+     "url": "wallet-payment-gateway-provider-webhook-integration",
+     "name": "Payment Gateway Provider & Webhook Integration",
+     "slug": "wallet-payment-gateway-provider-webhook-integration"
+    },
+    {
+     "url": "wallet-security-deposit-hold-refund-reconciliation",
+     "name": "Security Deposit Hold & Refund Reconciliation",
+     "slug": "wallet-security-deposit-hold-refund-reconciliation"
+    },
+    {
+     "url": "wallet-customer-wallet-ledger-transaction-audit",
+     "name": "Customer Wallet Ledger & Transaction Audit",
+     "slug": "wallet-customer-wallet-ledger-transaction-audit"
+    },
+    {
+     "url": "wallet-wallet-security-privilege-management",
+     "name": "Wallet Security Privilege Management",
+     "slug": "wallet-wallet-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "menu_header": "System"
+  },
+  {
+   "name": "Scheduler",
+   "icon": "menu-icon icon-base ti tabler-clock-cog",
+   "slug": "scheduler",
+   "badge": [
+    "label-secondary",
+    "5"
+   ],
+   "submenu": [
+    {
+     "url": "scheduler-cron-job-background-scheduler-management",
+     "name": "Cron Job & Background Scheduler Management",
+     "slug": "scheduler-cron-job-background-scheduler-management"
+    },
+    {
+     "url": "scheduler-etl-data-pipeline-database-sync",
+     "name": "ETL Data Pipeline & Database Sync",
+     "slug": "scheduler-etl-data-pipeline-database-sync"
+    },
+    {
+     "url": "scheduler-automated-system-maintenance-log-purge",
+     "name": "Automated System Maintenance & Log Purge",
+     "slug": "scheduler-automated-system-maintenance-log-purge"
+    },
+    {
+     "url": "scheduler-automated-notification-queue-dispatcher",
+     "name": "Automated Notification Queue & Dispatcher",
+     "slug": "scheduler-automated-notification-queue-dispatcher"
+    },
+    {
+     "url": "scheduler-scheduler-security-privilege-management",
+     "name": "Scheduler Security Privilege Management",
+     "slug": "scheduler-scheduler-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "System Administration",
+   "icon": "menu-icon icon-base ti tabler-settings",
+   "slug": "sysadmin",
+   "badge": [
+    "label-secondary",
+    "5"
+   ],
+   "submenu": [
+    {
+     "url": "sysadmin-global-erp-user-account-management",
+     "name": "Global ERP User Account Management",
+     "slug": "sysadmin-global-erp-user-account-management"
+    },
+    {
+     "url": "sysadmin-system-role-authority-hierarchy",
+     "name": "System Role & Authority Hierarchy",
+     "slug": "sysadmin-system-role-authority-hierarchy"
+    },
+    {
+     "url": "sysadmin-global-application-configuration-settings",
+     "name": "Global Application Configuration & Settings",
+     "slug": "sysadmin-global-application-configuration-settings"
+    },
+    {
+     "url": "sysadmin-enterprise-audit-log-compliance-viewer",
+     "name": "Enterprise Audit Log & Compliance Viewer",
+     "slug": "sysadmin-enterprise-audit-log-compliance-viewer"
+    },
+    {
+     "url": "sysadmin-system-administration-privilege-management",
+     "name": "System Administration Privilege Management",
+     "slug": "sysadmin-system-administration-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Mobile API",
+   "icon": "menu-icon icon-base ti tabler-api",
+   "slug": "api",
+   "badge": [
+    "label-secondary",
+    "5"
+   ],
+   "submenu": [
+    {
+     "url": "api-mobile-rest-api-gateway-route-registry",
+     "name": "Mobile REST API Gateway & Route Registry",
+     "slug": "api-mobile-rest-api-gateway-route-registry"
+    },
+    {
+     "url": "api-jwt-security-token-oauth-authentication-service",
+     "name": "JWT Security Token & OAuth Authentication Service",
+     "slug": "api-jwt-security-token-oauth-authentication-service"
+    },
+    {
+     "url": "api-fcm-apns-mobile-push-dispatch-engine",
+     "name": "FCM & APNS Mobile Push Dispatch Engine",
+     "slug": "api-fcm-apns-mobile-push-dispatch-engine"
+    },
+    {
+     "url": "api-third-party-api-webhook-partner-integration",
+     "name": "Third-Party API Webhook & Partner Integration",
+     "slug": "api-third-party-api-webhook-partner-integration"
+    },
+    {
+     "url": "api-mobile-api-security-privilege-management",
+     "name": "Mobile API Security Privilege Management",
+     "slug": "api-mobile-api-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "System Security",
+   "icon": "menu-icon icon-base ti tabler-shield-lock",
+   "slug": "security",
+   "badge": [
+    "label-secondary",
+    "5"
+   ],
+   "submenu": [
+    {
+     "url": "security-aes-256-data-encryption-key-rotation-manager",
+     "name": "AES-256 Data Encryption & Key Rotation Manager",
+     "slug": "security-aes-256-data-encryption-key-rotation-manager"
+    },
+    {
+     "url": "security-session-security-2fa-ip-whitelist-governance",
+     "name": "Session Security, 2FA & IP Whitelist Governance",
+     "slug": "security-session-security-2fa-ip-whitelist-governance"
+    },
+    {
+     "url": "security-database-backup-disaster-recovery-orchestrator",
+     "name": "Database Backup & Disaster Recovery Orchestrator",
+     "slug": "security-database-backup-disaster-recovery-orchestrator"
+    },
+    {
+     "url": "security-pci-dss-gdpr-compliance-audit-manager",
+     "name": "PCI-DSS & GDPR Compliance Audit Manager",
+     "slug": "security-pci-dss-gdpr-compliance-audit-manager"
+    },
+    {
+     "url": "security-system-security-privilege-management",
+     "name": "System Security Privilege Management",
+     "slug": "security-system-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Integration",
+   "icon": "menu-icon icon-base ti tabler-plug-connected",
+   "slug": "integration",
+   "badge": [
+    "label-secondary",
+    "5"
+   ],
+   "submenu": [
+    {
+     "url": "integration-global-master-data-synchronization-replication",
+     "name": "Global Master Data Synchronization & Replication",
+     "slug": "integration-global-master-data-synchronization-replication"
+    },
+    {
+     "url": "integration-data-warehouse-schema-analytical-datamarts",
+     "name": "Data Warehouse Schema & Analytical Datamarts",
+     "slug": "integration-data-warehouse-schema-analytical-datamarts"
+    },
+    {
+     "url": "integration-third-party-enterprise-api-connectors",
+     "name": "Third-Party Enterprise API Connectors",
+     "slug": "integration-third-party-enterprise-api-connectors"
+    },
+    {
+     "url": "integration-global-system-health-performance-dashboard",
+     "name": "Global System Health & Performance Dashboard",
+     "slug": "integration-global-system-health-performance-dashboard"
+    },
+    {
+     "url": "integration-final-integration-security-privilege-management",
+     "name": "Final Integration Security Privilege Management",
+     "slug": "integration-final-integration-security-privilege-management"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,95 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Inventory Sub-Category Master - Inventory{% endblock title %}
+
+{% comment %}
+FSD 3.3 -- Tier A, running on real client records. The 23 category/model pairs come from the client's Vehicle Type column.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Inventory Sub-Category Master" parent="Inventory" subtitle=purpose action_label="Add Sub-Category" action_url="#offcanvasAddSubCategory" %}
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4">
+        <select class="form-select"><option value="">All Categories</option>{% for c in categories_list %}<option>{{ c.name }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Sub-Category Code" />
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Sub-Category Name" />
+      </div>
+    </div>
+  </div>
+  <div class="card-datatable table-responsive">
+    <table class="datatables-subcategories table" data-search-label="Search sub-category">
+      <thead class="border-top"><tr><th>Parent Category</th><th>Code</th><th>Sub-Category Name</th><th>Description</th><th class="text-center">Items</th><th class="text-center">Status</th><th class="text-center">Actions</th></tr></thead>
+      <tbody>
+        {% for r in subcategories %}
+        <tr>
+          <td><span class="badge bg-label-secondary">{{ r.parent }}</span></td>
+          <td><span class="fw-medium">{{ r.code }}</span></td>
+          <td>{{ r.name }}</td>
+          <td class="text-body-secondary"><small>{{ r.description }}</small></td>
+          <td class="text-center"><span class="badge bg-label-secondary">{{ r.items }}</span></td>
+          <td class="text-center">{% include "byky/partials/status_badge.html" with status=r.status %}</td>
+          <td class="text-center">
+            <div class="d-inline-block">
+              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddSubCategory">Edit</a>
+                <div class="dropdown-divider"></div>
+                <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddSubCategory">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">Add Sub-Category</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <form onsubmit="return false">
+        <div class="mb-6"><label class="form-label" for="sub-parent">Parent Category <span class="text-danger">*</span></label><select id="sub-parent" class="select2 form-select"><option value="">Select</option>{% for c in categories_list %}<option>{{ c.name }}</option>{% endfor %}</select></div>
+        <div class="mb-6"><label class="form-label" for="sub-code">Sub-Category Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="sub-code" placeholder="" /></div>
+        <div class="mb-6"><label class="form-label" for="sub-name">Sub-Category Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="sub-name" placeholder="" /></div>
+        <div class="mb-6"><label class="form-label" for="sub-desc">Description</label><textarea class="form-control" id="sub-desc" rows="2"></textarea></div>
+        <div class="form-check mb-6"><input class="form-check-input" type="checkbox" id="offcanvasAddSubCategory-active" checked /><label class="form-check-label" for="offcanvasAddSubCategory-active">Is Active</label></div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

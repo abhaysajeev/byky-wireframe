@@ -1,0 +1,105 @@
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path(
+        "mobile/mobile-app-home-vehicle-catalog/",
+        views.Screen9_1.as_view(
+            screen_no="9.1",
+            screen_title="Mobile App Home & Vehicle Catalog",
+            module_label="Mobile App",
+            legacy_page="MobileHome.aspx",
+            tier="A",
+            phase=9,
+            purpose="To display promotional banners, nearby station rental hubs on an interactive GPS map, featured vehicle catalog (E-Bikes, Scooters, Quad Bikes), hourly rental rates, and quick booking triggers.",
+            layout="Top Header (App Logo, Station Selector, Customer Wallet Balance Badge), Promo Carousel Banner, Interactive Station Map View, Horizontal Vehicle Category Filter Cards, Vehicle Catalog Carousel, Bottom Navigation Bar (Home, Book, Active Ride, Wallet, Profile).",
+        ),
+        name="mobile-mobile-app-home-vehicle-catalog",
+    ),
+    path(
+        "mobile/mobile-vehicle-booking-station-selection/",
+        views.Screen9_2.as_view(
+            screen_no="9.2",
+            screen_title="Mobile Vehicle Booking & Station Selection",
+            module_label="Mobile App",
+            legacy_page="MobileBooking.aspx",
+            tier="A",
+            phase=9,
+            purpose="To select rental duration (Hours/Days), pick-up station, drop-off station, optional safety helmets/accessories, apply promo codes, and reserve vehicle units.",
+            layout="Vehicle Selected Summary Header, Pickup Station Dropdown, Dropoff Station Dropdown, Date & Time Picker (Start Time, End Time), Accessory Add-ons Checkboxes, Promo Code Textbox, Estimated Total AED, Confirm Reservation Button.",
+        ),
+        name="mobile-mobile-vehicle-booking-station-selection",
+    ),
+    path(
+        "mobile/mobile-customer-wallet-payment-checkout/",
+        views.Screen9_3.as_view(
+            screen_no="9.3",
+            screen_title="Mobile Customer Wallet & Payment Checkout",
+            module_label="Mobile App",
+            legacy_page="MobileWallet.aspx",
+            tier="A",
+            phase=9,
+            purpose="To top up mobile wallet balance via Apple Pay / Credit Card, settle booking payment totals, pay security deposits, and view wallet transaction history.",
+            layout="Wallet Balance Summary Header Card, Quick Top-Up Preset Buttons (AED 50, AED 100, AED 200, AED 500), Payment Method Selection (Apple Pay, Credit Card, Wallet Balance), Transaction History List View.",
+        ),
+        name="mobile-mobile-customer-wallet-payment-checkout",
+    ),
+    path(
+        "mobile/mobile-active-rental-telemetry-unlock/",
+        views.Screen9_4.as_view(
+            screen_no="9.4",
+            screen_title="Mobile Active Rental Telemetry & Unlock",
+            module_label="Mobile App",
+            legacy_page="MobileRentalTracker.aspx",
+            tier="A",
+            phase=9,
+            purpose="To display active rental ride telemetry (elapsed time, distance ridden KM, speed KM/H, battery level %), trigger Bluetooth/NFC vehicle lock release, and end rental ride.",
+            layout="Active Ride Header Banner, Live Telemetry Dashboard Gauges (Timer Clock, Speedometer, Battery Indicator), Interactive GPS Route Map, Action Buttons (Unlock Vehicle Lock, Pause Ride, End Ride & Return).",
+        ),
+        name="mobile-mobile-active-rental-telemetry-unlock",
+    ),
+    path(
+        "mobile/mobile-loyalty-rewards-coupon-redemption/",
+        views.Screen9_5.as_view(
+            screen_no="9.5",
+            screen_title="Mobile Loyalty Rewards & Coupon Redemption",
+            module_label="Mobile App",
+            legacy_page="MobileLoyalty.aspx",
+            tier="A",
+            phase=9,
+            purpose="To display customer loyalty points balance, reward tier badge (Gold VIP), active promotional coupons, and convert reward points into instant wallet credit.",
+            layout="Loyalty Summary Card (Total Points Balance, Current Tier Badge, Points to Next Tier), Available Redemption Reward Offers Grid, My Claimed Promo Coupons List.",
+        ),
+        name="mobile-mobile-loyalty-rewards-coupon-redemption",
+    ),
+    path(
+        "mobile/mobile-customer-account-document-upload/",
+        views.Screen9_6.as_view(
+            screen_no="9.6",
+            screen_title="Mobile Customer Account & Document Upload",
+            module_label="Mobile App",
+            legacy_page="MobileProfile.aspx",
+            tier="A",
+            phase=9,
+            purpose="To allow customers to update personal profile details, upload Emirates ID / Passport photos, scan driving licenses, and manage app notification preferences.",
+            layout="Customer Profile Header (Profile Photo, Full Name, Emirates ID No, Verification Status Badge), Contact Info Form, Document Upload Section (Front ID Scan, Back ID Scan, Driving License), Push Notification Toggles, Logout Button.",
+        ),
+        name="mobile-mobile-customer-account-document-upload",
+    ),
+    path(
+        "mobile/rmsresponsive-mobile-app-privilege-management/",
+        views.MobilePrivileges.as_view(
+            template_name="byky/partials/module_privileges.html",
+            screen_no="9.7",
+            screen_title="RmsResponsive Mobile App Privilege Management",
+            module_label="Mobile App",
+            legacy_page="MobilePrivilege.aspx",
+            tier="D",
+            phase=9,
+            purpose="To configure fine-grained role-based security permissions specifically for mobile API endpoints, customer self-booking permissions, wallet top-up caps, and mobile lock unlock rights.",
+            layout="Header Role Selector Dropdown, Central Privilege Checkbox Matrix Grid per Mobile Screen, Save/Reset Action Toolbar.",
+        ),
+        name="mobile-rmsresponsive-mobile-app-privilege-management",
+    ),
+]

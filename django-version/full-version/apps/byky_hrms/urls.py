@@ -1,0 +1,96 @@
+from django.urls import path
+
+from . import views
+
+urlpatterns = [
+    path(
+        "hrms/employee-personal-data/",
+        views.PersonalDataView.as_view(
+            template_name="hrms_employee_personal_data.html",
+            screen_no="2.1",
+            screen_title="Employee Personal Data",
+            module_label="Human Resources",
+            legacy_page="PersonalData.aspx",
+            tier="B",
+            phase=2,
+            purpose="To register, maintain, and inspect comprehensive employee master profiles, personal demographic data, official identity documents (Emirates ID, Passport, Labor Card), emergency contact details, photo uploads, and branch/department station placement.",
+            layout="Multi-tabbed Form Panel. Header: Employee Code, Name, Branch/Dept Selection. Tab 1: Personal & Demographic Info (DOB, Gender, Marital Status, Nationality). Tab 2: Identity Documents & Expiry Dates. Tab 3: Emergency Contact & Next of Kin. Right Side: Employee Passport Photo Upload & Live Preview.",
+        ),
+        name="hrms-employee-personal-data",
+    ),
+    path(
+        "hrms/employee-temporary-address/",
+        views.TemporaryAddressView.as_view(
+            template_name="hrms_employee_temporary_address.html",
+            screen_no="2.2",
+            screen_title="Employee Temporary Address",
+            module_label="Human Resources",
+            legacy_page="TemporaryAddress.aspx",
+            tier="A",
+            phase=2,
+            purpose="To record and track temporary residential addresses, accommodation details, hotel room assignments, and local emergency contact addresses for expatriate and seasonal staff.",
+            layout="Top Employee Search Bar, Form Panel (Address Line 1, Address Line 2, Building Name, Room/Flat No, City, State, Country, Landlord/Accommodation Contact), DataGrid showing temporary address history.",
+        ),
+        name="hrms-employee-temporary-address",
+    ),
+    path(
+        "hrms/employee-designation-master/",
+        views.DesignationView.as_view(
+            template_name="hrms_employee_designation_master.html",
+            screen_no="2.3",
+            screen_title="Employee Designation Master",
+            module_label="Human Resources",
+            legacy_page="EmployeeDesignation.aspx",
+            tier="A",
+            phase=2,
+            purpose="To define corporate job titles, designation codes, hierarchical rank levels, and operational responsibilities.",
+            layout="Form Panel (Designation Code, Designation Title, Description, Rank Order), Action Buttons, DataGrid displaying designations.",
+        ),
+        name="hrms-employee-designation-master",
+    ),
+    path(
+        "hrms/employee-grade-master/",
+        views.GradeView.as_view(
+            template_name="hrms_employee_grade_master.html",
+            screen_no="2.4",
+            screen_title="Employee Grade Master",
+            module_label="Human Resources",
+            legacy_page="EmployeeGrade.aspx",
+            tier="A",
+            phase=2,
+            purpose="To configure corporate compensation grade levels, salary bands, benefit entitlement tiers, and grade codes.",
+            layout="Form Panel (Grade Code, Grade Name, Min Salary, Max Salary), Action Toolbars, DataGrid showing configured grades.",
+        ),
+        name="hrms-employee-grade-master",
+    ),
+    path(
+        "hrms/employee-block-unblock/",
+        views.BlockUnblockView.as_view(
+            template_name="hrms_employee_block_unblock.html",
+            screen_no="2.5",
+            screen_title="Employee Block / Unblock",
+            module_label="Human Resources",
+            legacy_page="EmployeeBlockUnblock.aspx",
+            tier="A",
+            phase=2,
+            purpose="To immediately suspend or reinstate employee login credentials, revoke station terminal access, record disciplinary block reasons, and log audit trail history.",
+            layout="Staff Lookup Header, Employee Status Panel (Blocked / Active Badge), Block / Unblock Reason Form, Historical Block Log DataGrid.",
+        ),
+        name="hrms-employee-block-unblock",
+    ),
+    path(
+        "hrms/hrms-privileges/",
+        views.HrmsPrivilegeView.as_view(
+            template_name="hrms_hrms_privileges.html",
+            screen_no="2.6",
+            screen_title="HRMS Privileges",
+            module_label="Human Resources",
+            legacy_page="Privileges.aspx",
+            tier="D",
+            phase=2,
+            purpose="To configure fine-grained role-based security access controls specifically for HRMS screens, employee dossier viewing, and salary grade modifications.",
+            layout="Header Role Selector Dropdown, Central Privilege Checkbox Matrix Grid per HR Screen, Save/Reset Action Toolbar.",
+        ),
+        name="hrms-hrms-privileges",
+    ),
+]

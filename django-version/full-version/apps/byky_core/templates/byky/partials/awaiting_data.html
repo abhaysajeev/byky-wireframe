@@ -1,0 +1,20 @@
+{% comment %}
+Shown where the screen is built but the records have not been supplied yet.
+
+Keep the wording human. It should read like a colleague explaining the state of a
+project, not like a machine reporting a missing input.
+
+  {% include "byky/partials/awaiting_data.html" with needs="antenna and reader settings" %}
+{% endcomment %}
+<div class="text-center py-12">
+  <div class="avatar avatar-xl mx-auto mb-4">
+    <span class="avatar-initial rounded-circle bg-label-secondary">
+      <i class="icon-base ti tabler-inbox icon-26px"></i>
+    </span>
+  </div>
+  <h6 class="mb-1">Nothing here yet</h6>
+  <p class="mb-0 text-body-secondary">
+    {% if needs %}This screen is ready &mdash; {{ needs|lower }} will appear once added.
+    {% else %}Records will appear here once they are added.{% endif %}
+  </p>
+</div>

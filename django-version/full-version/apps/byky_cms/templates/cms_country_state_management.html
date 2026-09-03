@@ -1,0 +1,181 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Country &amp; State Management - Company Management{% endblock title %}
+
+{% comment %}
+FSD 1.2 -- Tier A. Section 17 specifies tab switching between the Country and
+State grids, each with its own form. Tabs use the Vuexy nav-pills pattern from
+apps/users/templates/app_user_view_account.html.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Country & State Management" parent="Company Management" subtitle=purpose action_label="Add Country" action_url="#offcanvasAddCountry" %}
+
+<div class="nav-align-top">
+  <ul class="nav nav-pills flex-column flex-md-row flex-wrap mb-6 row-gap-2" role="tablist">
+    <li class="nav-item">
+      <button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-country" role="tab" data-add-target="#offcanvasAddCountry" data-add-label="Add Country">
+        <i class="icon-base ti tabler-world icon-sm me-1_5"></i>Countries
+        <span class="badge bg-label-secondary ms-2">{{ countries_list|length }}</span>
+      </button>
+    </li>
+    <li class="nav-item">
+      <button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-state" role="tab" data-add-target="#offcanvasAddState" data-add-label="Add State">
+        <i class="icon-base ti tabler-map-2 icon-sm me-1_5"></i>States
+        <span class="badge bg-label-secondary ms-2">{{ states_list|length }}</span>
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content p-0">
+    <div class="tab-pane fade show active" id="tab-country" role="tabpanel">
+      <div class="card">
+        <div class="card-header border-bottom"><h5 class="card-title mb-0">Countries</h5></div>
+        <div class="card-datatable table-responsive">
+          <table class="datatables-countries table" data-search-label="Search country">
+            <thead class="border-top">
+              <tr><th>Country Code</th><th>Country Name</th><th>States</th><th class="text-center">Approval</th><th class="text-center">Actions</th></tr>
+            </thead>
+            <tbody>
+              {% for c in countries_list %}
+              <tr>
+                <td><span class="fw-medium">{{ c.code }}</span></td>
+                <td>{{ c.name }}</td>
+                <td>{{ c.states }}</td>
+                <td class="text-center">{% include "byky/partials/status_badge.html" with status=c.status %}</td>
+                <td class="text-center">
+                  <div class="d-inline-block">
+                    <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddCountry">Edit</a>
+                      <a href="javascript:void(0);" class="dropdown-item">Approve</a>
+                      <div class="dropdown-divider"></div>
+                      <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane fade" id="tab-state" role="tabpanel">
+      <div class="card">
+        <div class="card-header border-bottom"><h5 class="card-title mb-0">States</h5></div>
+        <div class="card-datatable table-responsive">
+          <table class="datatables-states table" data-search-label="Search state">
+            <thead class="border-top">
+              <tr><th>State Code</th><th>State Name</th><th>Country</th><th>Branches</th><th class="text-center">Approval</th><th class="text-center">Actions</th></tr>
+            </thead>
+            <tbody>
+              {% for s in states_list %}
+              <tr>
+                <td><span class="fw-medium">{{ s.code }}</span></td>
+                <td>{{ s.name }}</td>
+                <td>{{ s.country }}</td>
+                <td>{{ s.branches }}</td>
+                <td class="text-center">{% include "byky/partials/status_badge.html" with status=s.status %}</td>
+                <td class="text-center">
+                  <div class="d-inline-block">
+                    <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddState">Edit</a>
+                      <a href="javascript:void(0);" class="dropdown-item">Approve</a>
+                      <div class="dropdown-divider"></div>
+                      <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCountry">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title">Add Country</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-6">
+    <form onsubmit="return false">
+      <div class="mb-6">
+        <label class="form-label" for="country-code">Country Code <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="country-code" maxlength="10" placeholder="UAE" />
+      </div>
+      <div class="mb-6">
+        <label class="form-label" for="country-name">Country Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="country-name" maxlength="100" placeholder="United Arab Emirates" />
+      </div>
+      <div class="form-check mb-6">
+        <input class="form-check-input" type="checkbox" id="country-active" checked />
+        <label class="form-check-label" for="country-active">Is Active</label>
+      </div>
+      <div class="d-flex gap-4">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddState">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title">Add State</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body p-6">
+    <form onsubmit="return false">
+      <div class="mb-6">
+        <label class="form-label" for="state-country">Country <span class="text-danger">*</span></label>
+        <select id="state-country" class="form-select">
+          <option value="">Select</option>
+          {% for c in countries_list %}<option>{{ c.name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="mb-6">
+        <label class="form-label" for="state-code">State Code <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="state-code" maxlength="10" placeholder="DXB" />
+      </div>
+      <div class="mb-6">
+        <label class="form-label" for="state-name">State Name <span class="text-danger">*</span></label>
+        <input type="text" class="form-control" id="state-name" maxlength="100" placeholder="Dubai" />
+      </div>
+      <div class="form-check mb-6">
+        <input class="form-check-input" type="checkbox" id="state-active" checked />
+        <label class="form-check-label" for="state-active">Is Active</label>
+      </div>
+      <div class="d-flex gap-4">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,513 @@
+{% extends layout_path %}
+{% load static %}
+{% load i18n %}
+{% load humanize %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% comment %}
+BYKY landing dashboard. Adapted from Vuexy's dashboard_analytics -- same grid, card
+shapes, ApexCharts, Swiper and DataTable, plus a Leaflet/OpenStreetMap network map.
+
+Fleet, station and workforce figures are the client's own data (seed.py). Revenue
+figures are indicative (sales.py) because the source files carry no transactions;
+the page says so where it matters rather than implying they are actuals.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/swiper/swiper.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/leaflet/leaflet.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+{% endblock vendor_css %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/css/pages/cards-advance.css' %}" />
+{% endblock page_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+<script src="{% static 'vendor/libs/swiper/swiper.js' %}"></script>
+<script src="{% static 'vendor/libs/leaflet/leaflet.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+{{ chart_data|json_script:"byky-chart-data" }}
+<script src="{% static 'js/byky-dashboard.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="row g-6">
+
+  <!-- Business overview carousel -->
+  <div class="col-xl-6 col">
+    <div class="swiper-container swiper-container-horizontal swiper swiper-card-advance-bg" id="swiper-with-pagination-cards">
+      <div class="swiper-wrapper">
+
+        <div class="swiper-slide">
+          <div class="row">
+            <div class="col-12">
+              <h5 class="text-white mb-0">Revenue Overview</h5>
+              <small>Indicative monthly performance</small>
+            </div>
+            <div class="col-lg-8 col-md-9 col-12 order-2 order-md-1 pt-md-9">
+              <h6 class="text-white mt-0 mt-md-3 mb-4">This Month</h6>
+              <div class="row">
+                <div class="col-6">
+                  <ul class="list-unstyled mb-0">
+                    <li class="mb-4">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ sales.monthly_revenue|intcomma }}</span>
+                      <span class="d-block lh-sm mt-1">Revenue AED</span>
+                    </li>
+                    <li class="mb-0">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ sales.rentals|intcomma }}</span>
+                      <span class="d-block lh-sm mt-1">Rentals</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-6">
+                  <ul class="list-unstyled mb-0">
+                    <li class="mb-4">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ sales.daily_avg|intcomma }}</span>
+                      <span class="d-block lh-sm mt-1">Daily Avg</span>
+                    </li>
+                    <li class="mb-0">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ sales.avg_ticket }}</span>
+                      <span class="d-block lh-sm mt-1">Avg Ticket</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center d-flex align-items-center justify-content-center">
+              <i class="icon-base ti tabler-coins text-white icon-50px"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="row">
+            <div class="col-12">
+              <h5 class="text-white mb-0">Fleet Overview</h5>
+              <small>{{ vehicles|intcomma }} vehicles across {{ stations }} stations</small>
+            </div>
+            <div class="col-lg-8 col-md-9 col-12 order-2 order-md-1 pt-md-9">
+              <h6 class="text-white mt-0 mt-md-3 mb-4">Fleet</h6>
+              <div class="row">
+                <div class="col-6">
+                  <ul class="list-unstyled mb-0">
+                    <li class="mb-4">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ vehicles|intcomma }}</span>
+                      <span class="d-block lh-sm mt-1">Vehicles</span>
+                    </li>
+                    <li class="mb-0">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ categories }}</span>
+                      <span class="d-block lh-sm mt-1">Categories</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-6">
+                  <ul class="list-unstyled mb-0">
+                    <li class="mb-4">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ vehicle_types }}</span>
+                      <span class="d-block lh-sm mt-1">Models</span>
+                    </li>
+                    <li class="mb-0">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ electric }}</span>
+                      <span class="d-block lh-sm mt-1">Electric</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center d-flex align-items-center justify-content-center">
+              <i class="icon-base ti tabler-motorbike text-white icon-50px"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="swiper-slide">
+          <div class="row">
+            <div class="col-12">
+              <h5 class="text-white mb-0">Network &amp; Workforce</h5>
+              <small>{{ stations }} stations in {{ emirates }} emirates</small>
+            </div>
+            <div class="col-lg-8 col-md-9 col-12 order-2 order-md-1 pt-md-9">
+              <h6 class="text-white mt-0 mt-md-3 mb-4">Operations</h6>
+              <div class="row">
+                <div class="col-6">
+                  <ul class="list-unstyled mb-0">
+                    <li class="mb-4">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ stations }}</span>
+                      <span class="d-block lh-sm mt-1">Stations</span>
+                    </li>
+                    <li class="mb-0">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ employees }}</span>
+                      <span class="d-block lh-sm mt-1">Employees</span>
+                    </li>
+                  </ul>
+                </div>
+                <div class="col-6">
+                  <ul class="list-unstyled mb-0">
+                    <li class="mb-4">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ emirates }}</span>
+                      <span class="d-block lh-sm mt-1">Emirates</span>
+                    </li>
+                    <li class="mb-0">
+                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ avg_per_station }}</span>
+                      <span class="d-block lh-sm mt-1">Avg Fleet</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center d-flex align-items-center justify-content-center">
+              <i class="icon-base ti tabler-map-pin text-white icon-50px"></i>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+  <!--/ Business overview carousel -->
+
+  <!-- Monthly Sales -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="card h-100">
+      <div class="card-header pb-2">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h5 class="mb-1 card-title">Monthly Sales</h5>
+            <p class="mb-0 text-body-secondary small">Rolling 30 days</p>
+          </div>
+          <span class="badge bg-label-secondary">AED</span>
+        </div>
+        <h4 class="mb-1 mt-3">{{ sales.monthly_revenue|intcomma }}</h4>
+        <p class="mb-0 text-body-secondary small">
+          <i class="icon-base ti tabler-calendar-stats icon-12px me-1"></i>
+          Daily average {{ sales.daily_avg|intcomma }}
+        </p>
+      </div>
+      <div class="card-body px-0 pb-0">
+        <div id="dailySales"></div>
+      </div>
+    </div>
+  </div>
+  <!--/ Monthly Sales -->
+
+  <!-- Rentals vs Invoices -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="card h-100">
+      <div class="card-header">
+        <div class="d-flex justify-content-between">
+          <p class="mb-0 text-body">Invoices</p>
+        </div>
+        <h4 class="card-title mb-1">{{ sales.rentals|intcomma }}</h4>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-5">
+            <div class="d-flex gap-2 align-items-center mb-2">
+              <span class="badge bg-label-success p-1 rounded"><i class="icon-base ti tabler-receipt icon-sm"></i></span>
+              <p class="mb-0">Paid</p>
+            </div>
+            <h5 class="mb-0 pt-1">94%</h5>
+            <small class="text-body-secondary">{{ sales.paid_invoices|intcomma }}</small>
+          </div>
+          <div class="col-2">
+            <div class="divider divider-vertical">
+              <div class="divider-text"><span class="badge-divider-bg bg-label-secondary">VS</span></div>
+            </div>
+          </div>
+          <div class="col-5 text-end">
+            <div class="d-flex gap-2 justify-content-end align-items-center mb-2">
+              <p class="mb-0">Pending</p>
+              <span class="badge bg-label-warning p-1 rounded"><i class="icon-base ti tabler-clock icon-sm"></i></span>
+            </div>
+            <h5 class="mb-0 pt-1">6%</h5>
+            <small class="text-body-secondary">{{ sales.pending_invoices|intcomma }}</small>
+          </div>
+        </div>
+        <div class="d-flex align-items-center mt-6">
+          <div class="progress w-100" style="height: 10px;">
+            <div class="progress-bar bg-success" style="width: 94%" role="progressbar" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
+            <div class="progress-bar bg-warning" role="progressbar" style="width: 6%" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Rentals vs Invoices -->
+
+  <!-- Revenue Reports -->
+  <div class="col-md-6">
+    <div class="card h-100">
+      <div class="card-header pb-0 d-flex justify-content-between">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Revenue Reports</h5>
+          <p class="card-subtitle">Last 12 months, AED</p>
+        </div>
+        <span class="badge bg-label-secondary h-25">Indicative</span>
+      </div>
+      <div class="card-body">
+        <div class="row align-items-center g-md-8">
+          <div class="col-12 col-md-5 d-flex flex-column">
+            <div class="d-flex gap-2 align-items-center mb-3 flex-wrap">
+              <h2 class="mb-0">{{ sales.monthly_revenue|intcomma }}</h2>
+              <div class="badge rounded bg-label-secondary">AED / month</div>
+            </div>
+            <small class="text-body">Peaks in the cooler months, as leisure riding does across the Gulf.</small>
+          </div>
+          <div class="col-12 col-md-7 ps-xl-8">
+            <div id="revenueReports"></div>
+          </div>
+        </div>
+        <div class="border rounded p-5 mt-5">
+          <div class="row gap-4 gap-sm-0">
+            <div class="col-12 col-sm-4">
+              <div class="d-flex gap-2 align-items-center">
+                <div class="badge rounded bg-label-primary p-1"><i class="icon-base ti tabler-coins icon-18px"></i></div>
+                <h6 class="mb-0 fw-normal">Revenue</h6>
+              </div>
+              <h4 class="my-2">{{ sales.monthly_revenue|intcomma }}</h4>
+              <div class="progress w-75" style="height:4px"><div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div>
+            </div>
+            <div class="col-12 col-sm-4">
+              <div class="d-flex gap-2 align-items-center">
+                <div class="badge rounded bg-label-info p-1"><i class="icon-base ti tabler-receipt icon-18px"></i></div>
+                <h6 class="mb-0 fw-normal">Rentals</h6>
+              </div>
+              <h4 class="my-2">{{ sales.rentals|intcomma }}</h4>
+              <div class="progress w-75" style="height:4px"><div class="progress-bar bg-info" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div></div>
+            </div>
+            <div class="col-12 col-sm-4">
+              <div class="d-flex gap-2 align-items-center">
+                <div class="badge rounded bg-label-success p-1"><i class="icon-base ti tabler-ticket icon-18px"></i></div>
+                <h6 class="mb-0 fw-normal">Avg Ticket</h6>
+              </div>
+              <h4 class="my-2">{{ sales.avg_ticket }}</h4>
+              <div class="progress w-75" style="height:4px"><div class="progress-bar bg-success" role="progressbar" style="width: 46%" aria-valuenow="46" aria-valuemin="0" aria-valuemax="100"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Revenue Reports -->
+
+  <!-- Fleet Deployment -->
+  <div class="col-12 col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Fleet Deployment</h5>
+          <p class="card-subtitle">Stations holding stock</p>
+        </div>
+      </div>
+      <div class="card-body row">
+        <div class="col-12 col-sm-4">
+          <div class="mt-lg-4 mt-lg-2 mb-lg-6 mb-2">
+            <h2 class="mb-0">{{ stations }}</h2>
+            <p class="mb-0">Total Stations</p>
+          </div>
+          <ul class="p-0 m-0">
+            <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
+              <div class="badge rounded bg-label-success p-1_5"><i class="icon-base ti tabler-circle-check icon-md"></i></div>
+              <div><h6 class="mb-0 text-nowrap">Stocked</h6><small class="text-body-secondary">{{ stocked_stations }}</small></div>
+            </li>
+            <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
+              <div class="badge rounded bg-label-warning p-1_5"><i class="icon-base ti tabler-alert-circle icon-md"></i></div>
+              <div><h6 class="mb-0 text-nowrap">Empty</h6><small class="text-body-secondary">{{ empty_stations }}</small></div>
+            </li>
+            <li class="d-flex gap-4 align-items-center pb-1">
+              <div class="badge rounded bg-label-primary p-1_5"><i class="icon-base ti tabler-trophy icon-md"></i></div>
+              <div><h6 class="mb-0 text-nowrap">Largest</h6><small class="text-body-secondary">{{ largest_station.vehicle_count }} vehicles</small></div>
+            </li>
+          </ul>
+        </div>
+        <div class="col-12 col-md-8">
+          <div id="deploymentStatus"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Fleet Deployment -->
+
+  <!-- Station Network Map -->
+  <div class="col-xxl-8">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Station Network</h5>
+          <p class="card-subtitle">{{ stations }} stations across {{ emirates }} emirates &mdash; marker size reflects fleet</p>
+        </div>
+        <a href="{% url 'cms-station-address-mapping' %}" class="btn btn-sm btn-label-secondary">
+          <i class="icon-base ti tabler-list icon-xs me-1_5"></i>Station list
+        </a>
+      </div>
+      <div class="card-body">
+        <div id="stationMap" class="rounded" style="height: 420px;"></div>
+      </div>
+    </div>
+  </div>
+  <!--/ Station Network Map -->
+
+  <!-- Revenue by Emirate -->
+  <div class="col-xxl-4 col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Revenue by Emirate</h5>
+          <p class="card-subtitle">Indicative monthly, AED</p>
+        </div>
+      </div>
+      <div class="card-body">
+        <ul class="p-0 m-0">
+          {% for name, value in revenue_by_emirate %}
+          <li class="d-flex align-items-center {% if not forloop.last %}mb-4{% endif %}">
+            <div class="avatar flex-shrink-0 me-4">
+              <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-map-pin"></i></span>
+            </div>
+            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
+              <div class="me-2">
+                <h6 class="mb-0 me-1">{{ value|intcomma }}</h6>
+                <small class="text-body">{{ name }}</small>
+              </div>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+  <!--/ Revenue by Emirate -->
+
+  <!-- Revenue by Category -->
+  <div class="col-xxl-4 col-md-6">
+    <div class="card h-100">
+      <div class="card-header">
+        <div class="d-flex justify-content-between mb-4">
+          <h5 class="mb-0 card-title">Revenue by Category</h5>
+        </div>
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">{{ sales.monthly_revenue|intcomma }}</h4>
+          <h6 class="text-body-secondary mb-0">{{ categories }} categories</h6>
+        </div>
+      </div>
+      <div class="card-body">
+        <div id="revenueByCategory"></div>
+      </div>
+    </div>
+  </div>
+  <!--/ Revenue by Category -->
+
+  <!-- Top Stations by Revenue -->
+  <div class="col-xxl-4 col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Top Stations by Revenue</h5>
+          <p class="card-subtitle">Indicative monthly, AED</p>
+        </div>
+      </div>
+      <div class="card-body">
+        {% for s in top_stations_revenue %}
+        <div class="d-flex justify-content-between align-items-center {% if not forloop.last %}mb-5{% endif %}">
+          <div class="d-flex align-items-center">
+            <div class="avatar avatar-sm me-4">
+              <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-building-store icon-18px"></i></span>
+            </div>
+            <div>
+              <h6 class="mb-0">{{ s.name }}</h6>
+              <small class="text-body-secondary">{{ s.fleet }} vehicles</small>
+            </div>
+          </div>
+          <h6 class="mb-0">{{ s.revenue|intcomma }}</h6>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <!--/ Top Stations by Revenue -->
+
+  <!-- Workforce -->
+  <div class="col-xxl-4 col-md-6">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Workforce by Profession</h5>
+          <p class="card-subtitle">{{ employees }} employees on record</p>
+        </div>
+      </div>
+      <div class="card-body">
+        {% for role, count in by_profession %}
+        <div class="d-flex justify-content-between align-items-center {% if not forloop.last %}mb-5{% endif %}">
+          <div class="d-flex align-items-center">
+            <div class="badge rounded bg-label-{% cycle 'primary' 'info' 'success' 'warning' 'secondary' %} p-1_5">
+              <i class="icon-base ti tabler-user icon-18px"></i>
+            </div>
+            <h6 class="mb-0 ms-4">{{ role }}</h6>
+          </div>
+          <h6 class="mb-0">{{ count }}</h6>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  <!--/ Workforce -->
+
+  <!-- Recent Rental Agreements -->
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Recent Rental Agreements</h5>
+          <p class="card-subtitle">Latest activity across the network</p>
+        </div>
+        <span class="badge bg-label-secondary">Indicative</span>
+      </div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="border-top">
+            <tr>
+              <th>Agreement</th><th>Station</th><th>Vehicle</th><th>Category</th>
+              <th class="text-center">Hours</th><th class="text-end">Amount AED</th>
+              <th>Date</th><th class="text-center">Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for i in invoices %}
+            <tr>
+              <td><span class="fw-medium">{{ i.agreement }}</span></td>
+              <td>{{ i.station }}</td>
+              <td><code>{{ i.vehicle }}</code></td>
+              <td><span class="badge bg-label-secondary">{{ i.category }}</span></td>
+              <td class="text-center">{{ i.hours }}</td>
+              <td class="text-end fw-medium">{{ i.amount|intcomma }}</td>
+              <td class="text-body-secondary">{{ i.date }}</td>
+              <td class="text-center">{% include "byky/partials/status_badge.html" with status=i.status %}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="card-footer">
+        <small class="text-body-secondary">
+          Fleet, station and workforce figures come from BYKY's own records. Revenue and
+          agreement figures are indicative, pending the rental transaction export.
+        </small>
+      </div>
+    </div>
+  </div>
+  <!--/ Recent Rental Agreements -->
+
+</div>
+{% endblock %}

@@ -1,0 +1,75 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Push Notification Dispatch - Inventory{% endblock title %}
+
+{% comment %}
+FSD 3.17 -- fields, filters and defaults follow the FSD. The client's source files
+contain no records for this entity, so the grid shows the awaiting-data state
+rather than invented rows.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Push Notification Dispatch" parent="Inventory" subtitle=purpose action_label="New Push" action_url="#offcanvasAddPush" %}
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Title" />
+      </div>
+      <div class="col-md-4">
+        <select class="form-select"><option value="">All Platforms</option><option>Android (FCM)</option><option>iOS (APNs)</option><option>Both</option></select>
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control byky-date" placeholder="Dispatch date" />
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddPush">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">New Push</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <form onsubmit="return false">
+        <div class="mb-6"><label class="form-label" for="pn-title">Notification Title <span class="text-danger">*</span></label><input type="text" class="form-control" id="pn-title" placeholder="" /></div>
+        <div class="mb-6"><label class="form-label" for="pn-body">Message Body</label><textarea class="form-control" id="pn-body" rows="3"></textarea></div>
+        <div class="mb-6"><label class="form-label d-block">Platform</label><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="pn-plat" id="pn-and" checked /><label class="form-check-label" for="pn-and">Android</label></div><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="pn-plat" id="pn-ios" /><label class="form-check-label" for="pn-ios">iOS</label></div></div>
+        <div class="mb-6"><label class="form-label" for="pn-deeplink">Deep Link</label><select id="pn-deeplink" class="form-select"><option value="">Select</option><option>Home</option><option>Vehicle Catalog</option><option>Wallet</option><option>Offers</option></select></div>
+        <div class="form-check mb-6"><input class="form-check-input" type="checkbox" id="offcanvasAddPush-active" checked /><label class="form-check-label" for="offcanvasAddPush-active">Is Active</label></div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

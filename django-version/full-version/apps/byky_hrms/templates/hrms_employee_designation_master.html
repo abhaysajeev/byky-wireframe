@@ -1,0 +1,96 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Employee Designation Master - Human Resources{% endblock title %}
+
+{% comment %}
+FSD 2.3 -- Tier A. This master holds staff job titles; the client's Profession
+column is exactly that, so the 9 designations are derived from real staff records
+rather than invented. Rank Order shows the FSD section 23 default of 1 because the
+client supplied no seniority ranking.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Employee Designation Master" parent="Human Resources" subtitle=purpose action_label="Add Designation" action_url="#offcanvasAddDesignation" %}
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4"><input type="text" class="form-control" placeholder="Designation Code" /></div>
+      <div class="col-md-4"><input type="text" class="form-control" placeholder="Designation Title" /></div>
+    </div>
+  </div>
+
+  <div class="card-datatable table-responsive">
+    <table class="datatables-designations table" data-search-label="Search designation">
+      <thead class="border-top">
+        <tr>
+          <th>Code</th><th>Designation Title</th><th>Description</th>
+          <th class="text-center">Rank Order</th><th class="text-center">Headcount</th>
+          <th class="text-center">Status</th><th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for d in designations %}
+        <tr>
+          <td><span class="fw-medium">{{ d.code }}</span></td>
+          <td>{{ d.title }}</td>
+          <td class="text-body-secondary"><small>{{ d.description }}</small></td>
+          <td class="text-center">{{ d.rank }}</td>
+          <td class="text-center"><span class="badge bg-label-secondary">{{ d.headcount }}</span></td>
+          <td class="text-center">{% include "byky/partials/status_badge.html" with status=d.status %}</td>
+          <td class="text-center">
+            <div class="d-inline-block">
+              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddDesignation">Edit</a>
+                <div class="dropdown-divider"></div>
+                <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddDesignation">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">Add Designation</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <form onsubmit="return false">
+        <div class="mb-6"><label class="form-label" for="dg-code">Designation Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="dg-code" placeholder="MECH" /></div>
+        <div class="mb-6"><label class="form-label" for="dg-title">Designation Title <span class="text-danger">*</span></label><input type="text" class="form-control" id="dg-title" placeholder="Mechanic" /></div>
+        <div class="mb-6"><label class="form-label" for="dg-desc">Description</label><textarea class="form-control" id="dg-desc" rows="2"></textarea></div>
+        <div class="mb-6"><label class="form-label" for="dg-rank">Rank Order</label><input type="number" class="form-control" id="dg-rank" value="1" min="1" /></div>
+        <div class="form-check mb-6"><input class="form-check-input" type="checkbox" id="dg-active" checked /><label class="form-check-label" for="dg-active">Is Active</label></div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

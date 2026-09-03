@@ -1,0 +1,21 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}CMS Privilege Management - Company Management{% endblock title %}
+
+{% comment %}
+FSD 1.9 -- Tier D. Uses the shared privilege matrix partial, which is the same
+screen in all 16 modules. Seven permissions per screen plus Select All, per the
+FSD section 5 wireframe.
+{% endcomment %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="CMS Privilege Management" parent="Company Management" subtitle=purpose %}
+
+{% include "byky/partials/privilege_matrix.html" with roles=roles screens=screens permissions=permissions module="CMS" %}
+{% endblock %}

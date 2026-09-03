@@ -1,0 +1,90 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Station Working Time - Company Management{% endblock title %}
+
+{% comment %}
+FSD 1.8 -- not a list/form screen. Section 4 specifies a branch dropdown, a 7-row
+weekly schedule table with 8 time inputs per day (4 shifts x start/end), and a
+Save/Reset toolbar. Time inputs start empty: the client files contain no schedule.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-schedule.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Station Working Time" parent="Company Management" subtitle=purpose %}
+
+<div class="card mb-6">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Station Working Time Configuration</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-6">
+        <label class="form-label" for="wt-branch">Select Branch <span class="text-danger">*</span></label>
+        <select id="wt-branch" class="select2 form-select">
+          <option value="">Select</option>
+          {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4 d-flex align-items-end">
+        <button type="button" class="btn btn-label-secondary w-100">
+          <i class="icon-base ti tabler-refresh icon-xs me-1_5"></i>Load Existing Schedule
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <div class="alert alert-warning d-flex align-items-center" role="alert">
+      <i class="icon-base ti tabler-calendar-off icon-md me-3"></i>
+      <div>No saved schedules &mdash; the source files contain no weekly shift windows. The matrix below is ready for entry.</div>
+    </div>
+  </div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered mb-0">
+      <thead>
+        <tr>
+          <th style="min-width:120px">Day</th>
+          {% for n in shifts %}<th class="text-center" style="min-width:200px">Shift {{ n }} Start / End</th>{% endfor %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for day in days %}
+        <tr>
+          <td class="fw-medium align-middle">{{ day }}</td>
+          {% for n in shifts %}
+          <td>
+            <div class="d-flex align-items-center gap-2">
+              <input type="text" class="form-control form-control-sm shift-time" placeholder="--:--" aria-label="{{ day }} shift {{ n }} start" />
+              <span class="text-body-secondary">&ndash;</span>
+              <input type="text" class="form-control form-control-sm shift-time" placeholder="--:--" aria-label="{{ day }} shift {{ n }} end" />
+            </div>
+          </td>
+          {% endfor %}
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer d-flex gap-4">
+    <button type="button" class="btn btn-primary">Save Weekly Schedule</button>
+    <button type="button" class="btn btn-label-secondary">Reset Schedule</button>
+  </div>
+</div>
+{% endblock %}

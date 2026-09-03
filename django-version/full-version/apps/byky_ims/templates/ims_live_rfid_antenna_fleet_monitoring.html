@@ -1,0 +1,51 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Live RFID & Antenna Fleet Monitoring - Inventory{% endblock title %}
+
+{% comment %}
+FSD 3.18 -- fields, filters and defaults follow the FSD. The client's source files
+contain no records for this entity, so the grid shows the awaiting-data state
+rather than invented rows.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Live RFID & Antenna Fleet Monitoring" parent="Inventory" subtitle=purpose  %}
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4">
+        <select class="form-select"><option value="">All Station Branches</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="RFID Tag EPC" />
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+  </div>
+</div>
+{% endblock %}

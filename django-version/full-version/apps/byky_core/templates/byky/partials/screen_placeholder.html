@@ -1,0 +1,51 @@
+{% comment %}
+Placeholder for a BYKY screen that is routed and reachable but not yet built out.
+Shows the screen's real FSD identity so a walkthrough stays honest: what the screen
+is for, the layout the spec calls for, and which phase builds it.
+
+Context comes from apps/byky_core/views.py BykyScreenView.
+{% endcomment %}
+{% include "byky/partials/page_header.html" with title=screen_title parent=module_label subtitle=purpose %}
+
+<div class="row g-6">
+  <div class="col-lg-8">
+    <div class="card h-100">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Specification</h5>
+        <span class="badge rounded-pill bg-label-secondary">FSD {{ screen_no }}</span>
+      </div>
+      <div class="card-body">
+        <h6 class="text-body-secondary text-uppercase small mb-2">Purpose</h6>
+        <p>{{ purpose|default:"—" }}</p>
+        <hr class="my-4" />
+        <h6 class="text-body-secondary text-uppercase small mb-2">Specified layout</h6>
+        <p class="mb-0">{{ layout|default:"—" }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card h-100">
+      <div class="card-header"><h5 class="mb-0">Build detail</h5></div>
+      <div class="card-body">
+        <dl class="mb-0">
+          <dt class="fw-normal text-body-secondary">Screen</dt>
+          <dd class="fw-medium">{{ screen_no }} &mdash; {{ screen_title }}</dd>
+
+          <dt class="fw-normal text-body-secondary mt-4">Module</dt>
+          <dd class="fw-medium">{{ module_label }}</dd>
+
+          <dt class="fw-normal text-body-secondary mt-4">Legacy page</dt>
+          <dd><code>{{ legacy_page }}</code></dd>
+
+          <dt class="fw-normal text-body-secondary mt-4">Pattern</dt>
+          <dd><span class="badge rounded-pill bg-label-info">Tier {{ tier }}</span>
+              <span class="ms-1">{{ tier_label }}</span></dd>
+
+          <dt class="fw-normal text-body-secondary mt-4">Scheduled</dt>
+          <dd class="mb-0 fw-medium">Phase {{ phase }}</dd>
+        </dl>
+      </div>
+    </div>
+  </div>
+</div>

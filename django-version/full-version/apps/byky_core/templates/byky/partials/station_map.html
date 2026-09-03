@@ -1,0 +1,21 @@
+{% comment %}
+Station network map. Leaflet over OpenStreetMap tiles; marker size tracks the fleet
+held at each station.
+
+  {% include "byky/partials/station_map.html" with title="Fleet Distribution" subtitle="..." height="380px" %}
+
+The view must put `map_data` in context (see apps/byky_core/geo.py station_points).
+Vendor CSS/JS for leaflet must be declared in the page's vendor blocks.
+{% endcomment %}
+<div class="card mb-6">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <div class="card-title mb-0">
+      <h5 class="mb-1">{{ title|default:"Station Network" }}</h5>
+      <p class="card-subtitle">{{ subtitle }}</p>
+    </div>
+  </div>
+  <div class="card-body">
+    {{ map_data|json_script:"byky-map-data" }}
+    <div id="stationMap" class="rounded" style="height: {{ height|default:'380px' }};"></div>
+  </div>
+</div>

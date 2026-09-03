@@ -1,0 +1,9275 @@
+{
+ "stations": [
+  {
+   "code": "ST001",
+   "name": "Creek Park Gate 1",
+   "emirate": "Dubai",
+   "source": "locations",
+   "vehicle_count": 48
+  },
+  {
+   "code": "ST002",
+   "name": "Creek Park Gate 4",
+   "emirate": "Dubai",
+   "source": "locations",
+   "vehicle_count": 23
+  },
+  {
+   "code": "ST003",
+   "name": "Al Zabeel Park Gate 1",
+   "emirate": "Dubai",
+   "source": "locations",
+   "vehicle_count": 44
+  },
+  {
+   "code": "ST004",
+   "name": "Al Mamzar Park",
+   "emirate": "Dubai",
+   "source": "locations",
+   "vehicle_count": 38
+  },
+  {
+   "code": "ST005",
+   "name": "Al Barsha Pond Park",
+   "emirate": "Dubai",
+   "source": "locations",
+   "vehicle_count": 37
+  },
+  {
+   "code": "ST006",
+   "name": "Abu Dhabi Corniche 1",
+   "emirate": "Abu Dhabi",
+   "source": "locations",
+   "vehicle_count": 53
+  },
+  {
+   "code": "ST007",
+   "name": "Abu Dhabi Corniche 2",
+   "emirate": "Abu Dhabi",
+   "source": "locations",
+   "vehicle_count": 56
+  },
+  {
+   "code": "ST008",
+   "name": "Abu Dhabi Corniche 3",
+   "emirate": "Abu Dhabi",
+   "source": "locations",
+   "vehicle_count": 29
+  },
+  {
+   "code": "ST009",
+   "name": "Family Park",
+   "emirate": "Abu Dhabi",
+   "source": "locations",
+   "vehicle_count": 27
+  },
+  {
+   "code": "ST010",
+   "name": "Khalifa Square",
+   "emirate": "Abu Dhabi",
+   "source": "locations",
+   "vehicle_count": 25
+  },
+  {
+   "code": "ST011",
+   "name": "Majaz 1",
+   "emirate": "Sharjah",
+   "source": "locations",
+   "vehicle_count": 29
+  },
+  {
+   "code": "ST012",
+   "name": "Sharjah Corniche 1",
+   "emirate": "Sharjah",
+   "source": "locations",
+   "vehicle_count": 42
+  },
+  {
+   "code": "ST013",
+   "name": "Sharjah Corniche 2",
+   "emirate": "Sharjah",
+   "source": "locations",
+   "vehicle_count": 35
+  },
+  {
+   "code": "ST014",
+   "name": "Sharjah Corniche 3",
+   "emirate": "Sharjah",
+   "source": "locations",
+   "vehicle_count": 31
+  },
+  {
+   "code": "ST015",
+   "name": "Kshisha Park",
+   "emirate": "Sharjah",
+   "source": "locations",
+   "vehicle_count": 29
+  },
+  {
+   "code": "ST016",
+   "name": "Ajman Marina",
+   "emirate": "Ajman",
+   "source": "locations",
+   "vehicle_count": 24
+  },
+  {
+   "code": "ST017",
+   "name": "Alalam Park",
+   "emirate": "Ajman",
+   "source": "locations",
+   "vehicle_count": 20
+  },
+  {
+   "code": "ST018",
+   "name": "Safiya Park",
+   "emirate": "Ajman",
+   "source": "locations",
+   "vehicle_count": 23
+  },
+  {
+   "code": "ST019",
+   "name": "Fujairah Corniche",
+   "emirate": "Fujairah",
+   "source": "locations",
+   "vehicle_count": 33
+  },
+  {
+   "code": "ST020",
+   "name": "Kalba Corniche Park",
+   "emirate": "Fujairah",
+   "source": "locations",
+   "vehicle_count": 45
+  },
+  {
+   "code": "ST021",
+   "name": "Qidfa Beach",
+   "emirate": "Fujairah",
+   "source": "locations",
+   "vehicle_count": 0
+  },
+  {
+   "code": "ST022",
+   "name": "RAK Corniche 1",
+   "emirate": "Ras Al Khaimah",
+   "source": "locations",
+   "vehicle_count": 34
+  },
+  {
+   "code": "ST023",
+   "name": "Al Saqr Park",
+   "emirate": "Ras Al Khaimah",
+   "source": "locations",
+   "vehicle_count": 33
+  },
+  {
+   "code": "ST024",
+   "name": "Mina Al Arab",
+   "emirate": "Ras Al Khaimah",
+   "source": "locations",
+   "vehicle_count": 27
+  },
+  {
+   "code": "ST025",
+   "name": "Hili Archaeological Park",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 30
+  },
+  {
+   "code": "ST026",
+   "name": "Al Wadi",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 22
+  },
+  {
+   "code": "ST027",
+   "name": "Al Towayya Park",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 29
+  },
+  {
+   "code": "ST028",
+   "name": "Al Zakher Park",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 23
+  },
+  {
+   "code": "ST029",
+   "name": "Mubazzarah",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 32
+  },
+  {
+   "code": "ST030",
+   "name": "Asharij Walk Way",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 29
+  },
+  {
+   "code": "ST031",
+   "name": "Al Salamat Park",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 27
+  },
+  {
+   "code": "ST032",
+   "name": "Al Dhaher Park",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 28
+  },
+  {
+   "code": "ST033",
+   "name": "Mazyad Walkway",
+   "emirate": "Al Ain",
+   "source": "locations",
+   "vehicle_count": 24
+  },
+  {
+   "code": "ST034",
+   "name": "Ajman Corniche",
+   "emirate": "Ajman",
+   "source": "vehicles",
+   "vehicle_count": 25
+  },
+  {
+   "code": "ST035",
+   "name": "Dubai",
+   "emirate": "Dubai",
+   "source": "vehicles",
+   "vehicle_count": 2
+  },
+  {
+   "code": "ST036",
+   "name": "Hilton Kuwait Resort",
+   "emirate": "Kuwait",
+   "source": "vehicles",
+   "vehicle_count": 4
+  }
+ ],
+ "employees": [
+  {
+   "emp_no": "BYKY085",
+   "name": "Ghenwa Nabeel Alsoliman Alldhahr",
+   "profession": "General Manager"
+  },
+  {
+   "emp_no": "BYKY001",
+   "name": "Don Bosco Cyril Cyril",
+   "profession": "Administrative Supervisor"
+  },
+  {
+   "emp_no": "BYKY007",
+   "name": "Victor Stephen Stephen",
+   "profession": "Administrative Supervisor"
+  },
+  {
+   "emp_no": "BYKY010",
+   "name": "Anas Kadharmohideen Kadar Mohideen",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY027",
+   "name": "Abdul Gani Kala Meah",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY028",
+   "name": "Atar Ali Mokbul Hussain",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY049",
+   "name": "Min Bahadur Sunar",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY073",
+   "name": "Abhilash Appukuttan Ambika Appukuttan Chettiyar Sadanandan",
+   "profession": "Mechanic"
+  },
+  {
+   "emp_no": "BYKY074",
+   "name": "Manoj Kumar Mandapathingal Ramankutty Ramankutty",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY077",
+   "name": "Edwin Netto Jerald Netto",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY084",
+   "name": "Hasanuzzaman Md Din Ali",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY086",
+   "name": "Balakrishnan Kundil Kundil Vasudevan",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY088",
+   "name": "Anvar Kalamparambil Mohammed Kalamparambil",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY097",
+   "name": "Feroze Mohamud Mohammed Sadak Bhuyain",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY098",
+   "name": "Noor Hossain Norerjoma",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY099",
+   "name": "Mahesh Ottarat Mohanan Mohanan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY105",
+   "name": "Jaib Babu Babu",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY113",
+   "name": "Mohammad Ismail Hossain Suza Uddin",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY114",
+   "name": "Rasel Miah Md Ful Miah",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY119",
+   "name": "Noor Ahmed Ahmed Noor",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY129",
+   "name": "Lijo Mulakkampilly George George Mulakkampilly",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY134",
+   "name": "Anzari Kabeerkutty Kabeerkutty",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY138",
+   "name": "Syed Suhel Ali Alhaj Syed Mokoddos Ali",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY140",
+   "name": "Mohammed Hasan Fair Ahammed",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY143",
+   "name": "Mamun Ali Md Saydur Rahaman",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY153",
+   "name": "Saddam Hossain Abul Hossain",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY157",
+   "name": "Binu Kalavampara Ramu Ramu Kalavampara Krishnan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY159",
+   "name": "Ramesh Manoharan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY162",
+   "name": "Soharab Abu Yousuf",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY166",
+   "name": "Mohammed Joynal Mohammed Ishaque Meah",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY168",
+   "name": "Nithin Kumar Saleela Sivanandan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY176",
+   "name": "Abdul Kalam Azad Nur Nabi",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY177",
+   "name": "Muzammel Hoque Sohag Saydul Hoque",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY181",
+   "name": "Shadath Hossain Tazul Islam",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY185",
+   "name": "Mohd Fokrul Islam Mohd Somir Ali",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY204",
+   "name": "Manikandan Kodiyanpulakkal Raghavan Kodiyanpulakkal",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY208",
+   "name": "Sabeer Ariyannkattil Hamza Hamza Ariyankattil",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY211",
+   "name": "Shaji Puthiyaveetil Saidu Puthiyaveetil Mohamed Saidu",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY214",
+   "name": "Abdul Awal Tajul Islam",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY215",
+   "name": "Mohammed Shahidul Islam Abdur Rahim",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY216",
+   "name": "Riyasudeen Mohammed Ismail Mohammed Ismail",
+   "profession": "Store Keeper"
+  },
+  {
+   "emp_no": "BYKY218",
+   "name": "Satheeshkumar Sathyan Sathyanchellappan",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY240",
+   "name": "Navaneeth Edachery Balakrishnan Puthalath",
+   "profession": "PRO"
+  },
+  {
+   "emp_no": "BYKY259",
+   "name": "Riyas Allingal Muhammed Allingal",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY273",
+   "name": "Imran Ali Mohammad Mohammad Inayath Ali",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY282",
+   "name": "Rajesh Mandapathinkal Rajan Rajan",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY285",
+   "name": "Pradeep Jayaprakash Jayaprakash",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY287",
+   "name": "Suneesh Vazhakunnath Gopi Gopi",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY301",
+   "name": "Vibindas Chottathodi Balakrishnan Chottathodi",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY302",
+   "name": "Dil Bahadur Mahato",
+   "profession": "Mechanic"
+  },
+  {
+   "emp_no": "BYKY304",
+   "name": "Silas Mahato",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY308",
+   "name": "Mohammed Ifteqar Mohammed Khasim",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY309",
+   "name": "Shaik Taoofiq Ahmed Shaik Allah Bakhsh",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY314",
+   "name": "Shaik Mahboob Uddin Shaik Nizam Uddin",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY320",
+   "name": "Manu Gopakumari Mohanakumar Kuttan Pillai Mohankumar",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY322",
+   "name": "Ratheesh Parapuliyath Thupran Parapuliyath",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY323",
+   "name": "Abubekkar Vahab Vahab",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY324",
+   "name": "Akila Madushanka Babaragama Dewage",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY326",
+   "name": "Ratheesh Pothezhath Raveendran Raveendran",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY327",
+   "name": "Sumesh Ramamoorthy Ramamoorthy",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY330",
+   "name": "Vichu Vincent Vincent",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY331",
+   "name": "Vipin Vincent Vincent",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY332",
+   "name": "Sharo Ottaratt Shaji Shaji Ottaratt Rajan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY333",
+   "name": "Rajesh Rajendran Rajendran Velayudhan",
+   "profession": "Cashier"
+  },
+  {
+   "emp_no": "BYKY340",
+   "name": "Laxman Sunar",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY344",
+   "name": "Ashir Hashim Hashim Shahul Hameed",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY346",
+   "name": "Al Ameen Shafi Shafi Shajahan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY350",
+   "name": "Saleesh Valathara Ullas Ullas",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY351",
+   "name": "Vibin Perath Unnikrishnan Unnikrishnan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY354",
+   "name": "Hidhin Thevalil Dinesan Dinesan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY355",
+   "name": "Shasi Lasantha Molligoda Arachchige",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY360",
+   "name": "Vishak Vijayan Vijayan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY388",
+   "name": "Shekha Hazoor Bakhsh",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY392",
+   "name": "Omar Faruk Mofij Ulla",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY394",
+   "name": "Syed Kamrul Hasan Iqbal",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY408",
+   "name": "Md Masum Billah Late Md Ali Asharf",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY409",
+   "name": "Najrul Islam Nurul Islam",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY411",
+   "name": "Mir Hosen Nurujjaman",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY412",
+   "name": "Aneesh Pambinkavuparambil Puthan Veedu Velu Pambinkavu Parambil Puthan Veedu",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY413",
+   "name": "Md Sajib Miah Md Dulal Mia",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY423",
+   "name": "Shibin Chalil Veedu Balakrishnan Pothera Veettil",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY425",
+   "name": "Tajul Islam Nurul Islam",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY428",
+   "name": "Mouza Hazoor Bakhsh",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY429",
+   "name": "Sogha Mohamed Obaid Ali Alhefeiti",
+   "profession": "Customer Service Clerk"
+  },
+  {
+   "emp_no": "BYKY432",
+   "name": "Deepak Pookkottil Madhu Madhu Pookkottil Appunni",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY433",
+   "name": "Nidhin Das Maniyottupadikkal Devadas Maniyottupadikkal",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY436",
+   "name": "Ahnas Asharaf Asharaf Soudha Beevi",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY440",
+   "name": "Anetta Sunny Sunny Payyampallil Devasia",
+   "profession": "Assistant Accountant"
+  },
+  {
+   "emp_no": "BYKY443",
+   "name": "Ajith Varghese Aniyan Kunju Aniyan Kunju",
+   "profession": "Assistant Accountant"
+  },
+  {
+   "emp_no": "BYKY446",
+   "name": "Amal Krishna Pullarkatt Pradeepan Pradeepan Pullarkatt Karthikeyan",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY450",
+   "name": "Shafas Ummar Moolamkanni Ammu Moolamkanni Ummar",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY451",
+   "name": "Ann Mariya Kolamkanni Vincent Vincent Kolamkanni Varghese",
+   "profession": "Assistant Accountant"
+  },
+  {
+   "emp_no": "BYKY453",
+   "name": "Althaf Shafi Shafi",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY455",
+   "name": "Kanishka Piumal Heendeliye Kankanamge",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY457",
+   "name": "Nirmal Shashintha Kandawalage",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY458",
+   "name": "Pathum Hansa Perera Koralaye Gedara",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY461",
+   "name": "Maryam Ali Rashed Binshahein Alhefeiti",
+   "profession": "Administrative Supervisor"
+  },
+  {
+   "emp_no": "BYKY462",
+   "name": "Kareemullah Sameeullah Sameeullah Timiri Abdullah",
+   "profession": "Labour"
+  },
+  {
+   "emp_no": "BYKY463",
+   "name": "Maryam Saeed Obaid Ali Alhmoudi",
+   "profession": "Customer Service Clerk"
+  }
+ ],
+ "vehicles": [
+  {
+   "number": "KB113",
+   "barcode": "10113",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "KB139",
+   "barcode": "10139",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "KB140",
+   "barcode": "10140",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "KB141",
+   "barcode": "10141",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "KB142",
+   "barcode": "10142",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BE258",
+   "barcode": "40258",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BE259",
+   "barcode": "40259",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BE323",
+   "barcode": "40323",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BE324",
+   "barcode": "40324",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BE325",
+   "barcode": "40325",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BE326",
+   "barcode": "40326",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BE327",
+   "barcode": "40327",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BE328",
+   "barcode": "40328",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "DC11",
+   "barcode": "3211",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "DC12",
+   "barcode": "3212",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "DC13",
+   "barcode": "3213",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "DC14",
+   "barcode": "3214",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "DC17",
+   "barcode": "3217",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "DC18",
+   "barcode": "3218",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "DC19",
+   "barcode": "3219",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "DC20",
+   "barcode": "3220",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BL11",
+   "barcode": "25011",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BL12",
+   "barcode": "25012",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BL13",
+   "barcode": "25013",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BL14",
+   "barcode": "25014",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "BL15",
+   "barcode": "25015",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "JR11",
+   "barcode": "2411",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "JR12",
+   "barcode": "2412",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "JR13",
+   "barcode": "2413",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "JR39",
+   "barcode": "JR39",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "XP33",
+   "barcode": "2133",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "XP34",
+   "barcode": "2134",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "TW4819",
+   "barcode": "254819",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "TW5064",
+   "barcode": "5064",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "TW5862",
+   "barcode": "5862",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "TW5955",
+   "barcode": "255955",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "TW6051",
+   "barcode": "6051",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "TW6137",
+   "barcode": "256137",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "XP35",
+   "barcode": "2135",
+   "category": "Byky",
+   "vtype": "Xplorer",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "XP36",
+   "barcode": "2136",
+   "category": "Byky",
+   "vtype": "Xplorer",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "XP37",
+   "barcode": "2137",
+   "category": "Byky",
+   "vtype": "Xplorer",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "ES04",
+   "barcode": "ES 04",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "ED24",
+   "barcode": "ed 24",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "ED40",
+   "barcode": "ED 40",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "ED43",
+   "barcode": "ED 43",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "VI27",
+   "barcode": "VI 27",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "VI28",
+   "barcode": "VI 28",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "VI13",
+   "barcode": "VI 13",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "VI14",
+   "barcode": "VI 14",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "SPTW4944",
+   "barcode": "4944",
+   "category": "Special Offer",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "SPTW4975",
+   "barcode": "fguhkkl",
+   "category": "Special Offer",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "STE5955",
+   "barcode": "Stw5955",
+   "category": "Special Offer",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "STW5862",
+   "barcode": "Stw5862",
+   "category": "Special Offer",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 1",
+   "station_code": "ST006"
+  },
+  {
+   "number": "KB116",
+   "barcode": "10116",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB117",
+   "barcode": "10117",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB118",
+   "barcode": "10118",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB125",
+   "barcode": "10125",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB19",
+   "barcode": "1019",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB218",
+   "barcode": "10218",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB220",
+   "barcode": "10220",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB223",
+   "barcode": "10223",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB267",
+   "barcode": "10267",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB270",
+   "barcode": "10270",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE252",
+   "barcode": "40252",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE253",
+   "barcode": "40253",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE254",
+   "barcode": "40254",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE255",
+   "barcode": "40255",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE256",
+   "barcode": "40256",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE257",
+   "barcode": "40257",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE260",
+   "barcode": "40260",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE261",
+   "barcode": "40261",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE262",
+   "barcode": "40262",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE263",
+   "barcode": "40263",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BE264",
+   "barcode": "40264",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH354",
+   "barcode": "30354",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH355",
+   "barcode": "30355",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH356",
+   "barcode": "30356",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH357",
+   "barcode": "30357",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH358",
+   "barcode": "30358",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH359",
+   "barcode": "30359",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH360",
+   "barcode": "30360",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH361",
+   "barcode": "30361",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH362",
+   "barcode": "30362",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH363",
+   "barcode": "30363",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH364",
+   "barcode": "30364",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH365",
+   "barcode": "30365",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CH366",
+   "barcode": "30366",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BL34",
+   "barcode": "BL34",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BL36",
+   "barcode": "BL36",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "BL37",
+   "barcode": "BL37",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CR11",
+   "barcode": "CR11",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CR12",
+   "barcode": "CR12",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "CR13",
+   "barcode": "CR13",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "JR14",
+   "barcode": "2414",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "JR35",
+   "barcode": "JR35",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "JR36",
+   "barcode": "JR36",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "JR37",
+   "barcode": "JR37",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "JR38",
+   "barcode": "JR38",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "XP63",
+   "barcode": "2163",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "XP64",
+   "barcode": "2164",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "XP65",
+   "barcode": "2165",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "ES01",
+   "barcode": "ES 01",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "ED22",
+   "barcode": "ed 22",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "ED30",
+   "barcode": "ED 30",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "ED34",
+   "barcode": "ED 34",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "VI29",
+   "barcode": "VI 29",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "VI30",
+   "barcode": "VI 30",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "VI15",
+   "barcode": "VI 15",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "VI16",
+   "barcode": "VI16",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Abu Dhabi Corniche 2",
+   "station_code": "ST007"
+  },
+  {
+   "number": "KB100",
+   "barcode": "10100",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "KB101",
+   "barcode": "10101",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "KB103",
+   "barcode": "10103",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "KB104",
+   "barcode": "10104",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "KB235",
+   "barcode": "10235",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "BE306",
+   "barcode": "40306",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "BE307",
+   "barcode": "40307",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "BE308",
+   "barcode": "40308",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "BE309",
+   "barcode": "40309",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "BE310",
+   "barcode": "40310",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "BE311",
+   "barcode": "40311",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "CH102",
+   "barcode": "30102",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "CH105",
+   "barcode": "30105",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "CH225",
+   "barcode": "30225",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "CH236",
+   "barcode": "30236",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "CH296",
+   "barcode": "30296",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "CH297",
+   "barcode": "30297",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "MO158",
+   "barcode": "20158",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "MO159",
+   "barcode": "20159",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "MO17",
+   "barcode": "2017",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "MO175",
+   "barcode": "20175",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "MO179",
+   "barcode": "20179",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "MO60",
+   "barcode": "2060",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "TW4793",
+   "barcode": "254793",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "TW4945",
+   "barcode": "254945",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "TW4974",
+   "barcode": "4974",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "TW5807",
+   "barcode": "5807",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "TW5963",
+   "barcode": "5963",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "TW7171",
+   "barcode": "257171",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Abu Dhabi Corniche 3",
+   "station_code": "ST008"
+  },
+  {
+   "number": "BY02",
+   "barcode": "1102",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY03",
+   "barcode": "1103",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY04",
+   "barcode": "1104",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY05",
+   "barcode": "1105",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY06",
+   "barcode": "1106",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY07",
+   "barcode": "1107",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY08",
+   "barcode": "1108",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY09",
+   "barcode": "1109",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY10",
+   "barcode": "1110",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY17",
+   "barcode": "1117",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY18",
+   "barcode": "1118",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY19",
+   "barcode": "1119",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY20",
+   "barcode": "1120",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY21",
+   "barcode": "1121",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY22",
+   "barcode": "1122",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BY23",
+   "barcode": "1123",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "BE16",
+   "barcode": "4016",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "CH178",
+   "barcode": "30178",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "CH180",
+   "barcode": "30180",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "CH181",
+   "barcode": "30181",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "CH213",
+   "barcode": "30213",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "CH215",
+   "barcode": "30215",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "CH216",
+   "barcode": "30216",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "CH217",
+   "barcode": "30217",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "CH218",
+   "barcode": "30218",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Corniche",
+   "station_code": "ST034"
+  },
+  {
+   "number": "KB143",
+   "barcode": "10143",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "KB144",
+   "barcode": "10144",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "KB146",
+   "barcode": "10146",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "KB70",
+   "barcode": "1070",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "BE208",
+   "barcode": "40208",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "BE237",
+   "barcode": "40237",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "CH185",
+   "barcode": "30185",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "CH342",
+   "barcode": "30342",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "CH344",
+   "barcode": "30344",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "CH351",
+   "barcode": "30351",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "MO242",
+   "barcode": "20242",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "MO303",
+   "barcode": "20303",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "MO392",
+   "barcode": "20392",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "MO396",
+   "barcode": "20396",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "MO411",
+   "barcode": "20411",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "TW5805",
+   "barcode": "255805",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "TW5996",
+   "barcode": "255996",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "TW6847",
+   "barcode": "256847",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "TW6872",
+   "barcode": "256872",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "TW6949",
+   "barcode": "256949",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "ED68",
+   "barcode": "ED 68",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "ED71",
+   "barcode": "ED 71",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "ES60",
+   "barcode": "ES 60",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Single",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "ES65",
+   "barcode": "ES 65",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Single",
+   "station": "Ajman Marina",
+   "station_code": "ST016"
+  },
+  {
+   "number": "KB167",
+   "barcode": "10167",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "KB170",
+   "barcode": "10170",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "KB18",
+   "barcode": "1018",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "KB26",
+   "barcode": "1026",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "KB93",
+   "barcode": "1093",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "KB94",
+   "barcode": "1094",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "CH07",
+   "barcode": "3007",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "CH09",
+   "barcode": "3009",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "CH204",
+   "barcode": "30204",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "CH206",
+   "barcode": "30206",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "CH317",
+   "barcode": "30317",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "CH40",
+   "barcode": "3040",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "MO149",
+   "barcode": "20149",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "MO150",
+   "barcode": "20150",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "MO154",
+   "barcode": "20154",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "MO190",
+   "barcode": "20190",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "MO26",
+   "barcode": "2026",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "MO285",
+   "barcode": "20285",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "MO289",
+   "barcode": "20289",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "MO346",
+   "barcode": "20346",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Alalam Park",
+   "station_code": "ST017"
+  },
+  {
+   "number": "BY68",
+   "barcode": "BY68",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "BY69",
+   "barcode": "BY69",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "BY70",
+   "barcode": "BY 70",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "BY71",
+   "barcode": "BY71",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "BY72",
+   "barcode": "BY72",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "BY73",
+   "barcode": "BY73",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "DC100",
+   "barcode": "DC 100",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "DC101",
+   "barcode": "DC 101",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "DC102",
+   "barcode": "DC102",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "DC103",
+   "barcode": "DC 103",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "DC84",
+   "barcode": "DC84",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "DC99",
+   "barcode": "DC 99",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "CR14",
+   "barcode": "CR14",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "CR15",
+   "barcode": "CR15",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "JR45",
+   "barcode": "JR 45",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "JR46",
+   "barcode": "JR46",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "XP70",
+   "barcode": "2170",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "XP71",
+   "barcode": "2171",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "OR54",
+   "barcode": "OR 54",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "OR55",
+   "barcode": "OR55",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "OR56",
+   "barcode": "OR 56",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "OR57",
+   "barcode": "OR 57",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "TW18204",
+   "barcode": "TW18204",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "ES02",
+   "barcode": "ES 02",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "ES11",
+   "barcode": "ES 11",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "ED23",
+   "barcode": "ed 23",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "ED32",
+   "barcode": "ED 32",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "ED44",
+   "barcode": "ED 44",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Al Dhaher Park",
+   "station_code": "ST032"
+  },
+  {
+   "number": "KB233",
+   "barcode": "10233",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "KB234",
+   "barcode": "10234",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "KB260",
+   "barcode": "10260",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "KB263",
+   "barcode": "10263",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "KB265",
+   "barcode": "10265",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "KB266",
+   "barcode": "10266",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "BE298",
+   "barcode": "40298",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "BE302",
+   "barcode": "40302",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "BE303",
+   "barcode": "40303",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "BE305",
+   "barcode": "40305",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "DC27",
+   "barcode": "3227",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "DC28",
+   "barcode": "3228",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "DC30",
+   "barcode": "3230",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "DC31",
+   "barcode": "3031",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "DC34",
+   "barcode": "4634",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "DC36",
+   "barcode": "4636",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "BL19",
+   "barcode": "25019",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "BL20",
+   "barcode": "25020",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "JR16",
+   "barcode": "2416",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "JR17",
+   "barcode": "2417",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "XP23",
+   "barcode": "2123",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "XP24",
+   "barcode": "2124",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "TW5837",
+   "barcode": "255875",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "ED11",
+   "barcode": "ED 11",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "ED19",
+   "barcode": "ED 19",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "ED35",
+   "barcode": "ED 35",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "ED38",
+   "barcode": "ED 38",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Al Salamat Park",
+   "station_code": "ST031"
+  },
+  {
+   "number": "KB119",
+   "barcode": "10119",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "KB120",
+   "barcode": "10120",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "KB173",
+   "barcode": "10173",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "KB89",
+   "barcode": "1089",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "KB90",
+   "barcode": "1090",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "BE117",
+   "barcode": "40117",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "BE138",
+   "barcode": "40138",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "BE215",
+   "barcode": "40215",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "BE224",
+   "barcode": "40224",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "BE238",
+   "barcode": "40238",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "BE251",
+   "barcode": "40251",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "CH197",
+   "barcode": "30197",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "CH201",
+   "barcode": "30201",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "CH214",
+   "barcode": "30214",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "CH341",
+   "barcode": "30341",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "CH343",
+   "barcode": "30343",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "CH349",
+   "barcode": "30349",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO2",
+   "barcode": "202",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO208",
+   "barcode": "20208",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO237",
+   "barcode": "20237",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO290",
+   "barcode": "20290",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO302",
+   "barcode": "20302",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO304",
+   "barcode": "20304",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO321",
+   "barcode": "20321",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO322",
+   "barcode": "20322",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO325",
+   "barcode": "20325",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO328",
+   "barcode": "20328",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO329",
+   "barcode": "20329",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "MO345",
+   "barcode": "20345",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "TW4800",
+   "barcode": "254800",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "TW4968",
+   "barcode": "254968",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "TW5016",
+   "barcode": "255016",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "TW7294",
+   "barcode": "257294",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Saqr Park",
+   "station_code": "ST023"
+  },
+  {
+   "number": "BY47",
+   "barcode": "1047",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "BY48",
+   "barcode": "1148",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "BY49",
+   "barcode": "1049",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "BY50",
+   "barcode": "1050",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "BY51",
+   "barcode": "1051",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "DC71",
+   "barcode": "DC71",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "DC72",
+   "barcode": "DC72",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "DC73",
+   "barcode": "DC73",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "DC74",
+   "barcode": "DC74",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "DC75",
+   "barcode": "DC75",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "DC76",
+   "barcode": "DC76",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "CR03",
+   "barcode": "CR03",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "CR04",
+   "barcode": "CR04",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "CR05",
+   "barcode": "CR05",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "CR06",
+   "barcode": "CR06",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "JR33",
+   "barcode": "JR33",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "JR34",
+   "barcode": "JR34",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "XP59",
+   "barcode": "2159",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "XP60",
+   "barcode": "2160",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "OR27",
+   "barcode": "4227",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "OR28",
+   "barcode": "4228",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "OR29",
+   "barcode": "4229",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "OR30",
+   "barcode": "4230",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "OR31",
+   "barcode": "4231",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "OR32",
+   "barcode": "4232",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "ED72",
+   "barcode": "ED 72",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "ED74",
+   "barcode": "ED 74",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "ED77",
+   "barcode": "ED 77",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "ES63",
+   "barcode": "ES 63",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Single",
+   "station": "Al Towayya Park",
+   "station_code": "ST027"
+  },
+  {
+   "number": "KB168",
+   "barcode": "10168",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "KB200",
+   "barcode": "10200",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "KB206",
+   "barcode": "KB206",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "KB207",
+   "barcode": "KB207",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "KB210",
+   "barcode": "KB210",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "BE347",
+   "barcode": "40347",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "BE348",
+   "barcode": "40348",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "BE350",
+   "barcode": "40350",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "BE352",
+   "barcode": "BE352",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "DC65",
+   "barcode": "3565",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "DC66",
+   "barcode": "3566",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "DC68",
+   "barcode": "3568",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "DC70",
+   "barcode": "3570",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "CR01",
+   "barcode": "CR01",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "CR02",
+   "barcode": "CR02",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "JR29",
+   "barcode": "2429",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "JR30",
+   "barcode": "2430",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "XP57",
+   "barcode": "2157",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "XP58",
+   "barcode": "2158",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "ED73",
+   "barcode": "ED 73",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "ED75",
+   "barcode": "ED 75",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "ES59",
+   "barcode": "ES 59",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Single",
+   "station": "Al Wadi",
+   "station_code": "ST026"
+  },
+  {
+   "number": "BY52",
+   "barcode": "1152",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BY53",
+   "barcode": "BY53",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BY54",
+   "barcode": "BY54",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BY55",
+   "barcode": "BY55",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BY56",
+   "barcode": "BY56",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BE354",
+   "barcode": "BE354",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BE355",
+   "barcode": "BE355",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BE359",
+   "barcode": "BE359",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BE360",
+   "barcode": "BE360",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "DC47",
+   "barcode": "3047",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "DC48",
+   "barcode": "3048",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "DC49",
+   "barcode": "3049",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "DC50",
+   "barcode": "3050",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "DC51",
+   "barcode": "3551",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "DC52",
+   "barcode": "3552",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BL24",
+   "barcode": "25024",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "BL25",
+   "barcode": "25025",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "JR23",
+   "barcode": "2423",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "JR24",
+   "barcode": "2424",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "XP51",
+   "barcode": "2151",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "XP52",
+   "barcode": "2152",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "TW18146",
+   "barcode": "18146",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "TW18514",
+   "barcode": "18514",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Zakher Park",
+   "station_code": "ST028"
+  },
+  {
+   "number": "KB211",
+   "barcode": "10211",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "KB213",
+   "barcode": "10213",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "KB215",
+   "barcode": "KB215",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "KB240",
+   "barcode": "10240",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "KB291",
+   "barcode": "10291",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "KB292",
+   "barcode": "10292",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "BE127",
+   "barcode": "40127",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "BE299",
+   "barcode": "40299",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "BE304",
+   "barcode": "40304",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "BE317",
+   "barcode": "40317",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "DC67",
+   "barcode": "3567",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "DC69",
+   "barcode": "3569",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "DC83",
+   "barcode": "DC83",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "DC85",
+   "barcode": "DC85",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "DC86",
+   "barcode": "DC86",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "DC87",
+   "barcode": "DC87",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "BL31",
+   "barcode": "BL31",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "BL32",
+   "barcode": "BL32",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "CR07",
+   "barcode": "CR07",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "CR08",
+   "barcode": "CR08",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "XP61",
+   "barcode": "2161",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "XP62",
+   "barcode": "2162",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "TW4836",
+   "barcode": "254836",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "TW4980",
+   "barcode": "254980",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "TW5966",
+   "barcode": "255966",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "TW6079",
+   "barcode": "256079",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "ED70",
+   "barcode": "ED 70",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "ED80",
+   "barcode": "ED 80",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "ES62",
+   "barcode": "ES 62",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Single",
+   "station": "Asharij Walk Way",
+   "station_code": "ST030"
+  },
+  {
+   "number": "KB160",
+   "barcode": "10160",
+   "category": "Barsha Baby",
+   "vtype": "Barsha Baby",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "KB188",
+   "barcode": "10188",
+   "category": "Barsha Baby",
+   "vtype": "Barsha Baby",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "KB251",
+   "barcode": "10251",
+   "category": "Barsha Baby",
+   "vtype": "Barsha Baby",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CY05",
+   "barcode": "CY 05",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CY06",
+   "barcode": "CY06",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CY07",
+   "barcode": "CY07",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CY08",
+   "barcode": "CY08",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BE290",
+   "barcode": "40290",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BE291",
+   "barcode": "40291",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BE292",
+   "barcode": "40292",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BE293",
+   "barcode": "40293",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BE294",
+   "barcode": "40294",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BE295",
+   "barcode": "40295",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BE296",
+   "barcode": "40296",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BE297",
+   "barcode": "40297",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CH261",
+   "barcode": "30261",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CH262",
+   "barcode": "30262",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CH263",
+   "barcode": "30263",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CH264",
+   "barcode": "30264",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "CH265",
+   "barcode": "30265",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "DC09",
+   "barcode": "3209",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "DC10",
+   "barcode": "3210",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BL07",
+   "barcode": "2507",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "BL08",
+   "barcode": "2508",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "JR01",
+   "barcode": "2401",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO457",
+   "barcode": "20457",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO458",
+   "barcode": "20458",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO460",
+   "barcode": "20460",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO467",
+   "barcode": "20467",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO468",
+   "barcode": "20468",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO469",
+   "barcode": "20469",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO470",
+   "barcode": "20470",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO471",
+   "barcode": "20471",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "MO472",
+   "barcode": "20472",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "XP29",
+   "barcode": "2129",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "XP30",
+   "barcode": "2130",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "TW5853",
+   "barcode": "255853",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Barsha Pond Park",
+   "station_code": "ST005"
+  },
+  {
+   "number": "TR1",
+   "barcode": "431",
+   "category": "Byky",
+   "vtype": "6 Seat",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "TR3",
+   "barcode": "433",
+   "category": "Byky",
+   "vtype": "6 Seat",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "TR5",
+   "barcode": "435",
+   "category": "Byky",
+   "vtype": "6 Seat",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CY01",
+   "barcode": "CY01",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CY02",
+   "barcode": "CY02",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CY03",
+   "barcode": "CY03",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CY04",
+   "barcode": "CY04",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "KB209",
+   "barcode": "10209",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "KB221",
+   "barcode": "10221",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "KB248",
+   "barcode": "10248",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "KB268",
+   "barcode": "10268",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE272",
+   "barcode": "40272",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE273",
+   "barcode": "40273",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE274",
+   "barcode": "40274",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE277",
+   "barcode": "40277",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE278",
+   "barcode": "40278",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE280",
+   "barcode": "40280",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE312",
+   "barcode": "40312",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE313",
+   "barcode": "40313",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE314",
+   "barcode": "40314",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE315",
+   "barcode": "40315",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE362",
+   "barcode": "BE362",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BE363",
+   "barcode": "BE363",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CH183",
+   "barcode": "30183",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CH339",
+   "barcode": "30339",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CH375",
+   "barcode": "30375",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CH377",
+   "barcode": "30377",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CH378",
+   "barcode": "30378",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "CH383",
+   "barcode": "30383",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "DC01",
+   "barcode": "3201",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "DC02",
+   "barcode": "3202",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BL01",
+   "barcode": "2501",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BL02",
+   "barcode": "2502",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "BL35",
+   "barcode": "BL35",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "JR09",
+   "barcode": "2409",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "JR10",
+   "barcode": "2410",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO275",
+   "barcode": "20275",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO437",
+   "barcode": "20437",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO438",
+   "barcode": "20438",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO440",
+   "barcode": "20440",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO442",
+   "barcode": "20442",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO444",
+   "barcode": "20444",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO445",
+   "barcode": "20445",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO453",
+   "barcode": "20453",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "MO459",
+   "barcode": "20459",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "XP31",
+   "barcode": "2131",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "XP32",
+   "barcode": "2132",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "TW5034",
+   "barcode": "255034",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Creek Park Gate 1",
+   "station_code": "ST001"
+  },
+  {
+   "number": "KB178",
+   "barcode": "10178",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "KB259",
+   "barcode": "10259",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "KB276",
+   "barcode": "10276",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "BE118",
+   "barcode": "40118",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "BE232",
+   "barcode": "40232",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "BE269",
+   "barcode": "40269",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "BE270",
+   "barcode": "40270",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "BE271",
+   "barcode": "40271",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "CH162",
+   "barcode": "30162",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "CH202",
+   "barcode": "30202",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "CH205",
+   "barcode": "30205",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "CH252",
+   "barcode": "30252",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "CH253",
+   "barcode": "30253",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "CH278",
+   "barcode": "30278",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "MO196",
+   "barcode": "20196",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "MO355",
+   "barcode": "20355",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "MO368",
+   "barcode": "20368",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "MO426",
+   "barcode": "20426",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "MO428",
+   "barcode": "20428",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "MO429",
+   "barcode": "20429",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "MO430",
+   "barcode": "20430",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "MO431",
+   "barcode": "20431",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "TW5838",
+   "barcode": "255838",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Creek Park Gate 4",
+   "station_code": "ST002"
+  },
+  {
+   "number": "RB01",
+   "barcode": "RB01",
+   "category": "Rent Bike",
+   "vtype": "Rent Bike",
+   "station": "Dubai",
+   "station_code": "ST035"
+  },
+  {
+   "number": "RB02",
+   "barcode": "RB02",
+   "category": "Rent Bike",
+   "vtype": "Rent Bike",
+   "station": "Dubai",
+   "station_code": "ST035"
+  },
+  {
+   "number": "KB102",
+   "barcode": "10102",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "KB105",
+   "barcode": "10105",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "KB236",
+   "barcode": "10236",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "KB237",
+   "barcode": "10237",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "KB261",
+   "barcode": "10261",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "KB262",
+   "barcode": "10262",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "BE103",
+   "barcode": "40103",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "BE135",
+   "barcode": "40135",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "BE137",
+   "barcode": "40137",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "BE211",
+   "barcode": "40211",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "BE229",
+   "barcode": "40229",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "CH108",
+   "barcode": "30108",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "CH235",
+   "barcode": "30235",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "CH256",
+   "barcode": "30256",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "CH299",
+   "barcode": "30299",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "CH300",
+   "barcode": "30300",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "CH307",
+   "barcode": "30307",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "MO177",
+   "barcode": "20177",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "MO78",
+   "barcode": "2078",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "MO81",
+   "barcode": "2081",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "MO83",
+   "barcode": "2083",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "MO86",
+   "barcode": "2086",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "MO89",
+   "barcode": "2089",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "ES07",
+   "barcode": "ES 07",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "ED25",
+   "barcode": "ed 25",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "ED29",
+   "barcode": "ED 29",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "ED42",
+   "barcode": "ED 42",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Family Park",
+   "station_code": "ST009"
+  },
+  {
+   "number": "KB52",
+   "barcode": "1052",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "KB53",
+   "barcode": "1053",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "KB54",
+   "barcode": "1054",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "KB55",
+   "barcode": "1055",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "KB64",
+   "barcode": "1064",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "KB65",
+   "barcode": "1065",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "KB66",
+   "barcode": "1066",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "KB67",
+   "barcode": "1067",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "BE108",
+   "barcode": "40108",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "BE109",
+   "barcode": "40109",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "BE110",
+   "barcode": "40110",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "BE111",
+   "barcode": "40111",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "BE113",
+   "barcode": "40113",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "BE141",
+   "barcode": "40141",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "CH170",
+   "barcode": "30170",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "CH171",
+   "barcode": "30171",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "CH172",
+   "barcode": "30172",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "CH173",
+   "barcode": "30173",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "CH174",
+   "barcode": "30174",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "CH83",
+   "barcode": "3083",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "MO123",
+   "barcode": "20123",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "MO124",
+   "barcode": "20124",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "MO202",
+   "barcode": "20202",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "MO258",
+   "barcode": "20258",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "MO294",
+   "barcode": "20294",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "MO386",
+   "barcode": "20386",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "MO389",
+   "barcode": "20389",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "MO398",
+   "barcode": "20398",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "TW4915",
+   "barcode": "254915",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "TW5961",
+   "barcode": "255961",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "TW6958",
+   "barcode": "256958",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "TW7256",
+   "barcode": "257256",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "TW7333",
+   "barcode": "257333",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Fujairah Corniche",
+   "station_code": "ST019"
+  },
+  {
+   "number": "KB159",
+   "barcode": "10159",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "KB208",
+   "barcode": "10208",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "KB230",
+   "barcode": "10230",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "KB231",
+   "barcode": "10231",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "BE163",
+   "barcode": "40163",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "BE227",
+   "barcode": "40227",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "BE228",
+   "barcode": "40228",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "BE279",
+   "barcode": "40279",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "CH161",
+   "barcode": "30161",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "CH203",
+   "barcode": "30203",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "CH325",
+   "barcode": "30325",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "CH333",
+   "barcode": "30333",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "CH335",
+   "barcode": "30335",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "CH340",
+   "barcode": "30340",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "MO378",
+   "barcode": "20378",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "MO379",
+   "barcode": "20379",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "MO384",
+   "barcode": "20384",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "MO385",
+   "barcode": "20385",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "MO400",
+   "barcode": "20400",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "MO449",
+   "barcode": "20449",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "TW5828",
+   "barcode": "255828",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "TW5890",
+   "barcode": "5890",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "TW5894",
+   "barcode": "5894",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "TW6138",
+   "barcode": "6138",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "TW6835",
+   "barcode": "256835",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "TW6944",
+   "barcode": "256944",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "ES09",
+   "barcode": "ES 09",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "ED03",
+   "barcode": "ED 03",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "ED21",
+   "barcode": "ed21",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "ED36",
+   "barcode": "ED 36",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Hili Archaeological Park",
+   "station_code": "ST025"
+  },
+  {
+   "number": "CHO",
+   "barcode": "333333",
+   "category": "Kuwait Bike",
+   "vtype": "Electric Bike Double",
+   "station": "Hilton Kuwait Resort",
+   "station_code": "ST036"
+  },
+  {
+   "number": "BER01",
+   "barcode": "44444",
+   "category": "Kuwait Bike",
+   "vtype": "Four Seat",
+   "station": "Hilton Kuwait Resort",
+   "station_code": "ST036"
+  },
+  {
+   "number": "KD01",
+   "barcode": "1111101",
+   "category": "Kuwait Bike",
+   "vtype": "Kids Bike",
+   "station": "Hilton Kuwait Resort",
+   "station_code": "ST036"
+  },
+  {
+   "number": "MON02",
+   "barcode": "222222",
+   "category": "Kuwait Bike",
+   "vtype": "Electric Bike Single",
+   "station": "Hilton Kuwait Resort",
+   "station_code": "ST036"
+  },
+  {
+   "number": "KB10",
+   "barcode": "1010",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "KB222",
+   "barcode": "10222",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "KB224",
+   "barcode": "10224",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "KB225",
+   "barcode": "10225",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "KB226",
+   "barcode": "10226",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "KB56",
+   "barcode": "1056",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "KB57",
+   "barcode": "1057",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "KB58",
+   "barcode": "1058",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "KB59",
+   "barcode": "1059",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BE122",
+   "barcode": "40122",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BE125",
+   "barcode": "40125",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BE160",
+   "barcode": "40160",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BE175",
+   "barcode": "40175",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BE220",
+   "barcode": "40220",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BE241",
+   "barcode": "40241",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BE242",
+   "barcode": "40242",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BE250",
+   "barcode": "40250",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH177",
+   "barcode": "30177",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH179",
+   "barcode": "30179",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH230",
+   "barcode": "30230",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH231",
+   "barcode": "30231",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH266",
+   "barcode": "30266",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH282",
+   "barcode": "30282",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH302",
+   "barcode": "30302",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH304",
+   "barcode": "30304",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH82",
+   "barcode": "3082",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "CH84",
+   "barcode": "3084",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO127",
+   "barcode": "20127",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO195",
+   "barcode": "20195",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO201",
+   "barcode": "20201",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO203",
+   "barcode": "20203",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO211",
+   "barcode": "20211",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO212",
+   "barcode": "20212",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO215",
+   "barcode": "20215",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO223",
+   "barcode": "20223",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO231",
+   "barcode": "20231",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO261",
+   "barcode": "20261",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO277",
+   "barcode": "20277",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO279",
+   "barcode": "20279",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO351",
+   "barcode": "20351",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "MO387",
+   "barcode": "20387",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "ED67",
+   "barcode": "ED 67",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "ED76",
+   "barcode": "ED 76",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "ED78",
+   "barcode": "ED 78",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "ES66",
+   "barcode": "ES 66",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Single",
+   "station": "Kalba Corniche Park",
+   "station_code": "ST020"
+  },
+  {
+   "number": "BY62",
+   "barcode": "BY62",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "BY63",
+   "barcode": "BY63",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "BY64",
+   "barcode": "BY 64",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "BY65",
+   "barcode": "BY65",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "BY66",
+   "barcode": "BY 66",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "BY67",
+   "barcode": "BY 67",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "DC93",
+   "barcode": "DC93",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "DC94",
+   "barcode": "DC 94",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "DC95",
+   "barcode": "DC 95",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "DC96",
+   "barcode": "dc96",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "DC97",
+   "barcode": "DC97",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "DC98",
+   "barcode": "DC 98",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "BL39",
+   "barcode": "BL39",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "BL40",
+   "barcode": "BL40",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "JR43",
+   "barcode": "JR 43",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "JR44",
+   "barcode": "JR44",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "XP68",
+   "barcode": "2168",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "XP69",
+   "barcode": "2169",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "OR50",
+   "barcode": "4250",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "OR51",
+   "barcode": "OR51",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "OR52",
+   "barcode": "4252",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "OR53",
+   "barcode": "OR53",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "ED26",
+   "barcode": "ED 26",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "ED37",
+   "barcode": "ED 37",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "ED45",
+   "barcode": "ED 45",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Khalifa Square",
+   "station_code": "ST010"
+  },
+  {
+   "number": "BY11",
+   "barcode": "1111",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BY12",
+   "barcode": "1112",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BY13",
+   "barcode": "1113",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BY14",
+   "barcode": "1114",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BY15",
+   "barcode": "1115",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BY16",
+   "barcode": "1116",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BE330",
+   "barcode": "40330",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BE331",
+   "barcode": "40331",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BE332",
+   "barcode": "40332",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BE333",
+   "barcode": "60333",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BE334",
+   "barcode": "40334",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "DC21",
+   "barcode": "3221",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "DC22",
+   "barcode": "3222",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "DC23",
+   "barcode": "3223",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "DC24",
+   "barcode": "3224",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "DC25",
+   "barcode": "3225",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "DC26",
+   "barcode": "3226",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BL16",
+   "barcode": "25016",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BL17",
+   "barcode": "25017",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "JR15",
+   "barcode": "2415",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "JR18",
+   "barcode": "2418",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "XP46",
+   "barcode": "2146",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "XP47",
+   "barcode": "2147",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "TW18211",
+   "barcode": "18211",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "TW18213",
+   "barcode": "18213",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "TW18488",
+   "barcode": "18488",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "TW18516",
+   "barcode": "18516",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "TW18519",
+   "barcode": "18519",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "TW18585",
+   "barcode": "18585",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Kshisha Park",
+   "station_code": "ST015"
+  },
+  {
+   "number": "BY29",
+   "barcode": "1129",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BY32",
+   "barcode": "1132",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BY33",
+   "barcode": "1133",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BY34",
+   "barcode": "1134",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BE329",
+   "barcode": "40329",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BE337",
+   "barcode": "40337",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BE338",
+   "barcode": "40338",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BE340",
+   "barcode": "40340",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "DC41",
+   "barcode": "4641",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "DC42",
+   "barcode": "3042",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "DC43",
+   "barcode": "3043",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "DC45",
+   "barcode": "3145",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BL22",
+   "barcode": "25022",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "BL23",
+   "barcode": "25023",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "JR21",
+   "barcode": "2421",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "JR22",
+   "barcode": "2422",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "TW4810",
+   "barcode": "254810",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "TW4981",
+   "barcode": "4981",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "TW5067",
+   "barcode": "5067",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "TW6868",
+   "barcode": "256868",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "TW6899",
+   "barcode": "256899",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "XP40",
+   "barcode": "2140",
+   "category": "Byky",
+   "vtype": "Xplorer",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "XP41",
+   "barcode": "2141",
+   "category": "Byky",
+   "vtype": "Xplorer",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "ED69",
+   "barcode": "ED 69",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "ED79",
+   "barcode": "ED 79",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Double",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "ES61",
+   "barcode": "ES 61",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Single",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "ES64",
+   "barcode": "ES 64",
+   "category": "Electric Bike Ghae",
+   "vtype": "Electric Bike Single",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "SPTW4810",
+   "barcode": "jhgjkhjljkl",
+   "category": "Special Offer",
+   "vtype": "Two Wheel",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "SPTW6899",
+   "barcode": "6",
+   "category": "Special Offer",
+   "vtype": "Two Wheel",
+   "station": "Majaz 1",
+   "station_code": "ST011"
+  },
+  {
+   "number": "KB165",
+   "barcode": "10165",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "KB257",
+   "barcode": "10257",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "KB75",
+   "barcode": "1075",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "KB83",
+   "barcode": "1083",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BE120",
+   "barcode": "40120",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BE212",
+   "barcode": "40212",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BE214",
+   "barcode": "40214",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BE217",
+   "barcode": "40217",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BE221",
+   "barcode": "40221",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BE226",
+   "barcode": "40226",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BE235",
+   "barcode": "40235",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BE244",
+   "barcode": "40244",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "CH157",
+   "barcode": "30157",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "CH159",
+   "barcode": "30159",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "CH338",
+   "barcode": "30338",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "CH386",
+   "barcode": "30386",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "CH392",
+   "barcode": "30392",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "DC33",
+   "barcode": "4633",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "DC35",
+   "barcode": "4635",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BL09",
+   "barcode": "2509",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "BL10",
+   "barcode": "25010",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "JR03",
+   "barcode": "2403",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "JR04",
+   "barcode": "2404",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "MO383",
+   "barcode": "20383",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "MO418",
+   "barcode": "20418",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "MO419",
+   "barcode": "20419",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "MO441",
+   "barcode": "20441",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "XP25",
+   "barcode": "2125",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "XP26",
+   "barcode": "2126",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TL01",
+   "barcode": "501",
+   "category": "Byky",
+   "vtype": "Trolley",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TL02",
+   "barcode": "502",
+   "category": "Byky",
+   "vtype": "Trolley",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TL04",
+   "barcode": "504",
+   "category": "Byky",
+   "vtype": "Trolley",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TL05",
+   "barcode": "505",
+   "category": "Byky",
+   "vtype": "Trolley",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TL06",
+   "barcode": "506",
+   "category": "Byky",
+   "vtype": "Trolley",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TL07",
+   "barcode": "507",
+   "category": "Byky",
+   "vtype": "Trolley",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TR08",
+   "barcode": "508",
+   "category": "Byky",
+   "vtype": "Trolley",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TR09",
+   "barcode": "509",
+   "category": "Byky",
+   "vtype": "Trolley",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "TW5856",
+   "barcode": "255856",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Al Mamzar Park",
+   "station_code": "ST004"
+  },
+  {
+   "number": "KB124",
+   "barcode": "10124",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "KB157",
+   "barcode": "10157",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "KB232",
+   "barcode": "10232",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "KB68",
+   "barcode": "1068",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "BE316",
+   "barcode": "40316",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "BE320",
+   "barcode": "40320",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "BE321",
+   "barcode": "40321",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "BE322",
+   "barcode": "40322",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "CH352",
+   "barcode": "30352",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "CH353",
+   "barcode": "30353",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "CH367",
+   "barcode": "30367",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "CH373",
+   "barcode": "30373",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "MO370",
+   "barcode": "20370",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "MO374",
+   "barcode": "20374",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "MO377",
+   "barcode": "20377",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "MO422",
+   "barcode": "20422",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "MO433",
+   "barcode": "20433",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "TW18165",
+   "barcode": "18165",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "TW18492",
+   "barcode": "18492",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "TW18502",
+   "barcode": "18502",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "ES10",
+   "barcode": "ES 10",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "ED20",
+   "barcode": "ED 20",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "ED28",
+   "barcode": "ED 28",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "ED39",
+   "barcode": "ED 39",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mazyad Walkway",
+   "station_code": "ST033"
+  },
+  {
+   "number": "BY25",
+   "barcode": "1125",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "BY26",
+   "barcode": "1126",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "BY27",
+   "barcode": "1127",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "BY28",
+   "barcode": "1128",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "CY09",
+   "barcode": "CY09",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "CY10",
+   "barcode": "CY10",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "CY11",
+   "barcode": "CY11",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "BE189",
+   "barcode": "40189",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "BE243",
+   "barcode": "40243",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "CH371",
+   "barcode": "30371",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "CH380",
+   "barcode": "30380",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "CH388",
+   "barcode": "30388",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "CH389",
+   "barcode": "30389",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "MO412",
+   "barcode": "20412",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "MO415",
+   "barcode": "20415",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "MO421",
+   "barcode": "20421",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "MO448",
+   "barcode": "20448",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "TW5998",
+   "barcode": "255998",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "TW6076",
+   "barcode": "256076",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "TW7013",
+   "barcode": "257013",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "TW7272",
+   "barcode": "257272",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "ES05",
+   "barcode": "ES 05",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "ED09",
+   "barcode": "ED 09",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "ED15",
+   "barcode": "ED 15",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "ED18",
+   "barcode": "ED 18",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "ED27",
+   "barcode": "ED 27",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "ED46",
+   "barcode": "ED 46",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mina Al Arab",
+   "station_code": "ST024"
+  },
+  {
+   "number": "KB241",
+   "barcode": "10241",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "KB242",
+   "barcode": "10242",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "KB244",
+   "barcode": "10244",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "KB245",
+   "barcode": "10245",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "KB247",
+   "barcode": "10247",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "KB250",
+   "barcode": "10250",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "BE353",
+   "barcode": "BE353",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "BE356",
+   "barcode": "BE356",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "BE357",
+   "barcode": "BE357",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "BE358",
+   "barcode": "BE358",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "DC77",
+   "barcode": "DC77",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "DC78",
+   "barcode": "DC78",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "DC79",
+   "barcode": "DC79",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "DC80",
+   "barcode": "DC80",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "DC81",
+   "barcode": "DC81",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "DC82",
+   "barcode": "DC82",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "BL30",
+   "barcode": "25030",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "BL33",
+   "barcode": "BL33",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "CR09",
+   "barcode": "CR09",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "CR10",
+   "barcode": "CR10",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "JR31",
+   "barcode": "JR31",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "JR32",
+   "barcode": "JR 32",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "TW4797",
+   "barcode": "254797",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "TW7130",
+   "barcode": "257130",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "TW7161",
+   "barcode": "257161",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "TW7289",
+   "barcode": "257289",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "TW7334",
+   "barcode": "257334",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "TW7382",
+   "barcode": "257382",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "ED04",
+   "barcode": "ED04",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "ED17",
+   "barcode": "ED 17",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "ED31",
+   "barcode": "ED 31",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "ED33",
+   "barcode": "ED 33",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Mubazzarah",
+   "station_code": "ST029"
+  },
+  {
+   "number": "KB132",
+   "barcode": "10132",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "KB181",
+   "barcode": "10181",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "KB182",
+   "barcode": "10182",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "KB183",
+   "barcode": "10183",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "KB185",
+   "barcode": "10185",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "BE129",
+   "barcode": "40129",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "BE168",
+   "barcode": "40168",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "BE188",
+   "barcode": "40188",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "BE219",
+   "barcode": "40219",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "CH249",
+   "barcode": "30249",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "CH250",
+   "barcode": "30250",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "CH251",
+   "barcode": "30251",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "CH277",
+   "barcode": "30277",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "CH320",
+   "barcode": "30320",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "CH321",
+   "barcode": "30321",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "CH322",
+   "barcode": "30322",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "MO309",
+   "barcode": "20309",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "MO312",
+   "barcode": "20312",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "MO313",
+   "barcode": "20313",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "MO314",
+   "barcode": "20314",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "MO334",
+   "barcode": "20334",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "MO348",
+   "barcode": "20348",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "MO349",
+   "barcode": "20349",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "SB17",
+   "barcode": "2317",
+   "category": "Byky",
+   "vtype": "Sun Beam",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "SB18",
+   "barcode": "2318",
+   "category": "Byky",
+   "vtype": "Sun Beam",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "TW4979",
+   "barcode": "25499",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "TW5806",
+   "barcode": "255806",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "TW6136",
+   "barcode": "256136",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "TW6861",
+   "barcode": "256861",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "ES03",
+   "barcode": "ES 03",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "ES08",
+   "barcode": "ES 08",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "ED07",
+   "barcode": "ED 07",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "ED12",
+   "barcode": "ED 12",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "ED13",
+   "barcode": "ED 13",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "RAK Corniche 1",
+   "station_code": "ST022"
+  },
+  {
+   "number": "KB02",
+   "barcode": "1002",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "KB16",
+   "barcode": "1016",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "KB17",
+   "barcode": "1017",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "KB31",
+   "barcode": "1031",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "BE133",
+   "barcode": "40133",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "BE134",
+   "barcode": "40134",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "BE204",
+   "barcode": "40204",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "BE205",
+   "barcode": "40205",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "CH113",
+   "barcode": "30113",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "CH141",
+   "barcode": "30141",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "CH275",
+   "barcode": "30275",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "CH97",
+   "barcode": "3097",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "MO07",
+   "barcode": "2007",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "MO186",
+   "barcode": "20186",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "MO189",
+   "barcode": "20189",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "MO193",
+   "barcode": "20193",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "MO363",
+   "barcode": "20363",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "MO376",
+   "barcode": "20376",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "TW4829",
+   "barcode": "254829",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "TW4925",
+   "barcode": "254925",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "TW5833",
+   "barcode": "5833",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "TW5850",
+   "barcode": "255850",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "TW6064",
+   "barcode": "256064",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Safiya Park",
+   "station_code": "ST018"
+  },
+  {
+   "number": "BY35",
+   "barcode": "1135",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "BY36",
+   "barcode": "1136",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "BY40",
+   "barcode": "1140",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "BY43",
+   "barcode": "1043",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "BY45",
+   "barcode": "1145",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "BY46",
+   "barcode": "1146",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "CY12",
+   "barcode": "cy12",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "CY13",
+   "barcode": "cy13",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "CY14",
+   "barcode": "CY14",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "DC53",
+   "barcode": "3553",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "DC54",
+   "barcode": "3554",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "DC56",
+   "barcode": "3556",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "DC57",
+   "barcode": "3557",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "DC60",
+   "barcode": "3560",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "DC63",
+   "barcode": "3563",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "BL26",
+   "barcode": "25026",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "BL28",
+   "barcode": "25028",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "JR25",
+   "barcode": "2425",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "JR27",
+   "barcode": "2427",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "XP27",
+   "barcode": "2127",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "XP49",
+   "barcode": "2149",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "XP53",
+   "barcode": "2153",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "XP54",
+   "barcode": "2154",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "OR37",
+   "barcode": "4237",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "OR38",
+   "barcode": "4238",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "OR39",
+   "barcode": "4239",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "OR41",
+   "barcode": "4241",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "OR42",
+   "barcode": "4242",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "OR44",
+   "barcode": "4244",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "TW18019",
+   "barcode": "18019",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "TW18279",
+   "barcode": "tw18279",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "TW18282",
+   "barcode": "TW18282",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "TW18334",
+   "barcode": "TW18334",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "TW18569",
+   "barcode": "18569",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "ED05",
+   "barcode": "ED 05",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "ED06",
+   "barcode": "ED 06",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "ED41",
+   "barcode": "ED 41",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "VI31",
+   "barcode": "VI 31",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "VI32",
+   "barcode": "VI 32",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "VI17",
+   "barcode": "VI 17",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "VI18",
+   "barcode": "VI 18",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "STW1817",
+   "barcode": "sp18175",
+   "category": "Special Offer",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 1",
+   "station_code": "ST012"
+  },
+  {
+   "number": "BY37",
+   "barcode": "1137",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "BY38",
+   "barcode": "1138",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "BY39",
+   "barcode": "1139",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "BY41",
+   "barcode": "1041",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "BY42",
+   "barcode": "1142",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "BY44",
+   "barcode": "1144",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "DC55",
+   "barcode": "3555",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "DC58",
+   "barcode": "3558",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "DC59",
+   "barcode": "3559",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "DC61",
+   "barcode": "3561",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "DC62",
+   "barcode": "3562",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "DC64",
+   "barcode": "3564",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "BL27",
+   "barcode": "25027",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "BL29",
+   "barcode": "25029",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "JR26",
+   "barcode": "2426",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "JR28",
+   "barcode": "2428",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "XP55",
+   "barcode": "2155",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "XP66",
+   "barcode": "2166",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "OR33",
+   "barcode": "4233",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "OR36",
+   "barcode": "4236",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "OR40",
+   "barcode": "4240",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "OR43",
+   "barcode": "4243",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "TW17867",
+   "barcode": "17867",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "TW17967",
+   "barcode": "17967",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "TW18296",
+   "barcode": "18296",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "TW18380",
+   "barcode": "18380",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "TW18607",
+   "barcode": "18607",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "ES06",
+   "barcode": "ES 06",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "ED08",
+   "barcode": "ED 08",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "ED14",
+   "barcode": "ED 14",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "ED16",
+   "barcode": "ED 16",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "VI33",
+   "barcode": "VI 33",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "VI34",
+   "barcode": "VI 34",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "VI37",
+   "barcode": "VI 37",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "VI39",
+   "barcode": "VI 39",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Sharjah Corniche 2",
+   "station_code": "ST013"
+  },
+  {
+   "number": "BY57",
+   "barcode": "BY57",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "BY58",
+   "barcode": "BY58",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "BY59",
+   "barcode": "BY59",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "BY60",
+   "barcode": "BY60",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "BY61",
+   "barcode": "BY61",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "DC88",
+   "barcode": "DC88",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "DC89",
+   "barcode": "DC 89",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "DC90",
+   "barcode": "DC90",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "DC91",
+   "barcode": "DC91",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "DC92",
+   "barcode": "DC 92",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "BL38",
+   "barcode": "BL38",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "JR40",
+   "barcode": "JR 40",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "JR41",
+   "barcode": "JR41",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "XP56",
+   "barcode": "2156",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "XP67",
+   "barcode": "2167",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "OR45",
+   "barcode": "4245",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "OR46",
+   "barcode": "4246",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "OR47",
+   "barcode": "4247",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "OR48",
+   "barcode": "4248",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "OR49",
+   "barcode": "4249",
+   "category": "Byky",
+   "vtype": "Off Road",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "TW17433",
+   "barcode": "17433",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "TW17911",
+   "barcode": "17911",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "TW18135",
+   "barcode": "TW18135",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "TW18467",
+   "barcode": "TW18467",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "TW18621",
+   "barcode": "TW18621",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "TW18763",
+   "barcode": "18763",
+   "category": "Byky",
+   "vtype": "Two Wheel",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "ES12",
+   "barcode": "ES 12",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Single",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "ED01",
+   "barcode": "ED01",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "ED02",
+   "barcode": "ED 02",
+   "category": "Electric Bike iFun",
+   "vtype": "Electric Bike Double",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "VI35",
+   "barcode": "VI 35",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "VI38",
+   "barcode": "VI 38",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Sharjah Corniche 3",
+   "station_code": "ST014"
+  },
+  {
+   "number": "KB130",
+   "barcode": "10130",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "KB131",
+   "barcode": "10131",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "KB203",
+   "barcode": "10203",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "KB204",
+   "barcode": "10204",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "KB38",
+   "barcode": "1038",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "KB39",
+   "barcode": "1039",
+   "category": "Byky",
+   "vtype": "Baby",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE218",
+   "barcode": "40218",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE245",
+   "barcode": "40245",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE284",
+   "barcode": "40284",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE285",
+   "barcode": "40285",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE286",
+   "barcode": "40286",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE287",
+   "barcode": "40287",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE288",
+   "barcode": "40288",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE289",
+   "barcode": "40289",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "BE30",
+   "barcode": "4030",
+   "category": "Byky",
+   "vtype": "Berg",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH27",
+   "barcode": "3027",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH30",
+   "barcode": "3030",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH328",
+   "barcode": "30328",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH329",
+   "barcode": "30329",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH385",
+   "barcode": "30385",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH387",
+   "barcode": "30387",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH390",
+   "barcode": "30390",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH391",
+   "barcode": "30391",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH393",
+   "barcode": "30393",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "CH396",
+   "barcode": "30396",
+   "category": "Byky",
+   "vtype": "Chopper",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO439",
+   "barcode": "20439",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO443",
+   "barcode": "20443",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO447",
+   "barcode": "20447",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO450",
+   "barcode": "20450",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO451",
+   "barcode": "20451",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO452",
+   "barcode": "20452",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO454",
+   "barcode": "20454",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO455",
+   "barcode": "20455",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO456",
+   "barcode": "20456",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "MO463",
+   "barcode": "20463",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "P8",
+   "barcode": "208",
+   "category": "Byky",
+   "vtype": "Monaco",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "SB07",
+   "barcode": "2307",
+   "category": "Byky",
+   "vtype": "Sun Beam",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "SB08",
+   "barcode": "2308",
+   "category": "Byky",
+   "vtype": "Sun Beam",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "VI23",
+   "barcode": "VI 23",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "VI24",
+   "barcode": "VI 24",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Lunar",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "VI07",
+   "barcode": "vi07",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "VI08",
+   "barcode": "VI08",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "VI09",
+   "barcode": "VI09",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  },
+  {
+   "number": "VI10",
+   "barcode": "VI 10",
+   "category": "Electric Scooter Vigrous",
+   "vtype": "Vivago",
+   "station": "Al Zabeel Park Gate 1",
+   "station_code": "ST003"
+  }
+ ],
+ "categories": [
+  "Barsha Baby",
+  "Byky",
+  "Electric Bike Ghae",
+  "Electric Bike iFun",
+  "Electric Scooter Vigrous",
+  "Kuwait Bike",
+  "Rent Bike",
+  "Special Offer"
+ ],
+ "vehicle_types": [
+  "6 Seat",
+  "Baby",
+  "Barsha Baby",
+  "Berg",
+  "Chopper",
+  "Electric Bike Double",
+  "Electric Bike Single",
+  "Four Seat",
+  "Kids Bike",
+  "Lunar",
+  "Monaco",
+  "Off Road",
+  "Rent Bike",
+  "Sun Beam",
+  "Trolley",
+  "Two Wheel",
+  "Vivago",
+  "Xplorer"
+ ],
+ "emirates": [
+  "Abu Dhabi",
+  "Ajman",
+  "Al Ain",
+  "Dubai",
+  "Fujairah",
+  "Kuwait",
+  "Ras Al Khaimah",
+  "Sharjah"
+ ]
+}

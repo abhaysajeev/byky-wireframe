@@ -1,0 +1,27 @@
+{% load static %}
+
+{% comment %}
+Core JavaScript loaded on every page.
+
+Deliberately NOT loaded here:
+  @algolia/autocomplete-js (287 KB) -- powered the navbar search, which the BYKY
+    navbar no longer has. main.js guards on #autocomplete, so nothing breaks.
+  hammer.js (78 KB) -- touch gestures for the demo swipe-out menu, unused here.
+
+Per-page libraries (datatables, apex-charts, leaflet, select2, flatpickr, swiper)
+belong in each template's vendor_css / vendor_js blocks, never here.
+{% endcomment %}
+
+<!--Core Javascript-->
+
+{% if has_customizer %}
+<script src="{% static 'vendor/libs/pickr/pickr.js' %}"></script>
+{% endif %}
+
+<script src="{% static 'vendor/libs/jquery/jquery.js' %}"></script>
+<script src="{% static 'vendor/libs/popper/popper.js' %}"></script>
+<script src="{% static 'vendor/js/bootstrap.js' %}"></script>
+<script src="{% static 'vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+<script src="{% static 'vendor/libs/node-waves/node-waves.js' %}"></script>
+<script src="{% static 'vendor/js/menu.js' %}"></script>
+<script src="{% static 'js/main.js' %}"></script>

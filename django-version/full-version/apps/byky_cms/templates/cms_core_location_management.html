@@ -1,0 +1,90 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Core Location Management - Company Management{% endblock title %}
+
+{% comment %}
+FSD 1.3 -- Tier A. Fields, grid columns, filters and defaults follow FSD
+sections 11, 12, 22 and 23. The client's source files contain no records for this
+entity, so the grid shows the "awaiting client data" state rather than invented rows.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Core Location Management" parent="Company Management" subtitle=purpose action_label="Add Location" action_url="#offcanvasAddLocation" %}
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Location Code" />
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="Location Name" />
+      </div>
+      <div class="col-md-4">
+        <select class="form-select"><option value="">All States</option>{% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}</select>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddLocation">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">Add Location</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <form onsubmit="return false">
+        <div class="mb-6">
+          <label class="form-label" for="loc-code">Location Code <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="loc-code" maxlength="30" placeholder="LOC001" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="loc-name">Location Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="loc-name" maxlength="150" placeholder="" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="loc-state">State <span class="text-danger">*</span></label>
+          <select id="loc-state" class="select2 form-select">
+            <option value="">Select</option>
+            {% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="loc-landmark">Landmark</label>
+          <input type="text" class="form-control" id="loc-landmark" maxlength="200" placeholder="" />
+        </div>
+        <div class="form-check mb-6">
+          <input class="form-check-input" type="checkbox" id="offcanvasAddLocation-active" checked />
+          <label class="form-check-label" for="offcanvasAddLocation-active">Is Active</label>
+        </div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

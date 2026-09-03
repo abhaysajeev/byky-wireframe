@@ -1,0 +1,121 @@
+{% extends layout_path %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Vehicle Station Mapping - Inventory{% endblock title %}
+
+{% comment %}
+FSD 3.6 -- Tier A, running on real records. Every one of the client's 1,060
+vehicles carries its station, so all 1,060 mappings are genuine. Mapped Date is
+not in the source.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Vehicle Station Mapping" parent="Inventory" subtitle=purpose action_label="Map Vehicle" action_url="#offcanvasMapVehicle" %}
+
+<div class="row g-6 mb-6">
+  <div class="col-sm-6 col-xl-4">
+    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
+      <div class="content-left"><span class="text-heading">Mapped Vehicles</span>
+        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.items|intcomma }}</h4></div>
+        <small class="mb-0">Every vehicle is assigned</small></div>
+      <div class="avatar"><span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-map-pin-check icon-26px"></i></span></div>
+    </div></div></div>
+  </div>
+  <div class="col-sm-6 col-xl-4">
+    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
+      <div class="content-left"><span class="text-heading">Stations</span>
+        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.stations }}</h4></div>
+        <small class="mb-0">Holding inventory</small></div>
+      <div class="avatar"><span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-building-store icon-26px"></i></span></div>
+    </div></div></div>
+  </div>
+  <div class="col-sm-6 col-xl-4">
+    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
+      <div class="content-left"><span class="text-heading">RFID Tagged</span>
+        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.tagged|intcomma }}</h4></div>
+        <small class="mb-0">EPC on every unit</small></div>
+      <div class="avatar"><span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-nfc icon-26px"></i></span></div>
+    </div></div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4"><select class="form-select"><option value="">All Branches</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select></div>
+      <div class="col-md-4"><select class="form-select"><option value="">All Categories</option>{% for c in categories_list %}<option>{{ c.name }}</option>{% endfor %}</select></div>
+      <div class="col-md-4"><input type="text" class="form-control" placeholder="RFID Tag EPC" /></div>
+    </div>
+  </div>
+
+  <div class="card-datatable table-responsive">
+    <table class="datatables-mappings table" data-search-label="Search branch, item or RFID">
+      <thead class="border-top">
+        <tr><th>Branch Name</th><th>Item Code</th><th>Item Name</th><th>Serial No</th><th>RFID Tag EPC</th><th class="text-center">Mapped Date</th><th class="text-center">Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for m in mappings %}
+        <tr>
+          <td>{{ m.branch }}</td>
+          <td><span class="fw-medium">{{ m.code }}</span></td>
+          <td>{{ m.name }}</td>
+          <td class="text-body-secondary"><small>{{ m.serial }}</small></td>
+          <td><code>{{ m.rfid }}</code></td>
+          <td class="text-center text-body-secondary">{{ m.mapped_date }}</td>
+          <td class="text-center">
+            <div class="d-inline-block">
+              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="dropdown-item">Transfer</a>
+                <div class="dropdown-divider"></div>
+                <a href="javascript:void(0);" class="dropdown-item text-danger">Unmap</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMapVehicle">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">Map Vehicle to Station</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <form onsubmit="return false">
+        <div class="mb-6"><label class="form-label" for="mp-branch">Branch <span class="text-danger">*</span></label>
+          <select id="mp-branch" class="select2 form-select"><option value="">Select</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select></div>
+        <div class="mb-6"><label class="form-label" for="mp-item">Item Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="mp-item" placeholder="KB113" /></div>
+        <div class="mb-6"><label class="form-label" for="mp-rfid">RFID Tag EPC</label><input type="text" class="form-control" id="mp-rfid" placeholder="10113" /></div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

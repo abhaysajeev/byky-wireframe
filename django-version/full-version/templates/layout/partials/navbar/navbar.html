@@ -1,0 +1,99 @@
+{% load i18n %}
+{% load static %}
+
+{% comment %}
+BYKY navbar. Reduced to the sidebar toggle and the signed-in user menu.
+
+Removed from the Vuexy original: search, language switcher, quick-link shortcuts,
+the notifications dropdown (all placeholder rows), and the My Profile / Settings /
+Billing / Pricing / FAQ items, which pointed at demo pages that no longer exist.
+Nothing shown here is placeholder content.
+{% endcomment %}
+
+{% if navbar_detached %}
+<nav class="layout-navbar {{container_class}} navbar navbar-expand-xl {{navbar_detached_class}} align-items-center bg-navbar-theme" id="layout-navbar">
+{% endif %}
+
+{% if not navbar_detached %}
+<nav class="layout-navbar navbar navbar-expand-xl align-items-center" id="layout-navbar">
+  <div class="{{container_class}}">
+{% endif %}
+
+    {# Brand, shown only for the navbar-full layout #}
+    {% if navbar_full %}
+    <div class="navbar-brand app-brand demo d-none d-xl-flex py-0 me-4 ms-0">
+      <a href="{% url 'index' %}" class="app-brand-link">
+        <span class="app-brand-logo demo">{% include 'partials/logo.html' %}</span>
+        <span class="app-brand-text demo menu-text fw-bold">
+          <span class="text-primary">Byky</span><span class="text-heading"> RMS</span>
+        </span>
+      </a>
+      {% if menu_horizontal %}
+      <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-xl-none">
+        <i class="icon-base ti tabler-x icon-sm d-flex align-items-center justify-content-center"></i>
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {# Sidebar toggle #}
+    {% if not navbar_hide_toggle %}
+    <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 {{ menu_horizontal|yesno:'d-xl-none,' }} {{ content_navbar|yesno:'d-xl-none,' }}">
+      <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
+        <i class="icon-base ti tabler-menu-2 icon-md"></i>
+      </a>
+    </div>
+    {% endif %}
+
+    <div class="navbar-nav-right d-flex align-items-center justify-content-end w-100" id="navbar-collapse">
+      <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+        <!-- User -->
+        {% comment %}
+        Wireframe phase has no authentication, so this shows the demo identity the
+        prototype is walked through as. There is no Log out because there is nothing
+        to log out of -- see CLAUDE.md section 1.
+        {% endcomment %}
+        <li class="nav-item navbar-dropdown dropdown-user dropdown">
+          <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
+            <div class="avatar avatar-online">
+              <span class="avatar-initial rounded-circle bg-label-primary">AD</span>
+            </div>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end">
+            <li>
+              <div class="dropdown-item mt-0">
+                <div class="d-flex align-items-center">
+                  <div class="flex-shrink-0 me-2">
+                    <div class="avatar avatar-online">
+                      <span class="avatar-initial rounded-circle bg-label-primary">AD</span>
+                    </div>
+                  </div>
+                  <div class="flex-grow-1">
+                    <h6 class="mb-0">Administrator</h6>
+                    <small class="text-body-secondary">SuperAdmin</small>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li><div class="dropdown-divider my-1 mx-n2"></div></li>
+            <li>
+              <span class="dropdown-item text-body-secondary">
+                <i class="icon-base ti tabler-info-circle me-2 icon-md"></i>
+                <span class="align-middle">Prototype &mdash; sign-in not required</span>
+              </span>
+            </li>
+          </ul>
+        </li>
+        <!--/ User -->
+
+      </ul>
+    </div>
+
+{% if not navbar_detached %}
+  </div>
+</nav>
+{% endif %}
+{% if navbar_detached %}
+</nav>
+{% endif %}

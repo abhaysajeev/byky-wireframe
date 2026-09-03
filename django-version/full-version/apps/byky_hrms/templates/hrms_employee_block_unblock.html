@@ -1,0 +1,114 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Employee Block / Unblock - Human Resources{% endblock title %}
+
+{% comment %}
+FSD 2.5 -- section 4 specifies a staff lookup header, an employee status panel, a
+block/unblock reason form and a historical log grid. Section 17: Block uses a
+danger accent, Unblock a success accent (handled in byky-hrms.js).
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Employee Block / Unblock" parent="Human Resources" subtitle=purpose %}
+
+<div class="row g-6">
+  <div class="col-lg-5">
+    <div class="card h-100">
+      <div class="card-header border-bottom"><h5 class="card-title mb-0">Staff Lookup</h5></div>
+      <div class="card-body">
+        <div class="mb-6">
+          <label class="form-label" for="staff-lookup">Employee <span class="text-danger">*</span></label>
+          <select id="staff-lookup" class="select2 form-select">
+            <option value="">Select employee</option>
+            {% for e in employees_list %}<option>{{ e.emp_no }} &mdash; {{ e.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <button type="button" class="btn btn-label-secondary w-100 mb-6">
+          <i class="icon-base ti tabler-search icon-xs me-1_5"></i>Look Up Employee
+        </button>
+
+        <div class="d-flex align-items-center justify-content-between border rounded p-4">
+          <div>
+            <small class="text-body-secondary d-block">Current status</small>
+            <span class="badge bg-label-success mt-1">Active</span>
+          </div>
+          <div class="avatar"><span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-user-check icon-26px"></i></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-7">
+    <div class="card h-100 border" id="block-action-panel">
+      <div class="card-header border-bottom"><h5 class="card-title mb-0">Block / Unblock Action</h5></div>
+      <div class="card-body">
+        <form onsubmit="return false">
+          <div class="row g-4 mb-6">
+            <div class="col-md-6">
+              <label class="form-label" for="block-action-type">Action Type <span class="text-danger">*</span></label>
+              <select id="block-action-type" class="form-select">
+                <option value="BLOCK" selected>Block</option>
+                <option value="UNBLOCK">Unblock</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="block-reason">Reason Category <span class="text-danger">*</span></label>
+              <select id="block-reason" class="form-select">
+                <option value="">Select</option>
+                {% for r in reasons %}<option>{{ r }}</option>{% endfor %}
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" for="block-date">Action Date</label>
+              <input type="text" class="form-control byky-date" id="block-date" />
+            </div>
+            <div class="col-12">
+              <label class="form-label" for="block-remarks">Remarks</label>
+              <textarea class="form-control" id="block-remarks" rows="3"></textarea>
+            </div>
+          </div>
+          <div class="d-flex gap-4">
+            <button type="submit" class="btn btn-danger" id="block-confirm">Confirm Block</button>
+            <button type="reset" class="btn btn-label-secondary">Reset</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12">
+    <div class="card">
+      <div class="card-header border-bottom">
+        <h5 class="card-title mb-0">Historical Block Log</h5>
+        <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+          <div class="col-md-4"><select class="form-select"><option value="">All Actions</option><option>Block</option><option>Unblock</option></select></div>
+          <div class="col-md-4"><input type="text" class="form-control byky-date" placeholder="Action date from" /></div>
+          <div class="col-md-4"><input type="text" class="form-control byky-date" placeholder="Action date to" /></div>
+        </div>
+      </div>
+      <div class="card-body">
+        {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,124 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Employee Temporary Address - Human Resources{% endblock title %}
+
+{% comment %}
+FSD 2.2 -- Tier A. Fields, grid columns, filters and defaults follow FSD sections
+11, 12, 22 and 23. The client's source files contain no records for this entity, so
+the grid shows the "awaiting client data" state rather than invented rows.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Employee Temporary Address" parent="Human Resources" subtitle=purpose action_label="Add Address" action_url="#offcanvasAddAddress" %}
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4">
+        <select class="form-select"><option value="">All Employees</option>{% for e in employees_list %}<option>{{ e.emp_no }} &mdash; {{ e.name }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-md-4">
+        <input type="text" class="form-control" placeholder="City" />
+      </div>
+      <div class="col-md-4">
+        <select class="form-select"><option value="">All States</option>{% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}</select>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddAddress">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">Add Address</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <form onsubmit="return false">
+        <div class="mb-6">
+          <label class="form-label" for="ad-emp">Employee <span class="text-danger">*</span></label>
+          <select id="ad-emp" class="select2 form-select">
+            <option value="">Select</option>
+            {% for e in employees_list %}<option>{{ e.emp_no }} &mdash; {{ e.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-l1">Address Line 1 <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="ad-l1"  placeholder="" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-l2">Address Line 2</label>
+          <input type="text" class="form-control" id="ad-l2"  placeholder="" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-building">Building Name</label>
+          <input type="text" class="form-control" id="ad-building"  placeholder="" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-flat">Flat / Room No</label>
+          <input type="text" class="form-control" id="ad-flat"  placeholder="" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-city">City</label>
+          <input type="text" class="form-control" id="ad-city"  placeholder="" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-country">Country <span class="text-danger">*</span></label>
+          <select id="ad-country" class="select2 form-select">
+            <option value="">Select</option>
+            {% for c in countries_list %}<option>{{ c.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-state">State <span class="text-danger">*</span></label>
+          <select id="ad-state" class="select2 form-select">
+            <option value="">Select</option>
+            {% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-zip">Zip Code</label>
+          <input type="text" class="form-control" id="ad-zip"  placeholder="" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-landlord">Landlord Name</label>
+          <input type="text" class="form-control" id="ad-landlord"  placeholder="" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="ad-landlord-phone">Landlord Contact Phone</label>
+          <input type="text" class="form-control" id="ad-landlord-phone"  placeholder="" />
+        </div>
+        <div class="form-check mb-6">
+          <input class="form-check-input" type="checkbox" id="offcanvasAddAddress-active" checked />
+          <label class="form-check-label" for="offcanvasAddAddress-active">Is Active</label>
+        </div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

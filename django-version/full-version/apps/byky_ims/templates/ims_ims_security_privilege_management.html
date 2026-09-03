@@ -1,0 +1,19 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}IMS Security Privilege Management - Inventory{% endblock title %}
+
+{% comment %}
+FSD 3.20 -- Tier D. Reuses the shared privilege matrix with the IMS permission set
+(6 flags) across all 20 IMS screens.
+{% endcomment %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="IMS Security Privilege Management" parent="Inventory" subtitle=purpose %}
+{% include "byky/partials/privilege_matrix.html" with roles=roles screens=screens permissions=permissions module="IMS" %}
+{% endblock %}

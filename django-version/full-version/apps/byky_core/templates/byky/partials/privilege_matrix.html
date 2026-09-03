@@ -1,0 +1,73 @@
+{% comment %}
+Tier D -- role x screen x permission matrix. FSD specifies seven permissions per
+screen (Access, Create, Read, Update, Print, Approve, Delete) plus a Select All
+toggle per row.
+
+This is the SAME screen in all 16 modules, so it is built once here and included
+with the module's own screen list:
+
+  {% include "byky/partials/privilege_matrix.html" with roles=roles screens=screens permissions=permissions module=module_label %}
+
+`screens` is a list of {name, perms} where perms is a list of booleans matching
+`permissions` in order. Legacy .aspx filenames are deliberately not shown -- they
+are build metadata, not something a client-facing screen should display.
+{% endcomment %}
+
+<div class="card mb-6">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Role Selection</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4">
+        <label class="form-label" for="privilege-role">Select User Role</label>
+        <select id="privilege-role" class="form-select">
+          {% for r in roles %}<option {% if forloop.first %}selected{% endif %}>{{ r }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <label class="form-label" for="privilege-role-search">Search Role</label>
+        <input type="text" id="privilege-role-search" class="form-control" placeholder="Role name" />
+      </div>
+      <div class="col-md-4 d-flex align-items-end">
+        <button type="button" class="btn btn-label-secondary w-100">
+          <i class="icon-base ti tabler-refresh icon-xs me-1_5"></i>Load Privileges
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-datatable table-responsive">
+    <table class="table border-top">
+      <thead>
+        <tr>
+          <th>Page / Screen</th>
+          {% for p in permissions %}<th class="text-center">{{ p }}</th>{% endfor %}
+          <th class="text-center">Select All</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in screens %}
+        <tr>
+          <td><span class="fw-medium">{{ s.name }}</span></td>
+          {% for granted in s.perms %}
+          <td class="text-center">
+            <div class="form-check d-flex justify-content-center mb-0">
+              <input class="form-check-input" type="checkbox" {% if granted %}checked{% endif %} />
+            </div>
+          </td>
+          {% endfor %}
+          <td class="text-center">
+            <div class="form-check d-flex justify-content-center mb-0">
+              <input class="form-check-input privilege-select-all" type="checkbox" />
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card-footer d-flex gap-4">
+    <button type="button" class="btn btn-primary">Save {{ module }} Privileges</button>
+    <button type="button" class="btn btn-label-secondary">Reset Privileges</button>
+  </div>
+</div>

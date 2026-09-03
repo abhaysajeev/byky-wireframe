@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Django
+*.log
+local_settings.py
+media/
+
+# Environment — contains SECRET_KEY, see .env.example
+.env
+
+# Node
+node_modules/
+npm-debug.log*
+
+# Design source files — 316MB of Figma binaries, two files exceed
+# GitHub's 100MB per-file limit. Kept locally only.
+design-files/figma/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

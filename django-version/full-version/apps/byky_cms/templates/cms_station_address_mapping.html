@@ -1,0 +1,146 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Station Address Mapping - Company Management{% endblock title %}
+
+{% comment %}
+FSD 1.7 -- Tier A. Stations come from the client's data; the source files carry no
+GPS, address or contact columns, so those cells render "not captured" (CLAUDE.md 12)
+rather than fabricated coordinates.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/leaflet/leaflet.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/leaflet/leaflet.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-map.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Station Address Mapping" parent="Company Management" subtitle=purpose action_label="Add Station Address" action_url="#offcanvasAddStation" %}
+
+{% include "byky/partials/station_map.html" with title="Station Locations" subtitle="Approximate positions across the network — exact GPS to be confirmed per station" height="380px" %}
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4"><input type="text" class="form-control" placeholder="Station Number" /></div>
+      <div class="col-md-4">
+        <select class="form-select"><option value="">All Branches</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select"><option value="">All States</option>{% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}</select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-datatable table-responsive">
+    <table class="datatables-stations-addr table" data-search-label="Search station">
+      <thead class="border-top">
+        <tr>
+          <th>Station No</th><th>Branch Name</th><th>State</th>
+          <th class="text-center">Latitude</th><th class="text-center">Longitude</th>
+          <th>Contact No</th><th class="text-center">Approval</th><th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in addresses %}
+        <tr>
+          <td><span class="fw-medium">{{ a.station_no }}</span></td>
+          <td>{{ a.branch }}</td>
+          <td><span class="badge bg-label-secondary">{{ a.state }}</span></td>
+          <td class="text-center text-body-secondary"><small>{{ a.latitude }}</small></td>
+          <td class="text-center text-body-secondary"><small>{{ a.longitude }}</small></td>
+          <td class="text-body-secondary"><small>{{ a.contact_no }}</small></td>
+          <td class="text-center">{% include "byky/partials/status_badge.html" with status=a.status %}</td>
+          <td class="text-center">
+            <div class="d-inline-block">
+              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddStation">Edit</a>
+                <a href="javascript:void(0);" class="dropdown-item">Approve</a>
+                <div class="dropdown-divider"></div>
+                <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddStation">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">Add Station Address</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body p-6">
+      <form onsubmit="return false">
+        <div class="mb-6">
+          <label class="form-label" for="st-no">Station No <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="st-no" maxlength="30" placeholder="ST001" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="st-branch">Branch <span class="text-danger">*</span></label>
+          <select id="st-branch" class="select2 form-select">
+            <option value="">Select</option>
+            {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="st-state">State <span class="text-danger">*</span></label>
+          <select id="st-state" class="select2 form-select">
+            <option value="">Select</option>
+            {% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="st-address">Address</label>
+          <textarea class="form-control" id="st-address" rows="2"></textarea>
+        </div>
+        <div class="row g-4 mb-6">
+          <div class="col-6">
+            <label class="form-label" for="st-lat">Latitude <span class="text-danger">*</span></label>
+            <input type="number" step="0.000001" min="-90" max="90" class="form-control" id="st-lat" value="0.000000" />
+            <div class="form-text">-90 to +90</div>
+          </div>
+          <div class="col-6">
+            <label class="form-label" for="st-lng">Longitude <span class="text-danger">*</span></label>
+            <input type="number" step="0.000001" min="-180" max="180" class="form-control" id="st-lng" value="0.000000" />
+            <div class="form-text">-180 to +180</div>
+          </div>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="st-contact">Contact No</label>
+          <input type="text" class="form-control" id="st-contact" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="st-logo">Station Image</label>
+          <input type="file" class="form-control" id="st-logo" accept="image/*" />
+        </div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

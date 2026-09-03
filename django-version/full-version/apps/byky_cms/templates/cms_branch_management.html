@@ -1,0 +1,219 @@
+{% extends layout_path %}
+{% load static %}
+{% load humanize %}
+
+{% block title %}Branch Management - Company Management{% endblock title %}
+
+{% comment %}
+FSD 1.4 -- Tier B. Fields, grid columns, filters, buttons and defaults follow the
+FSD sections 11, 12, 21, 22 and 23. Replaces the legacy split-panel with a
+full-width list; Add/Edit opens the form drawer (CLAUDE.md section 8).
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-cms-list.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Branch Management" parent="Company Management" subtitle=purpose action_label="Add Branch" action_url="#offcanvasAddBranch" %}
+
+<div class="row g-6 mb-6">
+  <div class="col-sm-6 col-xl-3">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-start justify-content-between">
+        <div class="content-left">
+          <span class="text-heading">Branches</span>
+          <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ branches|length }}</h4></div>
+          <small class="mb-0">Rental station hubs</small>
+        </div>
+        <div class="avatar"><span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-building-store icon-26px"></i></span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-start justify-content-between">
+        <div class="content-left">
+          <span class="text-heading">Fleet Deployed</span>
+          <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ total_fleet|intcomma }}</h4></div>
+          <small class="mb-0">Across all branches</small>
+        </div>
+        <div class="avatar"><span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-motorbike icon-26px"></i></span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-start justify-content-between">
+        <div class="content-left">
+          <span class="text-heading">Head Offices</span>
+          <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ ho_count }}</h4></div>
+          <small class="mb-0">Is HO flag set</small>
+        </div>
+        <div class="avatar"><span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-building-bank icon-26px"></i></span></div>
+      </div>
+    </div></div>
+  </div>
+  <div class="col-sm-6 col-xl-3">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-start justify-content-between">
+        <div class="content-left">
+          <span class="text-heading">Pending Approval</span>
+          <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ pending }}</h4></div>
+          <small class="mb-0">IsApproved = 0</small>
+        </div>
+        <div class="avatar"><span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-clock-hour-4 icon-26px"></i></span></div>
+      </div>
+    </div></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header border-bottom">
+    <h5 class="card-title mb-0">Filters</h5>
+    {# FSD 1.4 section 22: Branch Code, Branch Name, Company ID #}
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4">
+        <select class="form-select" id="filter-company"><option value="">All Companies</option><option>BYKY</option></select>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" id="filter-location">
+          <option value="">All Locations</option>
+          {% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="col-md-4">
+        <select class="form-select" id="filter-status">
+          <option value="">All Status</option><option>Approved</option><option>Pending</option><option>Rejected</option>
+        </select>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-datatable table-responsive">
+    <table class="datatables-branches table">
+      <thead class="border-top">
+        <tr>
+          <th>Branch Code</th>
+          <th>Branch Name</th>
+          <th>Company</th>
+          <th>Location</th>
+          <th class="text-center">Is HO</th>
+          <th class="text-center">Multi User</th>
+          <th>Fleet</th>
+          <th class="text-center">Approval</th>
+          <th class="text-center">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in branches %}
+        <tr>
+          <td><span class="fw-medium">{{ b.code }}</span></td>
+          <td>{{ b.name }}</td>
+          <td>{{ b.company }}</td>
+          <td><span class="badge bg-label-secondary">{{ b.location }}</span></td>
+          <td class="text-center">{% if b.is_ho %}<span class="badge bg-label-success">Y</span>{% else %}<span class="badge bg-label-secondary">N</span>{% endif %}</td>
+          <td class="text-center">{% if b.multi_user %}<span class="badge bg-label-success">Y</span>{% else %}<span class="badge bg-label-secondary">N</span>{% endif %}</td>
+          <td>{{ b.fleet }}</td>
+          <td class="text-center">{% include "byky/partials/status_badge.html" with status=b.status %}</td>
+          <td class="text-center">
+            <div class="d-inline-block">
+              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
+              <div class="dropdown-menu dropdown-menu-end">
+                <a href="#offcanvasAddBranch" data-bs-toggle="offcanvas" class="dropdown-item">Edit</a>
+                <a href="javascript:void(0);" class="dropdown-item">Approve</a>
+                <a href="javascript:void(0);" class="dropdown-item">Reject</a>
+                <div class="dropdown-divider"></div>
+                <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+              </div>
+            </div>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {# FSD 1.4 section 8 Create Section + section 11 field table #}
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddBranch">
+    <div class="offcanvas-header border-bottom">
+      <h5 class="offcanvas-title">Add Branch</h5>
+      <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body mx-0 flex-grow-0 p-6 h-100">
+      <form onsubmit="return false">
+        <div class="mb-6">
+          <label class="form-label" for="branch-code">Branch Code <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="branch-code" maxlength="30" placeholder="BR001" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="branch-name">Branch Name <span class="text-danger">*</span></label>
+          <input type="text" class="form-control" id="branch-name" maxlength="150" placeholder="Creek Park Gate 1" />
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="branch-company">Company <span class="text-danger">*</span></label>
+          <select id="branch-company" class="form-select"><option>BYKY</option></select>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="branch-location">Core Location <span class="text-danger">*</span></label>
+          <select id="branch-location" class="select2 form-select">
+            <option value="">Select</option>
+            {% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="mb-6">
+          <label class="form-label" for="hotel-commission">Hotel Commission %</label>
+          <input type="number" step="0.01" class="form-control" id="hotel-commission" value="0.00" disabled />
+          <div class="form-text">Enabled only when <span class="fw-medium">Is Hotel</span> is checked.</div>
+        </div>
+        <div class="mb-6">
+          <label class="form-label d-block">Flags</label>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="flag-isho" />
+            <label class="form-check-label" for="flag-isho">Is Head Office <small class="text-body-secondary">(max 1 per company)</small></label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="flag-ishotel" />
+            <label class="form-check-label" for="flag-ishotel">Is Hotel</label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="flag-apppayment" />
+            <label class="form-check-label" for="flag-apppayment">Is App Payment</label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="flag-multiuser" checked />
+            <label class="form-check-label" for="flag-multiuser">Allow Multiple Users</label>
+          </div>
+          <div class="form-check mb-2">
+            <input class="form-check-input" type="checkbox" id="flag-testvehicle" />
+            <label class="form-check-label" for="flag-testvehicle">Is Test Vehicle</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="flag-active" checked />
+            <label class="form-check-label" for="flag-active">Is Active</label>
+          </div>
+        </div>
+        <div class="d-flex gap-4">
+          <button type="submit" class="btn btn-primary">Save</button>
+          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
+          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

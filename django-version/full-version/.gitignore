@@ -1,7 +1,10 @@
 # Ignoring src and assets folders
 
-# Exclude everything from vendors
-/src/assets/vendor
+# NOTE: Vuexy's own .gitignore excluded /src/assets/vendor, on the assumption you
+# rebuild those from src/scss with npm + gulp. This deployment has no build step --
+# the Dockerfile runs collectstatic against the prebuilt files -- so without them
+# in the repo a fresh clone serves HTML with no CSS or JS at all. 29 MB, 750 files,
+# largest 4.4 MB, all well inside GitHub limits. They are therefore tracked.
 
 # Ignoring static/assets folders
 ./assets/

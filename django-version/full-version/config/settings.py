@@ -40,7 +40,8 @@ DEBUG = os.environ.get("DEBUG", 'True').lower() in ['true', 'yes', '1']
 #   LAN_HOSTS=192.168.0.66
 # Comma-separate for several. Everything here is for the wireframe phase only;
 # a production deploy must pin ALLOWED_HOSTS to real domain names.
-_LAN_HOSTS = [h.strip() for h in os.environ.get("LAN_HOSTS", "").split(",") if h.strip()]
+_EXTRA_HOSTS = os.environ.get("EXTRA_ALLOWED_HOSTS", "") or os.environ.get("LAN_HOSTS", "")
+_LAN_HOSTS = [h.strip() for h in _EXTRA_HOSTS.split(",") if h.strip()]
 
 ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1", *_LAN_HOSTS]
 
@@ -200,7 +201,17 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 
 # Vendor assets never change between deploys; let the browser keep them.
 WHITENOISE_MAX_AGE = 31536000
-WHITENOISE_USE_FINDERS = True
+
+# Finders let WhiteNoise serve straight from src/assets without collectstatic,
+# which is handy locally. In production we run collectstatic and serve the
+# built output instead -- faster, and pre-gzipped by CompressedStaticFilesStorage.
+WHITENOISE_USE_FINDERS = DEBUG
+
+if not DEBUG:
+    STORAGES = {
+        "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
+        "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+    }
 
 
 STATICFILES_DIRS = [
@@ -243,7 +254,9 @@ LOGOUT_REDIRECT_URL = "/login/"
 # ------------------------------------------------------------------------------
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
-SESSION_COOKIE_SECURE = True
+# Only set this when the site is actually served over HTTPS -- a secure cookie is
+# never sent over plain HTTP, which breaks sessions with no visible error.
+SESSION_COOKIE_SECURE = os.environ.get("SECURE_COOKIES", "False").lower() in ("true", "yes", "1")
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = "Lax"
 

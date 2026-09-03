@@ -1,0 +1,41 @@
+# BYKY RMS — production compose for the wireframe demo.
+#
+# One container. No nginx here: WhiteNoise serves the static bundle and
+# GZipMiddleware compresses responses, so the only thing a proxy would add is
+# TLS and domain routing -- which the host nginx already does for every other
+# app on this box.
+#
+# The port is bound to 127.0.0.1 deliberately. Docker's published ports write
+# straight into iptables and bypass ufw, so 0.0.0.0 here would put the demo on
+# the public internet regardless of firewall rules. The host nginx reaches it
+# over loopback.
+#
+#   docker compose -p byky_rms -f docker-compose.prod.yml up -d --build
+
+services:
+  web:
+    build: .
+    image: byky_rms-web:latest
+    container_name: byky_rms_web
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8004:5005"
+    environment:
+      DEBUG: "False"
+      DJANGO_ENVIRONMENT: "production"
+      # Every hostname the site will be reached by, comma separated.
+      EXTRA_ALLOWED_HOSTS: "${BYKY_HOSTS:-localhost,127.0.0.1}"
+      # Flip to True only once the domain is served over HTTPS.
+      SECURE_COOKIES: "False"
+      SECRET_KEY: "${BYKY_SECRET_KEY:?set BYKY_SECRET_KEY in .env next to this file}"
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request;urllib.request.urlopen('http://127.0.0.1:5005/').read()\" || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "3"

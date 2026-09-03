@@ -5,10 +5,14 @@
 # TLS and domain routing -- which the host nginx already does for every other
 # app on this box.
 #
-# The port is bound to 127.0.0.1 deliberately. Docker's published ports write
-# straight into iptables and bypass ufw, so 0.0.0.0 here would put the demo on
-# the public internet regardless of firewall rules. The host nginx reaches it
-# over loopback.
+# BYKY_BIND controls exposure:
+#   0.0.0.0    reachable at http://<server-ip>:8004 -- matches how the other
+#              apps on this host publish, and needs no nginx config
+#   127.0.0.1  loopback only, for when a host reverse proxy fronts it
+#
+# Be aware that a published port writes straight into iptables and bypasses ufw,
+# so 0.0.0.0 is genuinely public regardless of firewall rules. With no login on
+# this prototype, anyone who knows the IP and port can open it.
 #
 #   docker compose -p byky_rms -f docker-compose.prod.yml up -d --build
 
@@ -19,12 +23,14 @@ services:
     container_name: byky_rms_web
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8004:5005"
+      - "${BYKY_BIND:-0.0.0.0}:8004:5005"
     environment:
       DEBUG: "False"
       DJANGO_ENVIRONMENT: "production"
-      # Every hostname the site will be reached by, comma separated.
-      EXTRA_ALLOWED_HOSTS: "${BYKY_HOSTS:-localhost,127.0.0.1}"
+      # Every hostname or IP the site is reached by, comma separated. With
+      # DEBUG=False Django returns 400 for anything not listed here, so the
+      # server's public IP must be present when BYKY_BIND is 0.0.0.0.
+      EXTRA_ALLOWED_HOSTS: "${BYKY_HOSTS:?set BYKY_HOSTS in .env, e.g. your server IP}"
       # Flip to True only once the domain is served over HTTPS.
       SECURE_COOKIES: "False"
       SECRET_KEY: "${BYKY_SECRET_KEY:?set BYKY_SECRET_KEY in .env next to this file}"

@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     # BYKY
     "apps.byky_core",
     "apps.byky_cms",
+    "apps.byky_fare",
     "apps.byky_hrms",
     "apps.byky_ims",
     "apps.byky_rms",

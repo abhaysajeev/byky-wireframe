@@ -357,14 +357,16 @@ apps/
   byky_cms/          9   byky_reports/       8   byky_scheduler/     5
   byky_hrms/         6   byky_sfa/           6   byky_sysadmin/      5
   byky_ims/         20   byky_rfid/          5   byky_api/           5
-  byky_rms/          9   byky_mobile/        7   byky_security/      5
+  byky_rms/          8   byky_mobile/        7   byky_security/      5
   byky_tracking/     4   byky_notification/  5   byky_integration/   5
                          byky_wallet/        5
+  byky_fare/         2   (Fare & Schemes -- not an FSD module; built from the
+                         client's two HTML mockups in `byky Docs/`)
 ```
 
 Each module app holds `urls.py` (one route per FSD screen) and
 `templates/<slug>_<screen>.html`. Every route is registered in `config/urls.py`
-and appears in the sidebar; all 109 return HTTP 200.
+and appears in the sidebar; all return HTTP 200.
 
 > **`byky_sysadmin`, not `byky_admin`** — the slug `admin` collides with Django's
 > own `/admin/`, which is registered first in `config/urls.py` and swallows the
@@ -567,6 +569,11 @@ Never duplicate a layout file to change one thing.
 
 **Do not force all 109 screens into one layout.** Screen counts are confirmed three ways per module (navigation map, §4 header, and
 actual §4 screen blocks) and all agree: 9+6+20+9+4+8+6+5+7+5×7 = **109**.
+
+FSD 4.5 *Rental Tariff & Fare Setup* is the one deliberate departure: it was removed
+from the build because the client's own Fare Entry and Scheme Creation mockups supersede
+it, and keeping both would have given the same tariff two places to live. RMS therefore
+ships 8 screens, and the built total is 108 FSD screens + 2 Fare & Schemes = 110 routes.
 
 The legacy split-panel
 (form left, grid right) is an ASP.NET WebForms artifact and is rejected: Module 1.1's
@@ -962,6 +969,19 @@ Real client data reaches three more screens: **Vehicle Fleet Telematics Registry
 
 Grids render their **column headers even when empty**, with the awaiting-data state
 inside the table body, so a client can see the structure each FSD screen specifies.
+
+**Fare & Schemes — done.** Two screens (`/fare/fare-entry/`, `/fare/scheme-creation/`)
+built from the client's `Fare_Entry_Advanced_UI_v3.html` and `Scheme_Creation.html`
+mockups rather than an FSD module. Both are Tier B: numbered section cards, one card
+per stage of the configuration.
+
+**Repeatable multi-field rows use list + drawer, never inline inputs.** A time slab
+carries ten fields and a free-item rule eight. Rendered as bare controls in a table
+row they lose their labels, and the cells clip. So the grid shows formatted read-only
+values (`Every day · 10:00–11:00 · AED 90.00 · 5 min`) with Edit and Delete, and
+`#offcanvasTimeSlab` / `#offcanvasFreeSlab` own the labelled form — the same list +
+drawer pattern as Tier A. Two-field rows (vehicle type + package) stay inline; they
+are readable as they are. Apply this rule to any future grid of editable rows.
 
 **Phase 3 (IMS) — done.** All 20 screens. Four run on real client records:
 Stock Item Management (1,060 vehicles — Vehicle Number is the item code and serial,

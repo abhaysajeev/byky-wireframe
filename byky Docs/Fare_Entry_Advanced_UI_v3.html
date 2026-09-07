@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fare Entry - Vehicle Rental</title>
+<script type="text/javascript" src="https://ff.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=i4jB9WO1HxL0aw8OyQmNUXgQfctq1rAEGcRf_WNKF2ZonfW-i0D_g0BXln7ZWLoIE8JpFWrNea8VTctd7B20DE73QwQx7qZxkAYNBF4hFairoUbasHEywqLpsqqVJOCaP3_Cw6KegYT-3kjJRaEu2iud8X9_lXCLgBQ5o0fyApAbYoev8IAZOOWiVADt5nOiCqTzEwFvRM4WAYm3gG_fbl_r7pWfC70KgNRY-bdYn4GYqe3BUggmraoAoGRI-z08qASGjXx_zOew6h9_PB4o-rT9q3uZJ7v-HZQSQlgb4rP6xfzLHmTpcbNtAcSfgLJxBB1Zf-QPDdqbHTDV_Rwbrg" charset="UTF-8"></script><style>
+:root{
+  --primary:#4f46e5;--primary2:#4338ca;--soft:#eef2ff;--bg:#f5f7fb;
+  --text:#172033;--muted:#687386;--border:#dce1e9;--green:#059669;--red:#dc2626;
+  --card:#fff;--shadow:0 7px 25px rgba(31,41,55,.08)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);font-size:13px}
+.topbar{height:58px;background:#fff;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:750;font-size:17px}
+.logo{width:34px;height:34px;border-radius:9px;background:linear-gradient(135deg,#6366f1,#3730a3);display:grid;place-items:center;color:#fff;font-weight:800}
+.crumb{color:var(--muted);font-size:12px}
+.page{max-width:1450px;margin:auto;padding:23px 28px 35px}
+.pagehead{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:18px}
+h1{margin:0 0 5px;font-size:25px}.subtitle{margin:0;color:var(--muted)}
+.status{padding:8px 12px;border-radius:20px;background:#ecfdf5;border:1px solid #bbf7d0;color:#047857;font-weight:650}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow);margin-bottom:15px;overflow:hidden}
+.cardhead{padding:14px 18px;border-bottom:1px solid #edf0f4;display:flex;justify-content:space-between;align-items:center}
+.ctitle{font-weight:750}.ctitle small{display:block;color:var(--muted);font-weight:400;margin-top:3px}
+.step{font-size:10px;background:#f3f4f6;color:#697386;padding:5px 8px;border-radius:5px}
+.body{padding:18px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.grid3{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:repeat(2,1fr)}
+label{display:block;font-size:11px;font-weight:650;color:#394354;margin-bottom:6px}.req{color:#ef4444}
+input,select{width:100%;height:38px;border:1px solid #d2d7e0;border-radius:7px;padding:0 10px;background:#fff;color:#202938;font:inherit;outline:none}
+input:focus,select:focus{border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.scope{display:grid;grid-template-columns:260px 1fr;gap:16px}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}
+.level{height:38px;border:1px solid #d5dae3;border-radius:7px;display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;background:#fff}
+.level.active{background:var(--soft);border-color:#6366f1;color:#3730a3;font-weight:700}
+.level input{width:auto;height:auto}
+.notice{margin-top:15px;background:#f8fafc;border:1px solid #e5e9f0;border-radius:8px;padding:10px 12px;color:#5d687a;font-size:11px;line-height:1.5}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:11px}.sectionlabel{text-transform:uppercase;letter-spacing:.06em;font-size:10px;font-weight:800;color:#667085}
+.btn{height:36px;border:0;border-radius:7px;padding:0 15px;font-weight:650;cursor:pointer}.primary{background:var(--primary);color:#fff}.secondary{background:#fff;color:#4b5563;border:1px solid #d4d9e2}.green{background:var(--green);color:#fff}.danger{background:#fef2f2;color:var(--red);border:1px solid #fee2e2}
+table{width:100%;border-collapse:separate;border-spacing:0;border:1px solid var(--border);border-radius:9px;overflow:hidden}
+#timeSlabArea table{min-width:1280px}
+th{background:#f8fafc;color:#697386;text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.04em;padding:10px;border-bottom:1px solid var(--border)}
+td{padding:9px;border-bottom:1px solid #edf0f4;vertical-align:middle}tr:last-child td{border-bottom:0}
+td input,td select{height:34px}
+.rownum{width:27px;height:27px;border-radius:50%;display:grid;place-items:center;background:var(--soft);color:#4338ca;font-weight:750}
+.xbtn{width:31px;height:31px;border:0;border-radius:6px;background:#fef2f2;color:#dc2626;font-size:17px;cursor:pointer}
+.price{font-weight:750}.aed{color:#697386;font-size:10px;margin-right:4px}
+.packagebox{display:flex;gap:7px;align-items:center}
+.packagebox select{min-width:155px}
+.packagebox .custom{width:82px}
+.subcard{border:1px solid #e3e7ee;border-radius:10px;padding:14px;background:#fcfcfd;margin-top:15px}
+.subhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.subhead strong{font-size:12px}
+.schedule-note{font-size:10px;color:var(--muted)}
+.summary{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.summarybox{border:1px solid #e6e9ef;background:#fff;border-radius:7px;padding:9px}
+.summarybox small{display:block;color:#8a94a6;font-size:9px;margin-bottom:4px}.summarybox b{font-size:11px}
+.footer{display:flex;justify-content:flex-end;gap:9px;padding-top:16px;margin-top:16px;border-top:1px solid var(--border)}
+.formula{background:#111827;color:#e5e7eb;padding:12px;border-radius:8px;font-size:11px;line-height:1.6;margin-top:12px}
+.formula strong{color:#fff}
+.hidden{display:none!important}
+.toast{position:fixed;right:24px;bottom:24px;background:#111827;color:#fff;padding:12px 16px;border-radius:8px;opacity:0;transform:translateY(10px);transition:.2s}.toast.show{opacity:1;transform:none}
+@media(max-width:1050px){.grid{grid-template-columns:repeat(2,1fr)}.scope{grid-template-columns:1fr}.summary{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:650px){.page{padding:15px}.grid,.grid3,.grid2{grid-template-columns:1fr}.levels{grid-template-columns:1fr}.summary{grid-template-columns:1fr}.topbar{padding:0 15px}.crumb{display:none}}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><div class="logo">R</div>Rental Management</div>
+  <div class="crumb">Home / Fare Details / <b>Create Fare</b></div>
+</header>
+
+<main class="page">
+  <div class="pagehead">
+    <div><h1>Create Fare</h1><p class="subtitle">Define vehicle rental packages, grace periods, concurrent charges and time-based pricing.</p></div>
+    <div class="status">● Active Configuration</div>
+  </div>
+
+  <!-- PRICE SCOPE -->
+  <section class="card">
+    <div class="cardhead"><div class="ctitle">Price Level & Scope <small>Select where this fare will be applicable.</small></div><span class="step">01</span></div>
+    <div class="body">
+      <div class="scope">
+        <div>
+          <label>Price Level <span class="req">*</span></label>
+          <div class="levels">
+            <label class="level active"><input type="radio" name="level" value="company" checked> Company</label>
+            <label class="level"><input type="radio" name="level" value="branch"> Branch</label>
+            <label class="level"><input type="radio" name="level" value="location"> Location</label>
+          </div>
+        </div>
+        <div class="grid grid3" style="grid-template-columns:1fr 1fr 1fr">
+          <div><label id="scopeLabel">Company <span class="req">*</span></label><select id="scopeSelect"><option>Select Company</option><option>ABC Rental Company LLC</option><option>XYZ Mobility LLC</option></select></div>
+          <div><label>Category <span class="req">*</span></label><select><option>Select Category</option><option>BYKY 30 MI</option><option>BYKY 45 MI</option><option>Bike Rental</option><option>Electric Mobility</option></select></div>
+          <div><label>Vehicle Type <span class="req">*</span></label><select id="vehicleTop"><option value="">Select Vehicle Type</option><option>Standard Bike</option><option>Premium Bike</option><option>Electric Bike</option><option>Sports Bike</option></select></div>
+        </div>
+      </div>
+      <div class="notice">The same vehicle type can have multiple package slabs. A fare can also have different pricing windows during the day while retaining the same vehicle type.</div>
+    </div>
+  </section>
+
+  <!-- VALIDITY -->
+  <section class="card">
+    <div class="cardhead"><div class="ctitle">Fare Validity & Tax <small>Define the effective dates and applicable tax percentage.</small></div><span class="step">02</span></div>
+    <div class="body">
+      <div class="grid">
+        <div><label>From Date <span class="req">*</span></label><input type="date" value="2026-09-04"></div>
+        <div><label>To Date <span class="req">*</span></label><input type="date" value="2026-12-31"></div>
+        <div><label>Tax Percentage <span class="req">*</span></label><input type="number" min="0" max="100" step=".01" value="5" placeholder="e.g. 5"></div>
+        <div><label>Fare Status</label><select><option>Active</option><option>Inactive</option></select></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PACKAGE -->
+  <section class="card">
+    <div class="cardhead">
+      <div class="ctitle">Package Fare <small>Enter one package time and its fare configuration at a time. The same package time applies to all fare rows below.</small></div>
+      <span class="step">03</span>
+    </div>
+    <div class="body">
+      <div class="grid grid3">
+        <div>
+          <label>Package Time (Minutes) <span class="req">*</span></label>
+          <input id="packageTime" type="number" min="1" step="1" value="30" placeholder="e.g. 30">
+          <div class="schedule-note" style="margin-top:5px">Example: 30, 45, 60. This is entered here and selected later during Scheme Creation.</div>
+        </div>
+        <div>
+          <label>Basic Fare (AED) <span class="req">*</span></label>
+          <input id="commonBasic" type="number" min="0" step=".01" value="100" placeholder="e.g. 100">
+        </div>
+        <div>
+          <label>Grace Period (Minutes) <span class="req">*</span></label>
+          <input id="commonGrace" type="number" min="0" step="1" value="5" placeholder="e.g. 5">
+        </div>
+      </div>
+
+      <div class="subcard">
+        <div class="subhead">
+          <div><strong>Concurrent Fare</strong><div class="schedule-note">Charge applied after the package time + grace period.</div></div>
+        </div>
+        <div class="grid grid3">
+          <div>
+            <label>Concurrent Interval (Minutes) <span class="req">*</span></label>
+            <input id="commonInterval" type="number" min="1" value="10" placeholder="e.g. 10">
+          </div>
+          <div>
+            <label>Concurrent Price (AED) <span class="req">*</span></label>
+            <input id="commonConcurrent" type="number" min="0" step=".01" value="10" placeholder="e.g. 10">
+          </div>
+          <div>
+            <label>Concurrent Grace Period (Minutes)</label>
+            <input id="commonCGrace" type="number" min="0" value="0" placeholder="e.g. 0">
+          </div>
+        </div>
+      </div>
+
+      <div class="formula">
+        <strong>Calculation:</strong> Package Time + Grace = Basic Fare. After that, each completed Concurrent Interval adds the Concurrent Price.
+        Example: 30 min + 5 min grace = AED 100. At 38 minutes, one 10-minute concurrent slab is charged → AED 110.
+      </div>
+    </div>
+  </section>
+
+  <!-- TIME BASED -->
+  <section class="card">
+    <div class="cardhead">
+      <div class="ctitle">Time Slab Pricing <small>Optional. Enable this only when the selected package needs different fares during different times of the day.</small></div>
+      <span class="step">04</span>
+    </div>
+    <div class="body">
+      <div class="subcard" style="margin-top:0">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:15px">
+          <div>
+            <strong>Enable Time Slab Pricing</strong>
+            <div class="schedule-note" style="margin-top:4px">If enabled, multiple daily time slabs can be entered. Basic fare, grace and concurrent price can vary by slab.</div>
+          </div>
+          <label class="level active" style="width:150px;margin:0">
+            <input id="timeSlabToggle" type="checkbox"> Enable
+          </label>
+        </div>
+      </div>
+
+      <div id="timeSlabArea" class="hidden" style="margin-top:15px">
+        <div class="toolbar">
+          <div>
+            <div class="sectionlabel">Daily Pricing Windows</div>
+            <div class="schedule-note">The package time above remains common; only the time-window pricing changes.</div>
+          </div>
+          <button class="btn primary" id="addTime" type="button">+ Add Time Slab</button>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th style="width:45px">#</th>
+              <th>Date</th>
+              <th>Day</th>
+              <th>From Time</th>
+              <th>To Time</th>
+              <th>Basic Fare (AED)</th>
+              <th>Grace (Min)</th>
+              <th>Concurrent Interval (Min)</th>
+              <th>Concurrent Price (AED)</th>
+              <th>Concurrent Grace (Min)</th>
+              <th style="width:45px"></th>
+            </tr>
+          </thead>
+          <tbody id="timeRows"></tbody>
+        </table>
+
+        <div class="notice">
+          Example: Package Time = <b>30 Minutes</b>. 10:00–11:00 → Basic AED 90; 11:00–16:00 → Basic AED 110.
+          Each time slab can have its own grace period, concurrent interval and concurrent price.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PREVIEW -->
+  <section class="card">
+    <div class="cardhead"><div class="ctitle">Fare Preview <small>Review the selected configuration before saving.</small></div></div>
+    <div class="body">
+      <div class="summary">
+        <div class="summarybox"><small>PRICE LEVEL</small><b id="pvLevel">Company</b></div>
+        <div class="summarybox"><small>SCOPE</small><b id="pvScope">ABC Rental Company LLC</b></div>
+        <div class="summarybox"><small>VEHICLE TYPE</small><b id="pvVehicle">Not selected</b></div>
+        <div class="summarybox"><small>VALIDITY</small><b id="pvDate">04 Sep 2026 – 31 Dec 2026</b></div>
+        <div class="summarybox"><small>PACKAGE TIME</small><b id="pvCount">30 Minutes</b></div>
+      </div>
+      <div class="footer">
+        <button class="btn secondary" id="clearBtn" type="button">Clear</button>
+        <button class="btn danger" id="cancelBtn" type="button">Cancel</button>
+        <button class="btn green" id="saveBtn" type="button">Save Fare</button>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="toast" id="toast">Fare saved successfully.</div>
+
+<script>
+function addTimeRow(day="All Days",from="10:00",to="11:00",basic="90",grace="5",interval="10",concurrent="10",cGrace="0"){
+  const tbody=document.getElementById("timeRows"),tr=document.createElement("tr");
+  tr.innerHTML=`
+    <td><div class="rownum">${tbody.children.length+1}</div></td>
+    <td>
+      <select class="dateMode">
+        <option value="all">All</option>
+        <option value="specific">Specific Date</option>
+      </select>
+      <input class="specificDate hidden" type="date" style="margin-top:6px" title="Specific Date">
+    </td>
+    <td><select><option>All Days</option><option>Monday</option><option>Tuesday</option><option>Wednesday</option><option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option></select></td>
+    <td><input type="time" value="${from}"></td>
+    <td><input type="time" value="${to}"></td>
+    <td><div class="packagebox"><span class="aed">AED</span><input type="number" min="0" step=".01" value="${basic}"></div></td>
+    <td><input type="number" min="0" value="${grace}"></td>
+    <td><input type="number" min="1" value="${interval}"></td>
+    <td><div class="packagebox"><span class="aed">AED</span><input type="number" min="0" step=".01" value="${concurrent}"></div></td>
+    <td><input type="number" min="0" value="${cGrace}"></td>
+    <td><button class="xbtn" type="button">×</button></td>`;
+  tr.querySelector(".xbtn").onclick=()=>{tr.remove();renumber("timeRows")};
+  const dateMode=tr.querySelector(".dateMode");
+  const specificDate=tr.querySelector(".specificDate");
+  dateMode.onchange=()=>{
+    specificDate.classList.toggle("hidden",dateMode.value!=="specific");
+  };
+  tbody.appendChild(tr);
+}
+
+function renumber(id){
+  [...document.getElementById(id).children].forEach((r,i)=>{
+    const n=r.querySelector(".rownum");
+    if(n)n.textContent=i+1;
+  });
+}
+
+const toggle=document.getElementById("timeSlabToggle");
+toggle.onchange=()=>{
+  document.getElementById("timeSlabArea").classList.toggle("hidden",!toggle.checked);
+};
+
+document.getElementById("addTime").onclick=()=>addTimeRow();
+
+document.querySelectorAll('input[name="level"]').forEach(r=>r.onchange=()=>{
+  document.querySelectorAll(".level").forEach(x=>x.classList.remove("active"));
+  r.closest(".level").classList.add("active");
+  const isCompany=r.value==="company",isBranch=r.value==="branch";
+  document.getElementById("scopeLabel").innerHTML=(isCompany?"Company":isBranch?"Branch":"Location")+" <span class='req'>*</span>";
+  document.getElementById("scopeSelect").innerHTML=isCompany
+   ? "<option>Select Company</option><option>ABC Rental Company LLC</option><option>XYZ Mobility LLC</option>"
+   : isBranch
+   ? "<option>Select Branch</option><option>Dubai Branch</option><option>Abu Dhabi Branch</option><option>Sharjah Branch</option>"
+   : "<option>Select Location</option><option>Dubai Marina</option><option>Downtown Dubai</option><option>Jumeirah</option>";
+  updatePreview();
+});
+document.getElementById("scopeSelect").onchange=updatePreview;
+document.getElementById("vehicleTop").onchange=updatePreview;
+document.querySelectorAll('input[type="date"]').forEach(x=>x.onchange=updatePreview);
+document.getElementById("packageTime").oninput=updatePreview;
+
+function fmt(v){
+  if(!v)return "—";
+  let d=new Date(v+"T00:00:00");
+  return d.toLocaleDateString("en-GB",{day:"2-digit",month:"short",year:"numeric"});
+}
+function updatePreview(){
+  const level=document.querySelector('input[name="level"]:checked').value;
+  document.getElementById("pvLevel").textContent=level[0].toUpperCase()+level.slice(1);
+  const scope=document.getElementById("scopeSelect");
+  document.getElementById("pvScope").textContent=scope.options[scope.selectedIndex]?.text||"—";
+  const v=document.getElementById("vehicleTop");
+  document.getElementById("pvVehicle").textContent=v.value||"Not selected";
+  const dates=document.querySelectorAll('input[type="date"]');
+  document.getElementById("pvDate").textContent=fmt(dates[0].value)+" – "+fmt(dates[1].value);
+  document.getElementById("pvCount").textContent=(document.getElementById("packageTime").value||"—")+" Minutes";
+}
+
+document.getElementById("saveBtn").onclick=()=>{let t=document.getElementById("toast");t.textContent="Fare saved successfully.";t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
+document.getElementById("clearBtn").onclick=()=>{
+  document.getElementById("packageTime").value="";
+  document.getElementById("commonBasic").value="";
+  document.getElementById("commonGrace").value="";
+  document.getElementById("commonInterval").value="";
+  document.getElementById("commonConcurrent").value="";
+  document.getElementById("commonCGrace").value="";
+  document.getElementById("timeRows").innerHTML="";
+  document.getElementById("timeSlabToggle").checked=false;
+  document.getElementById("timeSlabArea").classList.add("hidden");
+  updatePreview();
+}
+document.getElementById("cancelBtn").onclick=()=>{if(confirm("Cancel fare creation?"))history.back()}
+updatePreview();
+</script>
+</body>
+</html>

@@ -1,0 +1,2431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Promotion And Offers Creation - BYKY Rental Management</title>
+
+<style>
+:root{
+ --primary:#4f46e5;
+ --primary-dark:#3730a3;
+ --blue:#2563eb;
+ --green:#059669;
+ --red:#dc2626;
+ --amber:#d97706;
+ --bg:#f4f6fb;
+ --card:#fff;
+ --line:#e1e5ec;
+ --text:#172033;
+ --muted:#687386;
+ --soft:#eef2ff;
+}
+
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ background:var(--bg);
+ font-family:Inter,Segoe UI,Arial,sans-serif;
+ color:var(--text);
+ font-size:13px
+}
+
+.topbar{
+ height:58px;
+ background:#fff;
+ border-bottom:1px solid var(--line);
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ padding:0 28px
+}
+
+.brand{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ font-size:17px;
+ font-weight:750
+}
+
+.logo{
+ width:34px;
+ height:34px;
+ border-radius:9px;
+ background:linear-gradient(135deg,#6366f1,#3730a3);
+ display:grid;
+ place-items:center;
+ color:white;
+ font-weight:800
+}
+
+.crumb{
+ font-size:12px;
+ color:var(--muted)
+}
+
+.page{
+ max-width:1480px;
+ margin:auto;
+ padding:22px 28px 35px
+}
+
+.head{
+ display:flex;
+ justify-content:space-between;
+ align-items:end;
+ margin-bottom:17px
+}
+
+h1{
+ font-size:25px;
+ margin:0 0 5px
+}
+
+.sub{
+ margin:0;
+ color:var(--muted)
+}
+
+.badge{
+ padding:8px 12px;
+ border-radius:18px;
+ background:#ecfdf5;
+ border:1px solid #bbf7d0;
+ color:#047857;
+ font-weight:700
+}
+
+.card{
+ background:var(--card);
+ border:1px solid var(--line);
+ border-radius:12px;
+ box-shadow:0 7px 25px rgba(31,41,55,.07);
+ overflow:hidden;
+ margin-bottom:15px
+}
+
+.cardhead{
+ padding:14px 18px;
+ border-bottom:1px solid #edf0f4;
+ display:flex;
+ justify-content:space-between;
+ align-items:center
+}
+
+.title{
+ font-weight:750
+}
+
+.title small{
+ display:block;
+ font-weight:400;
+ color:var(--muted);
+ margin-top:3px
+}
+
+.step{
+ font-size:10px;
+ padding:5px 8px;
+ background:#f3f4f6;
+ border-radius:5px;
+ color:#697386
+}
+
+.body{
+ padding:18px
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:14px
+}
+
+.grid3{
+ grid-template-columns:repeat(3,1fr)
+}
+
+label.field{
+ display:block;
+ font-size:11px;
+ font-weight:650;
+ color:#394354;
+ margin-bottom:6px
+}
+
+.req{
+ color:#ef4444
+}
+
+input,select{
+ width:100%;
+ height:38px;
+ border:1px solid #d2d7e0;
+ border-radius:7px;
+ background:#fff;
+ padding:0 10px;
+ color:#202938;
+ font:inherit;
+ outline:none
+}
+
+input:focus,select:focus{
+ border-color:#6366f1;
+ box-shadow:0 0 0 3px rgba(99,102,241,.1)
+}
+
+.scope{
+ display:grid;
+ grid-template-columns:350px 1fr;
+ gap:18px
+}
+
+.levels{
+ display:grid;
+ grid-template-columns:repeat(2,1fr);
+ gap:8px
+}
+
+.radio{
+ height:38px;
+ border:1px solid #d5dae3;
+ border-radius:7px;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ gap:7px;
+ cursor:pointer;
+ background:#fff;
+ font-weight:600
+}
+
+.radio.active{
+ background:var(--soft);
+ border-color:#6366f1;
+ color:#3730a3
+}
+
+.radio input{
+ width:auto;
+ height:auto
+}
+
+.notice{
+ margin-top:13px;
+ padding:10px 12px;
+ background:#f8fafc;
+ border:1px solid #e6eaf0;
+ border-radius:8px;
+ color:#5e6879;
+ font-size:11px;
+ line-height:1.5
+}
+
+.toolbar{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:11px
+}
+
+.sectionlabel{
+ font-size:10px;
+ font-weight:800;
+ letter-spacing:.06em;
+ color:#667085;
+ text-transform:uppercase
+}
+
+.btn{
+ height:35px;
+ border-radius:7px;
+ padding:0 14px;
+ border:0;
+ font-weight:700;
+ cursor:pointer
+}
+
+.primary{
+ background:var(--primary);
+ color:#fff
+}
+
+.secondary{
+ background:#fff;
+ border:1px solid #d5dae3;
+ color:#475467
+}
+
+.green{
+ background:var(--green);
+ color:#fff
+}
+
+.danger{
+ background:#fef2f2;
+ border:1px solid #fecaca;
+ color:var(--red)
+}
+
+.tablewrap{
+ border:1px solid var(--line);
+ border-radius:9px;
+ overflow:auto
+}
+
+table{
+ width:100%;
+ border-collapse:collapse;
+ min-width:800px
+}
+
+th{
+ background:#f8fafc;
+ text-align:left;
+ padding:10px;
+ color:#697386;
+ font-size:10px;
+ text-transform:uppercase;
+ letter-spacing:.04em;
+ border-bottom:1px solid var(--line)
+}
+
+td{
+ padding:8px;
+ border-bottom:1px solid #edf0f4
+}
+
+tr:last-child td{
+ border-bottom:0
+}
+
+td input,
+td select{
+ height:34px
+}
+
+.num{
+ width:27px;
+ height:27px;
+ border-radius:50%;
+ display:grid;
+ place-items:center;
+ background:var(--soft);
+ color:#4338ca;
+ font-weight:750
+}
+
+.x{
+ width:31px;
+ height:31px;
+ border:0;
+ border-radius:6px;
+ background:#fef2f2;
+ color:#dc2626;
+ font-size:17px;
+ cursor:pointer
+}
+
+.panel{
+ border:1px solid #e3e7ee;
+ border-radius:10px;
+ background:#fcfcfd;
+ padding:14px;
+ margin-top:15px
+}
+
+.panelhead{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:10px
+}
+
+.panelhead strong{
+ font-size:12px
+}
+
+.hint{
+ font-size:10px;
+ color:var(--muted);
+ margin-top:4px
+}
+
+.ruleline{
+ display:grid;
+ grid-template-columns:1fr 1fr 1fr;
+ gap:12px
+}
+
+.optionbar{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
+ margin-top:13px
+}
+
+.optionbox{
+ min-height:58px;
+ border:1px solid #e3e7ee;
+ border-radius:9px;
+ background:#f8fafc;
+ padding:10px 12px;
+ display:flex;
+ align-items:center;
+ gap:12px
+}
+
+.optionbox>div:first-child{
+ flex:1
+}
+
+.optionbox b{
+ display:block;
+ font-size:11px
+}
+
+.optionbox small{
+ display:block;
+ color:var(--muted);
+ font-size:9px;
+ margin-top:3px;
+ line-height:1.35
+}
+
+.switch{
+ position:relative;
+ width:42px;
+ height:23px;
+ flex:0 0 42px;
+ margin:0
+}
+
+.switch input{
+ opacity:0;
+ width:0;
+ height:0
+}
+
+.switch span{
+ position:absolute;
+ inset:0;
+ background:#cbd5e1;
+ border-radius:20px;
+ cursor:pointer;
+ transition:.2s
+}
+
+.switch span:before{
+ content:"";
+ position:absolute;
+ width:17px;
+ height:17px;
+ left:3px;
+ top:3px;
+ background:white;
+ border-radius:50%;
+ transition:.2s;
+ box-shadow:0 1px 3px #999
+}
+
+.switch input:checked+span{
+ background:var(--primary)
+}
+
+.switch input:checked+span:before{
+ transform:translateX(19px)
+}
+
+.countwrap{
+ width:130px;
+ flex:0 0 130px
+}
+
+.countwrap .field{
+ margin-bottom:4px
+}
+
+.countwrap input{
+ height:32px
+}
+
+.timeHead{
+ min-width:180px
+}
+
+/* PROMOTION TIME SLAB */
+.promoItemWrap{
+ display:flex;
+ flex-direction:column;
+ gap:7px;
+ min-width:540px
+}
+
+.promoBase{
+ display:grid;
+ grid-template-columns:1fr 1fr 150px;
+ gap:7px;
+ align-items:center
+}
+
+.slabbox{
+ border:1px solid #e2e6ed;
+ border-radius:7px;
+ background:#f8fafc;
+ padding:8px
+}
+
+.slabhead{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ margin-bottom:6px
+}
+
+.slabtitle{
+ font-size:10px;
+ font-weight:750;
+ color:#475467
+}
+
+.addslab{
+ border:0;
+ background:#eef2ff;
+ color:#4338ca;
+ border-radius:5px;
+ padding:4px 8px;
+ font-size:10px;
+ font-weight:700;
+ cursor:pointer
+}
+
+/*
+ Date + Day + From Time + To Time + Discount + Remove
+*/
+.slabrow{
+ display:grid;
+ grid-template-columns:150px 125px 125px 125px 120px 28px;
+ gap:6px;
+ align-items:start;
+ margin-top:5px
+}
+
+.slabrow input,
+.slabrow select{
+ height:31px
+}
+
+.slabrow .remove{
+ height:29px;
+ width:29px;
+ border:0;
+ border-radius:5px;
+ background:#fef2f2;
+ color:#dc2626;
+ cursor:pointer
+}
+
+.slabDateCell{
+ display:flex;
+ flex-direction:column;
+ gap:4px
+}
+
+.slabDateCell select{
+ width:100%
+}
+
+.slabSpecificDate{
+ width:100%;
+ height:31px!important
+}
+
+.freeSlabHint{
+ font-size:9px;
+ color:#7a8495;
+ margin-top:5px
+}
+
+/* FREE / OFFER PRICE */
+.freeModeBox{
+ display:flex;
+ align-items:center;
+ gap:8px
+}
+
+.freeModeBox .field{
+ margin:0
+}
+
+.freeModeBox select{
+ width:150px;
+ height:32px
+}
+
+.freeQty{
+ min-width:140px
+}
+
+.freeSelectableText{
+ width:170px;
+ height:32px
+}
+
+.commonTimeSlabPanel{
+ margin-top:12px;
+ border:1px solid #e2e6ed;
+ border-radius:8px;
+ background:#fff;
+ padding:10px
+}
+
+.commonSlabHead{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ margin-bottom:8px
+}
+
+.commonSlabHead strong{
+ font-size:12px
+}
+
+.commonSlabTable{
+ min-width:1100px
+}
+
+.commonSlabTable .slabDateCell{
+ min-width:125px
+}
+
+.commonSlabTable input,
+.commonSlabTable select{
+ height:32px
+}
+
+.hidden{
+ display:none!important
+}
+
+.quantity-grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:15px
+}
+
+.empty{
+ padding:18px;
+ text-align:center;
+ color:#8993a4;
+ background:#fff;
+ border:1px dashed #d9dee7;
+ border-radius:7px;
+ font-size:11px
+}
+
+.amountbox{
+ display:flex;
+ align-items:center;
+ gap:6px
+}
+
+.amountbox span{
+ font-size:10px;
+ color:#697386
+}
+
+.preview{
+ display:grid;
+ grid-template-columns:repeat(6,1fr);
+ gap:8px
+}
+
+.pv{
+ border:1px solid #e6e9ef;
+ border-radius:7px;
+ padding:9px;
+ background:#fff
+}
+
+.pv small{
+ display:block;
+ color:#8a94a6;
+ font-size:9px;
+ margin-bottom:4px
+}
+
+.pv b{
+ font-size:11px
+}
+
+.footer{
+ display:flex;
+ justify-content:flex-end;
+ gap:9px;
+ margin-top:16px;
+ padding-top:16px;
+ border-top:1px solid var(--line)
+}
+
+.toast{
+ position:fixed;
+ right:25px;
+ bottom:25px;
+ background:#111827;
+ color:white;
+ padding:12px 16px;
+ border-radius:8px;
+ opacity:0;
+ transform:translateY(10px);
+ transition:.2s
+}
+
+.toast.show{
+ opacity:1;
+ transform:none
+}
+
+@media(max-width:1050px){
+ .grid,.grid3{
+  grid-template-columns:repeat(2,1fr)
+ }
+
+ .scope{
+  grid-template-columns:1fr
+ }
+
+ .preview{
+  grid-template-columns:repeat(3,1fr)
+ }
+}
+
+@media(max-width:700px){
+ .page{
+  padding:15px
+ }
+
+ .grid,.grid3,.quantity-grid,.preview{
+  grid-template-columns:1fr
+ }
+
+ .levels{
+  grid-template-columns:1fr
+ }
+
+ .topbar{
+  padding:0 15px
+ }
+
+ .crumb{
+  display:none
+ }
+
+ .slabrow{
+  grid-template-columns:1fr 1fr
+ }
+}
+</style>
+</head>
+
+<body>
+
+<header class="topbar">
+ <div class="brand">
+  <div class="logo">R</div>
+  Rental Management
+ </div>
+ <div class="crumb">
+  Home / Promotions / <b>Promotions Creation</b>
+ </div>
+</header>
+
+<main class="page">
+
+ <div class="head">
+  <div>
+   <h1>Create Promotion</h1>
+   <p class="sub">
+    Configure vehicle/package-based promotions with company or location applicability.
+   </p>
+  </div>
+  <div class="badge">● New Promotion</div>
+ </div>
+
+ <!-- PROMOTION LEVEL -->
+ <section class="card">
+
+  <div class="cardhead">
+   <div class="title">
+    Promotion Level & Scope
+    <small>
+     Choose whether the Promotion belongs to the company or a specific location.
+    </small>
+   </div>
+   <span class="step">01</span>
+  </div>
+
+  <div class="body">
+
+   <div class="scope">
+
+    <div>
+     <label class="field">
+      Promotion Level <span class="req">*</span>
+     </label>
+
+     <div class="levels">
+
+      <label class="radio active">
+       <input type="radio" name="level" value="Company" checked>
+       Company Wise
+      </label>
+
+      <label class="radio">
+       <input type="radio" name="level" value="Branch">
+       Branch Wise
+      </label>
+
+      <label class="radio">
+       <input type="radio" name="level" value="Location">
+       Location Wise
+      </label>
+
+     </div>
+    </div>
+
+    <div class="grid grid3">
+
+     <div>
+      <label class="field" id="scopeLabel">
+       Company <span class="req">*</span>
+      </label>
+
+      <select id="scope">
+       <option>Select Company</option>
+       <option>ABC Rental Company LLC</option>
+       <option>BYKY Sports Equipment</option>
+      </select>
+     </div>
+
+     <div>
+      <label class="field">
+       Promotion Code <span class="req">*</span>
+      </label>
+
+      <input
+       id="code"
+       value="PROMO-2026-001"
+       placeholder="promotion Code">
+     </div>
+
+     <div>
+      <label class="field">
+       Promotion Name <span class="req">*</span>
+      </label>
+
+      <input
+       id="name"
+       placeholder="Enter Promotion Name">
+     </div>
+
+    </div>
+
+   </div>
+
+  </div>
+ </section>
+
+
+ <!-- VALIDITY -->
+ <section class="card">
+
+  <div class="cardhead">
+   <div class="title">
+    Promotion Validity & Qualification
+    <small>
+     Define the period and the purchase value/quantity range for this promotion.
+    </small>
+   </div>
+   <span class="step">02</span>
+  </div>
+
+  <div class="body">
+
+   <div class="grid">
+
+    <div>
+     <label class="field">
+      From Date <span class="req">*</span>
+     </label>
+
+     <input
+      type="date"
+      id="from"
+      value="2026-09-04">
+    </div>
+
+    <div>
+     <label class="field">
+      To Date <span class="req">*</span>
+     </label>
+
+     <input
+      type="date"
+      id="to"
+      value="2026-12-31">
+    </div>
+
+    <div>
+     <label class="field">
+      promotion For <span class="req">*</span>
+     </label>
+
+     <select id="PromotionFor">
+      <option>Quantity</option>
+      <option>Amount</option>
+     </select>
+    </div>
+
+    <div>
+     <label class="field">
+      Inventory Type <span class="req">*</span>
+     </label>
+
+     <select>
+      <option>Vehicle Type</option>
+     </select>
+    </div>
+
+   </div>
+
+   <div class="grid grid3" style="margin-top:14px">
+
+    <div>
+     <label class="field">
+      Lower Promotion Value <span class="req">*</span>
+     </label>
+
+     <input
+      type="number"
+      value="1"
+      min="0"
+      placeholder="Minimum qualifying value">
+    </div>
+
+    <div>
+     <label class="field">
+      Upper Promotion Value <span class="req">*</span>
+     </label>
+
+     <input
+      type="number"
+      value="5"
+      min="0"
+      placeholder="Maximum qualifying value">
+    </div>
+
+    <div>
+     <label class="field">
+      Number of Promotion Items <span class="req">*</span>
+     </label>
+
+     <input
+      type="number"
+      id="promoCount"
+      min="1"
+      value="2">
+    </div>
+
+   </div>
+
+  </div>
+ </section>
+
+
+ <!-- PROMOTION RULE -->
+ <section class="card">
+
+  <div class="cardhead">
+   <div class="title">
+    Promotion Rule
+    <small>
+     Keep the rule controls compact and define promotion/free vehicle-package combinations below.
+    </small>
+   </div>
+
+   <span class="step">03</span>
+  </div>
+
+  <div class="body">
+
+   <div class="ruleline">
+
+    <div>
+     <label class="field">
+      Promotion Type <span class="req">*</span>
+     </label>
+
+     <select id="PromotionType">
+      <option>Quantity</option>
+      <option>Amount</option>
+      <option>Percentage</option>
+      <option>Each</option>
+	  <option>Offer Price</option>
+     </select>
+    </div>
+
+    <div id="freeCountRuleField" class="hidden">
+
+     <label class="field">
+      Number of Free Items <span class="req">*</span>
+     </label>
+
+     <input
+      type="number"
+      id="freeCount"
+      min="1"
+      value="1">
+
+    </div>
+
+    <div></div>
+
+   </div>
+
+
+   <div class="notice" style="margin-top:12px;margin-bottom:12px">
+
+    <b>Note:</b>
+    Promotion Items count and Free Items count are independent.
+    Free Items are available only when Promotion Type is <b>Quantity</b>.
+
+   </div>
+
+
+   <div class="optionbar">
+
+    <!-- TIME SLAB -->
+    <div class="optionbox">
+
+     <div>
+      <b>Time Slab Applicable</b>
+
+      <small>
+       Enable only if this Promotion should use a Fare Entry time slab.
+      </small>
+     </div>
+
+     <label class="switch">
+      <input type="checkbox" id="timeEnabled">
+      <span></span>
+     </label>
+
+    </div>
+
+
+    <!-- FREE ITEM SELECTABLE -->
+    <div id="freeSelectableOption" class="optionbox hidden">
+
+     <div>
+      <b>Free Item Selectable</b>
+
+      <small>
+       Enable to show the free-item selection text box.
+      </small>
+     </div>
+
+     <label class="switch">
+      <input type="checkbox" id="freeEnabled">
+      <span></span>
+     </label>
+
+     <input
+      id="freeSelectableText"
+      class="freeSelectableText hidden"
+      type="text"
+      placeholder="Enter free item selection">
+
+    </div>
+
+   </div>
+
+
+   <div id="timeInfo" class="notice hidden">
+
+    <b>Time slab mode:</b>
+    Package selection remains mandatory.
+    When enabled, the scheme uses common time slabs for the free promotion items below.
+    Each time slab can define its own date, day, time and free vehicle/package.
+
+   </div>
+
+
+   <!-- PROMOTION ITEMS -->
+   <div class="panel">
+
+    <div class="panelhead">
+
+     <div>
+      <strong>Promotion Items</strong>
+
+      <div class="hint">
+       Define the vehicle type + package combination.
+       If Time Slab is enabled, the same item can have multiple
+       From/To time slabs with separate discounts.
+      </div>
+     </div>
+
+    </div>
+
+
+    <div
+     id="amountNote"
+     class="notice"
+     style="margin:0 0 10px">
+
+     <b>Amount Promotion:</b>
+     each item has its own discount amount.
+
+    </div>
+
+
+    <div class="tablewrap">
+
+     <table>
+
+      <thead>
+
+       <tr>
+
+        <th style="width:45px">#</th>
+
+        <th>Vehicle Type</th>
+
+        <th>Package</th>
+
+        <th class="discountHead" id="promotionValueHeader">
+         Discount Amount (AED)
+        </th>
+
+        <th style="width:45px"></th>
+
+       </tr>
+
+      </thead>
+
+      <tbody id="promotionRows"></tbody>
+
+     </table>
+
+    </div>
+
+   </div>
+
+
+   <!-- FREE PROMOTION ITEMS -->
+   <div id="freePanel" class="panel hidden">
+
+    <div class="panelhead">
+
+     <div>
+      <strong>Free Promotion Items</strong>
+
+      <div class="hint">
+       Free items are independent from Number of Promotion Items.
+       Vehicle Type + Package can be selected separately for each free item.
+      </div>
+     </div>
+
+     <!-- NEW FREE / OFFER PRICE OPTION -->
+     <div class="freeModeBox">
+
+      <label class="field">
+       Free / Offer Price
+      </label>
+
+      <select id="freeMode">
+
+       <option value="Free">
+        Free
+       </option>
+
+       <option value="Offer Price">
+        Offer Price
+       </option>
+
+      </select>
+
+     </div>
+
+    </div>
+
+
+    <div class="tablewrap">
+
+     <table>
+
+      <thead>
+
+       <tr>
+
+        <th style="width:45px">#</th>
+
+        <th>Vehicle Type</th>
+
+        <th>Package</th>
+
+        <th id="freeValueHeader">
+         Free Quantity
+        </th>
+
+        <th style="width:45px"></th>
+
+       </tr>
+
+      </thead>
+
+      <tbody id="freeRows"></tbody>
+
+     </table>
+
+    </div>
+
+
+    <!-- COMMON TIME SLABS -->
+    <div id="commonTimeSlabPanel" class="commonTimeSlabPanel hidden">
+
+     <div class="commonSlabHead">
+      <div>
+       <strong>Free Item Time Slabs</strong>
+       <div class="hint">
+        Define common time slabs for this scheme. Select the free vehicle + package for each slab.
+       </div>
+      </div>
+
+      <button type="button" class="addslab" id="addCommonTimeSlab">
+       + Add Time Slab
+      </button>
+     </div>
+
+     <div class="tablewrap">
+      <table class="commonSlabTable">
+       <thead>
+        <tr>
+         <th style="width:45px">#</th>
+         <th>Date</th>
+         <th>Day</th>
+         <th>From Time</th>
+         <th>To Time</th>
+         <th>Vehicle Type</th>
+         <th>Package</th>
+         <th id="commonFreeValueHeader">Free Quantity</th>
+         <th style="width:45px"></th>
+        </tr>
+       </thead>
+       <tbody id="commonTimeSlabRows"></tbody>
+      </table>
+     </div>
+
+    </div>
+
+   </div>
+
+  </div>
+
+ </section>
+
+
+ <!-- PREVIEW -->
+ <section class="card">
+
+  <div class="cardhead">
+
+   <div class="title">
+    Promotion Preview
+
+    <small>
+     Quick review of the configuration before saving.
+    </small>
+
+   </div>
+
+  </div>
+
+
+  <div class="body">
+
+   <div class="preview">
+
+    <div class="pv">
+     <small>LEVEL</small>
+     <b id="pvLevel">Company</b>
+    </div>
+
+    <div class="pv">
+     <small>SCOPE</small>
+     <b id="pvScope">ABC Rental Company LLC</b>
+    </div>
+
+    <div class="pv">
+     <small>Promotion</small>
+     <b id="pvName">Not entered</b>
+    </div>
+
+    <div class="pv">
+     <small>VALIDITY</small>
+     <b id="pvDate">
+      04 Sep 2026 – 31 Dec 2026
+     </b>
+    </div>
+
+    <div class="pv">
+     <small>Promotion FOR</small>
+     <b id="pvFor">Quantity</b>
+    </div>
+
+    <div class="pv">
+     <small>Promotion TYPE</small>
+     <b id="pvType">Amount</b>
+    </div>
+
+   </div>
+
+
+   <div class="notice">
+
+    <b>Package options come from Fare Entry:</b>
+
+    30 Minutes, 45 Minutes, 60 Minutes, 90 Minutes, 120 Minutes.
+
+    The Promotion only selects the package;
+    package time and pricing are maintained in Fare Entry.
+
+   </div>
+
+
+   <div class="footer">
+
+    <button
+     class="btn secondary"
+     id="clear">
+     Clear
+    </button>
+
+    <button
+     class="btn danger"
+     id="cancel">
+     Cancel
+    </button>
+
+    <button
+     class="btn green"
+     id="save">
+     Save Promotion
+    </button>
+
+   </div>
+
+  </div>
+
+ </section>
+
+</main>
+
+
+<div class="toast" id="toast">
+ Promotion saved successfully.
+</div>
+
+
+<script>
+
+const vehicleTypes=[
+ "Standard Bike",
+ "Premium Bike",
+ "Electric Bike",
+ "Sports Bike"
+];
+
+const packages=[
+ "30 Minutes",
+ "45 Minutes",
+ "60 Minutes",
+ "90 Minutes",
+ "120 Minutes"
+];
+
+const timeSlabs=[
+ "10:00 AM – 11:00 AM",
+ "11:00 AM – 04:00 PM",
+ "04:00 PM – 08:00 PM",
+ "08:00 PM – 11:00 PM"
+];
+
+
+function vehicleSelect(){
+
+ return `
+ <select class="dynamic-select">
+  <option value="">Select Vehicle Type</option>
+  ${vehicleTypes.map(v=>`<option>${v}</option>`).join("")}
+ </select>
+ `;
+
+}
+
+
+function packageSelect(){
+
+ return `
+ <select class="dynamic-select">
+  <option value="">Select Package</option>
+  ${packages.map(p=>`<option>${p}</option>`).join("")}
+ </select>
+ `;
+
+}
+
+
+function timeSelect(){
+
+ return `
+ <select class="dynamic-select">
+  <option value="">Select Time Slab</option>
+  ${timeSlabs.map(t=>`<option>${t}</option>`).join("")}
+ </select>
+ `;
+
+}
+
+
+/* PROMOTION ITEM */
+
+function addPromotionRow(){
+
+ const tb=document.getElementById("promotionRows");
+
+ if(!tb)return;
+
+ const tr=document.createElement("tr");
+
+ tr.innerHTML=`
+
+  <td>
+   <div class="num">
+    ${tb.children.length+1}
+   </div>
+  </td>
+
+  <td>
+   ${vehicleSelect()}
+  </td>
+
+  <td>
+   ${packageSelect()}
+  </td>
+
+  <td class="discountCell">
+
+   <div class="amountbox">
+    <span>AED</span>
+
+    <input
+     type="number"
+     min="0"
+     step=".01"
+     placeholder="Discount amount" class="promotionValue">
+   </div>
+
+  </td>
+
+  <td>
+   <button
+    class="x"
+    type="button">
+    ×
+   </button>
+  </td>
+
+ `;
+
+
+ tr.querySelector(".x").onclick=()=>{
+
+  tr.remove();
+
+  renumber("promotionRows");
+
+ };
+
+
+ tb.appendChild(tr);
+
+}
+
+
+/* TIME SLAB */
+
+function addPromoSlab(container){
+
+ const row=document.createElement("div");
+
+ row.className="slabrow";
+
+
+ row.innerHTML=`
+
+  <div class="slabDateCell">
+
+   <select
+    class="slabDateMode"
+    title="Date">
+
+    <option value="all">
+     All Dates
+    </option>
+
+    <option value="specific">
+     Specific Date
+    </option>
+
+   </select>
+
+   <input
+    type="date"
+    class="slabSpecificDate hidden"
+    title="Specific Date">
+
+  </div>
+
+
+  <select
+   class="slabDay"
+   title="Day">
+
+   <option value="All Days">
+    All Days
+   </option>
+
+   <option value="Monday">
+    Monday
+   </option>
+
+   <option value="Tuesday">
+    Tuesday
+   </option>
+
+   <option value="Wednesday">
+    Wednesday
+   </option>
+
+   <option value="Thursday">
+    Thursday
+   </option>
+
+   <option value="Friday">
+    Friday
+   </option>
+
+   <option value="Saturday">
+    Saturday
+   </option>
+
+   <option value="Sunday">
+    Sunday
+   </option>
+
+  </select>
+
+
+  <input
+   type="time"
+   value="10:00"
+   title="From Time">
+
+
+  <input
+   type="time"
+   value="11:00"
+   title="To Time">
+
+
+  <div class="amountbox">
+
+   <span>AED</span>
+
+   <input
+    type="number"
+    min="0"
+    step=".01"
+    placeholder="Discount">
+
+  </div>
+
+
+  <button
+   type="button"
+   class="remove">
+   ×
+  </button>
+
+ `;
+
+
+ const dateMode=
+  row.querySelector(".slabDateMode");
+
+ const dateInput=
+  row.querySelector(".slabSpecificDate");
+
+
+ dateMode.onchange=()=>{
+
+  dateInput.classList.toggle(
+   "hidden",
+   dateMode.value!=="specific"
+  );
+
+ };
+
+
+ row.querySelector(".remove").onclick=()=>{
+
+  row.remove();
+
+ };
+
+
+ container.appendChild(row);
+
+}
+
+
+/* COMMON TIME SLAB */
+
+function addCommonTimeSlab(){
+
+ const tb=document.getElementById("commonTimeSlabRows");
+ if(!tb)return;
+
+ const tr=document.createElement("tr");
+
+ tr.innerHTML=`
+  <td><div class="num">${tb.children.length+1}</div></td>
+
+  <td>
+   <div class="slabDateCell">
+    <select class="slabDateMode" title="Date">
+     <option value="all">All Dates</option>
+     <option value="specific">Specific Date</option>
+    </select>
+    <input type="date" class="slabSpecificDate hidden" title="Specific Date">
+   </div>
+  </td>
+
+  <td>
+   <select class="slabDay" title="Day">
+    <option value="All Days">All Days</option>
+    <option value="Monday">Monday</option>
+    <option value="Tuesday">Tuesday</option>
+    <option value="Wednesday">Wednesday</option>
+    <option value="Thursday">Thursday</option>
+    <option value="Friday">Friday</option>
+    <option value="Saturday">Saturday</option>
+    <option value="Sunday">Sunday</option>
+   </select>
+  </td>
+
+  <td><input type="time" value="10:00" title="From Time"></td>
+  <td><input type="time" value="12:00" title="To Time"></td>
+
+  <td>${vehicleSelect()}</td>
+  <td>${packageSelect()}</td>
+
+  <td class="freeValueCell">
+   <input type="number" min="1" step="1" value="1" placeholder="Free Quantity">
+  </td>
+
+  <td>
+   <button class="x" type="button">×</button>
+  </td>
+ `;
+
+ const dateMode=tr.querySelector(".slabDateMode");
+ const dateInput=tr.querySelector(".slabSpecificDate");
+ dateMode.onchange=()=>{
+  dateInput.classList.toggle("hidden",dateMode.value!=="specific");
+ };
+
+ tr.querySelector(".x").onclick=()=>{
+  tr.remove();
+  renumber("commonTimeSlabRows");
+ };
+
+ tb.appendChild(tr);
+ updateCommonFreeMode();
+}
+
+function updateCommonFreeMode(){
+ const mode=document.getElementById("freeMode")?.value || "Free";
+ const header=document.getElementById("commonFreeValueHeader");
+ if(header){
+  header.textContent=mode==="Free" ? "Free Quantity" : "Offer Price (AED)";
+ }
+ document.querySelectorAll("#commonTimeSlabRows .freeValueCell input").forEach(input=>{
+  if(mode==="Free"){
+   input.min="1";
+   input.step="1";
+   input.placeholder="Free Quantity";
+  }else{
+   input.min="0";
+   input.step=".01";
+   input.placeholder="Offer Price";
+  }
+ });
+}
+
+/* FREE ITEM */
+
+function addFreeRow(){
+
+ const tb=document.getElementById("freeRows");
+
+ if(!tb)return;
+
+ const tr=document.createElement("tr");
+
+
+ tr.innerHTML=`
+
+  <td>
+   <div class="num">
+    ${tb.children.length+1}
+   </div>
+  </td>
+
+  <td>
+   ${vehicleSelect()}
+  </td>
+
+  <td>
+   ${packageSelect()}
+  </td>
+
+  <td class="freeValueCell">
+
+   <input
+    type="number"
+    min="1"
+    step="1"
+    value="1"
+    placeholder="Free Quantity">
+
+  </td>
+
+  <td>
+
+   <button
+    class="x"
+    type="button">
+    ×
+   </button>
+
+  </td>
+
+ `;
+
+
+ tr.querySelector(".x").onclick=()=>{
+
+  tr.remove();
+
+  renumber("freeRows");
+
+ };
+
+
+ tb.appendChild(tr);
+
+ updateFreeMode();
+
+}
+
+
+/* RENUMBER */
+
+function renumber(id){
+
+ const tb=document.getElementById(id);
+
+ if(!tb)return;
+
+ [...tb.children].forEach((r,i)=>{
+
+  const n=r.querySelector(".num");
+
+  if(n)
+   n.textContent=i+1;
+
+ });
+
+}
+
+
+/* PROMOTION ROW COUNT */
+
+function syncPromotionRows(count){
+
+ count=Math.max(
+  0,
+  Math.min(
+   50,
+   parseInt(count,10)||0
+  )
+ );
+
+ const tb=document.getElementById(
+  "promotionRows"
+ );
+
+ while(
+  tb.children.length<count
+ ){
+
+  addPromotionRow();
+
+ }
+
+
+ while(
+  tb.children.length>count
+ ){
+
+  tb.lastElementChild.remove();
+
+ }
+
+
+ renumber("promotionRows");
+
+}
+
+
+/* FREE ROW COUNT */
+
+function syncFreeRows(count){
+
+ count=Math.max(
+  0,
+  Math.min(
+   50,
+   parseInt(count,10)||0
+  )
+ );
+
+ const tb=document.getElementById(
+  "freeRows"
+ );
+
+
+ while(
+  tb.children.length<count
+ ){
+
+  addFreeRow();
+
+ }
+
+
+ while(
+  tb.children.length>count
+ ){
+
+  tb.lastElementChild.remove();
+
+ }
+
+
+ renumber("freeRows");
+
+ updateFreeMode();
+
+}
+
+
+/* FREE / OFFER PRICE */
+
+function updateFreeMode(){
+
+ const mode=
+  document.getElementById("freeMode")?.value
+  || "Free";
+
+
+ const header=
+  document.getElementById(
+   "freeValueHeader"
+  );
+
+
+ if(header){
+
+  header.textContent=
+   mode==="Free"
+   ? "Free Quantity"
+   : "Offer Price (AED)";
+
+ }
+
+
+ document
+  .querySelectorAll(
+   "#freeRows .freeValueCell input"
+  )
+  .forEach(input=>{
+
+   if(mode==="Free"){
+
+    input.min="1";
+    input.step="1";
+    input.placeholder=
+     "Free Quantity";
+
+   }
+   else{
+
+    input.min="0";
+    input.step=".01";
+    input.placeholder=
+     "Offer Price";
+
+   }
+
+  });
+
+ updateCommonFreeMode();
+}
+
+
+/* REFERENCES */
+
+const PromotionType=
+ document.getElementById(
+  "PromotionType"
+ );
+
+const promoCount=
+ document.getElementById(
+  "promoCount"
+ );
+
+const freeCount=
+ document.getElementById(
+  "freeCount"
+ );
+
+const timeEnabled=
+ document.getElementById(
+  "timeEnabled"
+ );
+
+const freeEnabled=
+ document.getElementById(
+  "freeEnabled"
+ );
+
+const freeMode=
+ document.getElementById(
+  "freeMode"
+ );
+
+const addCommonTimeSlabButton=document.getElementById("addCommonTimeSlab");
+
+if(addCommonTimeSlabButton){
+ addCommonTimeSlabButton.onclick=addCommonTimeSlab;
+}
+
+
+/* PROMOTION TYPE */
+
+function applyPromotionType(){
+
+ const quantity=
+  PromotionType.value==="Quantity";
+
+ // Label-only change based on Promotion Type.
+ const promotionValueHeader=
+  document.getElementById("promotionValueHeader");
+ const promotionValueText=
+  PromotionType.value==="Offer Price"
+   ? "Offer Price (AED)"
+   : PromotionType.value==="Percentage"
+    ? "Percentage (%)"
+    : "Discount Amount (AED)";
+
+ if(promotionValueHeader){
+  promotionValueHeader.textContent=promotionValueText;
+ }
+
+ document
+  .querySelectorAll(".promotionValue")
+  .forEach(input=>{
+   input.placeholder=
+    PromotionType.value==="Offer Price"
+     ? "Offer Price"
+     : PromotionType.value==="Percentage"
+      ? "Percentage"
+      : "Discount amount";
+  });
+
+
+ document
+  .getElementById("amountNote")
+  .classList
+  .toggle(
+   "hidden",
+   quantity
+  );
+
+
+ document
+  .querySelectorAll(
+   ".discountHead,.discountCell"
+  )
+  .forEach(x=>{
+
+   x.classList.toggle(
+    "hidden",
+    quantity
+   );
+
+  });
+
+
+ /*
+  Quantity alone controls:
+  Number of Free Items
+  and Free Promotion Items grid.
+ */
+
+ document
+  .getElementById(
+   "freeCountRuleField"
+  )
+  .classList
+  .toggle(
+   "hidden",
+   !quantity
+  );
+
+
+ document
+  .getElementById(
+   "freeSelectableOption"
+  )
+  .classList
+  .toggle(
+   "hidden",
+   !quantity
+  );
+
+
+ document
+  .getElementById(
+   "freePanel"
+  )
+  .classList
+  .toggle(
+   "hidden",
+   !quantity
+  );
+
+
+ if(quantity){
+
+  syncFreeRows(
+   freeCount.value
+  );
+
+ }
+ else{
+
+  document
+   .getElementById(
+    "freeRows"
+   )
+   .innerHTML="";
+
+
+  freeEnabled.checked=false;
+
+
+  document
+   .getElementById(
+    "freeSelectableText"
+   )
+   .classList
+   .add("hidden");
+
+ }
+
+
+ updatePreview();
+
+}
+
+
+/* PROMOTION COUNT */
+
+promoCount.oninput=()=>{
+
+ syncPromotionRows(
+  promoCount.value
+ );
+
+};
+
+
+/* FREE COUNT */
+
+freeCount.oninput=()=>{
+
+ if(
+  PromotionType.value==="Quantity"
+ ){
+
+  syncFreeRows(
+   freeCount.value
+  );
+
+ }
+
+};
+
+
+/* PROMOTION TYPE CHANGE */
+
+PromotionType.onchange=
+ applyPromotionType;
+
+
+/* FREE MODE CHANGE */
+
+if(freeMode){
+
+ freeMode.onchange=
+  updateFreeMode;
+
+}
+
+
+/* FREE ITEM SELECTABLE */
+
+freeEnabled.onchange=()=>{
+
+ /*
+  Independent control:
+  only show/hide the plain text box
+  beside the toggle.
+ */
+
+ document
+  .getElementById(
+   "freeSelectableText"
+  )
+  .classList
+  .toggle(
+   "hidden",
+   !freeEnabled.checked
+  );
+
+};
+
+
+/* TIME SLAB ENABLE */
+
+timeEnabled.onchange=()=>{
+
+ const on=timeEnabled.checked;
+
+ document
+  .getElementById("timeInfo")
+  .classList
+  .toggle("hidden",!on);
+
+ const common=document.getElementById("commonTimeSlabPanel");
+ if(common){
+  common.classList.toggle("hidden",!on);
+ }
+
+ if(on){
+  const rows=document.getElementById("commonTimeSlabRows");
+  if(rows && !rows.children.length){
+   addCommonTimeSlab();
+  }
+ }
+};
+
+
+/* INITIAL PROMOTION ROWS */
+
+syncPromotionRows(
+ promoCount.value
+);
+
+
+/* INITIAL PROMOTION TYPE */
+
+applyPromotionType();
+
+
+/* INITIAL FREE MODE */
+
+updateFreeMode();
+
+
+/* PREVIEW */
+
+function updatePreview(){
+
+ const lev=
+  document
+   .querySelector(
+    'input[name="level"]:checked'
+   )
+   .value;
+
+
+ document
+  .getElementById(
+   "pvLevel"
+  )
+  .textContent=lev;
+
+
+ const sc=
+  document.getElementById(
+   "scope"
+  );
+
+
+ document
+  .getElementById(
+   "pvScope"
+  )
+  .textContent=
+   sc.options[
+    sc.selectedIndex
+   ]?.text
+   ||"—";
+
+
+ document
+  .getElementById(
+   "pvName"
+  )
+  .textContent=
+   document
+    .getElementById(
+     "name"
+    )
+    .value
+    ||"Not entered";
+
+
+ document
+  .getElementById(
+   "pvDate"
+  )
+  .textContent=
+   fmt(
+    document
+     .getElementById(
+      "from"
+     )
+     .value
+   )
+   +" – "+
+   fmt(
+    document
+     .getElementById(
+      "to"
+     )
+     .value
+   );
+
+
+ document
+  .getElementById(
+   "pvFor"
+  )
+  .textContent=
+   document
+    .getElementById(
+     "PromotionFor"
+    )
+    .value;
+
+
+ document
+  .getElementById(
+   "pvType"
+  )
+  .textContent=
+   document
+    .getElementById(
+     "PromotionType"
+    )
+    .value;
+
+}
+
+
+/* DATE FORMAT */
+
+function fmt(value){
+
+ if(!value)
+  return "—";
+
+ const d=
+  new Date(
+   value+"T00:00:00"
+  );
+
+ return d.toLocaleDateString(
+  "en-GB",
+  {
+   day:"2-digit",
+   month:"short",
+   year:"numeric"
+  }
+ );
+
+}
+
+
+/* SAVE */
+
+document
+ .getElementById("save")
+ .onclick=()=>{
+
+  const t=
+   document.getElementById(
+    "toast"
+   );
+
+  t.classList.add("show");
+
+  setTimeout(
+   ()=>t.classList.remove("show"),
+   2200
+  );
+
+ };
+
+
+/* CLEAR */
+
+document
+ .getElementById("clear")
+ .onclick=()=>{
+
+  location.reload();
+
+ };
+
+
+/* CANCEL */
+
+document
+ .getElementById("cancel")
+ .onclick=()=>{
+
+  if(
+   confirm(
+    "Cancel promotion creation?"
+   )
+  ){
+
+   history.back();
+
+  }
+
+ };
+
+
+/*
+ Initial state:
+ Promotion rows are always rendered
+ from Number of Promotion Items.
+*/
+
+syncPromotionRows(
+ document
+  .getElementById(
+   "promoCount"
+  )
+  .value
+);
+
+
+document
+ .getElementById(
+  "freeEnabled"
+ )
+ .checked=false;
+
+
+document
+ .getElementById(
+  "freePanel"
+ )
+ .classList
+ .add("hidden");
+
+
+document
+ .getElementById(
+  "freeCountRuleField"
+ )
+ .classList
+ .add("hidden");
+
+
+document
+ .getElementById(
+  "freeSelectableOption"
+ )
+ .classList
+ .add("hidden");
+
+
+document
+ .getElementById(
+  "freeSelectableText"
+ )
+ .classList
+ .add("hidden");
+
+
+document
+ .getElementById(
+  "timeEnabled"
+ )
+ .checked=false;
+
+
+applyPromotionType();
+
+updateFreeMode();
+
+updatePreview();
+
+</script>
+
+</body>
+</html>

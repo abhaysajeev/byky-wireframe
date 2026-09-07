@@ -60,20 +60,6 @@ urlpatterns = [
         name="rms-vehicle-delivery-pickup-location",
     ),
     path(
-        "rms/rental-tariff-fare-setup/",
-        views.Screen4_5.as_view(
-            screen_no="4.5",
-            screen_title="Rental Tariff & Fare Setup",
-            module_label="Rental Management",
-            legacy_page="FareDetails.aspx",
-            tier="A",
-            phase=4,
-            purpose="To configure rental price matrix tariffs, hourly rates, daily rates, security deposit requirements, grace period rules, and overtime penalty rates per vehicle category.",
-            layout="Form Panel (Fare Plan Code, Plan Name, Vehicle Category, Hourly Rate AED, Half-Day Rate, Full-Day Rate, Security Deposit AED, Grace Period Mins, Overtime Hourly Rate), Configured Tariffs DataGrid.",
-        ),
-        name="rms-rental-tariff-fare-setup",
-    ),
-    path(
         "rms/sale-rates-accessory-pricing/",
         views.Screen4_6.as_view(
             screen_no="4.6",

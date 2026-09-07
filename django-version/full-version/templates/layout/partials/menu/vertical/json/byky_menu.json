@@ -214,7 +214,7 @@
    "slug": "rms",
    "badge": [
     "label-secondary",
-    "9"
+    "8"
    ],
    "submenu": [
     {
@@ -236,11 +236,6 @@
      "url": "rms-vehicle-delivery-pickup-location",
      "name": "Vehicle Delivery & Pickup Location",
      "slug": "rms-vehicle-delivery-pickup-location"
-    },
-    {
-     "url": "rms-rental-tariff-fare-setup",
-     "name": "Rental Tariff & Fare Setup",
-     "slug": "rms-rental-tariff-fare-setup"
     },
     {
      "url": "rms-sale-rates-accessory-pricing",

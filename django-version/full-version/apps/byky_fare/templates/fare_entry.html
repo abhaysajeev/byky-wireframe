@@ -1,0 +1,400 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Fare Entry - Fare &amp; Schemes{% endblock title %}
+
+{% comment %}
+Adapted from the client mockup byky Docs/Fare_Entry_Advanced_UI_v3.html.
+
+Same five steps and the same fields, rebuilt with Vuexy cards, the Bootstrap
+grid and the house spacing scale (g-6 between columns, mb-6 between sections)
+so it matches the other screens rather than carrying the mockup's own CSS.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-fare.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+{% include "byky/partials/page_header.html" with title="Fare Entry" parent="Fare & Schemes" subtitle=purpose badge="Active Configuration" %}
+
+<div class="row g-6">
+  <div class="col-12">
+
+    <!-- 01 Price Level & Scope -->
+    <div class="card mb-6">
+      <div class="card-header d-flex justify-content-between align-items-start">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Price Level &amp; Scope</h5>
+          <p class="card-subtitle">Select where this fare will be applicable.</p>
+        </div>
+        <span class="badge bg-label-secondary">01</span>
+      </div>
+      <div class="card-body">
+        <div class="row g-6">
+          <div class="col-lg-4">
+            <label class="form-label d-block">Price Level <span class="text-danger">*</span></label>
+            <div class="btn-group w-100" role="group" aria-label="Price level">
+              {% for lvl in price_levels %}
+                <input type="radio" class="btn-check" name="priceLevel" id="lvl-{{ forloop.counter }}"
+                       value="{{ lvl }}" {% if forloop.first %}checked{% endif %} autocomplete="off" />
+                <label class="btn btn-outline-primary" for="lvl-{{ forloop.counter }}">{{ lvl }}</label>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="row g-6">
+              <div class="col-md-4">
+                <label class="form-label" for="fare-scope">Company <span class="text-danger">*</span></label>
+                <select id="fare-scope" class="select2 form-select">
+                  <option value="">Select Company</option>
+                  {% for c in companies_list %}<option>{{ c }}</option>{% endfor %}
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label" for="fare-category">Category <span class="text-danger">*</span></label>
+                <select id="fare-category" class="select2 form-select">
+                  <option value="">Select Category</option>
+                  {% for c in categories_list %}<option>{{ c }}</option>{% endfor %}
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label" for="fare-vehicle">Vehicle Type <span class="text-danger">*</span></label>
+                <select id="fare-vehicle" class="select2 form-select">
+                  <option value="">Select Vehicle Type</option>
+                  {% for v in vehicle_types_list %}<option>{{ v }}</option>{% endfor %}
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="alert alert-secondary d-flex mt-6 mb-0" role="alert">
+          <i class="icon-base ti tabler-info-circle icon-md me-3 flex-shrink-0"></i>
+          <div>
+            The same vehicle type can hold multiple package slabs. A fare may also use different
+            pricing windows during the day while keeping the same vehicle type.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 Validity & Tax -->
+    <div class="card mb-6">
+      <div class="card-header d-flex justify-content-between align-items-start">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Fare Validity &amp; Tax</h5>
+          <p class="card-subtitle">Effective dates and the applicable tax percentage.</p>
+        </div>
+        <span class="badge bg-label-secondary">02</span>
+      </div>
+      <div class="card-body">
+        <div class="row g-6">
+          <div class="col-md-3">
+            <label class="form-label" for="fare-from">From Date <span class="text-danger">*</span></label>
+            <input type="text" class="form-control byky-date" id="fare-from" placeholder="Select date" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="fare-to">To Date <span class="text-danger">*</span></label>
+            <input type="text" class="form-control byky-date" id="fare-to" placeholder="Select date" />
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="fare-tax">Tax Percentage <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="fare-tax" min="0" max="100" step="0.01" value="5" />
+              <span class="input-group-text">%</span>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <label class="form-label" for="fare-status">Fare Status</label>
+            <select id="fare-status" class="form-select">
+              {% for s in fare_status %}<option>{{ s }}</option>{% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 Package Fare -->
+    <div class="card mb-6">
+      <div class="card-header d-flex justify-content-between align-items-start">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Package Fare</h5>
+          <p class="card-subtitle">One package time and its fare configuration. The same package time applies to every row below.</p>
+        </div>
+        <span class="badge bg-label-secondary">03</span>
+      </div>
+      <div class="card-body">
+        <div class="row g-6">
+          <div class="col-md-4">
+            <label class="form-label" for="pkg-time">Package Time <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="pkg-time" min="1" step="1" value="30" />
+              <span class="input-group-text">min</span>
+            </div>
+            <div class="form-text">Example 30, 45 or 60.</div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="pkg-basic">Basic Fare <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <span class="input-group-text">AED</span>
+              <input type="number" class="form-control" id="pkg-basic" min="0" step="0.01" value="100" />
+            </div>
+          </div>
+          <div class="col-md-4">
+            <label class="form-label" for="pkg-grace">Grace Period <span class="text-danger">*</span></label>
+            <div class="input-group">
+              <input type="number" class="form-control" id="pkg-grace" min="0" step="1" value="5" />
+              <span class="input-group-text">min</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="border rounded p-6 mt-6">
+          <h6 class="mb-1">Concurrent Fare</h6>
+          <p class="text-body-secondary small mb-4">Charged once the package time plus grace period has elapsed.</p>
+          <div class="row g-6">
+            <div class="col-md-4">
+              <label class="form-label" for="con-interval">Concurrent Interval <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="con-interval" min="1" value="10" />
+                <span class="input-group-text">min</span>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="con-price">Concurrent Price <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text">AED</span>
+                <input type="number" class="form-control" id="con-price" min="0" step="0.01" value="10" />
+              </div>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label" for="con-grace">Concurrent Grace Period</label>
+              <div class="input-group">
+                <input type="number" class="form-control" id="con-grace" min="0" value="0" />
+                <span class="input-group-text">min</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="alert alert-secondary d-flex mt-6 mb-0" role="alert">
+          <i class="icon-base ti tabler-calculator icon-md me-3 flex-shrink-0"></i>
+          <div>
+            <span class="fw-medium d-block mb-1">How the charge is calculated</span>
+            Package time plus grace equals the basic fare. Every completed concurrent interval after
+            that adds the concurrent price. For example 30 min with 5 min grace is AED 100; at
+            38 minutes one 10-minute slab is added, giving AED 110.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 Time Slab Pricing -->
+    <div class="card mb-6">
+      <div class="card-header d-flex justify-content-between align-items-start">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Time Slab Pricing</h5>
+          <p class="card-subtitle">Optional. Use when a package needs different fares at different times of day.</p>
+        </div>
+        <span class="badge bg-label-secondary">04</span>
+      </div>
+      <div class="card-body">
+        <div class="border rounded p-6 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-4">
+          <div>
+            <h6 class="mb-1">Enable Time Slab Pricing</h6>
+            <p class="text-body-secondary small mb-0">
+              Adds daily pricing windows. Basic fare, grace and concurrent price can vary per slab.
+            </p>
+          </div>
+          <div class="form-check form-switch mb-0 flex-shrink-0">
+            <input class="form-check-input" type="checkbox" id="timeSlabToggle" />
+            <label class="form-check-label" for="timeSlabToggle">Enable</label>
+          </div>
+        </div>
+
+        <div id="timeSlabArea" class="mt-6" hidden>
+          <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mb-4">
+            <div>
+              <h6 class="mb-1">Daily Pricing Windows</h6>
+              <p class="text-body-secondary small mb-0">The package time above stays common; only the window pricing changes.</p>
+            </div>
+            <button class="btn btn-primary btn-sm flex-shrink-0" type="button" id="addTimeSlab"
+                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasTimeSlab">
+              <i class="icon-base ti tabler-plus icon-14px me-1_5"></i>Add Time Slab
+            </button>
+          </div>
+
+          <div class="table-responsive border rounded">
+            <table class="table table-sm mb-0 align-middle" id="timeSlabTable">
+              <thead>
+                <tr>
+                  <th class="text-center">#</th>
+                  <th>Applies On</th>
+                  <th>Window</th>
+                  <th class="text-end">Basic Fare</th>
+                  <th class="text-end">Grace</th>
+                  <th class="text-end">Interval</th>
+                  <th class="text-end">Conc. Price</th>
+                  <th class="text-end">Conc. Grace</th>
+                  <th class="text-end">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="timeSlabRows"></tbody>
+            </table>
+          </div>
+
+          <div class="alert alert-secondary d-flex mt-6 mb-0" role="alert">
+            <i class="icon-base ti tabler-clock-hour-4 icon-md me-3 flex-shrink-0"></i>
+            <div>
+              With a 30 minute package, 10:00&ndash;11:00 might charge AED 90 while 11:00&ndash;16:00
+              charges AED 110. Each slab carries its own grace, interval and concurrent price.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 Preview -->
+    <div class="card">
+      <div class="card-header d-flex justify-content-between align-items-start">
+        <div class="card-title mb-0">
+          <h5 class="mb-1">Fare Preview</h5>
+          <p class="card-subtitle">Review the configuration before saving.</p>
+        </div>
+        <span class="badge bg-label-secondary">05</span>
+      </div>
+      <div class="card-body">
+        <div class="row g-4">
+          {% for label, value in preview_items %}
+          <div class="col-6 col-lg">
+            <div class="border rounded p-4 h-100">
+              <small class="text-body-secondary text-uppercase d-block mb-1">{{ label }}</small>
+              <span class="fw-medium">{{ value }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="card-footer d-flex flex-wrap gap-4">
+        <button type="button" class="btn btn-primary">Save Fare</button>
+        <button type="button" class="btn btn-label-secondary">Clear</button>
+        <button type="button" class="btn btn-label-danger">Cancel</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% comment %}
+  Time-slab editor. Ten fields per slab is too many to keep legible as bare
+  inputs in a table row, so the grid stays a readable summary and every field
+  keeps a visible label in this drawer -- the list + drawer pattern used
+  throughout the app.
+{% endcomment %}
+<div class="offcanvas offcanvas-end offcanvas-wide" tabindex="-1" id="offcanvasTimeSlab" aria-labelledby="offcanvasTimeSlabLabel">
+  <div class="offcanvas-header border-bottom">
+    <h5 class="offcanvas-title" id="offcanvasTimeSlabLabel">Add Time Slab</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body mx-0 flex-grow-0 h-100">
+    <form id="timeSlabForm" onsubmit="return false">
+
+      <h6 class="text-body-secondary text-uppercase small mb-4">When it applies</h6>
+      <div class="row g-4 mb-6">
+        <div class="col-md-6">
+          <label class="form-label" for="slab-applies">Applies On <span class="text-danger">*</span></label>
+          <select class="form-select" id="slab-applies">
+            <option value="all">Every day</option>
+            <option value="day">A day of the week</option>
+            <option value="date">A specific date</option>
+          </select>
+        </div>
+        <div class="col-md-6" id="slab-day-wrap" hidden>
+          <label class="form-label" for="slab-day">Day</label>
+          <select class="form-select" id="slab-day">
+            {% for day in days %}{% if day != 'All Days' %}<option>{{ day }}</option>{% endif %}{% endfor %}
+          </select>
+        </div>
+        <div class="col-md-6" id="slab-date-wrap" hidden>
+          <label class="form-label" for="slab-date">Date</label>
+          <input type="text" class="form-control byky-date" id="slab-date" placeholder="Pick a date" />
+        </div>
+      </div>
+
+      <h6 class="text-body-secondary text-uppercase small mb-4">Pricing window</h6>
+      <div class="row g-4 mb-6">
+        <div class="col-md-6">
+          <label class="form-label" for="slab-from">From <span class="text-danger">*</span></label>
+          <input type="time" class="form-control" id="slab-from" value="10:00" />
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="slab-to">To <span class="text-danger">*</span></label>
+          <input type="time" class="form-control" id="slab-to" value="11:00" />
+        </div>
+      </div>
+
+      <h6 class="text-body-secondary text-uppercase small mb-4">Fare for this window</h6>
+      <div class="row g-4 mb-6">
+        <div class="col-md-6">
+          <label class="form-label" for="slab-basic">Basic Fare <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text">AED</span>
+            <input type="number" class="form-control" id="slab-basic" min="0" step="0.01" value="90" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="slab-grace">Grace Period</label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="slab-grace" min="0" value="5" />
+            <span class="input-group-text">min</span>
+          </div>
+        </div>
+      </div>
+
+      <h6 class="text-body-secondary text-uppercase small mb-4">Concurrent charge</h6>
+      <div class="row g-4 mb-6">
+        <div class="col-md-6">
+          <label class="form-label" for="slab-interval">Concurrent Interval <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="slab-interval" min="1" value="10" />
+            <span class="input-group-text">min</span>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="slab-conc-price">Concurrent Price <span class="text-danger">*</span></label>
+          <div class="input-group">
+            <span class="input-group-text">AED</span>
+            <input type="number" class="form-control" id="slab-conc-price" min="0" step="0.01" value="10" />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label class="form-label" for="slab-conc-grace">Concurrent Grace</label>
+          <div class="input-group">
+            <input type="number" class="form-control" id="slab-conc-grace" min="0" value="0" />
+            <span class="input-group-text">min</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex flex-wrap gap-4">
+        <button type="button" class="btn btn-primary" id="slabSave">Save Slab</button>
+        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

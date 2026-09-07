@@ -223,7 +223,7 @@
    "slug": "rms",
    "badge": [
     "label-secondary",
-    "9"
+    "8"
    ],
    "submenu": [
     {
@@ -247,11 +247,6 @@
      "slug": "rms-vehicle-delivery-pickup-location"
     },
     {
-     "url": "rms-rental-tariff-fare-setup",
-     "name": "Rental Tariff & Fare Setup",
-     "slug": "rms-rental-tariff-fare-setup"
-    },
-    {
      "url": "rms-sale-rates-accessory-pricing",
      "name": "Sale Rates & Accessory Pricing",
      "slug": "rms-sale-rates-accessory-pricing"
@@ -270,6 +265,27 @@
      "url": "rms-rms-security-privilege-management",
      "name": "RMS Security Privilege Management",
      "slug": "rms-rms-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Fare & Schemes",
+   "icon": "menu-icon icon-base ti tabler-tag",
+   "slug": "fare",
+   "badge": [
+    "label-secondary",
+    "2"
+   ],
+   "submenu": [
+    {
+     "url": "fare-entry",
+     "name": "Fare Entry",
+     "slug": "fare-entry"
+    },
+    {
+     "url": "fare-scheme-creation",
+     "name": "Scheme Creation",
+     "slug": "fare-scheme-creation"
     }
    ]
   },

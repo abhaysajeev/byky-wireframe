@@ -33,6 +33,7 @@ urlpatterns = [
     path("", include("apps.byky_hrms.urls")),
     path("", include("apps.byky_ims.urls")),
     path("", include("apps.byky_rms.urls")),
+    path("", include("apps.byky_fare.urls")),
     path("", include("apps.byky_tracking.urls")),
     path("", include("apps.byky_reports.urls")),
     path("", include("apps.byky_sfa.urls")),

@@ -3,6 +3,7 @@
   {
    "url": "index",
    "icon": "menu-icon icon-base ti tabler-smart-home",
+   "svg": "M3 10.5 12 3l9 7.5M5 9.8V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.8",
    "name": "Dashboard",
    "slug": "index"
   },
@@ -12,6 +13,7 @@
   {
    "name": "Company Management",
    "icon": "menu-icon icon-base ti tabler-building",
+   "svg": "M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3",
    "slug": "cms",
    "badge": [
     "label-secondary",
@@ -29,9 +31,9 @@
      "slug": "cms-country-state-management"
     },
     {
-     "url": "cms-core-location-management",
+     "url": "cms-location-management",
      "name": "Core Location Management",
-     "slug": "cms-core-location-management"
+     "slug": "cms-location-management"
     },
     {
      "url": "cms-branch-management",
@@ -68,10 +70,11 @@
   {
    "name": "Human Resources",
    "icon": "menu-icon icon-base ti tabler-users",
+   "svg": "M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2M21 20v-1.4a3 3 0 0 0-2.3-2.9M16.6 5a3 3 0 0 1 0 5.8",
    "slug": "hrms",
    "badge": [
     "label-secondary",
-    "6"
+    "5"
    ],
    "submenu": [
     {
@@ -90,11 +93,6 @@
      "slug": "hrms-employee-designation-master"
     },
     {
-     "url": "hrms-employee-grade-master",
-     "name": "Employee Grade Master",
-     "slug": "hrms-employee-grade-master"
-    },
-    {
      "url": "hrms-employee-block-unblock",
      "name": "Employee Block / Unblock",
      "slug": "hrms-employee-block-unblock"
@@ -109,10 +107,11 @@
   {
    "name": "Inventory",
    "icon": "menu-icon icon-base ti tabler-package",
+   "svg": "m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10",
    "slug": "ims",
    "badge": [
     "label-secondary",
-    "20"
+    "10"
    ],
    "submenu": [
     {
@@ -151,56 +150,6 @@
      "slug": "ims-vehicle-transfer-relocation"
     },
     {
-     "url": "ims-e-commerce-category-master",
-     "name": "E-Commerce Category Master",
-     "slug": "ims-e-commerce-category-master"
-    },
-    {
-     "url": "ims-e-commerce-stock-item-catalog",
-     "name": "E-Commerce Stock Item Catalog",
-     "slug": "ims-e-commerce-stock-item-catalog"
-    },
-    {
-     "url": "ims-vehicle-item-features-master",
-     "name": "Vehicle & Item Features Master",
-     "slug": "ims-vehicle-item-features-master"
-    },
-    {
-     "url": "ims-order-status-management",
-     "name": "Order Status Management",
-     "slug": "ims-order-status-management"
-    },
-    {
-     "url": "ims-promotional-coupon-discount-code",
-     "name": "Promotional Coupon & Discount Code",
-     "slug": "ims-promotional-coupon-discount-code"
-    },
-    {
-     "url": "ims-loyalty-rewards-profile",
-     "name": "Loyalty Rewards Profile",
-     "slug": "ims-loyalty-rewards-profile"
-    },
-    {
-     "url": "ims-loyalty-redemption-profile",
-     "name": "Loyalty Redemption Profile",
-     "slug": "ims-loyalty-redemption-profile"
-    },
-    {
-     "url": "ims-wallet-refund-request-management",
-     "name": "Wallet Refund Request Management",
-     "slug": "ims-wallet-refund-request-management"
-    },
-    {
-     "url": "ims-newsletter-marketing-dispatch",
-     "name": "Newsletter & Marketing Dispatch",
-     "slug": "ims-newsletter-marketing-dispatch"
-    },
-    {
-     "url": "ims-push-notification-dispatch",
-     "name": "Push Notification Dispatch",
-     "slug": "ims-push-notification-dispatch"
-    },
-    {
      "url": "ims-live-rfid-antenna-fleet-monitoring",
      "name": "Live RFID & Antenna Fleet Monitoring",
      "slug": "ims-live-rfid-antenna-fleet-monitoring"
@@ -220,46 +169,17 @@
   {
    "name": "Rental Management",
    "icon": "menu-icon icon-base ti tabler-receipt",
+   "svg": "M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7",
    "slug": "rms",
    "badge": [
     "label-secondary",
-    "8"
+    "2"
    ],
    "submenu": [
     {
      "url": "rms-customer-details-registration",
      "name": "Customer Details & Registration",
      "slug": "rms-customer-details-registration"
-    },
-    {
-     "url": "rms-customer-card-rfid-mapping",
-     "name": "Customer Card & RFID Mapping",
-     "slug": "rms-customer-card-rfid-mapping"
-    },
-    {
-     "url": "rms-customer-sanction-blacklist-management",
-     "name": "Customer Sanction & Blacklist Management",
-     "slug": "rms-customer-sanction-blacklist-management"
-    },
-    {
-     "url": "rms-vehicle-delivery-pickup-location",
-     "name": "Vehicle Delivery & Pickup Location",
-     "slug": "rms-vehicle-delivery-pickup-location"
-    },
-    {
-     "url": "rms-sale-rates-accessory-pricing",
-     "name": "Sale Rates & Accessory Pricing",
-     "slug": "rms-sale-rates-accessory-pricing"
-    },
-    {
-     "url": "rms-vehicle-fleet-order-allocation",
-     "name": "Vehicle Fleet Order Allocation",
-     "slug": "rms-vehicle-fleet-order-allocation"
-    },
-    {
-     "url": "rms-rental-price-updates-tariff-adjustments",
-     "name": "Rental Price Updates & Tariff Adjustments",
-     "slug": "rms-rental-price-updates-tariff-adjustments"
     },
     {
      "url": "rms-rms-security-privilege-management",
@@ -271,6 +191,7 @@
   {
    "name": "Fare & Schemes",
    "icon": "menu-icon icon-base ti tabler-tag",
+   "svg": "m2.5 12.5 9-9a2 2 0 0 1 1.4-.6H20a1 1 0 0 1 1 1v7.1a2 2 0 0 1-.6 1.4l-9 9a1.5 1.5 0 0 1-2.1 0l-6.8-6.8a1.5 1.5 0 0 1 0-2.1M16.5 7.5h.01",
    "slug": "fare",
    "badge": [
     "label-secondary",
@@ -292,6 +213,7 @@
   {
    "name": "Tracking & Telematics",
    "icon": "menu-icon icon-base ti tabler-gps",
+   "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z",
    "slug": "tracking",
    "badge": [
     "label-secondary",
@@ -323,6 +245,7 @@
   {
    "name": "RFID Gates",
    "icon": "menu-icon icon-base ti tabler-radar",
+   "svg": "M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3",
    "slug": "rfid",
    "badge": [
     "label-secondary",
@@ -362,6 +285,7 @@
   {
    "name": "Reports",
    "icon": "menu-icon icon-base ti tabler-report-analytics",
+   "svg": "M4 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM8 16v-4M12 16V8M16 16v-6",
    "slug": "reports",
    "badge": [
     "label-secondary",
@@ -413,6 +337,7 @@
   {
    "name": "Sales Force",
    "icon": "menu-icon icon-base ti tabler-chart-line",
+   "svg": "m3 17 5.5-6.5 4 3.5L21 6M21 6h-5M21 6v5",
    "slug": "sfa",
    "badge": [
     "label-secondary",
@@ -454,6 +379,7 @@
   {
    "name": "Mobile App",
    "icon": "menu-icon icon-base ti tabler-device-mobile",
+   "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2",
    "slug": "mobile",
    "badge": [
     "label-secondary",
@@ -500,6 +426,7 @@
   {
    "name": "Notifications",
    "icon": "menu-icon icon-base ti tabler-bell",
+   "svg": "M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0",
    "slug": "notification",
    "badge": [
     "label-secondary",
@@ -536,6 +463,7 @@
   {
    "name": "Wallet & Payments",
    "icon": "menu-icon icon-base ti tabler-wallet",
+   "svg": "M3 7a2 2 0 0 1 2-2h11l4 4v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 13h2",
    "slug": "wallet",
    "badge": [
     "label-secondary",
@@ -575,6 +503,7 @@
   {
    "name": "Scheduler",
    "icon": "menu-icon icon-base ti tabler-clock-cog",
+   "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2",
    "slug": "scheduler",
    "badge": [
     "label-secondary",
@@ -611,6 +540,8 @@
   {
    "name": "System Administration",
    "icon": "menu-icon icon-base ti tabler-settings",
+   "svg": "M9.88 4.91L9.97 2.21L14.03 2.21L14.12 4.91L15.51 5.49L17.49 3.64L20.36 6.51L18.51 8.49L19.09 9.88L21.79 9.97L21.79 14.03L19.09 14.12L18.51 15.51L20.36 17.49L17.49 20.36L15.51 18.51L14.12 19.09L14.03 21.79L9.97 21.79L9.88 19.09L8.49 18.51L6.51 20.36L3.64 17.49L5.49 15.51L4.91 14.12L2.21 14.03L2.21 9.97L4.91 9.88L5.49 8.49L3.64 6.51L6.51 3.64L8.49 5.49Z",
+   "svg2": "M12 15.1a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2",
    "slug": "sysadmin",
    "badge": [
     "label-secondary",
@@ -647,6 +578,7 @@
   {
    "name": "Mobile API",
    "icon": "menu-icon icon-base ti tabler-api",
+   "svg": "M4 7h3.5a2 2 0 0 1 0 4H4v6M4 7v4M11 17V7h2.5a2 2 0 0 1 0 5H11M18 7v10",
    "slug": "api",
    "badge": [
     "label-secondary",
@@ -683,6 +615,7 @@
   {
    "name": "System Security",
    "icon": "menu-icon icon-base ti tabler-shield-lock",
+   "svg": "M12 22s8-4 8-10V5.5L12 2 4 5.5V12c0 6 8 10 8 10M9 12l2.2 2.2L15.5 10",
    "slug": "security",
    "badge": [
     "label-secondary",
@@ -719,6 +652,7 @@
   {
    "name": "Integration",
    "icon": "menu-icon icon-base ti tabler-plug-connected",
+   "svg": "M9 6v3a3 3 0 0 0 3 3h0a3 3 0 0 0 3-3V6M8 3v3M16 3v3M11 12v4a3 3 0 0 0 3 3h1M9 6h6",
    "slug": "integration",
    "badge": [
     "label-secondary",

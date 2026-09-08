@@ -4,16 +4,10 @@
 {% block title %}CMS Privilege Management - Company Management{% endblock title %}
 
 {% comment %}
-FSD 1.9 -- Tier D. Migrated onto the shared byky-screen.css/js base (see
-byky-screen-design-system.md and cms_company_details.html for the styling
-reference). Built self-contained here rather than through the shared
-byky/partials/privilege_matrix.html partial, since that partial still serves
-the 15 other modules on the old Vuexy design -- migrating it would have
-touched every one of them (CLAUDE.md: don't mix systems on one screen).
-
-Seven permissions per screen plus a Select All toggle, per FSD section 5. The
-select-all wiring (.privilege-select-all) is unchanged from byky-cms-list.js,
-so plain checkboxes are used here rather than a new .scr-* control.
+FSD 1.9 -- Tier D. Uses the shared privilege matrix partial, which is the same
+screen in all 16 modules -- now migrated onto the shared byky-screen.css/js base
+(see byky-screen-design-system.md). Seven permissions per screen plus Select
+All, per the FSD section 5 wireframe.
 {% endcomment %}
 
 {% block page_css %}
@@ -24,135 +18,8 @@ so plain checkboxes are used here rather than a new .scr-* control.
 {% block page_js %}
 {{ block.super }}
 <script src="{% static 'js/byky-screen.js' %}"></script>
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-<div class="scr">
-
-  <div class="scr-head">
-    <div>
-      <div class="scr-crumb">
-        <span>Company Management</span>
-        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
-        <b>CMS Privilege Management</b>
-      </div>
-      <h1 class="scr-title">CMS Privilege Management</h1>
-      <p class="scr-sub">{{ purpose }}</p>
-    </div>
-  </div>
-
-  <div class="scr-tiles">
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-red">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ roles|length }}</div><div class="scr-tile-lab">Roles</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-blue">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1M14 3v5h5M9 14h6M9 17h4"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ screens|length }}</div><div class="scr-tile-lab">CMS screens</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-amber">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ permissions|length }}</div><div class="scr-tile-lab">Permissions / screen</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-green">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">SuperAdmin</div><div class="scr-tile-lab">Default role loaded</div></div>
-    </div>
-  </div>
-
-  <div class="scr-card">
-    <div class="scr-form-head">
-      <div>
-        <div class="scr-form-title-row">
-          <h2 class="scr-form-title">Role Selection</h2>
-          <span class="scr-form-badge">Tier D</span>
-        </div>
-        <p class="scr-form-sub">Pick a role to load and edit its CMS screen-level permissions.</p>
-      </div>
-    </div>
-
-    <div class="scr-form-body">
-      <div class="scr-grid">
-        <div class="scr-field" style="grid-column:span 1">
-          <label class="scr-label" for="privilege-role">Select User Role</label>
-          <select id="privilege-role" class="scr-input">
-            {% for r in roles %}<option {% if forloop.first %}selected{% endif %}>{{ r }}</option>{% endfor %}
-          </select>
-        </div>
-        <div class="scr-field" style="grid-column:span 1">
-          <label class="scr-label" for="privilege-role-search">Search Role</label>
-          <input type="text" id="privilege-role-search" class="scr-input" placeholder="Role name" />
-        </div>
-        <div class="scr-field" style="grid-column:span 1; align-self:end">
-          <button type="button" class="scr-btn" style="width:100%; justify-content:center">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg>
-            Load Privileges
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="scr-card">
-    <div class="scr-form-head">
-      <div>
-        <div class="scr-form-title-row">
-          <h2 class="scr-form-title">Screen Permissions</h2>
-          <span class="scr-form-badge">{{ screens|length }} screens</span>
-        </div>
-        <p class="scr-form-sub">Access, Create, Read, Update, Print, Approve and Delete, per CMS screen.</p>
-      </div>
-    </div>
-
-    <div class="scr-form-body">
-      <div class="scr-table-scroll scr-sb">
-        <table>
-          <thead>
-            <tr>
-              <th>Page / Screen</th>
-              {% for p in permissions %}<th style="text-align:center">{{ p }}</th>{% endfor %}
-              <th style="text-align:center">Select All</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for s in screens %}
-            <tr class="scr-row">
-              <td style="font-weight:600">{{ s.name }}</td>
-              {% for granted in s.perms %}
-              <td>
-                <div style="display:flex; justify-content:center">
-                  <input type="checkbox" class="scr-check" {% if granted %}checked{% endif %} />
-                </div>
-              </td>
-              {% endfor %}
-              <td>
-                <div style="display:flex; justify-content:center">
-                  <input type="checkbox" class="scr-check privilege-select-all" />
-                </div>
-              </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-
-      <div class="scr-form-foot">
-        <div class="scr-form-actions" style="margin-left:auto">
-          <button type="button" class="scr-btn-secondary">Reset Privileges</button>
-          <button type="button" class="scr-btn-primary">Save CMS Privileges</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
+{% include "byky/partials/privilege_matrix.html" with title="CMS Privilege Management" parent="Company Management" subtitle=purpose roles=roles screens=screens permissions=permissions module="CMS" %}
 {% endblock %}

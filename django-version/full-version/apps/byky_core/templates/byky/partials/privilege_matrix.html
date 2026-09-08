@@ -1,73 +1,157 @@
 {% comment %}
 Tier D -- role x screen x permission matrix. FSD specifies seven permissions per
 screen (Access, Create, Read, Update, Print, Approve, Delete) plus a Select All
-toggle per row.
+toggle per row -- some modules (HRMS, IMS, ...) parameterise their own shorter
+permission list instead.
+
+Migrated onto the shared byky-screen.css/js base (see byky-screen-design-system.md
+and cms_company_details.html for the styling reference). This partial owns the
+WHOLE page -- its own scr-head, KPI tiles, role-selection card and the matrix
+card -- so the calling template no longer includes byky/partials/page_header.html
+separately; pass title/parent/subtitle the same way page_header.html did.
 
 This is the SAME screen in all 16 modules, so it is built once here and included
 with the module's own screen list:
 
-  {% include "byky/partials/privilege_matrix.html" with roles=roles screens=screens permissions=permissions module=module_label %}
+  {% include "byky/partials/privilege_matrix.html" with title=screen_title parent=module_label subtitle=purpose roles=roles screens=screens permissions=permissions module=module_label %}
 
 `screens` is a list of {name, perms} where perms is a list of booleans matching
 `permissions` in order. Legacy .aspx filenames are deliberately not shown -- they
 are build metadata, not something a client-facing screen should display.
+
+Requires byky-screen.css/js on the page (page_css/page_js blocks) -- the calling
+template's page_js block should no longer load byky-cms-list.js for this screen;
+the select-all and "Remove All Privileges" wiring now live in byky-screen.js.
 {% endcomment %}
 
-<div class="card mb-6">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Role Selection</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <label class="form-label" for="privilege-role">Select User Role</label>
-        <select id="privilege-role" class="form-select">
-          {% for r in roles %}<option {% if forloop.first %}selected{% endif %}>{{ r }}</option>{% endfor %}
-        </select>
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>{{ parent }}</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>{{ title }}</b>
       </div>
-      <div class="col-md-4">
-        <label class="form-label" for="privilege-role-search">Search Role</label>
-        <input type="text" id="privilege-role-search" class="form-control" placeholder="Role name" />
+      <h1 class="scr-title">{{ title }}</h1>
+      <p class="scr-sub">{{ subtitle }}</p>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ roles|length }}</div><div class="scr-tile-lab">Roles</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1M14 3v5h5M9 14h6M9 17h4"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ screens|length }}</div><div class="scr-tile-lab">{{ module }} screens</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ permissions|length }}</div><div class="scr-tile-lab">Permissions / screen</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ roles.0 }}</div><div class="scr-tile-lab">Default role loaded</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">Role Selection</h2>
+          <span class="scr-form-badge">Tier D</span>
+        </div>
+        <p class="scr-form-sub">Pick a role to load and edit its {{ module }} screen-level permissions.</p>
       </div>
-      <div class="col-md-4 d-flex align-items-end">
-        <button type="button" class="btn btn-label-secondary w-100">
-          <i class="icon-base ti tabler-refresh icon-xs me-1_5"></i>Load Privileges
-        </button>
+    </div>
+
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field" style="grid-column:span 1">
+          <label class="scr-label" for="privilege-role">Select User Role</label>
+          <select id="privilege-role" class="scr-input">
+            {% for r in roles %}<option {% if forloop.first %}selected{% endif %}>{{ r }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field" style="grid-column:span 1">
+          <label class="scr-label" for="privilege-role-search">Search Role</label>
+          <input type="text" id="privilege-role-search" class="scr-input" placeholder="Role name" />
+        </div>
+        <div class="scr-field" style="grid-column:span 1; align-self:end">
+          <button type="button" class="scr-btn" style="width:100%; justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg>
+            Load Privileges
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="card-datatable table-responsive">
-    <table class="table border-top">
-      <thead>
-        <tr>
-          <th>Page / Screen</th>
-          {% for p in permissions %}<th class="text-center">{{ p }}</th>{% endfor %}
-          <th class="text-center">Select All</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for s in screens %}
-        <tr>
-          <td><span class="fw-medium">{{ s.name }}</span></td>
-          {% for granted in s.perms %}
-          <td class="text-center">
-            <div class="form-check d-flex justify-content-center mb-0">
-              <input class="form-check-input" type="checkbox" {% if granted %}checked{% endif %} />
-            </div>
-          </td>
-          {% endfor %}
-          <td class="text-center">
-            <div class="form-check d-flex justify-content-center mb-0">
-              <input class="form-check-input privilege-select-all" type="checkbox" />
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">Screen Permissions</h2>
+          <span class="scr-form-badge">{{ screens|length }} screens</span>
+        </div>
+        <p class="scr-form-sub">{{ permissions|join:", " }}, per {{ module }} screen.</p>
+      </div>
+    </div>
+
+    <div class="scr-form-body">
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Page / Screen</th>
+              {% for p in permissions %}<th style="text-align:center">{{ p }}</th>{% endfor %}
+              <th style="text-align:center">Select All</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in screens %}
+            <tr class="scr-row">
+              <td style="font-weight:600">{{ s.name }}</td>
+              {% for granted in s.perms %}
+              <td>
+                <div style="display:flex; justify-content:center">
+                  <input type="checkbox" class="scr-check" {% if granted %}checked{% endif %} />
+                </div>
+              </td>
+              {% endfor %}
+              <td>
+                <div style="display:flex; justify-content:center">
+                  <input type="checkbox" class="scr-check privilege-select-all" />
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-form-foot">
+        <button type="button" class="scr-btn-danger" data-scr-clear-privileges>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg>
+          Remove All Privileges
+        </button>
+        <div class="scr-form-actions" style="margin-left:auto">
+          <button type="button" class="scr-btn-secondary">Reset Privileges</button>
+          <button type="button" class="scr-btn-primary">Save {{ module }} Privileges</button>
+        </div>
+      </div>
+    </div>
   </div>
 
-  <div class="card-footer d-flex gap-4">
-    <button type="button" class="btn btn-primary">Save {{ module }} Privileges</button>
-    <button type="button" class="btn btn-label-secondary">Reset Privileges</button>
-  </div>
 </div>

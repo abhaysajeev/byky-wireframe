@@ -150,11 +150,6 @@
      "slug": "ims-vehicle-transfer-relocation"
     },
     {
-     "url": "ims-live-rfid-antenna-fleet-monitoring",
-     "name": "Live RFID & Antenna Fleet Monitoring",
-     "slug": "ims-live-rfid-antenna-fleet-monitoring"
-    },
-    {
      "url": "ims-inventory-system-alerts-exception-monitoring",
      "name": "Inventory System Alerts & Exception Monitoring",
      "slug": "ims-inventory-system-alerts-exception-monitoring"
@@ -278,6 +273,68 @@
      "url": "creditnote-credit-note",
      "name": "Credit Note",
      "slug": "creditnote-credit-note"
+    }
+   ]
+  },
+  {
+   "name": "Customer App Management",
+   "icon": "menu-icon icon-base ti tabler-device-mobile-star",
+   "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2M9 6h6",
+   "slug": "customerapp",
+   "badge": [
+    "label-secondary",
+    "10"
+   ],
+   "submenu": [
+    {
+     "name": "Mail Template & Mapping",
+     "slug": "customerapp-mail-template",
+     "disabled": true
+    },
+    {
+     "url": "ims-live-rfid-antenna-fleet-monitoring",
+     "name": "Live Monitoring",
+     "slug": "ims-live-rfid-antenna-fleet-monitoring"
+    },
+    {
+     "url": "ims-order-status-management",
+     "name": "Order Status",
+     "slug": "ims-order-status-management"
+    },
+    {
+     "url": "ims-wallet-refund-request-management",
+     "name": "Wallet Refund",
+     "slug": "ims-wallet-refund-request-management"
+    },
+    {
+     "url": "ims-promotional-coupon-discount-code",
+     "name": "Promo Code",
+     "slug": "ims-promotional-coupon-discount-code"
+    },
+    {
+     "url": "ims-loyalty-rewards-profile",
+     "name": "Loyalty Profile",
+     "slug": "ims-loyalty-rewards-profile"
+    },
+    {
+     "url": "ims-loyalty-redemption-profile",
+     "name": "Loyalty Redemption Profile",
+     "slug": "ims-loyalty-redemption-profile"
+    },
+    {
+     "url": "ims-push-notification-dispatch",
+     "name": "Notifications",
+     "slug": "ims-push-notification-dispatch"
+    },
+    {
+     "name": "Advertisement",
+     "slug": "customerapp-advertisement",
+     "disabled": true
+    },
+    {
+     "name": "Customer Management",
+     "slug": "customerapp-customer-management",
+     "disabled": true
     }
    ]
   },

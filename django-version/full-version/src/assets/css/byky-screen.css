@@ -126,12 +126,43 @@
   cursor: pointer; transition: border-color 0.16s, background 0.16s, color 0.16s;
 }
 .scr-filter-btn.is-active { border-color: #f3c3c5; background: #fdeced; color: #c2141a; font-weight: 600; }
+/* General rule: any custom dropdown menu that can hold more than ~10 options
+   scrolls internally rather than growing past the viewport (a filter with 36
+   branches or 99 employees would otherwise run off the bottom of the page). */
 .scr-filter-menu {
   position: absolute; top: 44px; left: 0; z-index: 12; min-width: 190px; background: #fff;
   border: 1px solid #eeedf5; border-radius: 12px; box-shadow: 0 18px 40px -22px rgba(26, 22, 64, 0.4);
   padding: 6px; display: flex; flex-direction: column; gap: 1px;
+  max-height: 280px; overflow-y: auto;
 }
 .scr-filter-menu[hidden] { display: none; }
+
+/* Multi-select drawer field -- a checkbox menu, not a native <select multiple>
+   (cramped listbox, and a native option list near the bottom of a scrolling
+   drawer body can pop ABOVE the field with no way for CSS to control it).
+   The menu is position:fixed and placed by byky-screen.js from the button's
+   own bounding rect, so it opens below the field and flips above only if
+   there is genuinely more room there. */
+.scr-multiselect { position: relative; }
+.scr-multiselect-btn {
+  width: 100%; height: 42px; border: 1px solid #e8e7f2; background: #fff; border-radius: 11px; padding: 0 13px;
+  font-size: 13px; color: #1a1640; text-align: left; cursor: pointer; display: flex; align-items: center;
+  justify-content: space-between; gap: 8px; transition: border-color 0.16s, box-shadow 0.16s;
+}
+.scr-multiselect-btn:hover { border-color: #d3d0e6; }
+.scr-multiselect-btn.is-open { border-color: #d81f26; box-shadow: 0 0 0 3px rgba(216, 31, 38, 0.11); }
+.scr-multiselect-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.scr-multiselect-label.is-placeholder { color: #a9a6c4; }
+.scr-multiselect-btn svg { flex: 0 0 auto; color: #9490bb; transition: transform 0.16s; }
+.scr-multiselect-btn.is-open svg { transform: rotate(180deg); }
+.scr-multiselect-menu {
+  position: fixed; z-index: 1090; background: #fff; border: 1px solid #eeedf5; border-radius: 12px;
+  box-shadow: 0 18px 40px -18px rgba(26, 22, 64, 0.45); padding: 6px; max-height: 260px; overflow-y: auto;
+}
+.scr-multiselect-menu[hidden] { display: none; }
+.scr-multiselect-opt { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 8px; cursor: pointer; font-size: 12.5px; color: #4b4770; }
+.scr-multiselect-opt:hover { background: #faf9fd; }
+.scr-multiselect-opt input { flex: 0 0 auto; accent-color: #d81f26; width: 15px; height: 15px; }
 .scr-filter-opt {
   text-align: left; border: none; cursor: pointer; font-size: 12.5px; font-weight: 500; padding: 9px 11px;
   border-radius: 8px; background: transparent; color: #4b4770; transition: background 0.14s; width: 100%;
@@ -209,6 +240,38 @@
 .scr-check { width: 17px; height: 17px; border-radius: 5px; accent-color: #d81f26; cursor: pointer; flex: 0 0 auto; }
 .scr-check-label { font-size: 12.5px; font-weight: 500; color: #4b4770; cursor: pointer; }
 .scr-check-hint { font-size: 10.5px; color: #a9a6c4; }
+
+/* Radio row -- same shape as .scr-check-row, for a group of mutually
+   exclusive options (e.g. Promotion Type, Usage Type). */
+.scr-radio-row { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
+.scr-radio { width: 17px; height: 17px; accent-color: #d81f26; cursor: pointer; flex: 0 0 auto; }
+.scr-radio-label { font-size: 12.5px; font-weight: 500; color: #4b4770; cursor: pointer; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.scr-radio-label .scr-drawer-input { height: 34px; width: 84px; padding: 0 10px; font-size: 12.5px; }
+.scr-radio-label .scr-drawer-input:disabled { background: #f8f7fb; color: #c9c6dd; cursor: not-allowed; }
+
+/* Bordered panel with a title -- the boxed "Promotion Type" / "Usage Type"
+   groups in the Card Discount screen. Reuses .scr-section-title's type scale. */
+.scr-fieldset { border: 1px solid #eeedf5; border-radius: 12px; padding: 14px 16px; }
+.scr-fieldset-legend { font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: #a9a6c4; margin-bottom: 10px; }
+
+/* Day-wise discount rows -- a checkbox, a fixed-width day label, and a
+   discount input that only unlocks once its day is checked. */
+.scr-day-table { display: flex; flex-direction: column; gap: 2px; }
+.scr-day-row { display: flex; align-items: center; gap: 12px; padding: 6px 0; border-bottom: 1px solid #f6f5fc; }
+.scr-day-row:last-child { border-bottom: none; }
+.scr-day-row.scr-day-all { border-bottom: 1px solid #eeedf5; margin-bottom: 4px; padding-bottom: 10px; font-weight: 600; }
+.scr-day-check { display: flex; align-items: center; gap: 9px; width: 128px; flex: 0 0 auto; font-size: 12.5px; font-weight: 500; color: #4b4770; cursor: pointer; }
+.scr-day-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: #d81f26; cursor: pointer; flex: 0 0 auto; }
+.scr-day-row .scr-drawer-input { height: 38px; }
+.scr-day-row .scr-drawer-input:disabled { background: #f8f7fb; color: #c9c6dd; cursor: not-allowed; }
+
+/* Two-column layout for the Card Discount screen: day-wise table on the
+   left, the two radio panels stacked on the right. Collapses to one column
+   on narrow viewports, matching every other .scr-* screen's responsive rule. */
+.scr-discount-grid { display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start; }
+@media (max-width: 860px) {
+  .scr-discount-grid { grid-template-columns: 1fr; }
+}
 
 .scr-row-actions { display: flex; align-items: center; justify-content: flex-end; gap: 6px; opacity: 0.35; transition: opacity 0.16s; }
 .scr tbody tr:hover .scr-row-actions { opacity: 1; }
@@ -292,6 +355,14 @@
 .scr-toggle-label { font-size: 12.5px; font-weight: 500; color: #4b4770; }
 .scr-form-actions { display: flex; align-items: center; gap: 10px; }
 
+/* flatpickr's own calendar popup is z-index:1074 -- below the drawer's 1086,
+   which would render any date picker opened from a drawer field invisible
+   behind the drawer panel. Bumped above it here rather than in vendor CSS.
+   This rule was lost once already (a date field silently stopped opening its
+   calendar visibly, no console error) -- if editing this file, confirm it's
+   still present afterward. */
+.flatpickr-calendar { z-index: 1095 !important; }
+
 /* ── drawer ───────────────────────────────────────────────────────── */
 .scr-veil { position: fixed; inset: 0; background: rgba(26, 22, 64, 0.34); backdrop-filter: blur(2px); z-index: 1085; animation: cdVeilIn 0.2s ease-out; }
 .scr-veil[hidden] { display: none; }
@@ -345,6 +416,13 @@ textarea.scr-drawer-input { height: auto; min-height: 72px; padding: 10px 13px; 
 }
 .scr-modal-veil[hidden] { display: none; }
 .scr-modal {
+  /* Independently fixed + centered -- .scr-modal-veil is only the backdrop,
+     a sibling in the markup (same pattern as scr-veil/scr-drawer), so its
+     own flex centering never reached this element. Missing this was the
+     "stuck on a blurred screen" bug: the veil showed, but the modal itself
+     (bill + Print button) rendered wherever it fell in normal flow instead
+     of on top of it. */
+  position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1091;
   width: min(480px, 100%); max-height: 88vh; background: #fff; border-radius: 16px;
   box-shadow: 0 30px 70px -30px rgba(26, 22, 64, 0.5); display: flex; flex-direction: column;
   animation: cdFadeUp 0.22s ease-out;

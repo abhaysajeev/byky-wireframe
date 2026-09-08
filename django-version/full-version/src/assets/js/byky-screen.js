@@ -278,6 +278,66 @@
     });
   });
 
+  /* ── centered modals (data-scr-modal-open / data-scr-modal) ───────
+     Distinct from the side drawers: a single-purpose action dialog (e.g.
+     Device Approval / Upload APK) with no add/edit modes or record
+     prefill -- just open and close. Delegated at document level so a
+     trigger button anywhere on the page can reach a modal that, like
+     drawers, lives outside .scr as a sibling. */
+  document.querySelectorAll('[data-scr-modal-open]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var name = btn.dataset.scrModalOpen;
+      var veil = document.querySelector('[data-scr-modal-veil="' + name + '"]');
+      var modal = document.querySelector('[data-scr-modal="' + name + '"]');
+      if (veil) veil.hidden = false;
+      if (modal) modal.hidden = false;
+    });
+  });
+  function closeModal(modal) {
+    if (!modal) return;
+    var name = modal.dataset.scrModal;
+    var veil = name && document.querySelector('[data-scr-modal-veil="' + name + '"]');
+    if (veil) veil.hidden = true;
+    modal.hidden = true;
+  }
+  document.querySelectorAll('[data-scr-modal-close]').forEach(function (btn) {
+    btn.addEventListener('click', function () { closeModal(btn.closest('[data-scr-modal]')); });
+  });
+  document.querySelectorAll('[data-scr-modal-veil]').forEach(function (veil) {
+    veil.addEventListener('click', function () {
+      var name = veil.dataset.scrModalVeil;
+      closeModal(document.querySelector('[data-scr-modal="' + name + '"]'));
+    });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    document.querySelectorAll('[data-scr-modal]').forEach(function (m) {
+      if (!m.hidden) closeModal(m);
+    });
+  });
+
+  /* ── small action dropdown menu (data-scr-menu-toggle) ────────────
+     Generic open/close for a header "More actions" button, sibling to
+     .scr-filter-wrap's own dropdown but not tied to filtering -- clicking
+     an item just runs whatever that button does (e.g. data-scr-modal-open)
+     rather than re-applying a list filter. */
+  document.querySelectorAll('[data-scr-menu-toggle]').forEach(function (btn) {
+    var menu = btn.parentElement.querySelector('.scr-menu');
+    if (!menu) return;
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var willOpen = menu.hidden;
+      document.querySelectorAll('.scr-menu').forEach(function (m) { m.hidden = true; });
+      menu.hidden = !willOpen;
+    });
+    menu.querySelectorAll('.scr-menu-item').forEach(function (item) {
+      item.addEventListener('click', function () { menu.hidden = true; });
+    });
+  });
+  document.addEventListener('click', function () {
+    document.querySelectorAll('.scr-menu').forEach(function (m) { m.hidden = true; });
+  });
+
   /* ── top-level content tabs (screens with more than one grid) ───── */
   document.querySelectorAll('[data-scr-tabgroup]').forEach(function (group) {
     var name = group.dataset.scrTabgroup;

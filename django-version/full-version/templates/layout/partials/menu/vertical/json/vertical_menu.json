@@ -57,7 +57,7 @@
     },
     {
      "url": "cms-station-working-time",
-     "name": "Station Working Time",
+     "name": "Branch Working Time",
      "slug": "cms-station-working-time"
     },
     {
@@ -115,9 +115,14 @@
    ],
    "submenu": [
     {
-     "url": "ims-inventory-stock-item-management",
-     "name": "Inventory Stock Item Management",
-     "slug": "ims-inventory-stock-item-management"
+     "url": "ims-vehicle-management",
+     "name": "Vehicle Management",
+     "slug": "ims-vehicle-management"
+    },
+    {
+     "url": "ims-vehicle-station-mapping",
+     "name": "Vehicle Station Mapping",
+     "slug": "ims-vehicle-station-mapping"
     },
     {
      "url": "ims-inventory-category-master",
@@ -138,11 +143,6 @@
      "url": "ims-inventory-unit-of-measure",
      "name": "Inventory Unit of Measure",
      "slug": "ims-inventory-unit-of-measure"
-    },
-    {
-     "url": "ims-vehicle-station-mapping",
-     "name": "Vehicle Station Mapping",
-     "slug": "ims-vehicle-station-mapping"
     },
     {
      "url": "ims-vehicle-transfer-relocation",
@@ -229,6 +229,28 @@
      "url": "tracking-tracking-security-privilege-management",
      "name": "TRACKING Security Privilege Management",
      "slug": "tracking-tracking-security-privilege-management"
+    }
+   ]
+  },
+  {
+   "name": "Device Management",
+   "icon": "menu-icon icon-base ti tabler-device-mobile",
+   "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2",
+   "slug": "device",
+   "badge": [
+    "label-secondary",
+    "2"
+   ],
+   "submenu": [
+    {
+     "url": "device-device-mapping",
+     "name": "Device Mapping",
+     "slug": "device-device-mapping"
+    },
+    {
+     "url": "device-device-settings",
+     "name": "Device Settings",
+     "slug": "device-device-settings"
     }
    ]
   },

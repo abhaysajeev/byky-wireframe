@@ -46,6 +46,7 @@ urlpatterns = [
     path("", include("apps.byky_api.urls")),
     path("", include("apps.byky_security.urls")),
     path("", include("apps.byky_integration.urls")),
+    path("", include("apps.byky_device.urls")),
 ]
 
 handler404 = SystemView.as_view(template_name="pages_misc_error.html", status=404)

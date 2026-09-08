@@ -332,6 +332,54 @@ textarea.scr-drawer-input { height: auto; min-height: 72px; padding: 10px 13px; 
 .scr-drawer-active { display: flex; align-items: center; gap: 9px; flex: 1; min-width: 0; }
 .scr-drawer-active-label { font-size: 12px; font-weight: 500; color: #4b4770; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
+/* ── centered modal (distinct from the side scr-drawer) -- for a short,
+   single-purpose action that doesn't belong in the page flow or a side
+   panel, e.g. Device Approval / Upload APK on Device Settings. Same visual
+   language as scr-drawer (radius, shadow, header/body/foot), just centered
+   and not full-height. Wired in byky-screen.js via data-scr-modal-open /
+   data-scr-modal / data-scr-modal-close. ────────────────────────────── */
+.scr-modal-veil {
+  position: fixed; inset: 0; background: rgba(26, 22, 64, 0.34); backdrop-filter: blur(2px);
+  z-index: 1090; display: flex; align-items: center; justify-content: center; padding: 20px;
+  animation: cdVeilIn 0.2s ease-out;
+}
+.scr-modal-veil[hidden] { display: none; }
+.scr-modal {
+  width: min(480px, 100%); max-height: 88vh; background: #fff; border-radius: 16px;
+  box-shadow: 0 30px 70px -30px rgba(26, 22, 64, 0.5); display: flex; flex-direction: column;
+  animation: cdFadeUp 0.22s ease-out;
+}
+.scr-modal[hidden] { display: none; }
+.scr-modal-head { padding: 20px 22px 16px; border-bottom: 1px solid #f0eff7; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }
+.scr-modal-title { font-size: 15px; font-weight: 600; letter-spacing: -0.1px; }
+.scr-modal-sub { font-size: 12px; color: #9490bb; margin-top: 4px !important; }
+.scr-modal-body { padding: 20px 22px; overflow-y: auto; }
+.scr-modal-foot { padding: 16px 22px; border-top: 1px solid #f0eff7; background: #fbfaff; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+/* ── small action dropdown menu (e.g. a header "More" button) -- same
+   visual language as scr-filter-* but not tied to filtering, so a click
+   just opens/closes the menu (wired generically in byky-screen.js) rather
+   than re-applying a list filter. ────────────────────────────────────── */
+.scr-menu-wrap { position: relative; flex: 0 0 auto; }
+.scr-menu-btn {
+  display: flex; align-items: center; gap: 8px; height: 38px; padding: 0 14px; border-radius: 10px;
+  border: 1px solid #eeedf5; background: #fff; color: #4b4770; font-size: 12.5px; font-weight: 600;
+  cursor: pointer; transition: border-color 0.16s, background 0.16s, color 0.16s;
+}
+.scr-menu-btn:hover { border-color: #d3d0e6; color: #1a1640; }
+.scr-menu {
+  position: absolute; top: 44px; right: 0; z-index: 12; min-width: 200px; background: #fff;
+  border: 1px solid #eeedf5; border-radius: 12px; box-shadow: 0 18px 40px -22px rgba(26, 22, 64, 0.4);
+  padding: 6px; display: flex; flex-direction: column; gap: 1px;
+}
+.scr-menu[hidden] { display: none; }
+.scr-menu-item {
+  display: flex; align-items: center; gap: 9px; text-align: left; border: none; cursor: pointer;
+  font-size: 12.5px; font-weight: 500; padding: 9px 11px; border-radius: 8px; background: transparent;
+  color: #4b4770; transition: background 0.14s; width: 100%;
+}
+.scr-menu-item:hover { background: #faf9fd; color: #1a1640; }
+
 /* ── network map card (real coordinates, hand-drawn SVG -- no Leaflet) ──
    Generalised from byky-dashboard.css's .bd-map-* rules for any screen that
    needs the same station-network visual (bubble = fleet, dot-grid backdrop,

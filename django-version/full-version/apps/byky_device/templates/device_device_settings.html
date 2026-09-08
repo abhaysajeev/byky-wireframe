@@ -1,0 +1,356 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Device Settings - Device Management{% endblock title %}
+
+{% comment %}
+New module, not one of the 16 FSD modules -- requested against the client's
+RMS Web feedback doc (RMS WEB 07.09.2026-1.pdf, "Device Management" page).
+Built on the shared byky-screen.css/js base (see byky-screen-design-system.md
+and sysadmin_global_application_configuration_settings.html for the
+section-card settings-form reference): per-station receipt print
+configuration, matching the legacy Edit/Results screen's fields exactly.
+
+Device Approval and Upload APK are folded into a "More Actions" header
+dropdown rather than kept as separate top-level screens (per the follow-up
+instruction) -- each opens its own centered scr-modal (new in
+byky-screen.css/js: data-scr-modal-open / data-scr-modal), distinct from the
+side scr-drawer since neither is a record list.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Device Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Device Settings</b>
+      </div>
+      <h1 class="scr-title">Device Settings</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <div class="scr-menu-wrap">
+        <button type="button" class="scr-menu-btn" data-scr-menu-toggle>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
+          More Actions
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-menu" hidden>
+          <button type="button" class="scr-menu-item" data-scr-modal-open="device-approval">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+            Device Approval
+          </button>
+          <button type="button" class="scr-menu-item" data-scr-modal-open="upload-apk">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"></path></svg>
+            Upload APK
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row"><h2 class="scr-form-title">Find Settings</h2></div>
+        <p class="scr-form-sub">Search for an existing station's print configuration to edit.</p>
+      </div>
+    </div>
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Search In</label>
+          <select class="scr-input">
+            <option>Station</option>
+            <option>Settings Code</option>
+            <option>Company</option>
+          </select>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Search Type</label>
+          <input type="text" class="scr-input" placeholder="Type to search" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Approval Status</label>
+          <select class="scr-input">
+            <option>Approved</option>
+            <option>Pending</option>
+            <option>Rejected</option>
+          </select>
+        </div>
+        <div class="scr-field" style="align-self:end">
+          <button type="button" class="scr-btn" style="width:100%; justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">Receipt &amp; Print Configuration</h2>
+          <span class="scr-form-badge">Per station</span>
+        </div>
+        <p class="scr-form-sub">Header/footer text, logo, receipt copies and rounding rules for this station's device printouts.</p>
+      </div>
+    </div>
+
+    <div class="scr-form-body">
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Scope</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Company<span class="scr-required">*</span></label>
+            <select class="scr-input">
+              {% for c in companies_list %}<option>{{ c }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Station<span class="scr-required">*</span></label>
+            <select class="scr-input">
+              <option value="">Select</option>
+              {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Settings Code</label>
+            <input type="text" class="scr-input" value="" placeholder="creek1" readonly />
+          </div>
+        </div>
+      </div>
+
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Receipt Header &amp; Footer</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Header 1</label>
+            <input type="text" class="scr-input" value="" placeholder="e.g. BYKY SPORT &amp; LEISURE EQUIPMENT RENTAL LLC" />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Header 2 (Arabic)</label>
+            <input type="text" class="scr-input" value="" dir="rtl" />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Additional Header 2</label>
+            <input type="text" class="scr-input" value="" placeholder="Optional" />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Footer 1</label>
+            <input type="text" class="scr-input" value="" placeholder="e.g. Company is not responsible for any belongings" />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Footer 2 (Arabic)</label>
+            <input type="text" class="scr-input" value="" dir="rtl" />
+          </div>
+        </div>
+      </div>
+
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Print &amp; Copies</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Print Logo</label>
+            <div style="display:flex; gap:16px; height:40px; align-items:center">
+              <label class="scr-check-label" style="display:flex; align-items:center; gap:6px">
+                <input type="radio" class="scr-check" name="printLogo" checked /> Enable
+              </label>
+              <label class="scr-check-label" style="display:flex; align-items:center; gap:6px">
+                <input type="radio" class="scr-check" name="printLogo" /> Disable
+              </label>
+            </div>
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Paper Feed</label>
+            <select class="scr-input">
+              {% for p in print_feed_options %}<option>{{ p }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">No of Receipt Copy</label>
+            <input type="number" class="scr-input" value="1" min="1" />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Print Type</label>
+            <select class="scr-input">
+              {% for p in print_type_options %}<option {% if p == "Landscape" %}selected{% endif %}>{{ p }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Order No Starting Characters</label>
+            <input type="text" class="scr-input" value="" placeholder="CF001" />
+          </div>
+        </div>
+      </div>
+
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Test Slots, Tax &amp; Rounding</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Customer Test Time Slot (Min)</label>
+            <input type="number" class="scr-input" value="5" min="0" />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Cashier Test Time Slot (Min)</label>
+            <input type="number" class="scr-input" value="5" min="0" />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Before Tax / Discount Type</label>
+            <select class="scr-input">
+              {% for t in tax_type_options %}<option>{{ t }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Round Off Type</label>
+            <select class="scr-input">
+              {% for r in round_off_options %}<option>{{ r }}</option>{% endfor %}
+            </select>
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Round Off Limit</label>
+            <select class="scr-input">
+              {% for r in round_off_limits %}<option {% if r == "25 Fils" %}selected{% endif %}>{{ r }}</option>{% endfor %}
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="scr-section" style="margin-bottom:0">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Logo</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-logo-row" style="border-bottom:none; padding-bottom:0; margin-bottom:0">
+          <div class="scr-logo-preview">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#c9c6dd" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="m21 15-5-5L5 21"></path></svg>
+          </div>
+          <div class="scr-logo-actions">
+            <div class="scr-logo-buttons">
+              <label class="scr-btn scr-logo-upload-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"></path></svg>
+                Choose File
+                <input type="file" accept="image/*" hidden />
+              </label>
+              <button type="button" class="scr-logo-remove">Remove</button>
+            </div>
+            <div class="scr-help">PNG or JPG, printed on every receipt this station's devices issue.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="scr-form-foot">
+        <div class="scr-form-actions" style="margin-left:auto">
+          <button type="button" class="scr-btn-secondary">Cancel</button>
+          <button type="button" class="scr-btn-primary">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %}
+Device Approval -- pick one device by name or MAC, then set its approval
+status. A centered scr-modal (not a side drawer): a single quick action, not
+a record list or a multi-field create form.
+{% endcomment %}
+<div class="scr-modal-veil" data-scr-modal-veil="device-approval" hidden></div>
+<div class="scr-modal" data-scr-modal="device-approval" hidden>
+  <div class="scr-modal-head">
+    <div>
+      <h2 class="scr-modal-title">Device Approval</h2>
+      <p class="scr-modal-sub">Select a device, then set its approval status.</p>
+    </div>
+    <button type="button" class="scr-drawer-close" data-scr-modal-close>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+  <div class="scr-modal-body">
+    <div class="scr-field" style="margin-bottom:16px">
+      <label class="scr-label">Device (by name or MAC address)<span class="scr-required">*</span></label>
+      <select class="scr-input">
+        <option value="">Select a device</option>
+        {% for d in devices %}<option>{{ d.name }} &mdash; {{ d.mac }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-field" style="margin-bottom:16px">
+      <label class="scr-label">Approval Status<span class="scr-required">*</span></label>
+      <select class="scr-input">
+        {% for s in approval_statuses %}<option>{{ s }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-field">
+      <label class="scr-label">Remarks</label>
+      <textarea class="scr-input" rows="2" style="height:auto; padding:10px 12px"></textarea>
+    </div>
+  </div>
+  <div class="scr-modal-foot">
+    <button type="button" class="scr-btn-secondary" data-scr-modal-close>Cancel</button>
+    <button type="button" class="scr-btn-primary" style="margin-left:auto">Save Approval</button>
+  </div>
+</div>
+
+{% comment %}
+Upload APK -- a new APK build for the fleet to self-update from, replacing
+whichever build is currently marked active. Frontend-only: the file is
+accepted client-side, nothing uploads anywhere in this wireframe.
+{% endcomment %}
+<div class="scr-modal-veil" data-scr-modal-veil="upload-apk" hidden></div>
+<div class="scr-modal" data-scr-modal="upload-apk" hidden>
+  <div class="scr-modal-head">
+    <div>
+      <h2 class="scr-modal-title">Upload APK</h2>
+      <p class="scr-modal-sub">Devices poll this build and self-update once it's marked active.</p>
+    </div>
+    <button type="button" class="scr-drawer-close" data-scr-modal-close>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+  <div class="scr-modal-body">
+    <div class="scr-field" style="margin-bottom:16px">
+      <label class="scr-label">APK File<span class="scr-required">*</span></label>
+      <input type="file" class="scr-input" accept=".apk" style="padding:8px 12px; height:auto" />
+      <div class="scr-help">.apk file from local disk. Devices fetch and install it from here on their next update check.</div>
+    </div>
+    <div class="scr-field" style="margin-bottom:16px">
+      <label class="scr-label">Version Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-input" placeholder="1.12.80" />
+    </div>
+    <div class="scr-field">
+      <label class="scr-label">Release Notes</label>
+      <textarea class="scr-input" rows="2" style="height:auto; padding:10px 12px" placeholder="What changed in this build"></textarea>
+    </div>
+  </div>
+  <div class="scr-modal-foot">
+    <button type="button" class="scr-btn-secondary" data-scr-modal-close>Cancel</button>
+    <button type="button" class="scr-btn-primary" style="margin-left:auto">Upload &amp; Publish</button>
+  </div>
+</div>
+{% endblock %}

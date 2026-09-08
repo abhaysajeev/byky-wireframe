@@ -4,206 +4,312 @@
 {% block title %}Employee Personal Data - Human Resources{% endblock title %}
 
 {% comment %}
-FSD 2.1 -- Tier B. All 22 form inputs from FSD section 8 are present.
+FSD 2.1 -- Tier B. Built on the shared byky-screen.css/js base (see
+byky-screen-design-system.md and cms_company_details.html for the tabbed-
+drawer styling reference). All 22 form inputs from FSD section 8 are present,
+grouped into the same 5 tabs a reader would expect (Identity / Placement /
+Personal / Documents / Contact).
 
-The client's staff sheet populates only Employee No, Name and Profession. Every
-identity, document, contact and date field therefore shows "not captured" rather
-than a fabricated passport number, Emirates ID or date of birth (CLAUDE.md 12).
+The client's staff sheet populates only Employee No, Name and Profession.
+Every identity, document, contact and date field therefore shows
+seed.NOT_CAPTURED_SHORT in the grid rather than a fabricated passport number,
+Emirates ID or date of birth (CLAUDE.md 12).
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
-<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
-{% endblock vendor_js %}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
-<script src="{% static 'js/byky-hrms.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Employee Personal Data" parent="Human Resources" subtitle=purpose action_label="Add Employee" action_url="#offcanvasAddEmployee" %}
+<div class="scr">
 
-<div class="row g-6 mb-6">
-  <div class="col-sm-6 col-xl-3">
-    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
-      <div class="content-left"><span class="text-heading">Employees</span>
-        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.total }}</h4></div>
-        <small class="mb-0">On record</small></div>
-      <div class="avatar"><span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-users icon-26px"></i></span></div>
-    </div></div></div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
-      <div class="content-left"><span class="text-heading">Designations</span>
-        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.designations }}</h4></div>
-        <small class="mb-0">Distinct job titles</small></div>
-      <div class="avatar"><span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-id-badge-2 icon-26px"></i></span></div>
-    </div></div></div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
-      <div class="content-left"><span class="text-heading">Active</span>
-        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.total }}</h4></div>
-        <small class="mb-0">IsActive = 1</small></div>
-      <div class="avatar"><span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-user-check icon-26px"></i></span></div>
-    </div></div></div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
-      <div class="content-left"><span class="text-heading">Blocked</span>
-        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.blocked }}</h4></div>
-        <small class="mb-0">No block history yet</small></div>
-      <div class="avatar"><span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-user-off icon-26px"></i></span></div>
-    </div></div></div>
-  </div>
-</div>
-
-<div class="alert alert-warning d-flex align-items-center mb-6" role="alert">
-  <i class="icon-base ti tabler-id-off icon-md me-3"></i>
-  <div>
-    All {{ counts.total }} employees are listed. The source sheet has 26 columns but only
-    Employee No, Name and Profession carry data &mdash; identity documents, contact details,
-    dates and bank information are awaiting client data.
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    {# FSD 2.1 section 22 #}
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Branches</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select>
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Human Resources</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Employee Personal Data</b>
       </div>
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Designations</option>{% for d in designations_list %}<option>{{ d.title }}</option>{% endfor %}</select>
-      </div>
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Status</option><option>Active</option><option>Blocked</option></select>
-      </div>
+      <h1 class="scr-title">Employee Personal Data</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="employee:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Employee
+      </button>
     </div>
   </div>
 
-  <div class="card-datatable table-responsive">
-    <table class="datatables-employees table" data-search-label="Search employee">
-      <thead class="border-top">
-        <tr>
-          <th>Employee Code</th><th>Full Name</th><th>Designation</th>
-          <th>Branch</th><th>Department</th><th>Joining Date</th>
-          <th>Emirates ID Expiry</th><th class="text-center">Status</th><th class="text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for e in employees %}
-        <tr>
-          <td><span class="fw-medium">{{ e.emp_no }}</span></td>
-          <td>
-            <div class="d-flex align-items-center">
-              <div class="avatar avatar-sm me-3"><span class="avatar-initial rounded-circle bg-label-secondary">{{ e.name|slice:":1" }}</span></div>
-              <span>{{ e.name }}</span>
-            </div>
-          </td>
-          <td><span class="badge bg-label-secondary">{{ e.designation }}</span></td>
-          <td class="text-body-secondary"><small>{{ e.branch }}</small></td>
-          <td class="text-body-secondary"><small>{{ e.department }}</small></td>
-          <td class="text-body-secondary"><small>{{ e.joining_date }}</small></td>
-          <td class="text-body-secondary"><small>{{ e.emirates_id_expiry }}</small></td>
-          <td class="text-center">{% include "byky/partials/status_badge.html" with status=e.status %}</td>
-          <td class="text-center">
-            <div class="d-inline-block">
-              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddEmployee">Edit</a>
-                <a href="{% url 'hrms-employee-block-unblock' %}" class="dropdown-item">Block / Unblock</a>
-                <div class="dropdown-divider"></div>
-                <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2M21 20v-1.4a3 3 0 0 0-2.3-2.9M16.6 5a3 3 0 0 1 0 5.8"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Employees on record</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12 12 3.4 4.4 12 12 20.6zM12 8v.01M12 12v4"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.designations }}</div><div class="scr-tile-lab">Distinct designations</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Active</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6 5.6 18.4M5.6 5.6l12.8 12.8"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.blocked }}</div><div class="scr-tile-lab">Blocked &mdash; no history yet</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="employee" data-scr-noun-plural="employees">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search employee code or name" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="designation">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All designations</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All designations</button>
+          {% for d in designations_list %}
+          <button type="button" class="scr-filter-opt" data-value="{{ d.title }}">{{ d.title }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">{{ employees|length }} employees</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Employee Code</th>
+            <th>Full Name</th>
+            <th>Designation</th>
+            <th>Branch</th>
+            <th>Department</th>
+            <th>Joining Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in employees %}
+          <tr class="scr-row" data-search="{{ e.emp_no|lower }} {{ e.name|lower }}" data-designation="{{ e.designation }}" data-record-id="{{ e.json_id }}">
+            <td><span class="scr-code">{{ e.emp_no }}</span></td>
+            <td>
+              <div class="scr-co">
+                <span class="scr-avatar {% cycle 'scr-avatar-0' 'scr-avatar-1' 'scr-avatar-2' 'scr-avatar-3' 'scr-avatar-4' as scr_avatar_cls %}">{{ e.name|slice:":1" }}</span>
+                <div style="min-width:0"><div class="scr-co-name">{{ e.name }}</div></div>
               </div>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  {# FSD 2.1 section 8: all 22 inputs, grouped by meaning. #}
-  <div class="offcanvas offcanvas-end offcanvas-wide" tabindex="-1" id="offcanvasAddEmployee">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">Add Employee</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </td>
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ e.designation }}</span></td>
+            <td class="scr-contact">{{ e.branch }}</td>
+            <td class="scr-contact">{{ e.department }}</td>
+            <td class="scr-contact">{{ e.joining_date }}</td>
+            <td><span class="scr-badge scr-badge-approved"><i></i>{{ e.status }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="employee:edit">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                </button>
+                <a href="{% url 'hrms-employee-block-unblock' %}" class="scr-icon-btn" title="Block / Unblock">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6 5.6 18.4M5.6 5.6l12.8 12.8"></path></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {{ e.fields_json|json_script:e.json_id }}
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    <div class="offcanvas-body p-6">
-      <form onsubmit="return false">
-        <h6 class="text-body-secondary text-uppercase small mb-4">Identity</h6>
-        <div class="row g-4 mb-6">
-          <div class="col-md-6"><label class="form-label" for="e-code">Employee Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="e-code" placeholder="BYKY001" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-photo">Photo</label><input type="file" class="form-control" id="e-photo" accept="image/*" /></div>
-          <div class="col-md-4"><label class="form-label" for="e-first">First Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="e-first" /></div>
-          <div class="col-md-4"><label class="form-label" for="e-middle">Middle Name</label><input type="text" class="form-control" id="e-middle" /></div>
-          <div class="col-md-4"><label class="form-label" for="e-last">Last Name</label><input type="text" class="form-control" id="e-last" /></div>
-        </div>
 
-        <h6 class="text-body-secondary text-uppercase small mb-4">Placement</h6>
-        <div class="row g-4 mb-6">
-          <div class="col-md-6"><label class="form-label" for="e-branch">Branch <span class="text-danger">*</span></label>
-            <select id="e-branch" class="select2 form-select"><option value="">Select</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select></div>
-          <div class="col-md-6"><label class="form-label" for="e-dept">Department</label>
-            <select id="e-dept" class="form-select"><option value="">Select</option></select></div>
-          <div class="col-md-6"><label class="form-label" for="e-desig">Designation <span class="text-danger">*</span></label>
-            <select id="e-desig" class="select2 form-select"><option value="">Select</option>{% for d in designations_list %}<option>{{ d.title }}</option>{% endfor %}</select></div>
-          <div class="col-md-6"><label class="form-label" for="e-grade">Grade</label>
-            <select id="e-grade" class="form-select"><option value="">Select</option></select></div>
-        </div>
-
-        <h6 class="text-body-secondary text-uppercase small mb-4">Personal</h6>
-        <div class="row g-4 mb-6">
-          <div class="col-md-4"><label class="form-label" for="e-dob">Date of Birth</label><input type="text" class="form-control byky-date" id="e-dob" placeholder="Not captured" /></div>
-          <div class="col-md-4"><label class="form-label" for="e-gender">Gender</label><select id="e-gender" class="form-select"><option selected>Male</option><option>Female</option></select></div>
-          <div class="col-md-4"><label class="form-label" for="e-marital">Marital Status</label><select id="e-marital" class="form-select"><option value="">Select</option><option>Single</option><option>Married</option></select></div>
-          <div class="col-md-4"><label class="form-label" for="e-nat">Nationality</label><input type="text" class="form-control" id="e-nat" placeholder="Not captured" /></div>
-        </div>
-
-        <h6 class="text-body-secondary text-uppercase small mb-4">Documents</h6>
-        <div class="row g-4 mb-6">
-          <div class="col-md-6"><label class="form-label" for="e-eid">Emirates ID Number</label><input type="text" class="form-control" id="e-eid" placeholder="Not captured" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-eid-exp">Emirates ID Expiry</label><input type="text" class="form-control byky-date" id="e-eid-exp" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-pass">Passport Number</label><input type="text" class="form-control" id="e-pass" placeholder="Not captured" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-pass-exp">Passport Expiry</label><input type="text" class="form-control byky-date" id="e-pass-exp" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-labor">Labor Card Number</label><input type="text" class="form-control" id="e-labor" placeholder="Not captured" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-labor-exp">Labor Card Expiry</label><input type="text" class="form-control byky-date" id="e-labor-exp" /></div>
-        </div>
-
-        <h6 class="text-body-secondary text-uppercase small mb-4">Contact</h6>
-        <div class="row g-4 mb-6">
-          <div class="col-md-6"><label class="form-label" for="e-mobile">Mobile Number</label><input type="text" class="form-control" id="e-mobile" placeholder="Not captured" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-email">Email Address</label><input type="email" class="form-control" id="e-email" placeholder="Not captured" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-emg-person">Emergency Contact Person</label><input type="text" class="form-control" id="e-emg-person" /></div>
-          <div class="col-md-6"><label class="form-label" for="e-emg-phone">Emergency Phone</label><input type="text" class="form-control" id="e-emg-phone" /></div>
-        </div>
-
-        <div class="form-check mb-6">
-          <input class="form-check-input" type="checkbox" id="e-active" checked />
-          <label class="form-check-label" for="e-active">Is Active</label>
-        </div>
-        <div class="d-flex gap-4">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
-        </div>
-      </form>
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ employees|length }} of {{ employees|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+{% comment %}
+Add/Edit drawer -- all 22 FSD 2.1 section 8 fields, grouped into 5 tabs so the
+drawer doesn't scroll past all of them at once (the list + drawer pattern
+used everywhere else in the app, per CLAUDE.md).
+{% endcomment %}
+<div class="scr-veil" data-scr-drawer="employee" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="employee" data-add-title="Add Employee" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Employee</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+    <div class="scr-drawer-tabs scr-sb">
+      <button type="button" class="scr-drawer-tab is-on" data-tab="identity">Identity</button>
+      <button type="button" class="scr-drawer-tab" data-tab="placement">Placement</button>
+      <button type="button" class="scr-drawer-tab" data-tab="personal">Personal</button>
+      <button type="button" class="scr-drawer-tab" data-tab="documents">Documents</button>
+      <button type="button" class="scr-drawer-tab" data-tab="contact">Contact</button>
+    </div>
+  </div>
+
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="identity">
+      <label class="scr-label">Employee Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="emp_no" data-lock-on-edit="true" value="" placeholder="BYKY001" />
+    </div>
+    <div class="scr-drawer-field" data-tab="identity">
+      <label class="scr-label">Photo</label>
+      <input type="file" class="scr-drawer-input" accept="image/*" />
+    </div>
+    <div class="scr-drawer-field" data-tab="identity">
+      <label class="scr-label">First Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="first_name" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="identity">
+      <label class="scr-label">Middle Name</label>
+      <input type="text" class="scr-drawer-input" data-field="middle_name" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="identity">
+      <label class="scr-label">Last Name</label>
+      <input type="text" class="scr-drawer-input" data-field="last_name" value="" />
+    </div>
+
+    <div class="scr-drawer-field" data-tab="placement" hidden>
+      <label class="scr-label">Branch<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="branch">
+        <option value="">Select</option>
+        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="placement" hidden>
+      <label class="scr-label">Department</label>
+      <select class="scr-drawer-input" data-field="department">
+        <option value="">Select</option>
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="placement" hidden>
+      <label class="scr-label">Designation<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="designation">
+        <option value="">Select</option>
+        {% for d in designations_list %}<option>{{ d.title }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="placement" hidden>
+      <label class="scr-label">Grade</label>
+      <select class="scr-drawer-input" data-field="grade">
+        <option value="">Select</option>
+      </select>
+    </div>
+
+    <div class="scr-drawer-field" data-tab="personal" hidden>
+      <label class="scr-label">Date of Birth</label>
+      <input type="text" class="scr-drawer-input byky-date" data-field="dob" value="" placeholder="Not captured" />
+    </div>
+    <div class="scr-drawer-field" data-tab="personal" hidden>
+      <label class="scr-label">Gender</label>
+      <select class="scr-drawer-input" data-field="gender">
+        <option>Male</option>
+        <option>Female</option>
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="personal" hidden>
+      <label class="scr-label">Marital Status</label>
+      <select class="scr-drawer-input" data-field="marital_status">
+        <option value="">Select</option>
+        <option>Single</option>
+        <option>Married</option>
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="personal" hidden>
+      <label class="scr-label">Nationality</label>
+      <input type="text" class="scr-drawer-input" data-field="nationality" value="" placeholder="Not captured" />
+    </div>
+
+    <div class="scr-drawer-field" data-tab="documents" hidden>
+      <label class="scr-label">Emirates ID Number</label>
+      <input type="text" class="scr-drawer-input" data-field="eid_no" value="" placeholder="Not captured" />
+    </div>
+    <div class="scr-drawer-field" data-tab="documents" hidden>
+      <label class="scr-label">Emirates ID Expiry</label>
+      <input type="text" class="scr-drawer-input byky-date" data-field="eid_expiry" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="documents" hidden>
+      <label class="scr-label">Passport Number</label>
+      <input type="text" class="scr-drawer-input" data-field="passport_no" value="" placeholder="Not captured" />
+    </div>
+    <div class="scr-drawer-field" data-tab="documents" hidden>
+      <label class="scr-label">Passport Expiry</label>
+      <input type="text" class="scr-drawer-input byky-date" data-field="passport_expiry" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="documents" hidden>
+      <label class="scr-label">Labor Card Number</label>
+      <input type="text" class="scr-drawer-input" data-field="labor_no" value="" placeholder="Not captured" />
+    </div>
+    <div class="scr-drawer-field" data-tab="documents" hidden>
+      <label class="scr-label">Labor Card Expiry</label>
+      <input type="text" class="scr-drawer-input byky-date" data-field="labor_expiry" value="" />
+    </div>
+
+    <div class="scr-drawer-field" data-tab="contact" hidden>
+      <label class="scr-label">Mobile Number</label>
+      <input type="text" class="scr-drawer-input" data-field="mobile" value="" placeholder="Not captured" />
+    </div>
+    <div class="scr-drawer-field" data-tab="contact" hidden>
+      <label class="scr-label">Email Address</label>
+      <input type="email" class="scr-drawer-input" data-field="email" value="" placeholder="Not captured" />
+    </div>
+    <div class="scr-drawer-field" data-tab="contact" hidden>
+      <label class="scr-label">Emergency Contact Person</label>
+      <input type="text" class="scr-drawer-input" data-field="emergency_person" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="contact" hidden>
+      <label class="scr-label">Emergency Phone</label>
+      <input type="text" class="scr-drawer-input" data-field="emergency_phone" value="" />
+    </div>
+  </div>
+
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Is Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

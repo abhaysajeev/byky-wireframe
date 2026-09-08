@@ -33,7 +33,15 @@ class HrmsScreenView(BykyScreenView):
 class PersonalDataView(HrmsScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["employees"] = data.employees()
+        employees = data.employees()
+        for i, e in enumerate(employees):
+            e["json_id"] = f"scr-record-employee-{i}"
+            e["fields_json"] = {
+                "emp_no": e["emp_no"],
+                "name": e["name"],
+                "designation": e["designation"],
+            }
+        context["employees"] = employees
         return context
 
 
@@ -47,7 +55,16 @@ class TemporaryAddressView(HrmsScreenView):
 class DesignationView(HrmsScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["designations"] = data.designations()
+        designations = data.designations()
+        for i, d in enumerate(designations):
+            d["json_id"] = f"scr-record-designation-{i}"
+            d["fields_json"] = {
+                "code": d["code"],
+                "title": d["title"],
+                "description": "" if d["description"] == data.SHORT else d["description"],
+                "rank": d["rank"],
+            }
+        context["designations"] = designations
         return context
 
 

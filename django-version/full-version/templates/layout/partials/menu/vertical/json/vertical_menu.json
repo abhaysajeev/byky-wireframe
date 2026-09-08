@@ -211,13 +211,13 @@
    ]
   },
   {
-   "name": "Tracking & Telematics",
+   "name": "Vehicle Tracking Management",
    "icon": "menu-icon icon-base ti tabler-gps",
    "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z",
    "slug": "tracking",
    "badge": [
     "label-secondary",
-    "4"
+    "2"
    ],
    "submenu": [
     {
@@ -226,56 +226,9 @@
      "slug": "tracking-gps-iot-hardware-device-registration"
     },
     {
-     "url": "tracking-vehicle-fleet-telematics-registry",
-     "name": "Vehicle Fleet Telematics Registry",
-     "slug": "tracking-vehicle-fleet-telematics-registry"
-    },
-    {
-     "url": "tracking-vehicle-type-specification-master",
-     "name": "Vehicle Type & Specification Master",
-     "slug": "tracking-vehicle-type-specification-master"
-    },
-    {
      "url": "tracking-tracking-security-privilege-management",
      "name": "TRACKING Security Privilege Management",
      "slug": "tracking-tracking-security-privilege-management"
-    }
-   ]
-  },
-  {
-   "name": "RFID Gates",
-   "icon": "menu-icon icon-base ti tabler-radar",
-   "svg": "M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3",
-   "slug": "rfid",
-   "badge": [
-    "label-secondary",
-    "5"
-   ],
-   "submenu": [
-    {
-     "url": "rfid-station-antenna-gate-setup-ip-configuration",
-     "name": "Station Antenna Gate Setup & IP Configuration",
-     "slug": "rfid-station-antenna-gate-setup-ip-configuration"
-    },
-    {
-     "url": "rfid-rfid-tag-epc-encoding-vehicle-tagging",
-     "name": "RFID Tag EPC Encoding & Vehicle Tagging",
-     "slug": "rfid-rfid-tag-epc-encoding-vehicle-tagging"
-    },
-    {
-     "url": "rfid-antenna-gate-power-frequency-calibration",
-     "name": "Antenna Gate Power & Frequency Calibration",
-     "slug": "rfid-antenna-gate-power-frequency-calibration"
-    },
-    {
-     "url": "rfid-rfid-gate-event-telemetry-security-monitor",
-     "name": "RFID Gate Event Telemetry & Security Monitor",
-     "slug": "rfid-rfid-gate-event-telemetry-security-monitor"
-    },
-    {
-     "url": "rfid-rfid-security-privilege-management",
-     "name": "RFID Security Privilege Management",
-     "slug": "rfid-rfid-security-privilege-management"
     }
    ]
   },
@@ -335,95 +288,6 @@
    ]
   },
   {
-   "name": "Sales Force",
-   "icon": "menu-icon icon-base ti tabler-chart-line",
-   "svg": "m3 17 5.5-6.5 4 3.5L21 6M21 6h-5M21 6v5",
-   "slug": "sfa",
-   "badge": [
-    "label-secondary",
-    "6"
-   ],
-   "submenu": [
-    {
-     "url": "sfa-sales-lead-opportunity-management",
-     "name": "Sales Lead & Opportunity Management",
-     "slug": "sfa-sales-lead-opportunity-management"
-    },
-    {
-     "url": "sfa-corporate-b2b-rental-contract-setup",
-     "name": "Corporate B2B Rental Contract Setup",
-     "slug": "sfa-corporate-b2b-rental-contract-setup"
-    },
-    {
-     "url": "sfa-commercial-quotation-proposal-generator",
-     "name": "Commercial Quotation & Proposal Generator",
-     "slug": "sfa-commercial-quotation-proposal-generator"
-    },
-    {
-     "url": "sfa-sales-agent-commission-incentive-setup",
-     "name": "Sales Agent Commission & Incentive Setup",
-     "slug": "sfa-sales-agent-commission-incentive-setup"
-    },
-    {
-     "url": "sfa-sales-pipeline-target-tracking",
-     "name": "Sales Pipeline & Target Tracking",
-     "slug": "sfa-sales-pipeline-target-tracking"
-    },
-    {
-     "url": "sfa-sfa-security-privilege-management",
-     "name": "SFA Security Privilege Management",
-     "slug": "sfa-sfa-security-privilege-management"
-    }
-   ]
-  },
-  {
-   "name": "Mobile App",
-   "icon": "menu-icon icon-base ti tabler-device-mobile",
-   "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2",
-   "slug": "mobile",
-   "badge": [
-    "label-secondary",
-    "7"
-   ],
-   "submenu": [
-    {
-     "url": "mobile-mobile-app-home-vehicle-catalog",
-     "name": "Mobile App Home & Vehicle Catalog",
-     "slug": "mobile-mobile-app-home-vehicle-catalog"
-    },
-    {
-     "url": "mobile-mobile-vehicle-booking-station-selection",
-     "name": "Mobile Vehicle Booking & Station Selection",
-     "slug": "mobile-mobile-vehicle-booking-station-selection"
-    },
-    {
-     "url": "mobile-mobile-customer-wallet-payment-checkout",
-     "name": "Mobile Customer Wallet & Payment Checkout",
-     "slug": "mobile-mobile-customer-wallet-payment-checkout"
-    },
-    {
-     "url": "mobile-mobile-active-rental-telemetry-unlock",
-     "name": "Mobile Active Rental Telemetry & Unlock",
-     "slug": "mobile-mobile-active-rental-telemetry-unlock"
-    },
-    {
-     "url": "mobile-mobile-loyalty-rewards-coupon-redemption",
-     "name": "Mobile Loyalty Rewards & Coupon Redemption",
-     "slug": "mobile-mobile-loyalty-rewards-coupon-redemption"
-    },
-    {
-     "url": "mobile-mobile-customer-account-document-upload",
-     "name": "Mobile Customer Account & Document Upload",
-     "slug": "mobile-mobile-customer-account-document-upload"
-    },
-    {
-     "url": "mobile-rmsresponsive-mobile-app-privilege-management",
-     "name": "RmsResponsive Mobile App Privilege Management",
-     "slug": "mobile-rmsresponsive-mobile-app-privilege-management"
-    }
-   ]
-  },
-  {
    "name": "Notifications",
    "icon": "menu-icon icon-base ti tabler-bell",
    "svg": "M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0",
@@ -457,43 +321,6 @@
      "url": "notification-notification-security-privilege-management",
      "name": "Notification Security Privilege Management",
      "slug": "notification-notification-security-privilege-management"
-    }
-   ]
-  },
-  {
-   "name": "Wallet & Payments",
-   "icon": "menu-icon icon-base ti tabler-wallet",
-   "svg": "M3 7a2 2 0 0 1 2-2h11l4 4v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 13h2",
-   "slug": "wallet",
-   "badge": [
-    "label-secondary",
-    "5"
-   ],
-   "submenu": [
-    {
-     "url": "wallet-wallet-refund-request-approval-management",
-     "name": "Wallet Refund Request & Approval Management",
-     "slug": "wallet-wallet-refund-request-approval-management"
-    },
-    {
-     "url": "wallet-payment-gateway-provider-webhook-integration",
-     "name": "Payment Gateway Provider & Webhook Integration",
-     "slug": "wallet-payment-gateway-provider-webhook-integration"
-    },
-    {
-     "url": "wallet-security-deposit-hold-refund-reconciliation",
-     "name": "Security Deposit Hold & Refund Reconciliation",
-     "slug": "wallet-security-deposit-hold-refund-reconciliation"
-    },
-    {
-     "url": "wallet-customer-wallet-ledger-transaction-audit",
-     "name": "Customer Wallet Ledger & Transaction Audit",
-     "slug": "wallet-customer-wallet-ledger-transaction-audit"
-    },
-    {
-     "url": "wallet-wallet-security-privilege-management",
-     "name": "Wallet Security Privilege Management",
-     "slug": "wallet-wallet-security-privilege-management"
     }
    ]
   },

@@ -1,0 +1,150 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Search Order - Live Monitoring{% endblock title %}
+
+{% comment %}
+New module, not one of the 16 FSD modules -- requested against the client's
+RMS Web feedback doc (RMS WEB 07.09.2026-1.pdf, "Search Order" page). Built
+on the shared byky-screen.css/js base (see byky-screen-design-system.md and
+sysadmin_global_application_configuration_settings.html for the
+section-card detail-view reference).
+
+An order lookup has no source without a live rental engine, and the fields
+below are money and customer PII, so no example order is fabricated here
+(CLAUDE.md 12) -- the four detail sections render with real headings and
+field labels, in an awaiting-data state, the same honesty rule
+live_live_monitor.html follows.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Live Monitoring</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Search Order</b>
+      </div>
+      <h1 class="scr-title">Search Order</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-body" style="padding-bottom:0">
+      <div class="scr-grid">
+        <div class="scr-field" style="grid-column:span 3">
+          <label class="scr-label">Order Number</label>
+          <input type="text" class="scr-input" placeholder="e.g. ABCO210145042398" />
+        </div>
+        <div class="scr-field" style="align-self:end">
+          <button type="button" class="scr-btn-primary" style="width:100%; justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="scr-form-body" style="padding-top:20px">
+      <div class="scr-empty" style="padding:56px 24px">
+        <span class="scr-empty-ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        </span>
+        <div>
+          <div class="scr-empty-title">No order looked up yet</div>
+          <p class="scr-empty-sub">Enter an order number above. Its order, customer, payment and vehicle details will appear here, grouped the same way as below.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% comment %}
+  Reference layout for what a found order renders as -- section headings and
+  field labels only, no values, so the shape is visible without a fabricated
+  order (CLAUDE.md 12).
+  {% endcomment %}
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row"><h2 class="scr-form-title">Order Details Layout</h2></div>
+        <p class="scr-form-sub">The four sections a matched order fills in.</p>
+      </div>
+    </div>
+    <div class="scr-form-body">
+      <div class="scr-section">
+        <div class="scr-section-head"><h3 class="scr-section-title">Order</h3><div class="scr-section-rule"></div></div>
+        <div class="scr-grid">
+          <div class="scr-field"><label class="scr-label">Order Number</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Order Date &amp; Time</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Status</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Trans No</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Open By</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Close By</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Start Date &amp; Time</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Exit Date &amp; Time</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Station</label><input type="text" class="scr-input" disabled></div>
+        </div>
+      </div>
+      <div class="scr-section">
+        <div class="scr-section-head"><h3 class="scr-section-title">Customer Details</h3><div class="scr-section-rule"></div></div>
+        <div class="scr-grid">
+          <div class="scr-field"><label class="scr-label">Customer Name</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Phone Number</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Email ID</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">ID Type</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">ID Number</label><input type="text" class="scr-input" disabled></div>
+        </div>
+      </div>
+      <div class="scr-section">
+        <div class="scr-section-head"><h3 class="scr-section-title">Payment Details</h3><div class="scr-section-rule"></div></div>
+        <div class="scr-grid">
+          <div class="scr-field"><label class="scr-label">Payment Mode</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Collected Amount</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Fare Amount</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Deposit Amount</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Bill Amount</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Tax Percentage</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Tax Amount</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Discount Amount</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Net Amount</label><input type="text" class="scr-input" disabled></div>
+          <div class="scr-field"><label class="scr-label">Rounded Difference</label><input type="text" class="scr-input" disabled></div>
+        </div>
+      </div>
+      <div class="scr-section" style="margin-bottom:0">
+        <div class="scr-section-head"><h3 class="scr-section-title">Vehicle Details</h3><div class="scr-section-rule"></div></div>
+        <div class="scr-table-scroll scr-sb" style="border:1px solid #eeedf5; border-radius:12px">
+          <table>
+            <thead>
+              <tr>
+                <th>Vehicle Type</th>
+                <th>Vehicle Number</th>
+                <th>Start Time</th>
+                <th>End Time</th>
+                <th>Time Slot</th>
+                <th>Time Taken</th>
+                <th>Bill Amount</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td colspan="8" style="text-align:center; color:#9490bb; padding:20px">No vehicles on this order yet</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

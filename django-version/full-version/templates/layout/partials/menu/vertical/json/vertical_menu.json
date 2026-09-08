@@ -211,6 +211,33 @@
    ]
   },
   {
+   "name": "Discount Card Management",
+   "icon": "menu-icon icon-base ti tabler-credit-card",
+   "svg": "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 10h18M7 15h4",
+   "slug": "discount",
+   "badge": [
+    "label-secondary",
+    "3"
+   ],
+   "submenu": [
+    {
+     "url": "discount-card-management",
+     "name": "Card Management",
+     "slug": "discount-card-management"
+    },
+    {
+     "url": "discount-card-grade-management",
+     "name": "Card Grade Management",
+     "slug": "discount-card-grade-management"
+    },
+    {
+     "url": "discount-card-discount-management",
+     "name": "Card Discount",
+     "slug": "discount-card-discount-management"
+    }
+   ]
+  },
+  {
    "name": "Vehicle Tracking Management",
    "icon": "menu-icon icon-base ti tabler-gps",
    "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z",
@@ -251,6 +278,38 @@
      "url": "device-device-settings",
      "name": "Device Settings",
      "slug": "device-device-settings"
+    }
+   ]
+  },
+  {
+   "name": "Live Monitoring",
+   "icon": "menu-icon icon-base ti tabler-activity",
+   "svg": "M22 12h-4l-3 9L9 3l-3 9H2",
+   "slug": "live",
+   "badge": [
+    "label-secondary",
+    "3"
+   ],
+   "submenu": [
+    {
+     "url": "live-live-monitor",
+     "name": "Live Monitor",
+     "slug": "live-live-monitor"
+    },
+    {
+     "url": "live-search-order",
+     "name": "Search Order",
+     "slug": "live-search-order"
+    },
+    {
+     "url": "live-image-sharing",
+     "name": "Image Sharing",
+     "slug": "live-image-sharing"
+    },
+    {
+     "name": "Test Vehicle Details",
+     "slug": "live-test-vehicle-details",
+     "disabled": true
     }
    ]
   },

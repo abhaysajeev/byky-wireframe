@@ -34,6 +34,7 @@ urlpatterns = [
     path("", include("apps.byky_ims.urls")),
     path("", include("apps.byky_rms.urls")),
     path("", include("apps.byky_fare.urls")),
+    path("", include("apps.byky_discount.urls")),
     path("", include("apps.byky_tracking.urls")),
     path("", include("apps.byky_reports.urls")),
     path("", include("apps.byky_sfa.urls")),
@@ -47,6 +48,7 @@ urlpatterns = [
     path("", include("apps.byky_security.urls")),
     path("", include("apps.byky_integration.urls")),
     path("", include("apps.byky_device.urls")),
+    path("", include("apps.byky_live.urls")),
 ]
 
 handler404 = SystemView.as_view(template_name="pages_misc_error.html", status=404)

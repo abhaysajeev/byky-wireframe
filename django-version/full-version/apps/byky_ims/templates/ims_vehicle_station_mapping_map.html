@@ -1,0 +1,150 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Map Vehicle to Branch - Inventory{% endblock title %}
+
+{% comment %}
+FSD 3.6's "Map Vehicle" action -- a full page, not a drawer, per the FSD's own
+layout note for this screen ("Branch Selection Dropdown, Item Multi-select
+Grid with Checkboxes, Assigned Station Vehicles DataGrid"). Built on the
+shared byky-screen.css/js base (see byky-screen-design-system.md).
+
+The unmapped-vehicle pool is genuinely empty: every vehicle in the source data
+already carries a real station (see ims_vehicle_station_mapping.html and
+data.station_mappings()). data.unmapped_vehicles() is real, working logic --
+not a placeholder -- that will list actual rows the moment an unassigned
+vehicle enters the fleet; nothing here is invented to make the demo busier
+(CLAUDE.md 12).
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-ims-map-vehicle.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <a href="{% url 'ims-vehicle-station-mapping' %}">Vehicle Station Mapping</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Map Vehicle</b>
+      </div>
+      <h1 class="scr-title">Map Vehicle to Branch</h1>
+      <p class="scr-sub">Choose a branch, then select the unmapped vehicles to assign to it.</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'ims-vehicle-station-mapping' %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        Back to list
+      </a>
+    </div>
+  </div>
+
+  <div class="scr-banner scr-banner-success" id="map-success-banner" hidden>
+    <span class="scr-banner-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>
+    </span>
+    <span class="scr-banner-text" id="map-success-text">Mapped successfully.</span>
+    <button type="button" class="scr-banner-close" aria-label="Dismiss">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+
+  <div class="scr-card" style="padding:20px">
+    <h3 class="scr-form-title" style="margin-bottom:4px">1. Choose a branch</h3>
+    <p class="scr-form-sub" style="margin-bottom:14px">Selected vehicles below will be assigned to this branch.</p>
+    <div style="max-width:360px">
+      <select class="scr-input" id="map-branch-select">
+        <option value="">Select a branch</option>
+        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+      </select>
+    </div>
+  </div>
+
+  <div class="scr-card" id="map-vehicles-card" data-scr-noun-singular="vehicle" data-scr-noun-plural="vehicles">
+    <div class="scr-toolbar">
+      <div>
+        <h3 class="scr-form-title" style="margin-bottom:2px">2. Select unmapped vehicles</h3>
+        <p class="scr-form-sub" style="margin:0">Vehicles with no branch assigned yet.</p>
+      </div>
+      <div style="flex:1"></div>
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search vehicle or RFID" />
+      </div>
+      <span class="scr-toolbar-count">{{ unmapped|length }} vehicles</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px"><input type="checkbox" id="map-select-all" aria-label="Select all"></th>
+            <th>Item Code</th>
+            <th>Item Name</th>
+            <th>Category</th>
+            <th>RFID Tag EPC</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for v in unmapped %}
+          <tr class="scr-row" data-search="{{ v.code|lower }} {{ v.rfid|lower }}">
+            <td><input type="checkbox" data-veh-check value="{{ v.code }}"></td>
+            <td><span class="scr-code">{{ v.code }}</span></td>
+            <td style="font-weight:600">{{ v.name }}</td>
+            <td class="scr-contact">{{ v.category }}</td>
+            <td><span class="scr-code">{{ v.rfid }}</span></td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 15 5-5"></path><circle cx="12" cy="12" r="9"></circle></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No unmapped vehicles</div>
+                  <p class="scr-empty-sub">Every vehicle in the fleet already carries a branch. This list fills automatically the moment a vehicle needs one.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ unmapped|length }} of {{ unmapped|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="scr-drawer-foot" style="border-radius:0 0 16px 16px">
+      <div style="flex:1"></div>
+      <button type="button" class="scr-btn-primary" id="map-vehicles-btn" disabled>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+        Map Selected Vehicles
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}

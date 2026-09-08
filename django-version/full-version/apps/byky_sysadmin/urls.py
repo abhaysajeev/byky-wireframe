@@ -33,7 +33,8 @@ urlpatterns = [
     ),
     path(
         "sysadmin/global-application-configuration-settings/",
-        views.Screen13_3.as_view(
+        views.GlobalConfigView.as_view(
+            template_name="sysadmin_global_application_configuration_settings.html",
             screen_no="13.3",
             screen_title="Global Application Configuration & Settings",
             module_label="System Administration",

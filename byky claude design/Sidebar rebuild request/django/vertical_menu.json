@@ -1,0 +1,551 @@
+{
+  "menu": [
+    {
+      "name": "Dashboard",
+      "url": "dashboard",
+      "svg": "M3 10.5 12 3l9 7.5M5 9.8V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.8"
+    },
+    {
+      "menuHeader": "Operations"
+    },
+    {
+      "name": "Company Management",
+      "svg": "M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3",
+      "badge": [
+        "secondary",
+        9
+      ],
+      "submenu": [
+        {
+          "name": "Companies",
+          "url": "company-management-companies"
+        },
+        {
+          "name": "Branches",
+          "url": "company-management-branches"
+        },
+        {
+          "name": "Departments",
+          "url": "company-management-departments"
+        },
+        {
+          "name": "Designations",
+          "url": "company-management-designations"
+        },
+        {
+          "name": "Documents",
+          "url": "company-management-documents"
+        },
+        {
+          "name": "Contracts",
+          "url": "company-management-contracts"
+        },
+        {
+          "name": "Vendors",
+          "url": "company-management-vendors"
+        },
+        {
+          "name": "Approvals",
+          "url": "company-management-approvals"
+        },
+        {
+          "name": "Settings",
+          "url": "company-management-settings"
+        }
+      ]
+    },
+    {
+      "name": "Human Resources",
+      "svg": "M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2M21 20v-1.4a3 3 0 0 0-2.3-2.9M16.6 5a3 3 0 0 1 0 5.8",
+      "badge": [
+        "secondary",
+        6
+      ],
+      "submenu": [
+        {
+          "name": "Employees",
+          "url": "human-resources-employees"
+        },
+        {
+          "name": "Attendance",
+          "url": "human-resources-attendance"
+        },
+        {
+          "name": "Leaves",
+          "url": "human-resources-leaves"
+        },
+        {
+          "name": "Payroll",
+          "url": "human-resources-payroll"
+        },
+        {
+          "name": "Shifts",
+          "url": "human-resources-shifts"
+        },
+        {
+          "name": "Roles",
+          "url": "human-resources-roles"
+        }
+      ]
+    },
+    {
+      "name": "Inventory",
+      "svg": "m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10",
+      "badge": [
+        "secondary",
+        20
+      ],
+      "submenu": [
+        {
+          "name": "Vehicles",
+          "url": "inventory-vehicles"
+        },
+        {
+          "name": "Spare Parts",
+          "url": "inventory-spare-parts"
+        },
+        {
+          "name": "Stock In",
+          "url": "inventory-stock-in"
+        },
+        {
+          "name": "Stock Out",
+          "url": "inventory-stock-out"
+        },
+        {
+          "name": "Warehouses",
+          "url": "inventory-warehouses"
+        },
+        {
+          "name": "Suppliers",
+          "url": "inventory-suppliers"
+        },
+        {
+          "name": "Purchase Orders",
+          "url": "inventory-purchase-orders"
+        },
+        {
+          "name": "Audits",
+          "url": "inventory-audits"
+        }
+      ]
+    },
+    {
+      "name": "Rental Management",
+      "svg": "M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7",
+      "badge": [
+        "secondary",
+        8
+      ],
+      "submenu": [
+        {
+          "name": "Bookings",
+          "url": "rental-management-bookings"
+        },
+        {
+          "name": "Active Rentals",
+          "url": "rental-management-active-rentals"
+        },
+        {
+          "name": "Returns",
+          "url": "rental-management-returns"
+        },
+        {
+          "name": "Extensions",
+          "url": "rental-management-extensions"
+        },
+        {
+          "name": "Damages",
+          "url": "rental-management-damages"
+        },
+        {
+          "name": "Refunds",
+          "url": "rental-management-refunds"
+        },
+        {
+          "name": "Agreements",
+          "url": "rental-management-agreements"
+        },
+        {
+          "name": "History",
+          "url": "rental-management-history"
+        }
+      ]
+    },
+    {
+      "name": "Fare & Schemes",
+      "svg": "m2.5 12.5 9-9a2 2 0 0 1 1.4-.6H20a1 1 0 0 1 1 1v7.1a2 2 0 0 1-.6 1.4l-9 9a1.5 1.5 0 0 1-2.1 0l-6.8-6.8a1.5 1.5 0 0 1 0-2.1M16.5 7.5h.01",
+      "badge": [
+        "secondary",
+        2
+      ],
+      "submenu": [
+        {
+          "name": "Fare Plans",
+          "url": "fare-and-schemes-fare-plans"
+        },
+        {
+          "name": "Promo Schemes",
+          "url": "fare-and-schemes-promo-schemes"
+        }
+      ]
+    },
+    {
+      "name": "Tracking & Telematics",
+      "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z",
+      "badge": [
+        "secondary",
+        4
+      ],
+      "submenu": [
+        {
+          "name": "Live Map",
+          "url": "tracking-and-telematics-live-map"
+        },
+        {
+          "name": "Trip History",
+          "url": "tracking-and-telematics-trip-history"
+        },
+        {
+          "name": "Geofences",
+          "url": "tracking-and-telematics-geofences"
+        },
+        {
+          "name": "Device Health",
+          "url": "tracking-and-telematics-device-health"
+        }
+      ]
+    },
+    {
+      "name": "RFID Gates",
+      "svg": "M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3",
+      "badge": [
+        "secondary",
+        5
+      ],
+      "submenu": [
+        {
+          "name": "Gates",
+          "url": "rfid-gates-gates"
+        },
+        {
+          "name": "Tags",
+          "url": "rfid-gates-tags"
+        },
+        {
+          "name": "Access Logs",
+          "url": "rfid-gates-access-logs"
+        },
+        {
+          "name": "Rules",
+          "url": "rfid-gates-rules"
+        },
+        {
+          "name": "Diagnostics",
+          "url": "rfid-gates-diagnostics"
+        }
+      ]
+    },
+    {
+      "menuHeader": "Business"
+    },
+    {
+      "name": "Reports",
+      "svg": "M4 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM8 16v-4M12 16V8M16 16v-6",
+      "badge": [
+        "secondary",
+        8
+      ],
+      "submenu": [
+        {
+          "name": "Revenue",
+          "url": "reports-revenue"
+        },
+        {
+          "name": "Utilisation",
+          "url": "reports-utilisation"
+        },
+        {
+          "name": "Fleet Health",
+          "url": "reports-fleet-health"
+        },
+        {
+          "name": "Rider Activity",
+          "url": "reports-rider-activity"
+        },
+        {
+          "name": "Collections",
+          "url": "reports-collections"
+        },
+        {
+          "name": "Taxes",
+          "url": "reports-taxes"
+        },
+        {
+          "name": "Custom Reports",
+          "url": "reports-custom-reports"
+        },
+        {
+          "name": "Exports",
+          "url": "reports-exports"
+        }
+      ]
+    },
+    {
+      "name": "Sales Force",
+      "svg": "m3 17 5.5-6.5 4 3.5L21 6M21 6h-5M21 6v5",
+      "badge": [
+        "secondary",
+        6
+      ],
+      "submenu": [
+        {
+          "name": "Agents",
+          "url": "sales-force-agents"
+        },
+        {
+          "name": "Targets",
+          "url": "sales-force-targets"
+        },
+        {
+          "name": "Leads",
+          "url": "sales-force-leads"
+        },
+        {
+          "name": "Visits",
+          "url": "sales-force-visits"
+        },
+        {
+          "name": "Commissions",
+          "url": "sales-force-commissions"
+        },
+        {
+          "name": "Leaderboard",
+          "url": "sales-force-leaderboard"
+        }
+      ]
+    },
+    {
+      "name": "Mobile App",
+      "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2",
+      "badge": [
+        "secondary",
+        7
+      ],
+      "submenu": [
+        {
+          "name": "Rider App",
+          "url": "mobile-app-rider-app"
+        },
+        {
+          "name": "Onboarding",
+          "url": "mobile-app-onboarding"
+        },
+        {
+          "name": "Banners",
+          "url": "mobile-app-banners"
+        },
+        {
+          "name": "Versions",
+          "url": "mobile-app-versions"
+        },
+        {
+          "name": "Push Config",
+          "url": "mobile-app-push-config"
+        },
+        {
+          "name": "Feedback",
+          "url": "mobile-app-feedback"
+        },
+        {
+          "name": "Crash Logs",
+          "url": "mobile-app-crash-logs"
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "svg": "M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0",
+      "badge": [
+        "secondary",
+        5
+      ],
+      "submenu": [
+        {
+          "name": "Templates",
+          "url": "notifications-templates"
+        },
+        {
+          "name": "Campaigns",
+          "url": "notifications-campaigns"
+        },
+        {
+          "name": "SMS",
+          "url": "notifications-sms"
+        },
+        {
+          "name": "Email",
+          "url": "notifications-email"
+        },
+        {
+          "name": "Logs",
+          "url": "notifications-logs"
+        }
+      ]
+    },
+    {
+      "name": "Wallet & Payments",
+      "svg": "M3 7a2 2 0 0 1 2-2h11l4 4v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 13h2",
+      "badge": [
+        "secondary",
+        5
+      ],
+      "submenu": [
+        {
+          "name": "Wallets",
+          "url": "wallet-and-payments-wallets"
+        },
+        {
+          "name": "Top-ups",
+          "url": "wallet-and-payments-top-ups"
+        },
+        {
+          "name": "Transactions",
+          "url": "wallet-and-payments-transactions"
+        },
+        {
+          "name": "Gateways",
+          "url": "wallet-and-payments-gateways"
+        },
+        {
+          "name": "Settlements",
+          "url": "wallet-and-payments-settlements"
+        }
+      ]
+    },
+    {
+      "menuHeader": "System"
+    },
+    {
+      "name": "Scheduler",
+      "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2",
+      "badge": [
+        "secondary",
+        5
+      ],
+      "submenu": [
+        {
+          "name": "Jobs",
+          "url": "scheduler-jobs"
+        },
+        {
+          "name": "Cron Tasks",
+          "url": "scheduler-cron-tasks"
+        },
+        {
+          "name": "Queues",
+          "url": "scheduler-queues"
+        },
+        {
+          "name": "Run History",
+          "url": "scheduler-run-history"
+        },
+        {
+          "name": "Failures",
+          "url": "scheduler-failures"
+        }
+      ]
+    },
+    {
+      "name": "System Administration",
+      "svg": "M9.88 4.91L9.97 2.21L14.03 2.21L14.12 4.91L15.51 5.49L17.49 3.64L20.36 6.51L18.51 8.49L19.09 9.88L21.79 9.97L21.79 14.03L19.09 14.12L18.51 15.51L20.36 17.49L17.49 20.36L15.51 18.51L14.12 19.09L14.03 21.79L9.97 21.79L9.88 19.09L8.49 18.51L6.51 20.36L3.64 17.49L5.49 15.51L4.91 14.12L2.21 14.03L2.21 9.97L4.91 9.88L5.49 8.49L3.64 6.51L6.51 3.64L8.49 5.49Z",
+      "badge": [
+        "secondary",
+        5
+      ],
+      "submenu": [
+        {
+          "name": "Users",
+          "url": "system-administration-users"
+        },
+        {
+          "name": "Roles & Permissions",
+          "url": "system-administration-roles-and-permissions"
+        },
+        {
+          "name": "Audit Trail",
+          "url": "system-administration-audit-trail"
+        },
+        {
+          "name": "Backups",
+          "url": "system-administration-backups"
+        },
+        {
+          "name": "Configuration",
+          "url": "system-administration-configuration"
+        }
+      ],
+      "svg2": "M12 15.1a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2"
+    },
+    {
+      "name": "Mobile API",
+      "svg": "M4 7h3.5a2 2 0 0 1 0 4H4v6M4 7v4M11 17V7h2.5a2 2 0 0 1 0 5H11M18 7v10",
+      "badge": [
+        "secondary",
+        5
+      ],
+      "submenu": [
+        {
+          "name": "Endpoints",
+          "url": "mobile-api-endpoints"
+        },
+        {
+          "name": "API Keys",
+          "url": "mobile-api-api-keys"
+        },
+        {
+          "name": "Webhooks",
+          "url": "mobile-api-webhooks"
+        },
+        {
+          "name": "Rate Limits",
+          "url": "mobile-api-rate-limits"
+        },
+        {
+          "name": "Docs",
+          "url": "mobile-api-docs"
+        }
+      ]
+    },
+    {
+      "name": "System Security",
+      "svg": "M12 22s8-4 8-10V5.5L12 2 4 5.5V12c0 6 8 10 8 10M9 12l2.2 2.2L15.5 10",
+      "badge": [
+        "secondary",
+        5
+      ],
+      "submenu": [
+        {
+          "name": "Login Policy",
+          "url": "system-security-login-policy"
+        },
+        {
+          "name": "Sessions",
+          "url": "system-security-sessions"
+        },
+        {
+          "name": "IP Allowlist",
+          "url": "system-security-ip-allowlist"
+        },
+        {
+          "name": "Encryption",
+          "url": "system-security-encryption"
+        },
+        {
+          "name": "Alerts",
+          "url": "system-security-alerts"
+        }
+      ]
+    }
+  ]
+}

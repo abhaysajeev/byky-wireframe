@@ -120,11 +120,9 @@
   background-color: var(--bs-primary);
 }
 
-/* Brand lockup -- "Byky RMS".
-   Public Sans is already loaded at 300-700, so the two halves are separated by
-   weight, size and tracking rather than by a second typeface: the product name
-   carries the weight, the system suffix sits back as small uppercase with open
-   tracking. Both are optically centred against the 26px bike mark. */
+/* Brand lockup shared by the auth pages, navbar_full and footer_front -- the
+   sidebar owns its own brand markup/CSS now (static/css/sidebar.css) and no
+   longer uses these classes. */
 .app-brand .app-brand-link {
   display: flex;
   align-items: center;
@@ -150,26 +148,8 @@
   white-space: nowrap;
 }
 
-.app-brand .brand-name {
-  font-weight: 700;
-}
-
-.app-brand .brand-suffix {
-  font-size: 0.68em;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  opacity: 0.72;
-  transition: opacity 0.2s ease;
-}
-
-.app-brand .app-brand-link:hover .brand-suffix {
-  opacity: 1;
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .app-brand .app-brand-logo.demo img,
-  .app-brand .brand-suffix {
+  .app-brand .app-brand-logo.demo img {
     transition: none;
   }
 }

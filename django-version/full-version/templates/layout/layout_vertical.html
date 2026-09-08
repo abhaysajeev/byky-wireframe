@@ -8,7 +8,7 @@
 
     {% if is_menu %}
     <!-- Menu: Start -->
-    {% include "../layout/partials/menu/vertical/vertical_menu.html" %}
+    {% include "sidebar/sidebar.html" %}
     <!-- Menu: End -->
     {% endif %}
 
@@ -50,12 +50,6 @@
       <!-- / Layout page: End -->
     </div>
 
-    {% if is_menu %}
-    <!-- Overlay -->
-    <div class="layout-overlay layout-menu-toggle"></div>
-    {% endif %}
-    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
-    <div class="drag-target"></div>
   </div>
   <!-- Layout wrapper: End -->
   {% endblock layout %}

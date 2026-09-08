@@ -1,0 +1,162 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Card Grade Management - Discount Card Management{% endblock title %}
+
+{% comment %}
+Not an FSD module -- see discount_card_management.html for context. No card
+grades exist in any source file, so the grid shows its real column headers
+with the honest empty state (CLAUDE.md 12). Card Type reuses the same
+generic classification list the Card screen uses.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Discount Card Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Card Grade Management</b>
+      </div>
+      <h1 class="scr-title">Card Grade Management</h1>
+      <p class="scr-sub">Grade tiers within each card type, e.g. Silver, Gold, Platinum.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+      <button type="button" class="scr-btn-primary" data-scr-open="grade:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Card Grade
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="card grade" data-scr-noun-plural="card grades">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search grade name or code" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="type">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All card types</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All card types</button>
+          {% for t in card_types_list %}
+          <button type="button" class="scr-filter-opt" data-value="{{ t }}">{{ t }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">0 card grades</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Card Grade Name</th>
+            <th>Grade Code</th>
+            <th>Card Type</th>
+            <th>Approval</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.4 5.5 6 .6-4.5 4 1.3 5.9L12 16"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No card grades yet</div>
+                  <p class="scr-empty-sub">Grade tiers will appear here once one is added for a card type.</p>
+                </div>
+                <button type="button" class="scr-btn-primary" data-scr-open="grade:add">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  Add Card Grade
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %} Add/Edit drawer -- no rows exist yet, so this always opens in Add mode. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="grade" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="grade" data-add-title="Add Card Grade" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.4 5.5 6 .6-4.5 4 1.3 5.9L12 16"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Card Grade</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Card Type<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="type">
+        <option value="">Select</option>
+        {% for t in card_types_list %}<option>{{ t }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Card Grade Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" value="" placeholder="e.g. GLD" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Card Grade Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" placeholder="e.g. Gold" />
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
+{% endblock %}

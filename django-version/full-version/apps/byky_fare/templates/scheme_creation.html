@@ -4,285 +4,287 @@
 {% block title %}Scheme Creation - Fare &amp; Schemes{% endblock title %}
 
 {% comment %}
-Adapted from the client mockup byky Docs/Scheme_Creation.html.
-
-Same four steps and the same fields, rebuilt with Vuexy cards and the house
-spacing scale. The two hidden <select> templates at the foot supply option lists
-to rows that byky-fare.js creates at runtime, so the option data stays in Django
+Adapted from the client mockup byky Docs/Scheme_Creation.html. Migrated onto
+the shared byky-screen.css/js base (see byky-screen-design-system.md) --
+four numbered scr-card stages instead of Vuexy cards, same fields and order.
+The two hidden <select> templates at the foot still supply option lists to
+rows byky-fare.js creates at runtime, so the option data stays in Django
 rather than being duplicated in JavaScript.
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
 <link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
-{% endblock vendor_css %}
+{% endblock page_css %}
 
 {% block vendor_js %}
 {{ block.super }}
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
 <script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
 {% endblock vendor_js %}
 
 {% block page_js %}
 {{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
 <script src="{% static 'js/byky-fare.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Scheme Creation" parent="Fare & Schemes" subtitle=purpose %}
+<div class="scr">
 
-<div class="row g-6">
-  <div class="col-12">
-
-    <!-- 01 Promotion Level & Scope -->
-    <div class="card mb-6">
-      <div class="card-header d-flex justify-content-between align-items-start">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Promotion Level &amp; Scope</h5>
-          <p class="card-subtitle">Choose whether the promotion belongs to the company, a branch or a location.</p>
-        </div>
-        <span class="badge bg-label-secondary">01</span>
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Fare &amp; Schemes</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Scheme Creation</b>
       </div>
-      <div class="card-body">
-        <div class="row g-6">
-          <div class="col-lg-4">
-            <label class="form-label d-block">Promotion Level <span class="text-danger">*</span></label>
-            <div class="btn-group w-100" role="group" aria-label="Promotion level">
-              {% for lvl in price_levels %}
-                <input type="radio" class="btn-check" name="promoLevel" id="plvl-{{ forloop.counter }}"
-                       value="{{ lvl }}" {% if forloop.first %}checked{% endif %} autocomplete="off" />
-                <label class="btn btn-outline-primary" for="plvl-{{ forloop.counter }}">{{ lvl }}</label>
-              {% endfor %}
-            </div>
+      <h1 class="scr-title">Scheme Creation</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+  </div>
+
+  <!-- 01 Promotion Level & Scope -->
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row"><h2 class="scr-form-title">Promotion Level &amp; Scope</h2></div>
+        <p class="scr-form-sub">Choose whether the promotion belongs to the company, a branch or a location.</p>
+      </div>
+      <span class="scr-form-badge">01</span>
+    </div>
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field" style="grid-column:span 1">
+          <label class="scr-label">Promotion Level<span class="scr-required">*</span></label>
+          <div style="display:flex; gap:16px; height:40px; align-items:center">
+            {% for lvl in price_levels %}
+            <label class="scr-radio-label" style="display:flex; align-items:center; gap:6px">
+              <input type="radio" class="scr-radio" name="promoLevel" value="{{ lvl }}" {% if forloop.first %}checked{% endif %} />
+              {{ lvl }}
+            </label>
+            {% endfor %}
           </div>
-          <div class="col-lg-8">
-            <div class="row g-6">
-              <div class="col-md-4">
-                <label class="form-label" for="promo-company">Company <span class="text-danger">*</span></label>
-                <select id="promo-company" class="select2 form-select">
-                  <option value="">Select Company</option>
-                  {% for c in companies_list %}<option>{{ c }}</option>{% endfor %}
-                </select>
-              </div>
-              <div class="col-md-4">
-                <label class="form-label" for="promo-code">Promotion Code <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="promo-code" placeholder="SUMMER25" />
-              </div>
-              <div class="col-md-4">
-                <label class="form-label" for="promo-name">Promotion Name <span class="text-danger">*</span></label>
-                <input type="text" class="form-control" id="promo-name" placeholder="Summer campaign" />
-              </div>
-            </div>
-          </div>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-company">Company<span class="scr-required">*</span></label>
+          <select id="promo-company" class="scr-input">
+            <option value="">Select Company</option>
+            {% for c in companies_list %}<option>{{ c }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-code">Promotion Code<span class="scr-required">*</span></label>
+          <input type="text" class="scr-input" id="promo-code" placeholder="SUMMER25" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-name">Promotion Name<span class="scr-required">*</span></label>
+          <input type="text" class="scr-input" id="promo-name" placeholder="Summer campaign" />
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 02 Validity & Value Band -->
-    <div class="card mb-6">
-      <div class="card-header d-flex justify-content-between align-items-start">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Validity &amp; Value Band</h5>
-          <p class="card-subtitle">The period, and the purchase value or quantity range this promotion applies to.</p>
-        </div>
-        <span class="badge bg-label-secondary">02</span>
+  <!-- 02 Validity & Value Band -->
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row"><h2 class="scr-form-title">Validity &amp; Value Band</h2></div>
+        <p class="scr-form-sub">The period, and the purchase value or quantity range this promotion applies to.</p>
       </div>
-      <div class="card-body">
-        <div class="row g-6">
-          <div class="col-md-3">
-            <label class="form-label" for="promo-from">From Date <span class="text-danger">*</span></label>
-            <input type="text" class="form-control byky-date" id="promo-from" placeholder="Select date" />
-          </div>
-          <div class="col-md-3">
-            <label class="form-label" for="promo-to">To Date <span class="text-danger">*</span></label>
-            <input type="text" class="form-control byky-date" id="promo-to" placeholder="Select date" />
-          </div>
-          <div class="col-md-3">
-            <label class="form-label" for="promo-for">Promotion For <span class="text-danger">*</span></label>
-            <select id="promo-for" class="form-select">
-              {% for p in promotion_for %}<option>{{ p }}</option>{% endfor %}
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label" for="promo-inventory">Inventory Type <span class="text-danger">*</span></label>
-            <select id="promo-inventory" class="form-select">
-              {% for i in inventory_types %}<option>{{ i }}</option>{% endfor %}
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label" for="promo-lower">Lower Promotion Value <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <span class="input-group-text">AED</span>
-              <input type="number" class="form-control" id="promo-lower" min="0" step="0.01" value="0.00" />
-            </div>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label" for="promo-upper">Upper Promotion Value <span class="text-danger">*</span></label>
-            <div class="input-group">
-              <span class="input-group-text">AED</span>
-              <input type="number" class="form-control" id="promo-upper" min="0" step="0.01" value="0.00" />
-            </div>
-          </div>
-          <div class="col-md-3">
-            <label class="form-label" for="promo-count">Number of Promotion Items <span class="text-danger">*</span></label>
-            <input type="number" class="form-control" id="promo-count" min="0" value="1" />
-          </div>
-          <div class="col-md-3">
-            <label class="form-label" for="promo-type">Promotion Type <span class="text-danger">*</span></label>
-            <select id="promo-type" class="form-select">
-              {% for t in promotion_types %}<option>{{ t }}</option>{% endfor %}
-            </select>
-          </div>
+      <span class="scr-form-badge">02</span>
+    </div>
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label" for="promo-from">From Date<span class="scr-required">*</span></label>
+          <input type="text" class="scr-input byky-date" id="promo-from" placeholder="Select date" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-to">To Date<span class="scr-required">*</span></label>
+          <input type="text" class="scr-input byky-date" id="promo-to" placeholder="Select date" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-for">Promotion For<span class="scr-required">*</span></label>
+          <select id="promo-for" class="scr-input">
+            {% for p in promotion_for %}<option>{{ p }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-inventory">Inventory Type<span class="scr-required">*</span></label>
+          <select id="promo-inventory" class="scr-input">
+            {% for i in inventory_types %}<option>{{ i }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-lower">Lower Promotion Value AED<span class="scr-required">*</span></label>
+          <input type="number" class="scr-input" id="promo-lower" min="0" step="0.01" value="0.00" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-upper">Upper Promotion Value AED<span class="scr-required">*</span></label>
+          <input type="number" class="scr-input" id="promo-upper" min="0" step="0.01" value="0.00" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-count">Number of Promotion Items<span class="scr-required">*</span></label>
+          <input type="number" class="scr-input" id="promo-count" min="0" value="1" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label" for="promo-type">Promotion Type<span class="scr-required">*</span></label>
+          <select id="promo-type" class="scr-input">
+            {% for t in promotion_types %}<option>{{ t }}</option>{% endfor %}
+          </select>
         </div>
       </div>
     </div>
+  </div>
 
-    <!-- 03 Promotion Items -->
-    <div class="card mb-6">
-      <div class="card-header d-flex justify-content-between align-items-start">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Promotion Items</h5>
-          <p class="card-subtitle">The vehicle type and package combinations this promotion applies to.</p>
-        </div>
-        <span class="badge bg-label-secondary">03</span>
+  <!-- 03 Promotion Items -->
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row"><h2 class="scr-form-title">Promotion Items</h2></div>
+        <p class="scr-form-sub">The vehicle type and package combinations this promotion applies to.</p>
       </div>
-      <div class="card-body">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mb-4">
-          <div>
-            <h6 class="mb-1">Applicable Items</h6>
-            <p class="text-body-secondary small mb-0">Add one row per vehicle type and package pair.</p>
+      <span class="scr-form-badge">03</span>
+    </div>
+    <div class="scr-form-body">
+      <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; margin-bottom:14px">
+        <div>
+          <h3 class="scr-section-title" style="text-transform:none; font-size:13px; letter-spacing:0; color:#1a1640; margin-bottom:3px">Applicable Items</h3>
+          <p class="scr-help" style="margin:0">Add one row per vehicle type and package pair.</p>
+        </div>
+        <button type="button" class="scr-btn-primary" id="addPromoItem">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Add Item
+        </button>
+      </div>
+      <div class="scr-table-scroll scr-sb" style="border:1px solid #eeedf5; border-radius:12px">
+        <table>
+          <thead>
+            <tr>
+              <th style="text-align:center; width:50px">#</th>
+              <th>Vehicle Type</th>
+              <th>Package</th>
+              <th style="width:50px"></th>
+            </tr>
+          </thead>
+          <tbody id="promoItemRows"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 Free Promotion Items -->
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row"><h2 class="scr-form-title">Free Promotion Items</h2></div>
+        <p class="scr-form-sub">Optional. Enable when the scheme gives items away rather than discounting them.</p>
+      </div>
+      <span class="scr-form-badge">04</span>
+    </div>
+    <div class="scr-form-body">
+      <div style="border:1px solid #eeedf5; border-radius:12px; padding:16px 18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px">
+        <div>
+          <h3 class="scr-section-title" style="text-transform:none; font-size:13px; letter-spacing:0; color:#1a1640; margin-bottom:3px">Enable Free Items</h3>
+          <p class="scr-help" style="margin:0">Reveals the free-item quantity, offer price and item table.</p>
+        </div>
+        <div class="scr-toggle-row" style="flex:0 0 auto">
+          <button type="button" class="scr-toggle" id="freeItemsToggle"><i></i></button>
+          <span class="scr-toggle-label">Enable</span>
+        </div>
+      </div>
+
+      <div id="freeItemsArea" style="margin-top:20px" hidden>
+        <div class="scr-grid" style="margin-bottom:20px">
+          <div class="scr-field">
+            <label class="scr-label" for="free-count">Number of Free Items<span class="scr-required">*</span></label>
+            <input type="number" class="scr-input" id="free-count" min="0" value="1" />
           </div>
-          <button class="btn btn-primary btn-sm flex-shrink-0" type="button" id="addPromoItem">
-            <i class="icon-base ti tabler-plus icon-14px me-1_5"></i>Add Item
+          <div class="scr-field">
+            <label class="scr-label" for="free-price">Free / Offer Price AED</label>
+            <input type="number" class="scr-input" id="free-price" min="0" step="0.01" value="0.00" />
+          </div>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px">
+          <h3 class="scr-section-title" style="text-transform:none; font-size:13px; letter-spacing:0; color:#1a1640; margin:0">Free Items</h3>
+          <button type="button" class="scr-btn-primary" id="addFreeItem">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+            Add Free Item
           </button>
         </div>
-        <div class="table-responsive border rounded">
-          <table class="table table-sm text-nowrap mb-0 align-middle">
+        <div class="scr-table-scroll scr-sb" style="border:1px solid #eeedf5; border-radius:12px; margin-bottom:20px">
+          <table>
             <thead>
               <tr>
-                <th class="text-center w-px-50">#</th>
+                <th style="text-align:center; width:50px">#</th>
                 <th>Vehicle Type</th>
                 <th>Package</th>
-                <th class="text-center w-px-50"></th>
+                <th style="width:50px"></th>
               </tr>
             </thead>
-            <tbody id="promoItemRows"></tbody>
+            <tbody id="freeItemRows"></tbody>
           </table>
         </div>
-      </div>
-    </div>
 
-    <!-- 04 Free Promotion Items -->
-    <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-start">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Free Promotion Items</h5>
-          <p class="card-subtitle">Optional. Enable when the scheme gives items away rather than discounting them.</p>
-        </div>
-        <span class="badge bg-label-secondary">04</span>
-      </div>
-      <div class="card-body">
-        <div class="border rounded p-6 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-4">
+        <div style="border:1px solid #eeedf5; border-radius:12px; padding:16px 18px; display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px">
           <div>
-            <h6 class="mb-1">Enable Free Items</h6>
-            <p class="text-body-secondary small mb-0">Reveals the free-item quantity, offer price and item table.</p>
+            <h3 class="scr-section-title" style="text-transform:none; font-size:13px; letter-spacing:0; color:#1a1640; margin-bottom:3px">Free Item Time Slabs</h3>
+            <p class="scr-help" style="margin:0">Enable only when free items are limited to a Fare Entry time slab.</p>
           </div>
-          <div class="form-check form-switch mb-0 flex-shrink-0">
-            <input class="form-check-input" type="checkbox" id="freeItemsToggle" />
-            <label class="form-check-label" for="freeItemsToggle">Enable</label>
+          <div class="scr-toggle-row" style="flex:0 0 auto">
+            <button type="button" class="scr-toggle" id="freeSlabToggle"><i></i></button>
+            <span class="scr-toggle-label">Enable</span>
           </div>
         </div>
 
-        <div id="freeItemsArea" class="mt-6" hidden>
-          <div class="row g-6 mb-6">
-            <div class="col-md-4">
-              <label class="form-label" for="free-count">Number of Free Items <span class="text-danger">*</span></label>
-              <input type="number" class="form-control" id="free-count" min="0" value="1" />
+        <div id="freeSlabArea" style="margin-top:20px" hidden>
+          <div style="display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:14px; margin-bottom:14px">
+            <div>
+              <h3 class="scr-section-title" style="text-transform:none; font-size:13px; letter-spacing:0; color:#1a1640; margin-bottom:3px">Slab Restrictions</h3>
+              <p class="scr-help" style="margin:0">Each rule limits the free item to one window and vehicle type.</p>
             </div>
-            <div class="col-md-4">
-              <label class="form-label" for="free-price">Free / Offer Price</label>
-              <div class="input-group">
-                <span class="input-group-text">AED</span>
-                <input type="number" class="form-control" id="free-price" min="0" step="0.01" value="0.00" />
-              </div>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-between align-items-center mb-4">
-            <h6 class="mb-0">Free Items</h6>
-            <button class="btn btn-primary btn-sm" type="button" id="addFreeItem">
-              <i class="icon-base ti tabler-plus icon-14px me-1_5"></i>Add Free Item
+            <button type="button" class="scr-btn-primary" id="addFreeSlab">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+              Add Time Slab
             </button>
           </div>
-          <div class="table-responsive border rounded mb-6">
-            <table class="table table-sm text-nowrap mb-0 align-middle">
+          <div class="scr-table-scroll scr-sb" style="border:1px solid #eeedf5; border-radius:12px">
+            <table>
               <thead>
                 <tr>
-                  <th class="text-center w-px-50">#</th>
+                  <th style="text-align:center; width:50px">#</th>
+                  <th>Applies On</th>
+                  <th>Window</th>
                   <th>Vehicle Type</th>
                   <th>Package</th>
-                  <th class="text-center w-px-50"></th>
+                  <th style="text-align:right">Free Qty</th>
+                  <th style="text-align:right">Actions</th>
                 </tr>
               </thead>
-              <tbody id="freeItemRows"></tbody>
+              <tbody id="freeSlabRows"></tbody>
             </table>
-          </div>
-
-          <div class="border rounded p-6 d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-4">
-            <div>
-              <h6 class="mb-1">Free Item Time Slabs</h6>
-              <p class="text-body-secondary small mb-0">Enable only when free items are limited to a Fare Entry time slab.</p>
-            </div>
-            <div class="form-check form-switch mb-0 flex-shrink-0">
-              <input class="form-check-input" type="checkbox" id="freeSlabToggle" />
-              <label class="form-check-label" for="freeSlabToggle">Enable</label>
-            </div>
-          </div>
-
-          <div id="freeSlabArea" class="mt-6" hidden>
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-4 mb-4">
-              <div>
-                <h6 class="mb-1">Slab Restrictions</h6>
-                <p class="text-body-secondary small mb-0">Each rule limits the free item to one window and vehicle type.</p>
-              </div>
-              <button class="btn btn-primary btn-sm flex-shrink-0" type="button" id="addFreeSlab"
-                      data-bs-toggle="offcanvas" data-bs-target="#offcanvasFreeSlab">
-                <i class="icon-base ti tabler-plus icon-14px me-1_5"></i>Add Time Slab
-              </button>
-            </div>
-            <div class="table-responsive border rounded">
-              <table class="table table-sm mb-0 align-middle">
-                <thead>
-                  <tr>
-                    <th class="text-center w-px-50">#</th>
-                    <th>Applies On</th>
-                    <th>Window</th>
-                    <th>Vehicle Type</th>
-                    <th>Package</th>
-                    <th class="text-end">Free Qty</th>
-                    <th class="text-end">Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="freeSlabRows"></tbody>
-              </table>
-            </div>
           </div>
         </div>
       </div>
-      <div class="card-footer d-flex flex-wrap gap-4">
-        <button type="button" class="btn btn-primary">Save Scheme</button>
-        <button type="button" class="btn btn-label-secondary">Clear</button>
-        <button type="button" class="btn btn-label-danger">Cancel</button>
+
+      <div class="scr-form-foot">
+        <div class="scr-form-actions" style="margin-left:auto">
+          <button type="button" class="scr-btn-danger">Cancel</button>
+          <button type="button" class="scr-btn-secondary">Clear</button>
+          <button type="button" class="scr-btn-primary">Save Scheme</button>
+        </div>
       </div>
     </div>
-
   </div>
+
 </div>
 
 {% comment %}
-Option sources for rows created in JavaScript. Hidden from the page but read by
-byky-fare.js, so the lists stay defined in Django rather than duplicated in JS.
+Option sources for rows created in JavaScript. Hidden from the page but read
+by byky-fare.js, so the lists stay defined in Django rather than duplicated
+in JS.
 {% endcomment %}
 <select id="tplVehicleTypes" hidden>
   <option value="">Select Vehicle Type</option>
@@ -294,73 +296,81 @@ byky-fare.js, so the lists stay defined in Django rather than duplicated in JS.
 </select>
 
 {% comment %}
-  Free-item slab editor. Eight fields per rule stay labelled in a drawer while
-  the grid below reads as a summary, matching the Fare Entry time-slab pattern.
+  Free-item slab editor. Eight fields per rule stay labelled in a drawer
+  while the grid below reads as a summary, matching the Fare Entry
+  time-slab pattern -- same bespoke show/hide JS, same scr-veil/scr-drawer
+  markup.
 {% endcomment %}
-<div class="offcanvas offcanvas-end offcanvas-wide" tabindex="-1" id="offcanvasFreeSlab" aria-labelledby="offcanvasFreeSlabLabel">
-  <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title" id="offcanvasFreeSlabLabel">Add Time Slab</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+<div class="scr-veil" id="freeSlabVeil" hidden></div>
+<aside class="scr-drawer" id="offcanvasFreeSlab" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title" id="offcanvasFreeSlabLabel">Add Time Slab</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" id="freeSlabClose">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
   </div>
-  <div class="offcanvas-body mx-0 flex-grow-0 h-100">
+  <div class="scr-drawer-body scr-sb">
     <form id="freeSlabForm" onsubmit="return false">
-
-      <h6 class="text-body-secondary text-uppercase small mb-4">When it applies</h6>
-      <div class="row g-4 mb-6">
-        <div class="col-md-6">
-          <label class="form-label" for="fs-applies">Applies On <span class="text-danger">*</span></label>
-          <select class="form-select" id="fs-applies">
-            <option value="all">Every day</option>
-            <option value="day">A day of the week</option>
-            <option value="date">A specific date</option>
-          </select>
+      <div class="scr-section-title" style="margin-bottom:14px">When it applies</div>
+      <div class="scr-drawer-field">
+        <label class="scr-label">Applies On<span class="scr-required">*</span></label>
+        <select class="scr-drawer-input" id="fs-applies">
+          <option value="all">Every day</option>
+          <option value="day">A day of the week</option>
+          <option value="date">A specific date</option>
+        </select>
+      </div>
+      <div class="scr-drawer-field" id="fs-day-wrap" hidden>
+        <label class="scr-label">Day</label>
+        <select class="scr-drawer-input" id="fs-day">
+          {% for day in days %}{% if day != 'All Days' %}<option>{{ day }}</option>{% endif %}{% endfor %}
+        </select>
+      </div>
+      <div class="scr-drawer-field" id="fs-date-wrap" hidden>
+        <label class="scr-label">Date</label>
+        <input type="text" class="scr-drawer-input byky-date" id="fs-date" placeholder="Pick a date" />
+      </div>
+      <div class="scr-drawer-row" style="margin-bottom:16px">
+        <div class="scr-drawer-field" style="margin-bottom:0">
+          <label class="scr-label">From<span class="scr-required">*</span></label>
+          <input type="time" class="scr-drawer-input" id="fs-from" value="10:00" />
         </div>
-        <div class="col-md-6" id="fs-day-wrap" hidden>
-          <label class="form-label" for="fs-day">Day</label>
-          <select class="form-select" id="fs-day">
-            {% for day in days %}{% if day != 'All Days' %}<option>{{ day }}</option>{% endif %}{% endfor %}
-          </select>
-        </div>
-        <div class="col-md-6" id="fs-date-wrap" hidden>
-          <label class="form-label" for="fs-date">Date</label>
-          <input type="text" class="form-control byky-date" id="fs-date" placeholder="Pick a date" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label" for="fs-from">From <span class="text-danger">*</span></label>
-          <input type="time" class="form-control" id="fs-from" value="10:00" />
-        </div>
-        <div class="col-md-6">
-          <label class="form-label" for="fs-to">To <span class="text-danger">*</span></label>
-          <input type="time" class="form-control" id="fs-to" value="11:00" />
+        <div class="scr-drawer-field" style="margin-bottom:0">
+          <label class="scr-label">To<span class="scr-required">*</span></label>
+          <input type="time" class="scr-drawer-input" id="fs-to" value="11:00" />
         </div>
       </div>
 
-      <h6 class="text-body-secondary text-uppercase small mb-4">What is given free</h6>
-      <div class="row g-4 mb-6">
-        <div class="col-md-6">
-          <label class="form-label" for="fs-vehicle">Vehicle Type <span class="text-danger">*</span></label>
-          <select class="form-select" id="fs-vehicle">
-            {% for vt in vehicle_types_list %}<option>{{ vt }}</option>{% endfor %}
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label" for="fs-package">Package <span class="text-danger">*</span></label>
-          <select class="form-select" id="fs-package">
-            {% for pkg in package_times %}<option>{{ pkg }} Minutes</option>{% endfor %}
-          </select>
-        </div>
-        <div class="col-md-6">
-          <label class="form-label" for="fs-qty">Free Quantity <span class="text-danger">*</span></label>
-          <input type="number" class="form-control" id="fs-qty" min="1" value="1" />
-        </div>
+      <div class="scr-section-title" style="margin:20px 0 14px">What is given free</div>
+      <div class="scr-drawer-field">
+        <label class="scr-label">Vehicle Type<span class="scr-required">*</span></label>
+        <select class="scr-drawer-input" id="fs-vehicle">
+          {% for vt in vehicle_types_list %}<option>{{ vt }}</option>{% endfor %}
+        </select>
       </div>
-
-      <div class="d-flex flex-wrap gap-4">
-        <button type="button" class="btn btn-primary" id="freeSlabSave">Save Slab</button>
-        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+      <div class="scr-drawer-field">
+        <label class="scr-label">Package<span class="scr-required">*</span></label>
+        <select class="scr-drawer-input" id="fs-package">
+          {% for pkg in package_times %}<option>{{ pkg }} Minutes</option>{% endfor %}
+        </select>
+      </div>
+      <div class="scr-drawer-field">
+        <label class="scr-label">Free Quantity<span class="scr-required">*</span></label>
+        <input type="number" class="scr-drawer-input" id="fs-qty" min="1" value="1" />
       </div>
     </form>
   </div>
-</div>
+  <div class="scr-drawer-foot">
+    <button type="button" class="scr-btn-secondary" id="freeSlabCancel">Cancel</button>
+    <button type="button" class="scr-btn-primary" id="freeSlabSave" style="margin-left:auto">Save Slab</button>
+  </div>
+</aside>
 
 {% endblock %}

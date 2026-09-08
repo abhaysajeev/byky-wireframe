@@ -1,0 +1,168 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Customer Management - Customer App Management{% endblock title %}
+
+{% comment %}
+Not an FSD module -- built from the client's "RMS WEB" mockups (RMS WEB
+07.09.2026-1.pdf, page 11: "Customer App Management"), scoped explicitly to
+customers who registered through the customer app -- this is NOT the RMS
+customer master (FSD 4.1 Customer Details, a Tier B screen elsewhere).
+Search In / Search Type + a result profile match the legacy screenshot's own
+fields (Customer Name, Phone No, E-Mail, Customer Type, Customer Category,
+Loyalty Point, Redeem Loyalty Point, Virtual Wallet Amount, Reconciliation,
+and Address/Card/Loyalty Details links).
+
+No app-registered-customer data exists in any source file, so a search
+always returns the honest "not found" state -- nothing here is invented
+(CLAUDE.md 12). The result card markup below is dead code today (customer is
+always None) but is kept complete so the layout is visible/reviewable and
+ready the moment real data arrives.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Customer App Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Customer Management</b>
+      </div>
+      <h1 class="scr-title">Customer Management</h1>
+      <p class="scr-sub">Look up a customer registered through the customer app. Not the RMS customer master.</p>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-body" style="padding-bottom:22px">
+      <div class="scr-grid" style="grid-template-columns:1fr 1fr 2fr auto;align-items:end">
+        <div class="scr-field">
+          <label class="scr-label">Search In</label>
+          <select class="scr-input" id="cust-search-in">
+            {% for s in search_in %}<option>{{ s }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Search Type</label>
+          <select class="scr-input" id="cust-search-type">
+            {% for s in search_type %}<option>{{ s }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Search Value</label>
+          <input type="text" class="scr-input" id="cust-search-value" placeholder="Enter name, phone or email" />
+        </div>
+        <div class="scr-field">
+          <button type="button" class="scr-btn-primary" id="cust-search-btn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% if customer %}
+  <div class="scr-card" style="margin-top:20px">
+    <div class="scr-form-head">
+      <div class="scr-form-title-row">
+        <h2 class="scr-form-title">{{ customer.name }}</h2>
+      </div>
+      <p class="scr-form-sub">Customer app profile</p>
+    </div>
+    <div class="scr-form-body">
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Profile</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Customer Name</label>
+            <input type="text" class="scr-input" value="{{ customer.name }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Phone No</label>
+            <input type="text" class="scr-input" value="{{ customer.phone }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">E-Mail</label>
+            <input type="text" class="scr-input" value="{{ customer.email }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Customer Type</label>
+            <input type="text" class="scr-input" value="{{ customer.type }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Customer Category</label>
+            <input type="text" class="scr-input" value="{{ customer.category }}" readonly />
+          </div>
+        </div>
+      </div>
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Loyalty &amp; Wallet</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Loyalty Point</label>
+            <input type="text" class="scr-input" value="{{ customer.loyalty_point }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Redeem Loyalty Point</label>
+            <input type="text" class="scr-input" value="{{ customer.redeem_loyalty_point }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Virtual Wallet Amount</label>
+            <input type="text" class="scr-input" value="{{ customer.wallet_amount }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">&nbsp;</label>
+            <button type="button" class="scr-btn">Reconciliation</button>
+          </div>
+        </div>
+      </div>
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Related</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-head-actions">
+          <a href="#" class="scr-btn">Address Details</a>
+          <a href="#" class="scr-btn">Card Details</a>
+          <a href="#" class="scr-btn">Loyalty Details</a>
+        </div>
+      </div>
+    </div>
+    <div class="scr-form-foot">
+      <button type="button" class="scr-btn-secondary">Cancel</button>
+    </div>
+  </div>
+  {% else %}
+  <div class="scr-card" style="margin-top:20px">
+    <div class="scr-empty" style="padding:56px 20px">
+      <span class="scr-empty-ico">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+      </span>
+      <div>
+        <div class="scr-empty-title">No customer found</div>
+        <p class="scr-empty-sub">No customer has registered through the customer app yet. A search here will show their profile, loyalty and wallet standing once one does.</p>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

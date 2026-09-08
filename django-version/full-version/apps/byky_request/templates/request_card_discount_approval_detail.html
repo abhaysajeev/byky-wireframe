@@ -1,0 +1,150 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Card Discount Request {{ request_no }} - Request Management{% endblock title %}
+
+{% comment %}
+Full detail of one card discount request -- reachable from the "View" action
+on Card Discount Approval's list. Not a drawer: a request needs its full
+context reviewed before Approve/Reject, which is exactly the split-panel vs
+full-page reasoning CLAUDE.md already applies elsewhere (a decision needs
+the whole record in view, not an edit-in-place slice of it).
+
+No request has ever been submitted (see request_card_discount_approval.html
+and data.card_discount_requests()), so request_detail is always None today --
+this page's "not found" branch is what actually renders, honestly, rather
+than fabricating a request to demonstrate the detail layout (CLAUDE.md 12).
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-request-approval.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Request Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <a href="{% url 'request-card-discount-approval' %}">Card Discount Approval</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>{{ request_no }}</b>
+      </div>
+      <h1 class="scr-title">Request {{ request_no }}</h1>
+      <p class="scr-sub">Full detail of this card discount request.</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'request-card-discount-approval' %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        Back to list
+      </a>
+    </div>
+  </div>
+
+  {% if request_detail %}
+  <div class="scr-card" data-scr-noun-singular="request" data-scr-noun-plural="requests">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">{{ request_detail.customer }}</h2>
+          <span data-status-cell><span class="scr-badge {% if request_detail.status == 'Approved' %}scr-badge-approved{% elif request_detail.status == 'Rejected' %}scr-badge-rejected{% else %}scr-badge-pending{% endif %}"><i></i>{{ request_detail.status }}</span></span>
+        </div>
+        <p class="scr-form-sub">Submitted {{ request_detail.request_date }} through the customer app.</p>
+      </div>
+    </div>
+
+    <div class="scr-form-body">
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Customer</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Customer Name</label>
+            <input type="text" class="scr-input" value="{{ request_detail.customer }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Mobile No</label>
+            <input type="text" class="scr-input" value="{{ request_detail.mobile }}" readonly />
+          </div>
+        </div>
+      </div>
+
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Requested Card</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Card Type</label>
+            <input type="text" class="scr-input" value="{{ request_detail.card_type }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Card Grade</label>
+            <input type="text" class="scr-input" value="{{ request_detail.card_grade }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Requested Discount %</label>
+            <input type="text" class="scr-input" value="{{ request_detail.discount_pct }}%" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Validity</label>
+            <input type="text" class="scr-input" value="{{ request_detail.from_date }} &ndash; {{ request_detail.to_date }}" readonly />
+          </div>
+        </div>
+      </div>
+
+      <div class="scr-form-foot">
+        <div style="flex:1">
+          {% if request_detail.reason %}<p class="scr-help" style="margin:0">Customer note: {{ request_detail.reason }}</p>{% endif %}
+        </div>
+        <div class="scr-form-actions">
+          <button type="button" class="scr-btn" title="Reject" data-request-reject>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+            Reject
+          </button>
+          <button type="button" class="scr-btn-primary" title="Approve" data-request-approve>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+            Approve
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="scr-card">
+    <div class="scr-empty" style="padding:40px 20px">
+      <span class="scr-empty-ico">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+      </span>
+      <div>
+        <div class="scr-empty-title">Request not found</div>
+        <p class="scr-empty-sub">"{{ request_no }}" doesn't match any submitted request. No card discount request has been submitted through the customer app yet.</p>
+      </div>
+      <a href="{% url 'request-card-discount-approval' %}" class="scr-btn-primary">Back to Card Discount Approval</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

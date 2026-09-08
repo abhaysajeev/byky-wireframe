@@ -1,0 +1,155 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Credit Note Request - Credit Note Management{% endblock title %}
+
+{% comment %}
+Not an FSD module -- built from the client's own "RMS WEB" screenshots
+(RMS WEB 07.09.2026-1.pdf, page 7: "Credit Note Request (from RMS APK)"),
+redesigned on the shared byky-screen.css/js base instead of recreating the
+legacy grid verbatim (see byky-screen-design-system.md). Reuses the same
+Approve/Reject mechanism as Request Management (byky-request-approval.js) --
+this is the same shape of queue, just a different request type. Those
+screenshots are captures of the client's live legacy system (real order
+numbers, real staff names), not a data source we have access to, so the
+queue starts genuinely empty -- honest, not invented (CLAUDE.md 12).
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-request-approval.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Credit Note Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Credit Note Request</b>
+      </div>
+      <h1 class="scr-title">Credit Note Request</h1>
+      <p class="scr-sub">Credit note requests submitted by branch staff through the mobile app.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn" data-scr-export-table data-export-name="credit-note-requests">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="request" data-scr-noun-plural="requests">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search order no, request no or requester" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="branch">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All branches</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All branches</button>
+          {% for b in branches_list %}
+          <button type="button" class="scr-filter-opt" data-value="{{ b.name }}">{{ b.name }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">0 requests</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Order No</th>
+            <th>Request No</th>
+            <th>Requested By</th>
+            <th>Order Date</th>
+            <th>Requested Date</th>
+            <th>Net Amount</th>
+            <th>Credit Note Amount</th>
+            <th>Remarks</th>
+            <th data-status-cell>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in requests %}
+          <tr class="scr-row" data-search="{{ r.order_no|lower }} {{ r.request_no|lower }} {{ r.requested_by|lower }}" data-branch="{{ r.branch }}" data-status="{{ r.status }}">
+            <td><span class="scr-code">{{ r.order_no }}</span></td>
+            <td><span class="scr-code">{{ r.request_no }}</span></td>
+            <td style="font-weight:600">{{ r.requested_by }}</td>
+            <td class="scr-contact">{{ r.order_date }}</td>
+            <td class="scr-contact">{{ r.requested_date }}</td>
+            <td class="scr-contact">AED {{ r.net_amount }}</td>
+            <td class="scr-contact">AED {{ r.credit_note_amount }}</td>
+            <td class="scr-contact">{{ r.remarks }}</td>
+            <td data-status-cell><span class="scr-badge {% if r.status == 'Approved' %}scr-badge-approved{% elif r.status == 'Rejected' %}scr-badge-rejected{% else %}scr-badge-pending{% endif %}"><i></i>{{ r.status }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve" data-request-approve>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                </button>
+                <button type="button" class="scr-icon-btn" title="Reject" data-request-reject>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="10" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17l-3-2-2 2-2-2-2 2-2-2"></path><path d="M8 7h6M8 11h6"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No credit note requests yet</div>
+                  <p class="scr-empty-sub">Requests submitted through the mobile app will appear here, ready to approve or reject.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

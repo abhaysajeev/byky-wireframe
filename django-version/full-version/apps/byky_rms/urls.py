@@ -6,6 +6,7 @@ urlpatterns = [
     path(
         "rms/customer-details-registration/",
         views.Screen4_1.as_view(
+            template_name="rms_customer_details_registration.html",
             screen_no="4.1",
             screen_title="Customer Details & Registration",
             module_label="Rental Management",

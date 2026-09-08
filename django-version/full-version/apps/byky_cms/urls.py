@@ -34,11 +34,11 @@ urlpatterns = [
         name="cms-country-state-management",
     ),
     path(
-        "cms/core-location-management/",
-        views.CoreLocationView.as_view(
-            template_name="cms_core_location_management.html",
+        "cms/location-management/",
+        views.LocationView.as_view(
+            template_name="cms_location_management.html",
             screen_no="1.3",
-            screen_title="Core Location Management",
+            screen_title="Location Management",
             module_label="Company Management",
             legacy_page="CoreLocationManagement.aspx",
             tier="A",
@@ -46,7 +46,7 @@ urlpatterns = [
             purpose="To map sub-city operational zones, rental territories, micro-hubs, and landmark points of interest for station placement.",
             layout="Top Filter Header, Middle Create Panel, Bottom DataGrid showing mapped locations.",
         ),
-        name="cms-core-location-management",
+        name="cms-location-management",
     ),
     path(
         "cms/branch-management/",
@@ -113,7 +113,7 @@ urlpatterns = [
         views.StationWorkingTimeView.as_view(
             template_name="cms_station_working_time.html",
             screen_no="1.8",
-            screen_title="Station Working Time",
+            screen_title="Branch Working Time",
             module_label="Company Management",
             legacy_page="StationWorkingTime.aspx",
             tier="A",

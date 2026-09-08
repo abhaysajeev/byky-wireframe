@@ -6,14 +6,19 @@
 {% comment %}
 Tier D for modules 4-16. Same shared matrix as CMS/HRMS/IMS; each module passes its
 own permission list and screen names, so the one component covers all 16 modules.
+Migrated onto the shared byky-screen.css/js base -- see byky-screen-design-system.md.
 {% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title=screen_title parent=module_label subtitle=purpose %}
-{% include "byky/partials/privilege_matrix.html" with roles=roles screens=screens permissions=permissions module=module_label %}
+{% include "byky/partials/privilege_matrix.html" with title=screen_title parent=module_label subtitle=purpose roles=roles screens=screens permissions=permissions module=module_label %}
 {% endblock %}

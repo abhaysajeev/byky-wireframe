@@ -4,11 +4,11 @@ from . import views
 
 urlpatterns = [
     path(
-        "ims/inventory-stock-item-management/",
+        "ims/vehicle-management/",
         views.StockItemView.as_view(
-            template_name="ims_inventory_stock_item_management.html",
+            template_name="ims_vehicle_management.html",
             screen_no="3.1",
-            screen_title="Inventory Stock Item Management",
+            screen_title="Vehicle Management",
             module_label="Inventory",
             legacy_page="StockItem.aspx",
             tier="B",
@@ -16,7 +16,7 @@ urlpatterns = [
             purpose="To register, maintain, and classify physical rental items, vehicles, bicycles, electric scooters, spare parts, serial numbers, RFID tags, purchase rates, rental tariff rates, reorder levels, and warehouse stock balances.",
             layout="Split-panel layout. Left Panel: Input Data Form (Item Code, Item Name, Category, Sub-Category, Brand, Unit, Serial No, RFID Tag, Reorder Qty, Cost Price, Rental Price, Minimum Quantity). Right Panel: Filter Control Bar and DataGrid displaying registered stock items.",
         ),
-        name="ims-inventory-stock-item-management",
+        name="ims-vehicle-management",
     ),
     path(
         "ims/inventory-category-master/",
@@ -94,6 +94,21 @@ urlpatterns = [
             layout="Branch Selection Dropdown, Item Multi-select Grid with Checkboxes, Assigned Station Vehicles DataGrid.",
         ),
         name="ims-vehicle-station-mapping",
+    ),
+    path(
+        "ims/vehicle-station-mapping/map/",
+        views.StationMappingMapView.as_view(
+            template_name="ims_vehicle_station_mapping_map.html",
+            screen_no="3.6",
+            screen_title="Map Vehicle to Branch",
+            module_label="Inventory",
+            legacy_page="VehicleStationMapping.aspx",
+            tier="A",
+            phase=3,
+            purpose="Assign unmapped vehicles to a branch.",
+            layout="Branch Selection Dropdown, Item Multi-select Grid with Checkboxes, Assigned Station Vehicles DataGrid.",
+        ),
+        name="ims-vehicle-station-mapping-map",
     ),
     path(
         "ims/vehicle-transfer-relocation/",

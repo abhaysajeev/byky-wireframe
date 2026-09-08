@@ -1,0 +1,316 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Credit Note - Credit Note Management{% endblock title %}
+
+{% comment %}
+Not an FSD module -- built from the client's own "RMS WEB" screenshots
+(RMS WEB 07.09.2026-1.pdf, page 7: "Credit Note (Credit Generation from
+WEB)"), redesigned on the shared byky-screen.css/js base rather than
+recreating the legacy grey/red grid verbatim (see
+byky-screen-design-system.md and cms_country_state_management.html for the
+tabbed dual-panel reference). "Results" lists closed invoices eligible for a
+credit note; "Create" raises one against a chosen invoice.
+
+Those screenshots are captures of the client's live legacy system, not a
+data source we have access to, so the invoice list starts genuinely empty --
+honest, not invented (CLAUDE.md 12). The VAT split shown is real, working
+logic (Gross = Amount / 1.05, Tax = Amount - Gross) -- the mathematically
+correct version of the source's own worked example, which has an arithmetic
+error (see apps/byky_creditnote/data.py for the exact discrepancy).
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-creditnote.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Credit Note Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Credit Note</b>
+      </div>
+      <h1 class="scr-title">Credit Note</h1>
+      <p class="scr-sub">Look up a closed invoice and raise a credit note against it.</p>
+    </div>
+  </div>
+
+  <div class="scr-card">
+
+    <div class="scr-content-tabs" data-scr-tabgroup="cn">
+      <button type="button" class="scr-content-tab is-on" data-tab="results">
+        Results <span class="scr-content-tab-count">{{ invoices|length }}</span>
+      </button>
+      <button type="button" class="scr-content-tab" data-tab="create" id="cn-create-tab">
+        Create
+      </button>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="cn" data-tab="results" data-scr-noun-singular="invoice" data-scr-noun-plural="invoices">
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search order number or customer" />
+        </div>
+
+        <div class="scr-filter-wrap" data-filter-key="branch">
+          <button type="button" class="scr-filter-btn">
+            <span class="scr-filter-label">All branches</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="scr-filter-menu" hidden>
+            <button type="button" class="scr-filter-opt is-active" data-value="">All branches</button>
+            {% for b in branches_list %}
+            <button type="button" class="scr-filter-opt" data-value="{{ b.name }}">{{ b.name }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <span class="scr-toolbar-count">{{ invoices|length }} invoices</span>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Tax Invoice Date</th>
+              <th>Tax Invoice No</th>
+              <th>Open By</th>
+              <th>Close By</th>
+              <th>Customer Name</th>
+              <th>Bill Amount</th>
+              <th>Tax Amount</th>
+              <th>Discount Amount</th>
+              <th>Net Amount</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for inv in invoices %}
+            <tr class="scr-row" data-search="{{ inv.invoice_no|lower }} {{ inv.customer|lower }}" data-branch="{{ inv.branch }}"
+                data-order-no="{{ inv.invoice_no }}" data-invoice-date="{{ inv.invoice_date }}" data-trans-no="{{ inv.trans_no }}"
+                data-open-by="{{ inv.open_by }}" data-close-by="{{ inv.close_by }}" data-customer="{{ inv.customer }}"
+                data-mobile="{{ inv.mobile }}" data-start="{{ inv.start_datetime }}" data-end="{{ inv.end_datetime }}"
+                data-bill-amount="{{ inv.bill_amount }}" data-tax-pct="{{ inv.tax_pct }}" data-tax-amount="{{ inv.tax_amount }}"
+                data-net-amount="{{ inv.net_amount }}">
+              <td class="scr-contact">{{ inv.invoice_date }}</td>
+              <td><span class="scr-code">{{ inv.invoice_no }}</span></td>
+              <td class="scr-contact">{{ inv.open_by }}</td>
+              <td class="scr-contact">{{ inv.close_by }}</td>
+              <td style="font-weight:600">{{ inv.customer }}</td>
+              <td class="scr-contact">AED {{ inv.bill_amount }}</td>
+              <td class="scr-contact">AED {{ inv.tax_amount }}</td>
+              <td class="scr-contact">AED {{ inv.discount_amount }}</td>
+              <td class="scr-contact">AED {{ inv.net_amount }}</td>
+              <td>
+                <div class="scr-row-actions">
+                  <button type="button" class="scr-icon-btn" title="Credit This Invoice" data-cn-credit-row>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17l-3-2-2 2-2-2-2 2-2-2"></path><path d="M8 7h6M8 11h6"></path></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="10" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"></rect><path d="M3 9h18"></path><path d="M8 14h4"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No invoices to credit</div>
+                    <p class="scr-empty-sub">Closed rental invoices will appear here, ready to raise a credit note against.</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing {{ invoices|length }} of {{ invoices|length }}</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="cn" data-tab="create" hidden>
+      <div class="scr-form-body">
+
+        <div class="scr-section">
+          <div class="scr-section-head">
+            <h3 class="scr-section-title">Order</h3>
+            <div class="scr-section-rule"></div>
+          </div>
+          <div class="scr-grid">
+            <div class="scr-field">
+              <label class="scr-label">Order Number<span class="scr-required">*</span></label>
+              <input type="text" class="scr-input" id="cn-order-no" placeholder="e.g. ABCO2101450462" />
+              <div class="scr-help">Enter an order number to load its invoice, or use Credit This Invoice from Results.</div>
+            </div>
+            <div class="scr-field" style="align-self:end">
+              <button type="button" class="scr-btn" id="cn-load-order">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+                Load Order
+              </button>
+            </div>
+          </div>
+          <div class="scr-grid" style="margin-top:16px">
+            <div class="scr-field">
+              <label class="scr-label">Order Date and Time</label>
+              <input type="text" class="scr-input" id="cn-order-date" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Trans No</label>
+              <input type="text" class="scr-input" id="cn-trans-no" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Open By</label>
+              <input type="text" class="scr-input" id="cn-open-by" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Close By</label>
+              <input type="text" class="scr-input" id="cn-close-by" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Customer Name</label>
+              <input type="text" class="scr-input" id="cn-customer" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Mobile Number</label>
+              <input type="text" class="scr-input" id="cn-mobile" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Start Date and Time</label>
+              <input type="text" class="scr-input" id="cn-start" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">End Date and Time</label>
+              <input type="text" class="scr-input" id="cn-end" readonly />
+            </div>
+          </div>
+        </div>
+
+        <div class="scr-section">
+          <div class="scr-section-head">
+            <h3 class="scr-section-title">Vehicle Details</h3>
+            <div class="scr-section-rule"></div>
+          </div>
+          <div class="scr-table-scroll scr-sb">
+            <table>
+              <thead>
+                <tr><th>Vehicle Type</th><th>Vehicle Number</th><th>Bill Amount</th><th>Status</th></tr>
+              </thead>
+              <tbody id="cn-vehicle-rows">
+                <tr>
+                  <td colspan="4" style="padding:0">
+                    <div class="scr-empty" style="padding:20px">
+                      <p class="scr-empty-sub" style="margin:0">Load an order to show its vehicles.</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="scr-section">
+          <div class="scr-section-head">
+            <h3 class="scr-section-title">Invoice Amounts</h3>
+            <div class="scr-section-rule"></div>
+          </div>
+          <div class="scr-grid">
+            <div class="scr-field">
+              <label class="scr-label">Bill Amount</label>
+              <input type="text" class="scr-input" id="cn-bill-amount" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Tax Percentage</label>
+              <input type="text" class="scr-input" id="cn-tax-pct" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Tax Amount</label>
+              <input type="text" class="scr-input" id="cn-tax-amount" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Net Amount</label>
+              <input type="text" class="scr-input" id="cn-net-amount" readonly />
+            </div>
+            <div class="scr-field" style="grid-column:span 2">
+              <label class="scr-label">Remarks</label>
+              <textarea class="scr-drawer-input" id="cn-remarks" rows="2"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="scr-section">
+          <div class="scr-section-head">
+            <h3 class="scr-section-title">Credit Note</h3>
+            <div class="scr-section-rule"></div>
+          </div>
+          <div class="scr-grid">
+            <div class="scr-field">
+              <label class="scr-label">Credit Note Amount<span class="scr-required">*</span></label>
+              <input type="number" step="0.01" min="0" class="scr-input" id="cn-amount" placeholder="0.00" />
+              <div class="scr-help">Includes VAT. Gross and tax are split automatically at 5%.</div>
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Credit Note Gross Amount</label>
+              <input type="text" class="scr-input" id="cn-gross" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Credit Note Tax Amount</label>
+              <input type="text" class="scr-input" id="cn-credit-tax" readonly />
+            </div>
+            <div class="scr-field">
+              <label class="scr-label">Credit Date<span class="scr-required">*</span></label>
+              <input type="text" class="scr-input byky-date" id="cn-credit-date" placeholder="Select date" />
+            </div>
+          </div>
+        </div>
+
+        <div class="scr-form-foot">
+          <div style="flex:1"></div>
+          <div class="scr-form-actions">
+            <button type="button" class="scr-btn-secondary" id="cn-cancel">Cancel</button>
+            <button type="button" class="scr-btn-primary">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+              Submit
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

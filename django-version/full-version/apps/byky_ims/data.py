@@ -129,6 +129,28 @@ def station_mappings():
     return out
 
 
+def unmapped_vehicles():
+    """Vehicles with no branch/station assignment yet -- the pool FSD 3.6's
+    "Map Vehicle" action assigns to a branch. Every vehicle in the source
+    data already carries a real station (see station_mappings() above), so
+    this is honestly empty today; the logic is real and will surface genuine
+    rows the moment an unassigned vehicle enters the fleet, rather than this
+    screen ever inventing one to demo against (CLAUDE.md 12)."""
+    out = []
+    for v in seed.VEHICLES:
+        if v.get("station"):
+            continue
+        out.append(
+            {
+                "code": v["number"],
+                "name": f'{v["vtype"]} {v["number"]}',
+                "rfid": v["barcode"],
+                "category": v["category"],
+            }
+        )
+    return out
+
+
 def counts():
     return {
         "items": len(seed.VEHICLES),

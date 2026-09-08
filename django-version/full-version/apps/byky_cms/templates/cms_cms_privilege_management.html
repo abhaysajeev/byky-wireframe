@@ -5,17 +5,21 @@
 
 {% comment %}
 FSD 1.9 -- Tier D. Uses the shared privilege matrix partial, which is the same
-screen in all 16 modules. Seven permissions per screen plus Select All, per the
-FSD section 5 wireframe.
+screen in all 16 modules -- now migrated onto the shared byky-screen.css/js base
+(see byky-screen-design-system.md). Seven permissions per screen plus Select
+All, per the FSD section 5 wireframe.
 {% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="CMS Privilege Management" parent="Company Management" subtitle=purpose %}
-
-{% include "byky/partials/privilege_matrix.html" with roles=roles screens=screens permissions=permissions module="CMS" %}
+{% include "byky/partials/privilege_matrix.html" with title="CMS Privilege Management" parent="Company Management" subtitle=purpose roles=roles screens=screens permissions=permissions module="CMS" %}
 {% endblock %}

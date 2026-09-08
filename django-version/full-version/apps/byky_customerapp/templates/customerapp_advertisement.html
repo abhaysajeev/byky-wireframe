@@ -1,0 +1,286 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Advertisement - Customer App Management{% endblock title %}
+
+{% comment %}
+Not an FSD module -- built from the client's "RMS WEB" mockups (RMS WEB
+07.09.2026-1.pdf, page 11: "Customer App Management" -> Advertisement: image
+sliders). On the shared byky-screen.css/js base (see
+byky-screen-design-system.md). "Profiles" holds each slider image; "Profile
+Mapping" schedules the from/to date-time window a profile is shown. Both
+grids start genuinely empty -- no advertisement data exists in any source
+file (CLAUDE.md 12). Uses the same logo-upload widget pattern as
+cms_company_details.html for the profile image, and a page-local flatpickr
+datetime init (no other screen needed a time component yet, so it isn't in
+the shared byky-screen.js init -- see byky-customerapp.js).
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-customerapp.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Customer App Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Advertisement</b>
+      </div>
+      <h1 class="scr-title">Advertisement</h1>
+      <p class="scr-sub">Image-slider profiles shown in the customer app, and the date/time window each one is active.</p>
+    </div>
+  </div>
+
+  <div class="scr-card">
+
+    <div class="scr-content-tabs" data-scr-tabgroup="adv">
+      <button type="button" class="scr-content-tab is-on" data-tab="profiles">
+        Profiles <span class="scr-content-tab-count">{{ profiles|length }}</span>
+      </button>
+      <button type="button" class="scr-content-tab" data-tab="mapping">
+        Profile Mapping <span class="scr-content-tab-count">{{ mappings|length }}</span>
+      </button>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="adv" data-tab="profiles" data-scr-noun-singular="profile" data-scr-noun-plural="profiles">
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search profile name" />
+        </div>
+        <span class="scr-toolbar-count">0 profiles</span>
+        <div class="scr-head-actions">
+          <button type="button" class="scr-btn-primary" data-scr-open="profile:add">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+            Add Profile
+          </button>
+        </div>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Image</th>
+              <th>Profile Name</th>
+              <th>Approval</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="4" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L5 21"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No advertisement profiles yet</div>
+                    <p class="scr-empty-sub">Image-slider profiles for the customer app will appear here once one is added.</p>
+                  </div>
+                  <button type="button" class="scr-btn-primary" data-scr-open="profile:add">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                    Add Profile
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing 0 of 0</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="adv" data-tab="mapping" hidden data-scr-noun-singular="mapping" data-scr-noun-plural="mappings">
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search profile name" />
+        </div>
+        <span class="scr-toolbar-count">0 mappings</span>
+        <div class="scr-head-actions">
+          <button type="button" class="scr-btn-primary" data-scr-open="admapping:add">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+            Add Mapping
+          </button>
+        </div>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Profile</th>
+              <th>From</th>
+              <th>To</th>
+              <th>Approval</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 9h18M8 3v3M16 3v3"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No profile mappings yet</div>
+                    <p class="scr-empty-sub">Active-window scheduling for a profile will appear here once one is added. Add a profile first.</p>
+                  </div>
+                  <button type="button" class="scr-btn-primary" data-scr-open="admapping:add">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                    Add Mapping
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing 0 of 0</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% comment %} Profile drawer -- no rows exist yet, so this always opens in Add mode. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="profile" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="profile" data-add-title="Add Profile" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L5 21"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Profile</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Slider Image</label>
+      <div class="scr-logo-row" style="margin-bottom:0;padding-bottom:0;border-bottom:none">
+        <div class="scr-logo-preview" id="ad-profile-image-preview">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#c9c6dd" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"></rect><circle cx="9" cy="9" r="2"></circle><path d="m21 15-5-5L5 21"></path></svg>
+        </div>
+        <div class="scr-logo-actions">
+          <div class="scr-logo-buttons">
+            <label class="scr-btn scr-logo-upload-btn" for="ad-profile-image-input">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><path d="M17 8l-5-5-5 5"></path><path d="M12 3v12"></path></svg>
+              Upload Image
+            </label>
+            <input type="file" id="ad-profile-image-input" accept="image/png,image/jpeg" data-scr-logo-preview="ad-profile-image-preview" hidden />
+          </div>
+          <p class="scr-help">PNG or JPG · 1920&times;720px recommended.</p>
+        </div>
+      </div>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Profile Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" />
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
+
+{% comment %} Profile mapping drawer -- no rows exist yet, so this always opens in Add mode. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="admapping" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="admapping" data-add-title="Add Mapping" data-title-field="profile" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"></rect><path d="M3 9h18M8 3v3M16 3v3"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Mapping</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Profile<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="profile">
+        <option value="">Select</option>
+        {% for p in profiles %}<option>{{ p.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">From Date &amp; Time<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input byky-datetime" data-field="from" value="" placeholder="Select date and time" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">To Date &amp; Time<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input byky-datetime" data-field="to" value="" placeholder="Select date and time" />
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
+{% endblock %}

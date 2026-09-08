@@ -1,0 +1,162 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Request Approval - Request Management{% endblock title %}
+
+{% comment %}
+Not an FSD module of its own -- a consolidated approval queue in front of the
+request workflows the FSD already specifies. Closest precedent: FSD 11.1
+Wallet Refund Request & Approval Management (list + Approve/Reject action
+panel). Built on the shared byky-screen.css/js base (see
+byky-screen-design-system.md). No request has ever been submitted through the
+customer mobile app (FSD Module 9 specifies the app, not any real
+submission), so the queue is genuinely empty -- honest, not invented
+(CLAUDE.md 12). Tier C: a monitor with row actions, not a drawer -- requests
+arrive from elsewhere, they aren't created here.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-request-approval.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Request Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Request Approval</b>
+      </div>
+      <h1 class="scr-title">Request Approval</h1>
+      <p class="scr-sub">Requests submitted across the business, awaiting a decision.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn" data-scr-export-table data-export-name="request-approvals">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="request" data-scr-noun-plural="requests">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search request no or requester" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="type">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All types</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All types</button>
+          {% for t in request_types %}
+          <button type="button" class="scr-filter-opt" data-value="{{ t }}">{{ t }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="status">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All statuses</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All statuses</button>
+          {% for s in statuses %}
+          <button type="button" class="scr-filter-opt" data-value="{{ s }}">{{ s }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">0 requests</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Request No</th>
+            <th>Type</th>
+            <th>Requested By</th>
+            <th>Mobile No</th>
+            <th>Request Date</th>
+            <th data-status-cell>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in requests %}
+          <tr class="scr-row" data-search="{{ r.request_no|lower }} {{ r.requested_by|lower }}" data-type="{{ r.type }}" data-status="{{ r.status }}">
+            <td><span class="scr-code">{{ r.request_no }}</span></td>
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ r.type }}</span></td>
+            <td style="font-weight:600">{{ r.requested_by }}</td>
+            <td class="scr-contact">{{ r.mobile }}</td>
+            <td class="scr-contact">{{ r.request_date }}</td>
+            <td data-status-cell><span class="scr-badge {% if r.status == 'Approved' %}scr-badge-approved{% elif r.status == 'Rejected' %}scr-badge-rejected{% else %}scr-badge-pending{% endif %}"><i></i>{{ r.status }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve" data-request-approve>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                </button>
+                <button type="button" class="scr-icon-btn" title="Reject" data-request-reject>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2"></path><path d="M9 3h6v3H9z"></path><path d="m9 13 2 2 4-4"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No pending requests</div>
+                  <p class="scr-empty-sub">Requests submitted through the customer app or other modules will appear here, ready to approve or reject.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

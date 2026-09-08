@@ -237,6 +237,13 @@ button is `btn-label-danger`, never `btn-primary`. A Rejected badge is
 - Supporting text: `<p class="mb-0">` or `<small>`
 - Never set `font-size`, `font-weight`, or `font-family` inline.
 
+**One deliberate exception:** the sidebar (`src/assets/css/sidebar.css`) loads
+"Sora" (300–800) for its own rail — a scoped, approved carve-out from the "Byky
+Sidebar v2" redesign, not drift. The dashboard (`src/assets/css/byky-dashboard.css`)
+also uses Sora, matching its own approved design, plus "IBM Plex Mono" for the
+vehicle-code chips in Recent Rental Agreements. Every other screen stays on
+Public Sans.
+
 ### 4.4 Icons
 
 Tabler, via the `icon-base` convention:
@@ -265,6 +272,14 @@ Light theme only — no dark-mode rules (§3.3). Always pair the mobile and desk
 ---
 
 ## 5. Template Discovery Algorithm
+
+**If the screen you're building belongs to a module already migrated to the
+shared `.scr-*` design system** (currently: CMS, and Global Application
+Configuration & Settings) **read `byky-screen-design-system.md` (repo root)
+first** — it documents that system's shared CSS/JS, its list+drawer and
+form patterns, and how to extend it safely, and supersedes the Vuexy lookup
+below for that screen. Everything else in this repo still goes through the
+algorithm below.
 
 Before building **any** UI block, run this in order. Do not skip to step 4.
 
@@ -585,7 +600,7 @@ nested horizontal scrollbar.
 ### Tier A — Thin masters (3–5 fields) → list page + offcanvas drawer
 
 70 screens: Category, Sub-Category, Brand, Unit, Department, Designation, Grade,
-Order Status, Features, Core Location, Delivery Location, Vehicle Type…
+Order Status, Features, Location, Delivery Location, Vehicle Type…
 
 Full-width list; **Add** opens an offcanvas over it. The grid stays visible behind, so
 rapid consecutive data entry (the one thing split-panel was good at) is preserved.
@@ -628,7 +643,7 @@ Role × Screen × CRUD checkbox grid. **One shared component, reused 16 times.**
 - Approval-flow screens get a status badge
   (`bg-label-warning` Pending / `bg-label-success` Approved / `bg-label-danger` Rejected)
   plus an `[Approve] [Reject]` button group, shown only for SuperAdmin.
-- Cascading dropdowns (Country → State → CoreLocation → Branch) use **one** shared JS
+- Cascading dropdowns (Country → State → Location → Branch) use **one** shared JS
   helper, not a per-screen copy.
 
 ---
@@ -863,6 +878,33 @@ The horizontal menu has its own file: `partials/menu/horizontal/json/horizontal_
 
 ## 15. Anti-Patterns — these are defects
 
+**Exception to this whole section: `templates/sidebar/`, `src/assets/css/sidebar.css`,
+`src/assets/js/sidebar.js`, and the dashboard's `apps/byky_core/templates/byky_dashboard.html`
++ `src/assets/css/byky-dashboard.css` + `src/assets/js/byky-dashboard.js`.** These
+are separately commissioned, approved, self-contained designs ported verbatim —
+"Byky Sidebar v2" and the redesigned dashboard — not screens composed from Vuexy
+components. Their hex colours, custom `border-radius`, `box-shadow`, and the
+"Sora"/"IBM Plex Mono" typefaces are the approved design, not drift. Do not "fix"
+them toward Vuexy/Public Sans conventions, and do not reintroduce ApexCharts,
+Swiper or DataTables on the dashboard — its charts are hand-drawn SVG in
+`byky-dashboard.js`, reading the same `chart_data` context the old build used.
+
+**Leaflet is the one exception, and it is required.** The Station Network card
+is a real tile map, not a drawn chart. A hand-drawn bubble plot on a blank grid
+was tried here and rejected on sight by the client: without coastline, streets
+or satellite imagery it reads as "square pixels", and an operator placing a
+station cannot use it. Every station map on the site now goes through
+`src/assets/js/byky-leaflet-map.js` — opt in with
+`<div class="byky-map" data-map-points="<json_script id>"></div>` plus leaflet's
+vendor css/js in the page's `vendor_css`/`vendor_js` blocks. It offers three
+keyless Esri basemaps (Light / Streets / Satellite) via a layer switcher; never
+Mapbox, which needs an access token. Leaflet's container needs an explicit CSS
+height — it cannot size itself from content the way an `<svg>` does.
+`src/assets/css/sidebar-integration.css` and `src/assets/js/sidebar-layout-sync.js`
+are the only files that may touch how the sidebar sits inside the rest of the
+layout (positioning, width sync) — never restyle the ported components themselves
+there.
+
 - ❌ Writing custom CSS before searching `apps/*/templates/` for the pattern
 - ❌ Any inline `style="..."`, hex colour, `border-radius`, `box-shadow`, or `font-size`
 - ❌ Bootstrap-default spacing assumptions (`mb-3` ≠ 1rem here)
@@ -983,6 +1025,53 @@ values (`Every day · 10:00–11:00 · AED 90.00 · 5 min`) with Edit and Delete
 drawer pattern as Tier A. Two-field rows (vehicle type + package) stay inline; they
 are readable as they are. Apply this rule to any future grid of editable rows.
 
+**Sidebar — replaced.** "Byky Sidebar v2" (`templates/sidebar/`,
+`src/assets/css/sidebar.css`, `src/assets/js/sidebar.js`) replaces the old
+`#layout-menu` Vuexy rail — full labels, no clipping, collapse-to-76px icon rail,
+hover-to-peek, drag-to-resize, independently-expanding accordions with persisted
+open state. All menu **data** (group names, leaf labels, URL names, badge counts,
+section headers) is unchanged, still `vertical_menu.json`; the new templates only
+supply markup/CSS/JS and one `svg` icon path per group (added to that same JSON).
+
+The component's native model assumes an app-shell with internal content
+scrolling, which this app doesn't use anywhere (110+ screens rely on window-level
+scroll with a fixed navbar). So the sidebar is pinned `position:fixed` instead
+(`src/assets/css/sidebar-integration.css`), with `.layout-page`'s
+`padding-inline-start` kept in sync via a CSS custom property
+(`--byky-sb-w`) that `src/assets/js/sidebar-layout-sync.js` updates on
+collapse/expand/drag — keyed off `.is-collapsed`, not raw width, so hover-peek
+(which visually overlays without pushing content) never touches it.
+`TEMPLATE_CONFIG["menu_fixed"]` is `False` for the same reason: left `True`, Vuexy's
+own `.layout-menu-fixed` padding rule would fight this one.
+
+Leaf rows carry no icon — only the top-level Dashboard link and the 17 group rows
+do, via a `top_level` flag threaded through the templates. Watch this if adding a
+menu template include: Django's `{% include %}` inherits the outer context by
+default, so `top_level` must be **explicitly** reset to `False` at the point the
+submenu loop includes a leaf (`menu_collapsible_template.html`) — omitting it lets
+`True` leak down from the enclosing group and puts an icon on every leaf.
+
+**All of the sidebar's own internal class names were renamed to `byky-menu-*`**
+(`menu-item`, `menu-link`, `menu-toggle`, `menu-icon`, `menu-sub`, `menu-header` →
+`byky-menu-item`, etc. — `menu-badge`, `menu-caret`, `menu-label` and `menu-slot`
+were already collision-free and kept as-is). The ported design's own generic names
+matched Vuexy's own vertical-menu vocabulary in `core.css` (100+ rules combined),
+which is still loaded globally — most visibly, Vuexy's `.menu-toggle::after`
+chevron pseudo-element was rendering on top of every group icon. If you ever touch
+these files, keep the `byky-` prefix; reverting to the bare names reopens that
+whole class of bugs.
+
+**Dashboard — replaced.** The landing dashboard (`apps/byky_core/templates/byky_dashboard.html`,
+`src/assets/css/byky-dashboard.css`, `src/assets/js/byky-dashboard.js`) is a
+second ported, approved design (".bd" prefix throughout), replacing the old
+ApexCharts/Swiper/Leaflet/DataTables build. `views.py`, `seed.py`, `sales.py` and
+`geo.py` are unchanged — the new JS reads the same `chart_data` context via
+`{{ chart_data|json_script:"byky-chart-data" }}` and draws the sparkline, month
+bars, ranked bars, deployment gauge and station map itself, in plain SVG. The page
+restyles `#layout-navbar` to a 64px white header, but only on this page — it
+arrives through `{% block page_css %}`, which Django scopes per-template, so no
+other screen's navbar is affected by loading it.
+
 **Phase 3 (IMS) — done.** All 20 screens. Four run on real client records:
 Stock Item Management (1,060 vehicles — Vehicle Number is the item code and serial,
 **Barcode is the RFID tag EPC**), Category Master (8), Sub-Category Master (23
@@ -1002,7 +1091,7 @@ passes its own list.
 
 **Phase 1 (CMS) — done.** All 9 screens built against FSD sections 11/12/21/22/23:
 Company Details and Branch Management as Tier B, Country & State (tabbed dual grid),
-Core Location, Department and Branch Department Mapping as Tier A, Station Address
+Location, Department and Branch Department Mapping as Tier A, Station Address
 Mapping as Tier A over real station data, Station Working Time as the 7x4 shift matrix,
 and CMS Privilege Management as the first Tier D build.
 
@@ -1013,7 +1102,7 @@ Module 1 data lives in `apps/byky_cms/data.py`, derived from `byky_core.seed`:
 (flatpickr HH:mm on the shift matrix).
 
 **Four CMS entities have no source data** and render the awaiting-data state rather
-than invented rows: core locations, departments, branch-department mappings, and
+than invented rows: locations, departments, branch-department mappings, and
 weekly working times. Station GPS, addresses and contact numbers are likewise
 "not captured". This is a live data request to the client, not a gap in the build.
 

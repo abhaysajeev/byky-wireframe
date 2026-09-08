@@ -1,217 +1,180 @@
-/**
- * BYKY Dashboard
- *
- * Charts and the station network map. Every series is supplied by the server
- * through the #byky-chart-data JSON tag; nothing is hardcoded here.
- *
- * Fleet and station series come from BYKY's own records. Revenue series are
- * indicative, generated in apps/byky_core/sales.py, and the cards that show them
- * are labelled as such.
- */
-
-'use strict';
-
+/* BYKY dashboard — the parts of the design that must be computed from data:
+   sparkline, month bars, emirate/category bars, deployment gauge, station map,
+   and the hero carousel. Reads the same #byky-chart-data payload the old
+   ApexCharts build used, so views.py is unchanged. No vendor libraries. */
 (function () {
-  const dataEl = document.getElementById('byky-chart-data');
-  if (!dataEl) return;
-  const data = JSON.parse(dataEl.textContent);
+  'use strict';
 
-  const cardColor = config.colors.cardColor;
-  const labelColor = config.colors.textMuted;
-  const headingColor = config.colors.headingColor;
-  const fontFamily = config.fontFamily;
-  const primary = config.colors.primary;
-  const borderColor = config.colors.borderColor;
+  var root = document.querySelector('.bd');
+  if (!root) return;
 
-  const aed = v => 'AED ' + Number(v).toLocaleString();
+  var node = document.getElementById('byky-chart-data');
+  var data = node ? JSON.parse(node.textContent) : {};
+  var fmt = function (n) { return Math.round(n).toLocaleString('en-US'); };
+  var svgNS = 'http://www.w3.org/2000/svg';
+  var el = function (name, attrs) {
+    var n = document.createElementNS(svgNS, name);
+    for (var k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  };
+  var RED = '#d81f26', MID = '#ef767b', PALE = '#f6b8bb';
 
-  // Swiper: revenue / fleet / network
-  // --------------------------------------------------------------------
-  const swiperEl = document.querySelector('#swiper-with-pagination-cards');
-  if (swiperEl) {
-    new Swiper(swiperEl, {
-      loop: true,
-      // No autoplay. On a card this dense any mid-transition frame shows two
-      // slides at once, which reads as overlapping text -- and a dashboard that
-      // animates by itself is a distraction during a walkthrough. The pagination
-      // dots stay clickable, so all three views are still reachable.
-      effect: 'fade',
-      fadeEffect: { crossFade: false },
-      speed: 300,
-      pagination: { clickable: true, el: '.swiper-pagination' }
+  /* ── hero carousel ───────────────────────────────────────────── */
+  (function () {
+    var slides = root.querySelectorAll('.bd-hero-slide');
+    var dots = root.querySelectorAll('.bd-dots button');
+    if (!slides.length) return;
+    var i = 0, timer;
+    function go(n) {
+      i = n % slides.length;
+      slides.forEach(function (s, k) { s.classList.toggle('is-on', k === i); });
+      dots.forEach(function (d, k) { d.classList.toggle('is-on', k === i); });
+    }
+    dots.forEach(function (d, k) {
+      d.addEventListener('click', function () { clearInterval(timer); go(k); });
     });
-  }
+    timer = setInterval(function () { go(i + 1); }, 7000);
+    go(0);
+  })();
 
-  // Average Daily Sales -- 30-day revenue curve
-  // --------------------------------------------------------------------
-  const dailyEl = document.querySelector('#dailySales');
-  if (dailyEl) {
-    new ApexCharts(dailyEl, {
-      chart: {
-        height: 150, type: 'area', parentHeightOffset: 0,
-        toolbar: { show: false }, sparkline: { enabled: true }
-      },
-      markers: { colors: 'transparent', strokeColors: 'transparent' },
-      grid: { show: false },
-      colors: [primary],
-      fill: {
-        type: 'gradient',
-        gradient: { shade: 'light', shadeIntensity: 0.8, opacityFrom: 0.6, opacityTo: 0.1, stops: [0, 95, 100] }
-      },
-      dataLabels: { enabled: false },
-      stroke: { width: 2, curve: 'smooth' },
-      series: [{ name: 'Revenue', data: data.daily_revenue }],
-      xaxis: { categories: data.daily_labels, show: false, labels: { show: false }, axisBorder: { show: false } },
-      yaxis: { show: false },
-      tooltip: {
-        enabled: true,
-        x: { show: true },
-        y: { formatter: aed, title: { formatter: () => 'Revenue' } }
-      }
-    }).render();
-  }
-
-  // Revenue Reports -- 12 months
-  // --------------------------------------------------------------------
-  const revenueEl = document.querySelector('#revenueReports');
-  if (revenueEl) {
-    new ApexCharts(revenueEl, {
-      chart: { height: 200, parentHeightOffset: 0, type: 'bar', toolbar: { show: false } },
-      plotOptions: { bar: { barHeight: '60%', columnWidth: '58%', borderRadius: 5, distributed: true } },
-      grid: { show: false, padding: { top: -20, bottom: 0, left: -10, right: -10 } },
-      colors: [primary],
-      dataLabels: { enabled: false },
-      legend: { show: false },
-      series: [{ name: 'Revenue', data: data.monthly_revenue }],
-      xaxis: {
-        categories: data.monthly_labels,
-        axisBorder: { show: false }, axisTicks: { show: false },
-        labels: { style: { colors: labelColor, fontFamily, fontSize: '11px' } }
-      },
-      yaxis: { labels: { show: false } },
-      tooltip: { y: { formatter: aed } },
-      states: { hover: { filter: { type: 'none' } } }
-    }).render();
-  }
-
-  // Fleet Deployment gauge
-  // --------------------------------------------------------------------
-  const deploymentEl = document.querySelector('#deploymentStatus');
-  if (deploymentEl) {
-    new ApexCharts(deploymentEl, {
-      series: [data.deployment_pct],
-      labels: ['Stocked'],
-      chart: { height: 340, type: 'radialBar' },
-      plotOptions: {
-        radialBar: {
-          offsetY: 10, startAngle: -140, endAngle: 130,
-          hollow: { size: '65%' },
-          track: { background: cardColor, strokeWidth: '100%' },
-          dataLabels: {
-            name: { offsetY: -20, color: labelColor, fontFamily, fontSize: '13px', fontWeight: '400' },
-            value: { offsetY: 10, color: headingColor, fontFamily, fontSize: '38px', fontWeight: '500', formatter: v => v + '%' }
-          }
-        }
-      },
-      colors: [primary],
-      fill: {
-        type: 'gradient',
-        gradient: {
-          shade: 'dark', shadeIntensity: 0.5, gradientToColors: [primary],
-          inverseColors: true, opacityFrom: 1, opacityTo: 0.6, stops: [30, 70, 100]
-        }
-      },
-      stroke: { dashArray: 10 },
-      grid: { padding: { top: -20, bottom: -20 } },
-      states: { hover: { filter: { type: 'none' } } }
-    }).render();
-  }
-
-  // Revenue by Category
-  // --------------------------------------------------------------------
-  const categoryEl = document.querySelector('#revenueByCategory');
-  if (categoryEl) {
-    new ApexCharts(categoryEl, {
-      chart: { height: 270, parentHeightOffset: 0, type: 'bar', toolbar: { show: false } },
-      plotOptions: { bar: { horizontal: true, barHeight: '70%', borderRadius: 4 } },
-      grid: {
-        borderColor, strokeDashArray: 6,
-        xaxis: { lines: { show: true } }, yaxis: { lines: { show: false } },
-        padding: { top: -20, bottom: -12, left: 0, right: 16 }
-      },
-      colors: [primary],
-      dataLabels: { enabled: false },
-      series: [{ name: 'Revenue', data: data.revenue_category_values }],
-      xaxis: {
-        categories: data.revenue_categories,
-        axisBorder: { show: false }, axisTicks: { show: false },
-        labels: {
-          style: { colors: labelColor, fontFamily, fontSize: '11px' },
-          formatter: v => (v >= 1000 ? Math.round(v / 1000) + 'k' : v)
-        }
-      },
-      yaxis: { labels: { style: { colors: labelColor, fontFamily, fontSize: '12px' }, maxWidth: 160 } },
-      tooltip: { y: { formatter: aed } }
-    }).render();
-  }
-
-  // Station network map -- Leaflet over OpenStreetMap tiles
-  // --------------------------------------------------------------------
-  const mapEl = document.querySelector('#stationMap');
-  if (mapEl && typeof L !== 'undefined' && data.map_points) {
-    const map = L.map(mapEl, { scrollWheelZoom: false }).setView(data.map_centre, data.map_zoom);
-
-    // Basemap: Esri light-gray canvas plus its reference (label) layer.
-    //
-    // Chosen over OSM's standard tiles because those render place names in the
-    // local script -- Arabic across the UAE -- and this dashboard is read in
-    // English. Esri's canvas labels are latin. The neutral grey base also keeps
-    // the red station markers the loudest thing on the map.
-    //
-    // Tile servers require a Referer; Django's default SECURE_REFERRER_POLICY of
-    // "same-origin" strips it, so settings.py sets "strict-origin-when-cross-origin".
-    const esri = 'https://server.arcgisonline.com/ArcGIS/rest/services';
-    L.tileLayer(esri + '/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; &copy; OpenStreetMap contributors',
-      maxZoom: 16
-    }).addTo(map);
-    L.tileLayer(esri + '/Canvas/World_Light_Gray_Reference/MapServer/tile/{z}/{y}/{x}', {
-      maxZoom: 16,
-      pane: 'overlayPane'
-    }).addTo(map);
-
-    const fleets = data.map_points.map(p => p.fleet);
-    const maxFleet = Math.max.apply(null, fleets) || 1;
-
-    const markers = data.map_points.map(p => {
-      // Radius tracks fleet size so the busiest hubs read at a glance.
-      const radius = 6 + Math.round((p.fleet / maxFleet) * 14);
-      const marker = L.circleMarker([p.lat, p.lng], {
-        radius: p.fleet ? radius : 5,
-        color: primary,
-        weight: 2,
-        fillColor: primary,
-        fillOpacity: p.fleet ? 0.45 : 0.12
-      }).addTo(map);
-
-      marker.bindPopup(
-        `<div style="min-width:170px">
-           <div style="font-weight:600;margin-bottom:2px">${p.name}</div>
-           <div style="opacity:.7;margin-bottom:6px">${p.emirate}</div>
-           <div><strong>${p.fleet}</strong> vehicles</div>
-           <div><strong>${aed(p.revenue)}</strong> / month</div>
-         </div>`
-      );
-      return marker;
+  /* ── segmented range control (visual state only) ─────────────── */
+  root.querySelectorAll('.bd-segment button').forEach(function (b) {
+    b.addEventListener('click', function () {
+      b.parentNode.querySelectorAll('button').forEach(function (o) { o.classList.remove('is-on'); });
+      b.classList.add('is-on');
     });
+  });
 
-    // Fit to the UAE cluster. The single Kuwait station stays on the map but is
-    // excluded from the auto-fit, otherwise the whole Gulf is framed and the UAE
-    // network shrinks to a few pixels.
-    const core = markers.filter((m, i) => data.map_points[i].emirate !== 'Kuwait');
-    const fit = core.length ? core : markers;
-    map.fitBounds(L.featureGroup(fit).getBounds().pad(0.12));
-    // Re-measure once the card has its final width.
-    setTimeout(() => map.invalidateSize(), 250);
-  }
+  /* ── monthly sales sparkline ─────────────────────────────────── */
+  (function () {
+    var svg = root.querySelector('#bd-spark');
+    var series = data.daily_revenue || [];
+    if (!svg || series.length < 2) return;
+    var labels = data.daily_labels || [];
+    var lo = Math.min.apply(null, series) * 0.9;
+    var hi = Math.max.apply(null, series) * 1.04;
+    var pts = series.map(function (v, i) {
+      return [(i / (series.length - 1)) * 296 + 2, 92 - ((v - lo) / (hi - lo)) * 78];
+    });
+    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + p[0].toFixed(1) + ' ' + p[1].toFixed(1); }).join(' ');
+
+    var defs = el('defs');
+    var grad = el('linearGradient', { id: 'bdSparkFill', x1: '0', y1: '0', x2: '0', y2: '1' });
+    grad.appendChild(el('stop', { offset: '0%', 'stop-color': RED, 'stop-opacity': '.24' }));
+    grad.appendChild(el('stop', { offset: '100%', 'stop-color': RED, 'stop-opacity': '0' }));
+    defs.appendChild(grad);
+    svg.appendChild(defs);
+    svg.appendChild(el('path', { d: line + ' L298 96 L2 96 Z', fill: 'url(#bdSparkFill)' }));
+    svg.appendChild(el('path', {
+      d: line, fill: 'none', stroke: RED, 'stroke-width': '1.8',
+      'stroke-linecap': 'round', 'stroke-linejoin': 'round'
+    }));
+
+    var peakIdx = 0;
+    series.forEach(function (v, i) { if (v > series[peakIdx]) peakIdx = i; });
+    var px = pts[peakIdx][0].toFixed(1), py = pts[peakIdx][1].toFixed(1);
+    var g = el('g', { class: 'bd-spark-marker' });
+    g.appendChild(el('line', { x1: px, y1: '0', x2: px, y2: '96', stroke: '#1a1640', 'stroke-width': '.8', 'stroke-dasharray': '3 3', opacity: '.28' }));
+    g.appendChild(el('circle', { cx: px, cy: py, r: '3.6', fill: RED, stroke: '#fff', 'stroke-width': '2' }));
+    svg.appendChild(g);
+
+    var peakLabel = root.querySelector('#bd-spark-peak');
+    if (peakLabel) peakLabel.textContent = 'Peak ' + (labels[peakIdx] || '') + ' · ' + fmt(series[peakIdx]);
+
+    var weekend = 0, total = 0;
+    series.forEach(function (v, i) {
+      total += v;
+      if (series[i] > (lo + hi) / 2) weekend += v;
+    });
+    var aux = root.querySelector('#bd-spark-aux');
+    if (aux && total) aux.textContent = 'Busiest days = ' + Math.round((weekend / total) * 100) + '%';
+  })();
+
+  /* ── revenue reports: 12 month bars ──────────────────────────── */
+  (function () {
+    var host = root.querySelector('#bd-months');
+    var vals = data.monthly_revenue || [], labels = data.monthly_labels || [];
+    if (!host || !vals.length) return;
+    var max = Math.max.apply(null, vals), min = Math.min.apply(null, vals);
+    vals.forEach(function (v, i) {
+      var wrap = document.createElement('div');
+      wrap.className = 'bd-bar';
+      wrap.title = labels[i] + ' · AED ' + fmt(v);
+      var bar = document.createElement('i');
+      bar.style.height = Math.round((v / max) * 112) + 'px';
+      bar.style.background = v >= max * 0.93 ? RED : (v <= min * 1.07 ? PALE : MID);
+      var lab = document.createElement('span');
+      lab.textContent = labels[i];
+      wrap.appendChild(bar);
+      wrap.appendChild(lab);
+      host.appendChild(wrap);
+    });
+    var pi = vals.indexOf(max), ti = vals.indexOf(min);
+    var peak = root.querySelector('#bd-month-peak'), trough = root.querySelector('#bd-month-trough');
+    if (peak) peak.textContent = labels[pi] + ' peak · ' + fmt(max);
+    if (trough) trough.textContent = labels[ti] + ' trough · ' + fmt(min);
+  })();
+
+  /* ── revenue by emirate ──────────────────────────────────────── */
+  (function () {
+    var host = root.querySelector('#bd-emirates');
+    var names = data.revenue_emirates || [], vals = data.revenue_emirate_values || [];
+    if (!host || !names.length) return;
+    var max = Math.max.apply(null, vals);
+    names.forEach(function (name, i) {
+      var row = document.createElement('div');
+      row.innerHTML =
+        '<div class="bd-ranked-head"><span class="bd-ranked-name"></span><span class="bd-ranked-val"></span></div>' +
+        '<div class="bd-ranked-track"><i></i></div>';
+      row.querySelector('.bd-ranked-name').textContent = name;
+      row.querySelector('.bd-ranked-val').textContent = fmt(vals[i]);
+      var bar = row.querySelector('.bd-ranked-track i');
+      bar.style.width = Math.max(2, Math.round((vals[i] / max) * 100)) + '%';
+      bar.style.background = i === 0 ? RED : (i < 4 ? MID : PALE);
+      host.appendChild(row);
+    });
+  })();
+
+  /* ── revenue by category ─────────────────────────────────────── */
+  (function () {
+    var host = root.querySelector('#bd-categories');
+    var names = data.revenue_categories || [], vals = data.revenue_category_values || [];
+    if (!host || !names.length) return;
+    var max = Math.max.apply(null, vals);
+    names.forEach(function (name, i) {
+      var row = document.createElement('div');
+      row.className = 'bd-catrow';
+      row.innerHTML = '<span class="name"></span><span class="bar"><i></i></span><span class="val"></span>';
+      row.querySelector('.name').textContent = name;
+      row.querySelector('.name').title = name;
+      row.querySelector('.val').textContent = fmt(vals[i]);
+      var bar = row.querySelector('.bar i');
+      bar.style.width = Math.max(1.2, (vals[i] / max) * 100) + '%';
+      bar.style.background = i === 0 ? RED : (i < 4 ? MID : PALE);
+      host.appendChild(row);
+    });
+  })();
+
+  /* ── deployment gauge: 42 ticks over a 270° sweep ────────────── */
+  (function () {
+    var svg = root.querySelector('#bd-gauge');
+    if (!svg) return;
+    var pct = (Number(svg.dataset.pct) || 0) / 100;
+    var TICKS = 42;
+    for (var i = 0; i < TICKS; i++) {
+      var a = ((135 + (i / (TICKS - 1)) * 270) * Math.PI) / 180;
+      var f = i / (TICKS - 1);
+      svg.appendChild(el('line', {
+        x1: (98 + Math.cos(a) * 68).toFixed(1), y1: (98 + Math.sin(a) * 68).toFixed(1),
+        x2: (98 + Math.cos(a) * 86).toFixed(1), y2: (98 + Math.sin(a) * 86).toFixed(1),
+        stroke: f <= pct ? (f > 0.7 ? RED : '#e8474d') : '#f2dcdc',
+        'stroke-width': '5', 'stroke-linecap': 'round'
+      }));
+    }
+  })();
+
+  /* Station Network is a real Leaflet tile map (byky-leaflet-map.js), not
+     drawn here -- placing a station needs actual geography, which a bubble
+     plot on a blank grid cannot show. data.map_points still feeds it, via
+     the map_points json_script node in the template. */
 })();

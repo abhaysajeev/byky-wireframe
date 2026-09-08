@@ -4,69 +4,150 @@
 {% block title %}Loyalty Rewards Profile - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.13 -- fields, filters and defaults follow the FSD. The client's source files
-contain no records for this entity, so the grid shows the awaiting-data state
-rather than invented rows.
+FSD 3.13 -- Tier A. Rebuilt on the shared byky-screen.css/js base (see
+byky-screen-design-system.md and cms_department_management.html for the
+zero-data list+drawer reference) -- was on the old Vuexy offcanvas design.
+Fields, filters and defaults follow the FSD. The client's source files
+contain no records for this entity, so the grid shows the awaiting-data
+state rather than invented rows (CLAUDE.md 12).
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
-<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
-{% endblock vendor_js %}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
-<script src="{% static 'js/byky-hrms.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Loyalty Rewards Profile" parent="Inventory" subtitle=purpose action_label="Add Tier" action_url="#offcanvasAddTier" %}
+<div class="scr">
 
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Tier Code" />
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Loyalty Rewards Profile</b>
       </div>
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Tier Name" />
-      </div>
+      <h1 class="scr-title">Loyalty Rewards Profile</h1>
+      <p class="scr-sub">Loyalty tier rules and reward points earning rates per AED spent.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+      <button type="button" class="scr-btn-primary" data-scr-open="tier:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Tier
+      </button>
     </div>
   </div>
-  <div class="card-body">
-    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
-  </div>
 
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddTier">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">Add Tier</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  <div class="scr-card" data-scr-noun-singular="tier" data-scr-noun-plural="tiers">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search tier code or name" />
+      </div>
+
+      <span class="scr-toolbar-count">0 tiers</span>
     </div>
-    <div class="offcanvas-body p-6">
-      <form onsubmit="return false">
-        <div class="mb-6"><label class="form-label" for="lt-code">Tier Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="lt-code" placeholder="GOLD" /></div>
-        <div class="mb-6"><label class="form-label" for="lt-name">Tier Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="lt-name" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="lt-rate">Points Earn Rate</label><input type="number" class="form-control" id="lt-rate" placeholder="1.00" /></div>
-        <div class="mb-6"><label class="form-label" for="lt-min">Min Spend Threshold</label><input type="number" class="form-control" id="lt-min" placeholder="0.00" /></div>
-        <div class="form-check mb-6"><input class="form-check-input" type="checkbox" id="offcanvasAddTier-active" checked /><label class="form-check-label" for="offcanvasAddTier-active">Is Active</label></div>
-        <div class="d-flex gap-4">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
-        </div>
-      </form>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Tier Code</th>
+            <th>Tier Name</th>
+            <th>Earn Rate</th>
+            <th>Min Spend Threshold</th>
+            <th>Approval</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="6" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.4 5.5 6 .6-4.5 4 1.3 5.9L12 16"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No loyalty tiers yet</div>
+                  <p class="scr-empty-sub">Tier rules (Bronze, Silver, Gold, Platinum) will appear here once one is added.</p>
+                </div>
+                <button type="button" class="scr-btn-primary" data-scr-open="tier:add">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  Add Tier
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+{% comment %} Add/Edit drawer -- no rows exist yet, so this always opens in Add mode. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="tier" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="tier" data-add-title="Add Tier" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 2.4 5.5 6 .6-4.5 4 1.3 5.9L12 16"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Tier</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Tier Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" value="" placeholder="e.g. GOLD" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Tier Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Points Earn Rate</label>
+      <input type="number" step="0.01" class="scr-drawer-input" data-field="rate" value="" placeholder="1.00" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Min Spend Threshold (AED)</label>
+      <input type="number" step="0.01" class="scr-drawer-input" data-field="minSpend" value="" placeholder="0.00" />
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

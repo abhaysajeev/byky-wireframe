@@ -4,6 +4,12 @@
  * Interactivity for the two create forms adapted from the client mockups:
  * the time-slab table on Fare Entry, and the promotion/free-item tables on
  * Scheme Creation. Wireframe phase -- nothing is submitted anywhere.
+ *
+ * Migrated onto the .scr-* design system: the time-slab / free-slab editors
+ * use the scr-veil/scr-drawer markup, but their show/hide + prefill logic
+ * stays bespoke here rather than byky-screen.js's generic wireDrawer, since
+ * their rows are built by this script at runtime, not rendered server-side
+ * per record (there is no json_script blob to read a record from).
  */
 
 'use strict';
@@ -39,18 +45,42 @@
     });
   }
 
+  /** Open/close helpers for a scr-veil/scr-drawer pair driven by this script
+      rather than byky-screen.js's data-scr-open (see file header). Clicking
+      the veil or pressing Escape closes it, matching every other drawer in
+      the app even though this pair isn't registered with byky-screen.js. */
+  function drawerControls(veilId, drawerId) {
+    const veil = document.getElementById(veilId);
+    const drawer = document.getElementById(drawerId);
+    const api = {
+      open() {
+        if (veil) veil.hidden = false;
+        if (drawer) drawer.hidden = false;
+      },
+      close() {
+        if (veil) veil.hidden = true;
+        if (drawer) drawer.hidden = true;
+      }
+    };
+    if (veil) veil.addEventListener('click', api.close);
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && drawer && !drawer.hidden) api.close();
+    });
+    return api;
+  }
+
   // Fare Entry -- time slab rows
   // --------------------------------------------------------------------
   const slabToggle = document.getElementById('timeSlabToggle');
   const slabArea = document.getElementById('timeSlabArea');
   const slabRows = document.getElementById('timeSlabRows');
+  const slabDrawer = drawerControls('timeSlabVeil', 'offcanvasTimeSlab');
 
   // Time slabs -- summary grid + labelled drawer
   // --------------------------------------------------------------------
   // Ten fields per slab cannot stay legible as bare inputs in a table row,
   // so the grid shows formatted values and the drawer owns the labelled
   // form. `editing` holds the row being changed, or null when adding.
-  const slabDrawerEl = document.getElementById('offcanvasTimeSlab');
   const slabForm = {
     applies: document.getElementById('slab-applies'),
     dayWrap: document.getElementById('slab-day-wrap'),
@@ -115,29 +145,29 @@
   function renderSlabRow(tr, slab) {
     tr.dataset.slab = JSON.stringify(slab);
     tr.innerHTML = `
-      <td class="text-center">
-        <span class="badge bg-label-primary rounded-pill row-index">1</span>
+      <td style="text-align:center">
+        <span class="scr-badge scr-badge-pending row-index">1</span>
       </td>
-      <td><span class="fw-medium">${appliesLabel(slab)}</span></td>
+      <td style="font-weight:600">${appliesLabel(slab)}</td>
       <td>${slab.from} &ndash; ${slab.to}</td>
-      <td class="text-end fw-medium">${aed(slab.basic)}</td>
-      <td class="text-end">${mins(slab.grace)}</td>
-      <td class="text-end">${mins(slab.interval)}</td>
-      <td class="text-end">${aed(slab.concPrice)}</td>
-      <td class="text-end">${mins(slab.concGrace)}</td>
-      <td class="text-end text-nowrap">
-        <button type="button" class="btn btn-icon btn-sm btn-text-secondary rounded-pill row-edit" aria-label="Edit slab">
-          <i class="icon-base ti tabler-edit icon-16px"></i>
+      <td style="text-align:right; font-weight:600">${aed(slab.basic)}</td>
+      <td style="text-align:right">${mins(slab.grace)}</td>
+      <td style="text-align:right">${mins(slab.interval)}</td>
+      <td style="text-align:right">${aed(slab.concPrice)}</td>
+      <td style="text-align:right">${mins(slab.concGrace)}</td>
+      <td style="text-align:right; white-space:nowrap">
+        <button type="button" class="scr-icon-btn scr-icon-btn-edit row-edit" aria-label="Edit slab" style="width:26px; height:26px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path></svg>
         </button>
-        <button type="button" class="btn btn-icon btn-sm btn-text-danger rounded-pill row-remove" aria-label="Remove slab">
-          <i class="icon-base ti tabler-trash icon-16px"></i>
+        <button type="button" class="scr-icon-btn row-remove" aria-label="Remove slab" style="width:26px; height:26px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg>
         </button>
       </td>`;
     tr.querySelector('.row-edit').addEventListener('click', () => {
       editing = tr;
       writeSlabForm(JSON.parse(tr.dataset.slab));
       document.getElementById('offcanvasTimeSlabLabel').textContent = 'Edit Time Slab';
-      bootstrap.Offcanvas.getOrCreateInstance(slabDrawerEl).show();
+      slabDrawer.open();
     });
     tr.querySelector('.row-remove').addEventListener('click', () => {
       tr.remove();
@@ -160,10 +190,20 @@
     const tr = document.createElement('tr');
     tr.className = 'slab-empty';
     tr.innerHTML = `
-      <td colspan="9" class="text-center text-body-secondary py-6">
-        No pricing windows yet. Use <span class="fw-medium">Add Time Slab</span> to create one.
+      <td colspan="9" style="text-align:center; color:#9490bb; padding:26px 14px">
+        No pricing windows yet. Use <span style="font-weight:600">Add Time Slab</span> to create one.
       </td>`;
     slabRows.appendChild(tr);
+  }
+
+  const addTimeSlabBtn = document.getElementById('addTimeSlab');
+  if (addTimeSlabBtn) {
+    addTimeSlabBtn.addEventListener('click', () => {
+      editing = null;
+      document.getElementById('offcanvasTimeSlabLabel').textContent = 'Add Time Slab';
+      writeSlabForm({ applies: 'all', day: '', date: '', from: '10:00', to: '11:00', basic: 90, grace: 5, interval: 10, concPrice: 10, concGrace: 0 });
+      slabDrawer.open();
+    });
   }
 
   const slabSaveBtn = document.getElementById('slabSave');
@@ -176,21 +216,29 @@
       editing = null;
       renumber(slabRows);
       syncSlabEmptyState();
-      bootstrap.Offcanvas.getOrCreateInstance(slabDrawerEl).hide();
+      slabDrawer.close();
     });
   }
 
-  if (slabDrawerEl) {
-    slabDrawerEl.addEventListener('hidden.bs.offcanvas', () => {
-      editing = null;
-      document.getElementById('offcanvasTimeSlabLabel').textContent = 'Add Time Slab';
-    });
-  }
+  ['timeSlabClose', 'timeSlabCancel'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', () => { editing = null; slabDrawer.close(); });
+  });
 
   if (slabToggle && slabArea) {
-    slabToggle.addEventListener('change', () => {
-      slabArea.hidden = !slabToggle.checked;
-      if (slabToggle.checked) syncSlabEmptyState();
+    slabToggle.addEventListener('click', () => {
+      // byky-screen.js's .scr-toggle listener is delegated on `document`,
+      // so it only runs in the BUBBLE phase -- after this listener, which is
+      // attached directly to the button and therefore fires in the TARGET
+      // phase first. is-on here is still the PRE-click value; the class is
+      // about to flip to its opposite once this handler returns and the
+      // click keeps bubbling. (A comment here previously assumed the
+      // opposite order and caused the toggle to visually enable while the
+      // panel stayed hidden, and vice versa on the next click -- always one
+      // click behind.)
+      const enabled = !slabToggle.classList.contains('is-on');
+      slabArea.hidden = !enabled;
+      if (enabled) syncSlabEmptyState();
     });
   }
   syncSlabEmptyState();
@@ -199,12 +247,12 @@
   // --------------------------------------------------------------------
   function itemRowHtml(count) {
     return `
-      <td class="text-center"><span class="badge bg-label-primary rounded-pill row-index">${count}</span></td>
-      <td><select class="form-select form-select-sm">${optionsFrom('tplVehicleTypes')}</select></td>
-      <td><select class="form-select form-select-sm">${optionsFrom('tplPackages')}</select></td>
-      <td class="text-center">
-        <button type="button" class="btn btn-icon btn-sm btn-text-danger rounded-pill row-remove" aria-label="Remove row">
-          <i class="icon-base ti tabler-trash icon-16px"></i>
+      <td style="text-align:center"><span class="scr-badge scr-badge-pending row-index">${count}</span></td>
+      <td><select class="scr-input" style="height:34px; font-size:12px">${optionsFrom('tplVehicleTypes')}</select></td>
+      <td><select class="scr-input" style="height:34px; font-size:12px">${optionsFrom('tplPackages')}</select></td>
+      <td style="text-align:center">
+        <button type="button" class="scr-icon-btn row-remove" aria-label="Remove row" style="width:26px; height:26px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg>
         </button>
       </td>`;
   }
@@ -230,7 +278,7 @@
   // Free-item slabs -- same summary grid + labelled drawer as Fare Entry
   // --------------------------------------------------------------------
   const freeSlabRows = document.getElementById('freeSlabRows');
-  const freeDrawerEl = document.getElementById('offcanvasFreeSlab');
+  const freeSlabDrawer = drawerControls('freeSlabVeil', 'offcanvasFreeSlab');
   const fs = {
     applies: document.getElementById('fs-applies'),
     dayWrap: document.getElementById('fs-day-wrap'),
@@ -261,18 +309,18 @@
   function renderFreeSlabRow(tr, r) {
     tr.dataset.slab = JSON.stringify(r);
     tr.innerHTML = `
-      <td class="text-center"><span class="badge bg-label-primary rounded-pill row-index">1</span></td>
-      <td><span class="fw-medium">${fsAppliesLabel(r)}</span></td>
+      <td style="text-align:center"><span class="scr-badge scr-badge-pending row-index">1</span></td>
+      <td style="font-weight:600">${fsAppliesLabel(r)}</td>
       <td>${r.from} &ndash; ${r.to}</td>
       <td>${r.vehicle}</td>
       <td>${r.pkg}</td>
-      <td class="text-end fw-medium">${r.qty}</td>
-      <td class="text-end text-nowrap">
-        <button type="button" class="btn btn-icon btn-sm btn-text-secondary rounded-pill row-edit" aria-label="Edit slab">
-          <i class="icon-base ti tabler-edit icon-16px"></i>
+      <td style="text-align:right; font-weight:600">${r.qty}</td>
+      <td style="text-align:right; white-space:nowrap">
+        <button type="button" class="scr-icon-btn scr-icon-btn-edit row-edit" aria-label="Edit slab" style="width:26px; height:26px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path></svg>
         </button>
-        <button type="button" class="btn btn-icon btn-sm btn-text-danger rounded-pill row-remove" aria-label="Remove slab">
-          <i class="icon-base ti tabler-trash icon-16px"></i>
+        <button type="button" class="scr-icon-btn row-remove" aria-label="Remove slab" style="width:26px; height:26px">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg>
         </button>
       </td>`;
     tr.querySelector('.row-edit').addEventListener('click', () => {
@@ -283,7 +331,7 @@
       fs.vehicle.value = v.vehicle; fs.pkg.value = v.pkg; fs.qty.value = v.qty;
       fsSyncApplies();
       document.getElementById('offcanvasFreeSlabLabel').textContent = 'Edit Time Slab';
-      bootstrap.Offcanvas.getOrCreateInstance(freeDrawerEl).show();
+      freeSlabDrawer.open();
     });
     tr.querySelector('.row-remove').addEventListener('click', () => {
       tr.remove();
@@ -305,10 +353,22 @@
     const tr = document.createElement('tr');
     tr.className = 'slab-empty';
     tr.innerHTML = `
-      <td colspan="7" class="text-center text-body-secondary py-6">
-        No slab restrictions yet. Use <span class="fw-medium">Add Time Slab</span> to create one.
+      <td colspan="7" style="text-align:center; color:#9490bb; padding:26px 14px">
+        No slab restrictions yet. Use <span style="font-weight:600">Add Time Slab</span> to create one.
       </td>`;
     freeSlabRows.appendChild(tr);
+  }
+
+  const addFreeSlabBtn = document.getElementById('addFreeSlab');
+  if (addFreeSlabBtn) {
+    addFreeSlabBtn.addEventListener('click', () => {
+      editingFree = null;
+      document.getElementById('offcanvasFreeSlabLabel').textContent = 'Add Time Slab';
+      fs.applies.value = 'all'; fs.day.value = ''; fs.date.value = '';
+      fs.from.value = '10:00'; fs.to.value = '11:00'; fs.qty.value = 1;
+      fsSyncApplies();
+      freeSlabDrawer.open();
+    });
   }
 
   const freeSlabSaveBtn = document.getElementById('freeSlabSave');
@@ -325,25 +385,30 @@
       editingFree = null;
       renumber(freeSlabRows);
       syncFreeSlabEmptyState();
-      bootstrap.Offcanvas.getOrCreateInstance(freeDrawerEl).hide();
+      freeSlabDrawer.close();
     });
   }
 
-  if (freeDrawerEl) {
-    freeDrawerEl.addEventListener('hidden.bs.offcanvas', () => {
-      editingFree = null;
-      document.getElementById('offcanvasFreeSlabLabel').textContent = 'Add Time Slab';
-    });
-  }
+  ['freeSlabClose', 'freeSlabCancel'].forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.addEventListener('click', () => { editingFree = null; freeSlabDrawer.close(); });
+  });
   syncFreeSlabEmptyState();
 
-  // Toggles that reveal an optional block
+  // Toggles that reveal an optional block -- each is a scr-toggle button.
+  // byky-screen.js's is-on listener is delegated on `document` (bubble
+  // phase), so it fires AFTER this listener, which sits directly on the
+  // button (target phase). is-on read here is still the pre-click value --
+  // predict its post-click opposite rather than reading it as already
+  // flipped (that assumption previously left the toggle and its panel one
+  // click out of sync).
   [['freeItemsToggle', 'freeItemsArea'], ['freeSlabToggle', 'freeSlabArea']].forEach(([t, a]) => {
     const toggle = document.getElementById(t);
     const area = document.getElementById(a);
-    if (toggle && area) toggle.addEventListener('change', () => {
-      area.hidden = !toggle.checked;
-      if (toggle.checked) syncFreeSlabEmptyState();
+    if (toggle && area) toggle.addEventListener('click', () => {
+      const enabled = !toggle.classList.contains('is-on');
+      area.hidden = !enabled;
+      if (enabled) syncFreeSlabEmptyState();
     });
   });
 

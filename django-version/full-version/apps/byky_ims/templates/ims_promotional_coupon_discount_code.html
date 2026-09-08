@@ -4,76 +4,193 @@
 {% block title %}Promotional Coupon & Discount Code - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.12 -- fields, filters and defaults follow the FSD. The client's source files
-contain no records for this entity, so the grid shows the awaiting-data state
-rather than invented rows.
+FSD 3.12 -- Tier B. Rebuilt on the shared byky-screen.css/js base (see
+byky-screen-design-system.md and cms_branch_management.html for the
+select/radio-drawer reference) -- was on the old Vuexy offcanvas design.
+Fields, filters and defaults follow the FSD. The client's source files
+contain no records for this entity, so the grid shows the awaiting-data
+state rather than invented rows (CLAUDE.md 12).
 {% endcomment %}
 
 {% block vendor_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
 <link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
 {% endblock vendor_css %}
 
 {% block vendor_js %}
 {{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
 <script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
 {% endblock vendor_js %}
 
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 <script src="{% static 'js/byky-hrms.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Promotional Coupon & Discount Code" parent="Inventory" subtitle=purpose action_label="Add Promo Code" action_url="#offcanvasAddPromo" %}
+<div class="scr">
 
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Promo Code" />
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Promotional Coupon & Discount Code</b>
       </div>
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Discount Types</option><option>Percentage</option><option>Fixed Amount</option></select>
-      </div>
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Status</option><option>Active</option><option>Expired</option></select>
-      </div>
+      <h1 class="scr-title">Promotional Coupon & Discount Code</h1>
+      <p class="scr-sub">Discount voucher codes, validity windows and usage limit caps for mobile app rentals.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+      <button type="button" class="scr-btn-primary" data-scr-open="promo:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Promo Code
+      </button>
     </div>
   </div>
-  <div class="card-body">
-    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
-  </div>
 
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddPromo">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">Add Promo Code</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body p-6">
-      <form onsubmit="return false">
-        <div class="mb-6"><label class="form-label" for="pm-code">Promo Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="pm-code" placeholder="SUMMER25" /></div>
-        <div class="mb-6"><label class="form-label d-block">Discount Type <span class="text-danger">*</span></label><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="pm-type" id="pm-pct" checked /><label class="form-check-label" for="pm-pct">Percentage</label></div><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="pm-type" id="pm-fixed" /><label class="form-check-label" for="pm-fixed">Fixed Amount</label></div></div>
-        <div class="mb-6"><label class="form-label" for="pm-value">Discount Value <span class="text-danger">*</span></label><input type="number" class="form-control" id="pm-value" placeholder="0.00" /></div>
-        <div class="mb-6"><label class="form-label" for="pm-min">Minimum Spend</label><input type="number" class="form-control" id="pm-min" placeholder="0.00" /></div>
-        <div class="mb-6"><label class="form-label" for="pm-cap">Usage Cap</label><input type="number" class="form-control" id="pm-cap" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="pm-user">Per-User Limit</label><input type="number" class="form-control" id="pm-user" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="pm-from">Valid From</label><input type="text" class="form-control byky-date" id="pm-from" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="pm-to">Valid To</label><input type="text" class="form-control byky-date" id="pm-to" placeholder="" /></div>
-        <div class="form-check mb-6"><input class="form-check-input" type="checkbox" id="offcanvasAddPromo-active" checked /><label class="form-check-label" for="offcanvasAddPromo-active">Is Active</label></div>
-        <div class="d-flex gap-4">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+  <div class="scr-card" data-scr-noun-singular="promo code" data-scr-noun-plural="promo codes">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search promo code" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="discountType">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All discount types</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All discount types</button>
+          <button type="button" class="scr-filter-opt" data-value="Percentage">Percentage</button>
+          <button type="button" class="scr-filter-opt" data-value="Fixed Amount">Fixed Amount</button>
         </div>
-      </form>
+      </div>
+
+      <span class="scr-toolbar-count">0 promo codes</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Promo Code</th>
+            <th>Discount</th>
+            <th>Min Spend</th>
+            <th>Usage Cap</th>
+            <th>Valid From &ndash; To</th>
+            <th>Approval</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v2a2 2 0 0 1-2 2 2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h2M15 5h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2 2 2 0 0 0-2 2v2a2 2 0 0 1-2 2h-2"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No promo codes yet</div>
+                  <p class="scr-empty-sub">Discount voucher codes for the customer app will appear here once one is added.</p>
+                </div>
+                <button type="button" class="scr-btn-primary" data-scr-open="promo:add">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  Add Promo Code
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+{% comment %} Add/Edit drawer -- no rows exist yet, so this always opens in Add mode. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="promo" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="promo" data-add-title="Add Promo Code" data-title-field="code" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v2a2 2 0 0 1-2 2 2 2 0 0 1 2 2v2a2 2 0 0 0 2 2h2M15 5h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2 2 2 0 0 0-2 2v2a2 2 0 0 1-2 2h-2"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Promo Code</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Promo Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" value="" placeholder="SUMMER25" style="text-transform:uppercase" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Discount Type<span class="scr-required">*</span></label>
+      <div class="scr-radio-row">
+        <label class="scr-radio-label"><input type="radio" class="scr-radio" name="promoDiscountType" value="Percentage" checked /> Percentage</label>
+        <label class="scr-radio-label"><input type="radio" class="scr-radio" name="promoDiscountType" value="Fixed Amount" /> Fixed Amount</label>
+      </div>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Discount Value<span class="scr-required">*</span></label>
+      <input type="number" step="0.01" class="scr-drawer-input" data-field="value" value="" placeholder="0.00" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Minimum Spend (AED)</label>
+      <input type="number" step="0.01" class="scr-drawer-input" data-field="minSpend" value="" placeholder="0.00" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Usage Cap</label>
+      <input type="number" class="scr-drawer-input" data-field="usageCap" value="" placeholder="e.g. 500" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Per-User Limit</label>
+      <input type="number" class="scr-drawer-input" data-field="perUserLimit" value="" placeholder="e.g. 1" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Valid From</label>
+      <input type="text" class="scr-drawer-input byky-date" data-field="validFrom" value="" placeholder="Select date" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Valid To</label>
+      <input type="text" class="scr-drawer-input byky-date" data-field="validTo" value="" placeholder="Select date" />
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

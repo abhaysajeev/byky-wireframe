@@ -6,505 +6,459 @@
 {% block title %}Dashboard{% endblock %}
 
 {% comment %}
-BYKY landing dashboard. Adapted from Vuexy's dashboard_analytics -- same grid, card
-shapes, ApexCharts, Swiper and DataTable, plus a Leaflet/OpenStreetMap network map.
+BYKY landing dashboard — rebuilt to match the "Byky Dashboard" design exactly.
 
-Fleet, station and workforce figures are the client's own data (seed.py). Revenue
-figures are indicative (sales.py) because the source files carry no transactions;
-the page says so where it matters rather than implying they are actuals.
+No ApexCharts / Swiper / DataTables: the sparkline, month bars, ranked bars and
+deployment gauge are plain markup plus byky-dashboard.js, drawn from the same
+{{ chart_data }} payload the old build used. views.py, seed.py, sales.py and
+geo.py are unchanged.
+
+Station Network is the one exception: it is a real Leaflet tile map, not a
+drawn chart. Station placement needs actual geography (coastline, streets,
+satellite), which a bubble plot on a blank grid cannot show.
 {% endcomment %}
 
 {% block vendor_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/swiper/swiper.css' %}" />
 <link rel="stylesheet" href="{% static 'vendor/libs/leaflet/leaflet.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
 {% endblock vendor_css %}
-
-{% block page_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/css/pages/cards-advance.css' %}" />
-{% endblock page_css %}
 
 {% block vendor_js %}
 {{ block.super }}
-<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
-<script src="{% static 'vendor/libs/swiper/swiper.js' %}"></script>
 <script src="{% static 'vendor/libs/leaflet/leaflet.js' %}"></script>
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
 {% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-dashboard.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
 {{ chart_data|json_script:"byky-chart-data" }}
 <script src="{% static 'js/byky-dashboard.js' %}"></script>
+<script src="{% static 'js/byky-leaflet-map.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-<div class="row g-6">
+<div class="bd">
 
-  <!-- Business overview carousel -->
-  <div class="col-xl-6 col">
-    <div class="swiper-container swiper-container-horizontal swiper swiper-card-advance-bg" id="swiper-with-pagination-cards">
-      <div class="swiper-wrapper">
-
-        <div class="swiper-slide">
-          <div class="row">
-            <div class="col-12">
-              <h5 class="text-white mb-0">Revenue Overview</h5>
-              <small>Indicative monthly performance</small>
-            </div>
-            <div class="col-lg-8 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-              <h6 class="text-white mt-0 mt-md-3 mb-4">This Month</h6>
-              <div class="row">
-                <div class="col-6">
-                  <ul class="list-unstyled mb-0">
-                    <li class="mb-4">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ sales.monthly_revenue|intcomma }}</span>
-                      <span class="d-block lh-sm mt-1">Revenue AED</span>
-                    </li>
-                    <li class="mb-0">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ sales.rentals|intcomma }}</span>
-                      <span class="d-block lh-sm mt-1">Rentals</span>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-6">
-                  <ul class="list-unstyled mb-0">
-                    <li class="mb-4">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ sales.daily_avg|intcomma }}</span>
-                      <span class="d-block lh-sm mt-1">Daily Avg</span>
-                    </li>
-                    <li class="mb-0">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ sales.avg_ticket }}</span>
-                      <span class="d-block lh-sm mt-1">Avg Ticket</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center d-flex align-items-center justify-content-center">
-              <i class="icon-base ti tabler-coins text-white icon-50px"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="swiper-slide">
-          <div class="row">
-            <div class="col-12">
-              <h5 class="text-white mb-0">Fleet Overview</h5>
-              <small>{{ vehicles|intcomma }} vehicles across {{ stations }} stations</small>
-            </div>
-            <div class="col-lg-8 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-              <h6 class="text-white mt-0 mt-md-3 mb-4">Fleet</h6>
-              <div class="row">
-                <div class="col-6">
-                  <ul class="list-unstyled mb-0">
-                    <li class="mb-4">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ vehicles|intcomma }}</span>
-                      <span class="d-block lh-sm mt-1">Vehicles</span>
-                    </li>
-                    <li class="mb-0">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ categories }}</span>
-                      <span class="d-block lh-sm mt-1">Categories</span>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-6">
-                  <ul class="list-unstyled mb-0">
-                    <li class="mb-4">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ vehicle_types }}</span>
-                      <span class="d-block lh-sm mt-1">Models</span>
-                    </li>
-                    <li class="mb-0">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ electric }}</span>
-                      <span class="d-block lh-sm mt-1">Electric</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center d-flex align-items-center justify-content-center">
-              <i class="icon-base ti tabler-motorbike text-white icon-50px"></i>
-            </div>
-          </div>
-        </div>
-
-        <div class="swiper-slide">
-          <div class="row">
-            <div class="col-12">
-              <h5 class="text-white mb-0">Network &amp; Workforce</h5>
-              <small>{{ stations }} stations in {{ emirates }} emirates</small>
-            </div>
-            <div class="col-lg-8 col-md-9 col-12 order-2 order-md-1 pt-md-9">
-              <h6 class="text-white mt-0 mt-md-3 mb-4">Operations</h6>
-              <div class="row">
-                <div class="col-6">
-                  <ul class="list-unstyled mb-0">
-                    <li class="mb-4">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ stations }}</span>
-                      <span class="d-block lh-sm mt-1">Stations</span>
-                    </li>
-                    <li class="mb-0">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ employees }}</span>
-                      <span class="d-block lh-sm mt-1">Employees</span>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-6">
-                  <ul class="list-unstyled mb-0">
-                    <li class="mb-4">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ emirates }}</span>
-                      <span class="d-block lh-sm mt-1">Emirates</span>
-                    </li>
-                    <li class="mb-0">
-                      <span class="d-inline-block fw-medium website-analytics-text-bg">{{ avg_per_station }}</span>
-                      <span class="d-block lh-sm mt-1">Avg Fleet</span>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-4 col-md-3 col-12 order-1 order-md-2 my-4 my-md-0 text-center d-flex align-items-center justify-content-center">
-              <i class="icon-base ti tabler-map-pin text-white icon-50px"></i>
-            </div>
-          </div>
-        </div>
-
+  <div class="bd-head">
+    <div>
+      <h1 class="bd-title">Dashboard</h1>
+      <p class="bd-sub">{{ vehicles|intcomma }} vehicles · {{ stations }} stations · {{ emirates }} emirates</p>
+    </div>
+    <div class="bd-head-actions">
+      <div class="bd-segment">
+        <button type="button">Week</button>
+        <button type="button" class="is-on">Month</button>
+        <button type="button">Quarter</button>
       </div>
-      <div class="swiper-pagination"></div>
+      <button type="button" class="bd-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
     </div>
   </div>
-  <!--/ Business overview carousel -->
 
-  <!-- Monthly Sales -->
-  <div class="col-xl-3 col-sm-6">
-    <div class="card h-100">
-      <div class="card-header pb-2">
-        <div class="d-flex justify-content-between align-items-start">
+  <div class="bd-row">
+
+    <!-- Business overview carousel -->
+    <div class="bd-hero">
+      <div class="bd-hero-slide is-on">
+        <div class="bd-hero-top">
           <div>
-            <h5 class="mb-1 card-title">Monthly Sales</h5>
-            <p class="mb-0 text-body-secondary small">Rolling 30 days</p>
+            <h2 class="bd-hero-title">Revenue Overview</h2>
+            <p class="bd-hero-sub">Indicative monthly performance</p>
           </div>
-          <span class="badge bg-label-secondary">AED</span>
+          <div class="bd-dots">
+            <button type="button" class="is-on" aria-label="Revenue"></button>
+            <button type="button" aria-label="Fleet"></button>
+            <button type="button" aria-label="Network"></button>
+          </div>
         </div>
-        <h4 class="mb-1 mt-3">{{ sales.monthly_revenue|intcomma }}</h4>
-        <p class="mb-0 text-body-secondary small">
-          <i class="icon-base ti tabler-calendar-stats icon-12px me-1"></i>
-          Daily average {{ sales.daily_avg|intcomma }}
-        </p>
+        <div class="bd-hero-body">
+          <div class="bd-hero-stats">
+            <div><span class="bd-hero-val">{{ sales.monthly_revenue|intcomma }}</span><div class="bd-hero-lab">Revenue AED</div></div>
+            <div><span class="bd-hero-val">{{ sales.daily_avg|intcomma }}</span><div class="bd-hero-lab">Daily Avg</div></div>
+            <div><span class="bd-hero-val">{{ sales.rentals|intcomma }}</span><div class="bd-hero-lab">Rentals</div></div>
+            <div><span class="bd-hero-val">{{ sales.avg_ticket }}</span><div class="bd-hero-lab">Avg Ticket</div></div>
+          </div>
+          <div class="bd-hero-icon">
+            <svg width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 21V4.2a1.2 1.2 0 0 1 1.2-1.2h11.6A1.2 1.2 0 0 1 19 4.2V21l-2.3-1.6-2.4 1.6-2.3-1.6-2.4 1.6L7.3 19.4z"></path>
+              <path d="m8.6 14.4 2.6-3.1 2.1 1.8 2.3-3.4M15.6 9.7h-2.2M15.6 9.7v2.2"></path>
+            </svg>
+          </div>
+        </div>
       </div>
-      <div class="card-body px-0 pb-0">
-        <div id="dailySales"></div>
-      </div>
-    </div>
-  </div>
-  <!--/ Monthly Sales -->
 
-  <!-- Rentals vs Invoices -->
-  <div class="col-xl-3 col-sm-6">
-    <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between">
-          <p class="mb-0 text-body">Invoices</p>
-        </div>
-        <h4 class="card-title mb-1">{{ sales.rentals|intcomma }}</h4>
-      </div>
-      <div class="card-body">
-        <div class="row">
-          <div class="col-5">
-            <div class="d-flex gap-2 align-items-center mb-2">
-              <span class="badge bg-label-success p-1 rounded"><i class="icon-base ti tabler-receipt icon-sm"></i></span>
-              <p class="mb-0">Paid</p>
-            </div>
-            <h5 class="mb-0 pt-1">94%</h5>
-            <small class="text-body-secondary">{{ sales.paid_invoices|intcomma }}</small>
+      <div class="bd-hero-slide">
+        <div class="bd-hero-top">
+          <div>
+            <h2 class="bd-hero-title">Fleet Overview</h2>
+            <p class="bd-hero-sub">{{ vehicles|intcomma }} vehicles across {{ stations }} stations</p>
           </div>
-          <div class="col-2">
-            <div class="divider divider-vertical">
-              <div class="divider-text"><span class="badge-divider-bg bg-label-secondary">VS</span></div>
-            </div>
-          </div>
-          <div class="col-5 text-end">
-            <div class="d-flex gap-2 justify-content-end align-items-center mb-2">
-              <p class="mb-0">Pending</p>
-              <span class="badge bg-label-warning p-1 rounded"><i class="icon-base ti tabler-clock icon-sm"></i></span>
-            </div>
-            <h5 class="mb-0 pt-1">6%</h5>
-            <small class="text-body-secondary">{{ sales.pending_invoices|intcomma }}</small>
+          <div class="bd-dots">
+            <button type="button" aria-label="Revenue"></button>
+            <button type="button" class="is-on" aria-label="Fleet"></button>
+            <button type="button" aria-label="Network"></button>
           </div>
         </div>
-        <div class="d-flex align-items-center mt-6">
-          <div class="progress w-100" style="height: 10px;">
-            <div class="progress-bar bg-success" style="width: 94%" role="progressbar" aria-valuenow="94" aria-valuemin="0" aria-valuemax="100"></div>
-            <div class="progress-bar bg-warning" role="progressbar" style="width: 6%" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100"></div>
+        <div class="bd-hero-body">
+          <div class="bd-hero-stats">
+            <div><span class="bd-hero-val">{{ vehicles|intcomma }}</span><div class="bd-hero-lab">Vehicles</div></div>
+            <div><span class="bd-hero-val">{{ categories }}</span><div class="bd-hero-lab">Categories</div></div>
+            <div><span class="bd-hero-val">{{ vehicle_types }}</span><div class="bd-hero-lab">Models</div></div>
+            <div><span class="bd-hero-val">{{ electric }}</span><div class="bd-hero-lab">Electric</div></div>
+          </div>
+          <div class="bd-hero-icon">
+            <svg width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5.6 19.4a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8M18.4 19.4a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8"></path>
+              <path d="M5.6 16h4.1l3.2-6.4 5.5 6.4M9.7 16l3.2-6.4h-2.6M13.2 9.6h3.2M11.6 8.2h2.6"></path>
+            </svg>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <!--/ Rentals vs Invoices -->
 
-  <!-- Revenue Reports -->
-  <div class="col-md-6">
-    <div class="card h-100">
-      <div class="card-header pb-0 d-flex justify-content-between">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Revenue Reports</h5>
-          <p class="card-subtitle">Last 12 months, AED</p>
-        </div>
-        <span class="badge bg-label-secondary h-25">Indicative</span>
-      </div>
-      <div class="card-body">
-        <div class="row align-items-center g-md-8">
-          <div class="col-12 col-md-5 d-flex flex-column">
-            <div class="d-flex gap-2 align-items-center mb-3 flex-wrap">
-              <h2 class="mb-0">{{ sales.monthly_revenue|intcomma }}</h2>
-              <div class="badge rounded bg-label-secondary">AED / month</div>
-            </div>
-            <small class="text-body">Peaks in the cooler months, as leisure riding does across the Gulf.</small>
+      <div class="bd-hero-slide">
+        <div class="bd-hero-top">
+          <div>
+            <h2 class="bd-hero-title">Network &amp; Workforce</h2>
+            <p class="bd-hero-sub">{{ stations }} stations in {{ emirates }} emirates</p>
           </div>
-          <div class="col-12 col-md-7 ps-xl-8">
-            <div id="revenueReports"></div>
+          <div class="bd-dots">
+            <button type="button" aria-label="Revenue"></button>
+            <button type="button" aria-label="Fleet"></button>
+            <button type="button" class="is-on" aria-label="Network"></button>
           </div>
         </div>
-        <div class="border rounded p-5 mt-5">
-          <div class="row gap-4 gap-sm-0">
-            <div class="col-12 col-sm-4">
-              <div class="d-flex gap-2 align-items-center">
-                <div class="badge rounded bg-label-primary p-1"><i class="icon-base ti tabler-coins icon-18px"></i></div>
-                <h6 class="mb-0 fw-normal">Revenue</h6>
-              </div>
-              <h4 class="my-2">{{ sales.monthly_revenue|intcomma }}</h4>
-              <div class="progress w-75" style="height:4px"><div class="progress-bar" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div></div>
-            </div>
-            <div class="col-12 col-sm-4">
-              <div class="d-flex gap-2 align-items-center">
-                <div class="badge rounded bg-label-info p-1"><i class="icon-base ti tabler-receipt icon-18px"></i></div>
-                <h6 class="mb-0 fw-normal">Rentals</h6>
-              </div>
-              <h4 class="my-2">{{ sales.rentals|intcomma }}</h4>
-              <div class="progress w-75" style="height:4px"><div class="progress-bar bg-info" role="progressbar" style="width: 72%" aria-valuenow="72" aria-valuemin="0" aria-valuemax="100"></div></div>
-            </div>
-            <div class="col-12 col-sm-4">
-              <div class="d-flex gap-2 align-items-center">
-                <div class="badge rounded bg-label-success p-1"><i class="icon-base ti tabler-ticket icon-18px"></i></div>
-                <h6 class="mb-0 fw-normal">Avg Ticket</h6>
-              </div>
-              <h4 class="my-2">{{ sales.avg_ticket }}</h4>
-              <div class="progress w-75" style="height:4px"><div class="progress-bar bg-success" role="progressbar" style="width: 46%" aria-valuenow="46" aria-valuemin="0" aria-valuemax="100"></div></div>
-            </div>
+        <div class="bd-hero-body">
+          <div class="bd-hero-stats">
+            <div><span class="bd-hero-val">{{ stations }}</span><div class="bd-hero-lab">Stations</div></div>
+            <div><span class="bd-hero-val">{{ emirates }}</span><div class="bd-hero-lab">Emirates</div></div>
+            <div><span class="bd-hero-val">{{ employees }}</span><div class="bd-hero-lab">Employees</div></div>
+            <div><span class="bd-hero-val">{{ avg_per_station }}</span><div class="bd-hero-lab">Avg Fleet</div></div>
+          </div>
+          <div class="bd-hero-icon">
+            <svg width="62" height="62" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,.92)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 14.6a2.6 2.6 0 1 0 0-5.2 2.6 2.6 0 0 0 0 5.2M4.6 7.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4M19.4 7.2a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4M12 21.6a2.2 2.2 0 1 0 0-4.4 2.2 2.2 0 0 0 0 4.4"></path>
+              <path d="m6.2 6.4 4 3.6M17.8 6.4l-4 3.6M12 14.6v2.6"></path>
+            </svg>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <!--/ Revenue Reports -->
+    <!--/ Business overview carousel -->
 
-  <!-- Fleet Deployment -->
-  <div class="col-12 col-md-6">
-    <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Fleet Deployment</h5>
-          <p class="card-subtitle">Stations holding stock</p>
+    <!-- Monthly Sales -->
+    <div class="bd-card bd-sales">
+      <div class="bd-sales-head">
+        <div class="bd-flexrow">
+          <div>
+            <h3 class="bd-card-h3">Monthly Sales</h3>
+            <p class="bd-card-sub">Rolling 30 days</p>
+          </div>
+          <span class="bd-chip">AED</span>
+        </div>
+        <div style="display:flex;align-items:baseline;gap:8px;margin-top:16px">
+          <span class="bd-big">{{ sales.monthly_revenue|intcomma }}</span>
+          <span class="bd-delta">+6.4%</span>
+        </div>
+        <p class="bd-note">Daily average {{ sales.daily_avg|intcomma }}</p>
+      </div>
+      <svg id="bd-spark" class="bd-spark" viewBox="0 0 300 96" preserveAspectRatio="none"></svg>
+      <div class="bd-spark-labels">
+        <span class="peak" id="bd-spark-peak"></span>
+        <span class="aux" id="bd-spark-aux"></span>
+      </div>
+    </div>
+    <!--/ Monthly Sales -->
+
+    <!-- Invoices -->
+    <div class="bd-card bd-invoices">
+      <div class="bd-flexrow">
+        <div>
+          <h3 class="bd-card-h3">Invoices</h3>
+          <p class="bd-card-sub">Rentals billed this month</p>
         </div>
       </div>
-      <div class="card-body row">
-        <div class="col-12 col-sm-4">
-          <div class="mt-lg-4 mt-lg-2 mb-lg-6 mb-2">
-            <h2 class="mb-0">{{ stations }}</h2>
-            <p class="mb-0">Total Stations</p>
+      <div class="bd-big" style="margin-top:14px">{{ sales.rentals|intcomma }}</div>
+      <div class="bd-split">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:7px">
+            <span class="bd-ico bd-ico-green">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1f9d63" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+            </span>
+            <span class="bd-mini-lab">Paid</span>
           </div>
-          <ul class="p-0 m-0">
-            <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-              <div class="badge rounded bg-label-success p-1_5"><i class="icon-base ti tabler-circle-check icon-md"></i></div>
-              <div><h6 class="mb-0 text-nowrap">Stocked</h6><small class="text-body-secondary">{{ stocked_stations }}</small></div>
-            </li>
-            <li class="d-flex gap-4 align-items-center mb-lg-3 pb-1">
-              <div class="badge rounded bg-label-warning p-1_5"><i class="icon-base ti tabler-alert-circle icon-md"></i></div>
-              <div><h6 class="mb-0 text-nowrap">Empty</h6><small class="text-body-secondary">{{ empty_stations }}</small></div>
-            </li>
-            <li class="d-flex gap-4 align-items-center pb-1">
-              <div class="badge rounded bg-label-primary p-1_5"><i class="icon-base ti tabler-trophy icon-md"></i></div>
-              <div><h6 class="mb-0 text-nowrap">Largest</h6><small class="text-body-secondary">{{ largest_station.vehicle_count }} vehicles</small></div>
-            </li>
-          </ul>
+          <div class="bd-pct">94%</div>
+          <p class="bd-pct-sub">{{ sales.paid_invoices|intcomma }}</p>
         </div>
-        <div class="col-12 col-md-8">
-          <div id="deploymentStatus"></div>
+        <div class="bd-split-div"></div>
+        <div style="flex:1;text-align:right">
+          <div style="display:flex;align-items:center;gap:7px;justify-content:flex-end">
+            <span class="bd-mini-lab">Pending</span>
+            <span class="bd-ico bd-ico-amber">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#e08700" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4.5l3 1.8"></path></svg>
+            </span>
+          </div>
+          <div class="bd-pct">6%</div>
+          <p class="bd-pct-sub">{{ sales.pending_invoices|intcomma }}</p>
+        </div>
+      </div>
+      <div class="bd-progress-wrap">
+        <div class="bd-progress-cap">
+          <span class="ok">{{ sales.paid_invoices|intcomma }} cleared</span>
+          <span class="warn">{{ sales.pending_invoices|intcomma }} open</span>
+        </div>
+        <div class="bd-progress">
+          <i class="paid" style="width:94%"></i>
+          <i class="pending" style="width:6%"></i>
         </div>
       </div>
     </div>
+    <!--/ Invoices -->
   </div>
-  <!--/ Fleet Deployment -->
 
-  <!-- Station Network Map -->
-  <div class="col-xxl-8">
-    <div class="card h-100">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Station Network</h5>
-          <p class="card-subtitle">{{ stations }} stations across {{ emirates }} emirates &mdash; marker size reflects fleet</p>
+  <div class="bd-row">
+
+    <!-- Revenue Reports -->
+    <div class="bd-card bd-reports">
+      <div class="bd-flexrow">
+        <div>
+          <h3 class="bd-card-h3">Revenue Reports</h3>
+          <p class="bd-card-sub">Last 12 months, AED</p>
         </div>
-        <a href="{% url 'cms-station-address-mapping' %}" class="btn btn-sm btn-label-secondary">
-          <i class="icon-base ti tabler-list icon-xs me-1_5"></i>Station list
+        <span class="bd-chip">Indicative</span>
+      </div>
+      <div class="bd-reports-body">
+        <div class="bd-reports-left">
+          <div class="bd-reports-total">{{ sales.monthly_revenue|intcomma }}</div>
+          <div class="bd-chip" style="display:inline-block;margin-top:12px">AED / month</div>
+          <p class="bd-reports-copy">Nov–Mar trades <strong>24% above</strong> the annual mean; Jun–Aug falls 19% below it.</p>
+        </div>
+        <div class="bd-reports-right">
+          <div class="bd-callout">
+            <span class="peak" id="bd-month-peak"></span>
+            <span class="trough" id="bd-month-trough"></span>
+          </div>
+          <div class="bd-bars" id="bd-months"></div>
+        </div>
+      </div>
+      <div class="bd-statstrip">
+        <div class="bd-stat">
+          <div class="bd-stat-head">
+            <span class="bd-stat-ico" style="background:#fdeced">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d81f26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="6" rx="8" ry="3"></ellipse><path d="M4 6v6c0 1.7 3.6 3 8 3s8-1.3 8-3V6M4 12v6c0 1.7 3.6 3 8 3s8-1.3 8-3v-6"></path></svg>
+            </span>
+            <span class="bd-mini-lab">Revenue</span>
+          </div>
+          <div class="bd-stat-val">{{ sales.monthly_revenue|intcomma }}</div>
+          <div class="bd-track"><i style="width:100%;background:#d81f26"></i></div>
+        </div>
+        <div class="bd-stat">
+          <div class="bd-stat-head">
+            <span class="bd-stat-ico" style="background:#eaf1fd">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#3b6fd4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg>
+            </span>
+            <span class="bd-mini-lab">Rentals</span>
+          </div>
+          <div class="bd-stat-val">{{ sales.rentals|intcomma }}</div>
+          <div class="bd-track"><i style="width:72%;background:#3b6fd4"></i></div>
+        </div>
+        <div class="bd-stat">
+          <div class="bd-stat-head">
+            <span class="bd-stat-ico" style="background:#e9f8f0">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#1f9d63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9V7a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v2a2.5 2.5 0 0 0 0 6v2a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-2a2.5 2.5 0 0 0 0-6"></path></svg>
+            </span>
+            <span class="bd-mini-lab">Avg Ticket</span>
+          </div>
+          <div class="bd-stat-val">{{ sales.avg_ticket }}</div>
+          <div class="bd-track"><i style="width:46%;background:#1f9d63"></i></div>
+        </div>
+      </div>
+    </div>
+    <!--/ Revenue Reports -->
+
+    <!-- Fleet Deployment -->
+    <div class="bd-card bd-fleet">
+      <div>
+        <h3 class="bd-card-h3">Fleet Deployment</h3>
+        <p class="bd-card-sub">Stations holding stock</p>
+      </div>
+      <div class="bd-fleet-body">
+        <div class="bd-fleet-left">
+          <div class="bd-fleet-total">{{ stations }}</div>
+          <p class="bd-card-sub">Total stations</p>
+          <div class="bd-legend">
+            <div class="bd-legend-row">
+              <span class="bd-legend-ico" style="background:#e9f8f0">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1f9d63" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8.5 12 2.4 2.4 4.6-4.8"></path></svg>
+              </span>
+              <div><div class="bd-legend-t">Stocked</div><div class="bd-legend-s">{{ stocked_stations }} stations</div></div>
+            </div>
+            <div class="bd-legend-row">
+              <span class="bd-legend-ico" style="background:#fdf3e3">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#e08700" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v4M12 16h.01"></path></svg>
+              </span>
+              <div><div class="bd-legend-t">Empty</div><div class="bd-legend-s">{{ empty_stations }} station{{ empty_stations|pluralize }}</div></div>
+            </div>
+            <div class="bd-legend-row">
+              <span class="bd-legend-ico" style="background:#fdeced">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#d81f26" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 4h8v4a4 4 0 0 1-8 0z"></path><path d="M12 12v4M9 20h6M8 5H5v2a3 3 0 0 0 3 3M16 5h3v2a3 3 0 0 1-3 3"></path></svg>
+              </span>
+              <div><div class="bd-legend-t">Largest</div><div class="bd-legend-s">{{ largest_station.name }} · {{ largest_station.vehicle_count }}</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="bd-gauge-wrap">
+          <div class="bd-gauge">
+            <svg id="bd-gauge" width="196" height="196" viewBox="0 0 196 196" data-pct="{{ deployment_pct }}"></svg>
+            <div class="bd-gauge-centre">
+              <div class="bd-gauge-lab">Stocked</div>
+              <div class="bd-gauge-pct">{{ deployment_pct }}%</div>
+              <div class="bd-gauge-hint">{{ avg_per_station }} avg · {{ empty_stations }} empty</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--/ Fleet Deployment -->
+  </div>
+
+  <div class="bd-row">
+
+    <!-- Station Network -->
+    <div class="bd-card bd-map-card">
+      <div class="bd-flexrow" style="flex-wrap:wrap">
+        <div>
+          <h3 class="bd-card-h3">Station Network</h3>
+          <p class="bd-card-sub">{{ stations }} stations across {{ emirates }} emirates — marker size reflects fleet</p>
+        </div>
+        <a href="{% url 'cms-station-address-mapping' %}" class="bd-link">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"></path></svg>
+          Station list
         </a>
       </div>
-      <div class="card-body">
-        <div id="stationMap" class="rounded" style="height: 420px;"></div>
+      <div class="bd-map-frame">
+        {{ map_points|json_script:"bd-map-points" }}
+        <div id="bd-map" class="byky-map" data-map-points="bd-map-points"></div>
+        <div class="bd-map-legend">
+          <b>Fleet</b>
+          <span><i style="width:8px;height:8px"></i>10</span>
+          <span><i style="width:14px;height:14px"></i>30</span>
+          <span><i style="width:20px;height:20px"></i>56</span>
+        </div>
       </div>
     </div>
-  </div>
-  <!--/ Station Network Map -->
+    <!--/ Station Network -->
 
-  <!-- Revenue by Emirate -->
-  <div class="col-xxl-4 col-md-6">
-    <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Revenue by Emirate</h5>
-          <p class="card-subtitle">Indicative monthly, AED</p>
+    <!-- Revenue by Emirate -->
+    <div class="bd-card bd-list-card">
+      <div class="bd-flexrow">
+        <div>
+          <h3 class="bd-card-h3">Revenue by Emirate</h3>
+          <p class="bd-card-sub">Indicative monthly, AED</p>
         </div>
       </div>
-      <div class="card-body">
-        <ul class="p-0 m-0">
-          {% for name, value in revenue_by_emirate %}
-          <li class="d-flex align-items-center {% if not forloop.last %}mb-4{% endif %}">
-            <div class="avatar flex-shrink-0 me-4">
-              <span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-map-pin"></i></span>
-            </div>
-            <div class="d-flex w-100 flex-wrap align-items-center justify-content-between gap-2">
-              <div class="me-2">
-                <h6 class="mb-0 me-1">{{ value|intcomma }}</h6>
-                <small class="text-body">{{ name }}</small>
-              </div>
-            </div>
-          </li>
-          {% endfor %}
-        </ul>
-      </div>
+      <div class="bd-ranked" id="bd-emirates"></div>
     </div>
+    <!--/ Revenue by Emirate -->
   </div>
-  <!--/ Revenue by Emirate -->
 
-  <!-- Revenue by Category -->
-  <div class="col-xxl-4 col-md-6">
-    <div class="card h-100">
-      <div class="card-header">
-        <div class="d-flex justify-content-between mb-4">
-          <h5 class="mb-0 card-title">Revenue by Category</h5>
-        </div>
-        <div class="d-flex justify-content-between align-items-center">
-          <h4 class="mb-0">{{ sales.monthly_revenue|intcomma }}</h4>
-          <h6 class="text-body-secondary mb-0">{{ categories }} categories</h6>
-        </div>
+  <div class="bd-row">
+
+    <!-- Revenue by Category -->
+    <div class="bd-card bd-list-card" style="flex:1 1 320px">
+      <div class="bd-flexrow">
+        <h3 class="bd-card-h3">Revenue by Category</h3>
+        <span style="font-size:11.5px;color:#9490bb;font-weight:500;flex:0 0 auto">{{ categories }} categories</span>
       </div>
-      <div class="card-body">
-        <div id="revenueByCategory"></div>
-      </div>
+      <div style="font-size:22px;font-weight:700;letter-spacing:-.8px;margin-top:14px" class="bd-num">{{ sales.monthly_revenue|intcomma }}</div>
+      <div class="bd-catrows" id="bd-categories"></div>
     </div>
-  </div>
-  <!--/ Revenue by Category -->
+    <!--/ Revenue by Category -->
 
-  <!-- Top Stations by Revenue -->
-  <div class="col-xxl-4 col-md-6">
-    <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Top Stations by Revenue</h5>
-          <p class="card-subtitle">Indicative monthly, AED</p>
-        </div>
+    <!-- Top Stations by Revenue -->
+    <div class="bd-card bd-list-card" style="flex:1 1 320px">
+      <div>
+        <h3 class="bd-card-h3">Top Stations by Revenue</h3>
+        <p class="bd-card-sub">Indicative monthly, AED</p>
       </div>
-      <div class="card-body">
+      <div class="bd-stations">
         {% for s in top_stations_revenue %}
-        <div class="d-flex justify-content-between align-items-center {% if not forloop.last %}mb-5{% endif %}">
-          <div class="d-flex align-items-center">
-            <div class="avatar avatar-sm me-4">
-              <span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-building-store icon-18px"></i></span>
-            </div>
-            <div>
-              <h6 class="mb-0">{{ s.name }}</h6>
-              <small class="text-body-secondary">{{ s.fleet }} vehicles</small>
-            </div>
+        <div class="bd-station">
+          <span class="bd-rank">{{ forloop.counter }}</span>
+          <div style="flex:1;min-width:0">
+            <div class="bd-station-name">{{ s.name }}</div>
+            <div class="bd-station-sub">{{ s.fleet }} vehicles</div>
           </div>
-          <h6 class="mb-0">{{ s.revenue|intcomma }}</h6>
+          <span class="bd-station-val">{{ s.revenue|intcomma }}</span>
         </div>
         {% endfor %}
       </div>
     </div>
-  </div>
-  <!--/ Top Stations by Revenue -->
+    <!--/ Top Stations by Revenue -->
 
-  <!-- Workforce -->
-  <div class="col-xxl-4 col-md-6">
-    <div class="card h-100">
-      <div class="card-header d-flex justify-content-between">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Workforce by Profession</h5>
-          <p class="card-subtitle">{{ employees }} employees on record</p>
-        </div>
+    <!-- Workforce by Profession -->
+    <div class="bd-card bd-list-card" style="flex:1 1 320px">
+      <div>
+        <h3 class="bd-card-h3">Workforce by Profession</h3>
+        <p class="bd-card-sub">{{ employees }} employees on record</p>
       </div>
-      <div class="card-body">
+      <div class="bd-people">
         {% for role, count in by_profession %}
-        <div class="d-flex justify-content-between align-items-center {% if not forloop.last %}mb-5{% endif %}">
-          <div class="d-flex align-items-center">
-            <div class="badge rounded bg-label-{% cycle 'primary' 'info' 'success' 'warning' 'secondary' %} p-1_5">
-              <i class="icon-base ti tabler-user icon-18px"></i>
-            </div>
-            <h6 class="mb-0 ms-4">{{ role }}</h6>
-          </div>
-          <h6 class="mb-0">{{ count }}</h6>
+        <div class="bd-person">
+          <span class="bd-person-ico" style="background:{% cycle '#fdeced' '#eaf1fd' '#e9f8f0' '#fdf3e3' '#f4f3f9' as pbg %}">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="{% cycle '#d81f26' '#3b6fd4' '#1f9d63' '#e08700' '#7d7aa0' as pfg %}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.4"></circle><path d="M5.5 20a6.5 6.5 0 0 1 13 0"></path></svg>
+          </span>
+          <span class="bd-person-name">{{ role }}</span>
+          <span class="bd-person-count">{{ count }}</span>
         </div>
         {% endfor %}
       </div>
     </div>
+    <!--/ Workforce by Profession -->
   </div>
-  <!--/ Workforce -->
 
   <!-- Recent Rental Agreements -->
-  <div class="col-12">
-    <div class="card">
-      <div class="card-header d-flex justify-content-between align-items-center">
-        <div class="card-title mb-0">
-          <h5 class="mb-1">Recent Rental Agreements</h5>
-          <p class="card-subtitle">Latest activity across the network</p>
-        </div>
-        <span class="badge bg-label-secondary">Indicative</span>
+  <div class="bd-card bd-table-card">
+    <div class="bd-table-head">
+      <div>
+        <h3 class="bd-card-h3">Recent Rental Agreements</h3>
+        <p class="bd-card-sub">Latest activity across the network</p>
       </div>
-      <div class="table-responsive">
-        <table class="table">
-          <thead class="border-top">
-            <tr>
-              <th>Agreement</th><th>Station</th><th>Vehicle</th><th>Category</th>
-              <th class="text-center">Hours</th><th class="text-end">Amount AED</th>
-              <th>Date</th><th class="text-center">Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for i in invoices %}
-            <tr>
-              <td><span class="fw-medium">{{ i.agreement }}</span></td>
-              <td>{{ i.station }}</td>
-              <td><code>{{ i.vehicle }}</code></td>
-              <td><span class="badge bg-label-secondary">{{ i.category }}</span></td>
-              <td class="text-center">{{ i.hours }}</td>
-              <td class="text-end fw-medium">{{ i.amount|intcomma }}</td>
-              <td class="text-body-secondary">{{ i.date }}</td>
-              <td class="text-center">{% include "byky/partials/status_badge.html" with status=i.status %}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      <div class="card-footer">
-        <small class="text-body-secondary">
-          Fleet, station and workforce figures come from BYKY's own records. Revenue and
-          agreement figures are indicative, pending the rental transaction export.
-        </small>
-      </div>
+      <span class="bd-chip">Indicative</span>
+    </div>
+    <div class="bd-table-scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Agreement</th><th>Station</th><th>Vehicle</th><th>Category</th>
+            <th class="hours-cell">Hours</th><th class="amount-cell">Amount AED</th>
+            <th>Date</th><th>Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in invoices %}
+          <tr>
+            <td>{{ i.agreement }}</td>
+            <td>{{ i.station }}</td>
+            <td><span class="bd-vehicle">{{ i.vehicle }}</span></td>
+            <td><span class="bd-cat">{{ i.category }}</span></td>
+            <td class="hours-cell">{{ i.hours }}</td>
+            <td class="amount-cell">{{ i.amount|intcomma }}</td>
+            <td class="date-cell">{{ i.date }}</td>
+            <td><span class="bd-status {{ i.status|lower }}"><i></i>{{ i.status }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    <div class="bd-table-foot">
+      <p>Fleet, station and workforce figures come from BYKY's own records. Revenue and
+        agreement figures are indicative, pending the rental transaction export.</p>
     </div>
   </div>
   <!--/ Recent Rental Agreements -->

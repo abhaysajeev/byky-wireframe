@@ -4,72 +4,187 @@
 {% block title %}Push Notification Dispatch - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.17 -- fields, filters and defaults follow the FSD. The client's source files
-contain no records for this entity, so the grid shows the awaiting-data state
-rather than invented rows.
+FSD 3.17 -- Tier A. Rebuilt on the shared byky-screen.css/js base (see
+byky-screen-design-system.md) -- was on the old Vuexy offcanvas design.
+Fields, filters and defaults follow the FSD. The client's source files
+contain no dispatch history, so the grid shows the awaiting-data state
+rather than invented rows (CLAUDE.md 12).
 {% endcomment %}
 
 {% block vendor_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
 <link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
 {% endblock vendor_css %}
 
 {% block vendor_js %}
 {{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
 <script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
 {% endblock vendor_js %}
 
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 <script src="{% static 'js/byky-hrms.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Push Notification Dispatch" parent="Inventory" subtitle=purpose action_label="New Push" action_url="#offcanvasAddPush" %}
+<div class="scr">
 
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Title" />
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Push Notification Dispatch</b>
       </div>
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Platforms</option><option>Android (FCM)</option><option>iOS (APNs)</option><option>Both</option></select>
-      </div>
-      <div class="col-md-4">
-        <input type="text" class="form-control byky-date" placeholder="Dispatch date" />
-      </div>
+      <h1 class="scr-title">Push Notification Dispatch</h1>
+      <p class="scr-sub">Compose, target and trigger mobile push notifications to customer app users.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+      <button type="button" class="scr-btn-primary" data-scr-open="push:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        New Push
+      </button>
     </div>
   </div>
-  <div class="card-body">
-    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
-  </div>
 
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddPush">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">New Push</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body p-6">
-      <form onsubmit="return false">
-        <div class="mb-6"><label class="form-label" for="pn-title">Notification Title <span class="text-danger">*</span></label><input type="text" class="form-control" id="pn-title" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="pn-body">Message Body</label><textarea class="form-control" id="pn-body" rows="3"></textarea></div>
-        <div class="mb-6"><label class="form-label d-block">Platform</label><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="pn-plat" id="pn-and" checked /><label class="form-check-label" for="pn-and">Android</label></div><div class="form-check form-check-inline"><input class="form-check-input" type="radio" name="pn-plat" id="pn-ios" /><label class="form-check-label" for="pn-ios">iOS</label></div></div>
-        <div class="mb-6"><label class="form-label" for="pn-deeplink">Deep Link</label><select id="pn-deeplink" class="form-select"><option value="">Select</option><option>Home</option><option>Vehicle Catalog</option><option>Wallet</option><option>Offers</option></select></div>
-        <div class="form-check mb-6"><input class="form-check-input" type="checkbox" id="offcanvasAddPush-active" checked /><label class="form-check-label" for="offcanvasAddPush-active">Is Active</label></div>
-        <div class="d-flex gap-4">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+  <div class="scr-card" data-scr-noun-singular="push" data-scr-noun-plural="pushes">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search notification title" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="platform">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All platforms</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All platforms</button>
+          <button type="button" class="scr-filter-opt" data-value="Android (FCM)">Android (FCM)</button>
+          <button type="button" class="scr-filter-opt" data-value="iOS (APNs)">iOS (APNs)</button>
+          <button type="button" class="scr-filter-opt" data-value="Both">Both</button>
         </div>
-      </form>
+      </div>
+
+      <span class="scr-toolbar-count">0 pushes</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Platform</th>
+            <th>Deep Link</th>
+            <th>Dispatch Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="6" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No push notifications dispatched yet</div>
+                  <p class="scr-empty-sub">Notifications sent to customer app users will appear here once one is composed and dispatched.</p>
+                </div>
+                <button type="button" class="scr-btn-primary" data-scr-open="push:add">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  New Push
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+{% comment %} Add/Edit drawer -- no rows exist yet, so this always opens in Add mode. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="push" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="push" data-add-title="New Push" data-title-field="title" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">New Push</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Notification Title<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="title" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Message Body</label>
+      <textarea class="scr-drawer-input" data-field="body" rows="4"></textarea>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Platform</label>
+      <div class="scr-radio-row">
+        <label class="scr-radio-label"><input type="radio" class="scr-radio" name="pushPlatform" value="Android (FCM)" checked /> Android</label>
+        <label class="scr-radio-label"><input type="radio" class="scr-radio" name="pushPlatform" value="iOS (APNs)" /> iOS</label>
+        <label class="scr-radio-label"><input type="radio" class="scr-radio" name="pushPlatform" value="Both" /> Both</label>
+      </div>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Deep Link Target</label>
+      <select class="scr-drawer-input" data-field="deepLink">
+        <option value="">Select</option>
+        <option>Home</option>
+        <option>Vehicle Catalog</option>
+        <option>Wallet</option>
+        <option>Offers</option>
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Dispatch Date</label>
+      <input type="text" class="scr-drawer-input byky-date" data-field="dispatchDate" value="" placeholder="Select date" />
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

@@ -68,6 +68,10 @@ INSTALLED_APPS = [
     "apps.byky_core",
     "apps.byky_cms",
     "apps.byky_fare",
+    "apps.byky_discount",
+    "apps.byky_request",
+    "apps.byky_creditnote",
+    "apps.byky_customerapp",
     "apps.byky_hrms",
     "apps.byky_ims",
     "apps.byky_rms",
@@ -83,6 +87,9 @@ INSTALLED_APPS = [
     "apps.byky_api",
     "apps.byky_security",
     "apps.byky_integration",
+    "apps.byky_device",
+    "apps.byky_live",
+    "apps.byky_invoice",
 ]
 
 MIDDLEWARE = [
@@ -124,6 +131,7 @@ TEMPLATES = [
                 "config.context_processors.my_setting",
                 "config.context_processors.get_cookie",
                 "config.context_processors.environment",
+                "config.context_processors.alert_feed",
             ],
             "libraries": {
                 "theme": "web_project.template_tags.theme",
@@ -200,8 +208,15 @@ LOCALE_PATHS = [
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Vendor assets never change between deploys; let the browser keep them.
-WHITENOISE_MAX_AGE = 31536000
+# Vendor assets never change between deploys; let the browser keep them for a
+# year in production. In dev, filenames aren't content-hashed (no manifest
+# storage -- see STORAGES below), so a 1-year Cache-Control on a JS/CSS file
+# you're actively editing means a browser that fetched it once will keep
+# replaying that stale copy indefinitely, no matter how many times the file
+# is fixed and the server restarted -- only a hard/cache-clearing reload
+# would ever see the change. This produced exactly that symptom on the
+# station-address and dashboard map scripts. Disable caching in DEBUG instead.
+WHITENOISE_MAX_AGE = 31536000 if not DEBUG else 0
 
 # Finders let WhiteNoise serve straight from src/assets without collectstatic,
 # which is handy locally. In production we run collectstatic and serve the

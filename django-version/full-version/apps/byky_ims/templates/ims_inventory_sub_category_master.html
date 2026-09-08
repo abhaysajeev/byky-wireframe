@@ -4,92 +4,158 @@
 {% block title %}Inventory Sub-Category Master - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.3 -- Tier A, running on real client records. The 23 category/model pairs come from the client's Vehicle Type column.
+FSD 3.3 -- Tier A, running on real client records. Built on the shared
+byky-screen.css/js base (see byky-screen-design-system.md). The category/model
+pairs come from the client's Vehicle Type column.
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
-{% endblock vendor_js %}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Inventory Sub-Category Master" parent="Inventory" subtitle=purpose action_label="Add Sub-Category" action_url="#offcanvasAddSubCategory" %}
+<div class="scr">
 
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Categories</option>{% for c in categories_list %}<option>{{ c.name }}</option>{% endfor %}</select>
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Inventory Sub-Category Master</b>
       </div>
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Sub-Category Code" />
-      </div>
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Sub-Category Name" />
-      </div>
+      <h1 class="scr-title">Inventory Sub-Category Master</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="subcategory:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Sub-Category
+      </button>
     </div>
   </div>
-  <div class="card-datatable table-responsive">
-    <table class="datatables-subcategories table" data-search-label="Search sub-category">
-      <thead class="border-top"><tr><th>Parent Category</th><th>Code</th><th>Sub-Category Name</th><th>Description</th><th class="text-center">Items</th><th class="text-center">Status</th><th class="text-center">Actions</th></tr></thead>
-      <tbody>
-        {% for r in subcategories %}
-        <tr>
-          <td><span class="badge bg-label-secondary">{{ r.parent }}</span></td>
-          <td><span class="fw-medium">{{ r.code }}</span></td>
-          <td>{{ r.name }}</td>
-          <td class="text-body-secondary"><small>{{ r.description }}</small></td>
-          <td class="text-center"><span class="badge bg-label-secondary">{{ r.items }}</span></td>
-          <td class="text-center">{% include "byky/partials/status_badge.html" with status=r.status %}</td>
-          <td class="text-center">
-            <div class="d-inline-block">
-              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddSubCategory">Edit</a>
-                <div class="dropdown-divider"></div>
-                <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
-              </div>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
 
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddSubCategory">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">Add Sub-Category</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body p-6">
-      <form onsubmit="return false">
-        <div class="mb-6"><label class="form-label" for="sub-parent">Parent Category <span class="text-danger">*</span></label><select id="sub-parent" class="select2 form-select"><option value="">Select</option>{% for c in categories_list %}<option>{{ c.name }}</option>{% endfor %}</select></div>
-        <div class="mb-6"><label class="form-label" for="sub-code">Sub-Category Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="sub-code" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="sub-name">Sub-Category Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="sub-name" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="sub-desc">Description</label><textarea class="form-control" id="sub-desc" rows="2"></textarea></div>
-        <div class="form-check mb-6"><input class="form-check-input" type="checkbox" id="offcanvasAddSubCategory-active" checked /><label class="form-check-label" for="offcanvasAddSubCategory-active">Is Active</label></div>
-        <div class="d-flex gap-4">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+  <div class="scr-card" data-scr-noun-singular="sub-category" data-scr-noun-plural="sub-categories">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search sub-category code or name" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="parent">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All categories</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All categories</button>
+          {% for c in categories_list %}<button type="button" class="scr-filter-opt" data-value="{{ c.name }}">{{ c.name }}</button>{% endfor %}
         </div>
-      </form>
+      </div>
+
+      <span class="scr-toolbar-count">{{ subcategories|length }} sub-categories</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Parent Category</th>
+            <th>Code</th>
+            <th>Sub-Category Name</th>
+            <th>Description</th>
+            <th>Items</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in subcategories %}
+          <tr class="scr-row" data-search="{{ r.code|lower }} {{ r.name|lower }}" data-parent="{{ r.parent }}" data-record-id="{{ r.json_id }}">
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ r.parent }}</span></td>
+            <td><span class="scr-code">{{ r.code }}</span></td>
+            <td style="font-weight:600">{{ r.name }}</td>
+            <td class="scr-contact">{{ r.description }}</td>
+            <td><span class="scr-badge scr-badge-approved"><i></i>{{ r.items }}</span></td>
+            <td><span class="scr-badge scr-badge-approved"><i></i>{{ r.status }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="subcategory:edit">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {{ r.fields_json|json_script:r.json_id }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ subcategories|length }} of {{ subcategories|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+<div class="scr-veil" data-scr-drawer="subcategory" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="subcategory" data-add-title="Add Sub-Category" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 15V9a2 2 0 0 1 2-2h6l4 4v4a1 1 0 0 1-1 1H6a2 2 0 0 1-1-1"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Sub-Category</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Parent Category<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="parent">
+        <option value="">Select</option>
+        {% for c in categories_list %}<option>{{ c.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Sub-Category Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Sub-Category Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Description</label>
+      <textarea class="scr-drawer-input" data-field="description" rows="2"></textarea>
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

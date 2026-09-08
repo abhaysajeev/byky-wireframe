@@ -1,0 +1,274 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Mail Template & Template Mapping - Customer App Management{% endblock title %}
+
+{% comment %}
+Not an FSD module -- built from the client's "RMS WEB" mockups (RMS WEB
+07.09.2026-1.pdf, page 11: "Customer App Management"), on the shared
+byky-screen.css/js base (see byky-screen-design-system.md and
+creditnote_credit_note.html for the tabbed dual-grid reference). "Templates"
+holds the mail templates the customer app sends; "Template Mapping" routes
+each one to the event and customer type that triggers it. Both grids start
+genuinely empty -- no mail template data exists in any source file
+(CLAUDE.md 12).
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Customer App Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Mail Template & Template Mapping</b>
+      </div>
+      <h1 class="scr-title">Mail Template & Template Mapping</h1>
+      <p class="scr-sub">Templates the customer app sends, and which event and customer type each one is triggered by.</p>
+    </div>
+  </div>
+
+  <div class="scr-card">
+
+    <div class="scr-content-tabs" data-scr-tabgroup="mail">
+      <button type="button" class="scr-content-tab is-on" data-tab="templates">
+        Templates <span class="scr-content-tab-count">{{ templates|length }}</span>
+      </button>
+      <button type="button" class="scr-content-tab" data-tab="mapping">
+        Template Mapping <span class="scr-content-tab-count">{{ mappings|length }}</span>
+      </button>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="mail" data-tab="templates" data-scr-noun-singular="template" data-scr-noun-plural="templates">
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search template code or name" />
+        </div>
+        <span class="scr-toolbar-count">0 templates</span>
+        <div class="scr-head-actions">
+          <button type="button" class="scr-btn-primary" data-scr-open="template:add">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+            Add Template
+          </button>
+        </div>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Template Code</th>
+              <th>Template Name</th>
+              <th>Subject</th>
+              <th>Approval</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9 6 9-6M5 6h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No mail templates yet</div>
+                    <p class="scr-empty-sub">Mail templates for the customer app will appear here once one is added.</p>
+                  </div>
+                  <button type="button" class="scr-btn-primary" data-scr-open="template:add">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                    Add Template
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing 0 of 0</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="mail" data-tab="mapping" hidden data-scr-noun-singular="mapping" data-scr-noun-plural="mappings">
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search event or template" />
+        </div>
+        <span class="scr-toolbar-count">0 mappings</span>
+        <div class="scr-head-actions">
+          <button type="button" class="scr-btn-primary" data-scr-open="mapping:add">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+            Add Mapping
+          </button>
+        </div>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Trigger Event</th>
+              <th>Customer Type</th>
+              <th>Template</th>
+              <th>Approval</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="5" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 7h16l-1 13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 7z"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No template mappings yet</div>
+                    <p class="scr-empty-sub">Mappings routing an event to a template will appear here once one is added. Add a template first.</p>
+                  </div>
+                  <button type="button" class="scr-btn-primary" data-scr-open="mapping:add">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                    Add Mapping
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing 0 of 0</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% comment %} Template drawer -- no rows exist yet, so this always opens in Add mode. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="template" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="template" data-add-title="Add Template" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8l9 6 9-6M5 6h14a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Template</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Template Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" value="" placeholder="e.g. MT-001" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Template Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Subject<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="subject" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Body</label>
+      <textarea class="scr-drawer-input" data-field="body" rows="6"></textarea>
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
+
+{% comment %} Mapping drawer -- no rows exist yet, so this always opens in Add mode. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="mapping" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="mapping" data-add-title="Add Mapping" data-title-field="event" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 7h16l-1 13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L4 7z"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Mapping</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Trigger Event<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="event">
+        <option value="">Select</option>
+        {% for e in events %}<option>{{ e }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Customer Type<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="customerType">
+        <option value="">Select</option>
+        {% for t in customer_types %}<option>{{ t }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Template<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="template">
+        <option value="">Select</option>
+        {% for t in templates %}<option>{{ t.name }}</option>{% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
+{% endblock %}

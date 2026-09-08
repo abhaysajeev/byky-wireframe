@@ -4,51 +4,124 @@
 {% block title %}Wallet Refund Request Management - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.15 -- fields, filters and defaults follow the FSD. The client's source files
-contain no records for this entity, so the grid shows the awaiting-data state
-rather than invented rows.
+FSD 3.15 -- Tier A approval queue (inspect/verify/approve/reject, not create).
+Rebuilt on the shared byky-screen.css/js base (see byky-screen-design-system.md
+and request_request_approval.html for the approval-queue reference, reusing
+its Approve/Reject row action JS) -- was on the old Vuexy card+filter design.
+Refund requests and security deposit refund claims arrive from the customer
+mobile app or a payment gateway chargeback, not created here, so this screen
+has no Add action -- same reasoning as Request Approval. The client's source
+files contain no refund claims, so the queue is genuinely empty (CLAUDE.md 12).
 {% endcomment %}
 
 {% block vendor_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
 {% endblock vendor_css %}
 
 {% block vendor_js %}
 {{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
-<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
 {% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
-<script src="{% static 'js/byky-hrms.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-request-approval.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Wallet Refund Request Management" parent="Inventory" subtitle=purpose  %}
+<div class="scr">
 
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Claim ID" />
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Wallet Refund Request Management</b>
       </div>
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Customer Phone" />
-      </div>
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Status</option><option>Pending</option><option>Approved</option><option>Rejected</option><option>Refunded</option></select>
-      </div>
+      <h1 class="scr-title">Wallet Refund Request Management</h1>
+      <p class="scr-sub">Inspect, verify, approve or reject customer wallet refund and security deposit claims.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn" data-scr-export-table data-export-name="wallet-refund-requests">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
     </div>
   </div>
-  <div class="card-body">
-    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+
+  <div class="scr-card" data-scr-noun-singular="claim" data-scr-noun-plural="claims">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search claim ID or customer phone" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="status">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All statuses</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All statuses</button>
+          <button type="button" class="scr-filter-opt" data-value="Pending">Pending</button>
+          <button type="button" class="scr-filter-opt" data-value="Approved">Approved</button>
+          <button type="button" class="scr-filter-opt" data-value="Rejected">Rejected</button>
+          <button type="button" class="scr-filter-opt" data-value="Refunded">Refunded</button>
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">0 claims</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Claim ID</th>
+            <th>Customer Phone</th>
+            <th>Claim Amount (AED)</th>
+            <th>Bank / IBAN</th>
+            <th data-status-cell>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="6" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"></rect><path d="M2 10h20M6 15h4"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No refund claims yet</div>
+                  <p class="scr-empty-sub">Wallet refund and security deposit claims submitted through the customer app will appear here, ready to verify and approve or reject.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

@@ -1,0 +1,274 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Print Invoice - Print Invoice{% endblock title %}
+
+{% comment %}
+New module, not one of the 16 FSD modules -- requested against the client's
+RMS Web feedback doc (RMS WEB 07.09.2026-1.pdf, "Print Invoice" page). Built
+on the shared byky-screen.css/js base (see byky-screen-design-system.md and
+cms_branch_management.html for a populated Tier A list reference). No
+submodules, so the sidebar links straight to this screen rather than a
+collapsible group.
+
+Sample invoice rows by explicit instruction for this module (unlike Live
+Monitoring, which stays awaiting-data for the same kind of fields) -- see
+apps/byky_invoice/data.py's docstring. Every row's Print action, and the
+header Print button, open the same representative bill in a scr-modal --
+not a new tab -- built to be a pinpoint recreation of the legacy screen's
+own printed receipt (byky-invoice-print.css), sized to the station
+printer's real 100mm paper width when actually printed.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+<link rel="stylesheet" href="{% static 'css/byky-invoice-print.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock page_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <b>Print Invoice</b>
+      </div>
+      <h1 class="scr-title">Print Invoice</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-modal-open="bill">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z"></path></svg>
+        Print
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Station</label>
+          <select class="scr-input">
+            {% for b in branches_list %}<option {% if forloop.first %}selected{% endif %}>{{ b.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Date</label>
+          <input type="text" class="scr-input byky-date" value="02/09/2026" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Order Number</label>
+          <input type="text" class="scr-input" placeholder="Search order number" />
+        </div>
+        <div class="scr-field" style="align-self:end">
+          <button type="button" class="scr-btn" style="width:100%; justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="invoice" data-scr-noun-plural="invoices">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search order number or customer" />
+      </div>
+      <span class="scr-toolbar-count">{{ invoices|length }} invoices</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Order Number</th>
+            <th>Order Date</th>
+            <th>Open By</th>
+            <th>Close By</th>
+            <th>Customer Name</th>
+            <th>Bill Amount</th>
+            <th>Tax Amount</th>
+            <th>Discount Amount</th>
+            <th>Net Amount</th>
+            <th style="text-align:center">Print</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for inv in invoices %}
+          <tr class="scr-row" data-search="{{ inv.order_no|lower }} {{ inv.customer|lower }}">
+            <td><span class="scr-code">{{ inv.order_no }}</span></td>
+            <td class="scr-contact">{{ inv.order_date }}</td>
+            <td class="scr-contact">{{ inv.open_by }}</td>
+            <td class="scr-contact">{{ inv.close_by }}</td>
+            <td style="font-weight:600">{{ inv.customer }}</td>
+            <td class="scr-contact">{{ inv.bill|floatformat:2 }}</td>
+            <td class="scr-contact">{{ inv.tax|floatformat:2 }}</td>
+            <td class="scr-contact">{{ inv.discount|floatformat:2 }}</td>
+            <td style="font-weight:600">{{ inv.net|floatformat:2 }}</td>
+            <td style="text-align:center">
+              <button type="button" class="scr-icon-btn" title="Print this invoice" data-scr-modal-open="bill">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z"></path></svg>
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ invoices|length }} of {{ invoices|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %}
+Print-bill modal -- shows only the receipt and a Print button, per
+instruction (no title, no extra chrome beyond a close X). The bill itself
+(.bill, from byky-invoice-print.css) is a pinpoint recreation of the legacy
+screen's own printed receipt: same station/logo header, TAX INVOICE + TRN,
+bike-rental line table, discount/tax/net breakdown, customer footer. The
+print-isolation rule in that stylesheet hides everything else on the page
+when Print is pressed, so only .bill reaches the printer, at the station's
+real 100mm paper width.
+{% endcomment %}
+<div class="scr-modal-veil" data-scr-modal-veil="bill" hidden></div>
+<div class="scr-modal" data-scr-modal="bill" hidden style="width:min(94vw, 118mm)">
+  <div class="scr-modal-head no-print" style="padding-bottom:0; border-bottom:none">
+    <div></div>
+    <button type="button" class="scr-drawer-close" data-scr-modal-close>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+  <div class="scr-modal-body" style="background:#e9e9ee; padding:16px">
+    <div class="bill">
+      <div class="bill-head">
+        <div class="bill-head-text">
+          <div class="station">{{ bill.station_name|upper }}</div>
+          <div class="emirate">{{ bill.emirate|upper }}</div>
+        </div>
+        <img class="bill-logo" src="{% static 'img/branding/byky-logo.png' %}" alt="BYKY" />
+      </div>
+      <div class="bill-title-block">
+        <div class="bill-title">TAX INVOICE</div>
+        <div class="bill-trn">TRN : {{ bill.trn }}</div>
+      </div>
+
+      <hr class="bill-rule" />
+
+      <div class="bill-row2">
+        <div class="col-a"><span class="bill-kv-label">Date</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.date }}</span></div>
+        <div class="col-b"><span class="bill-kv-label">Trans No</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.trans_no }}</span></div>
+      </div>
+      <div class="bill-row2">
+        <div class="col-a"><span class="bill-kv-label">Inv No</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.inv_no }}</span></div>
+        <div class="col-b"><span class="bill-kv-label">Starting Time</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.starting_time }}</span></div>
+      </div>
+      <div class="bill-row2">
+        <div class="col-a"><span class="bill-kv-label">Open By</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.open_by }}</span></div>
+        <div class="col-b"><span class="bill-kv-label">Returning Time</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.returning_time }}</span></div>
+      </div>
+      <div class="bill-row2">
+        <div class="col-a"><span class="bill-kv-label">Closed By</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.closed_by }}</span></div>
+        <div class="col-b"><span class="bill-kv-label">Closing Time</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.closing_time }}</span></div>
+      </div>
+
+      <div class="bill-section-title">Bike Rental Details</div>
+      <table class="bill-table">
+        <thead>
+          <tr>
+            <th>SNo</th>
+            <th>Bike No</th>
+            <th>Base Rate</th>
+            <th>Extra Rate</th>
+            <th>Rtn Time</th>
+            <th>Dur</th>
+            <th>Amt IncVat</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in bill.lines %}
+          <tr>
+            <td>{{ l.sno|stringformat:"02d" }}</td>
+            <td>{{ l.bike_no }}</td>
+            <td>{{ l.base_rate }}</td>
+            <td>{{ l.extra_rate }}</td>
+            <td>{{ l.rtn_time }}</td>
+            <td>{{ l.dur }}</td>
+            <td>{{ l.amount|floatformat:2 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <div class="bill-row2" style="margin-top:2mm">
+        <div class="col-a"><span class="bill-kv-label">Discount</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">AED {{ bill.discount|floatformat:2 }}</span></div>
+        <div class="col-b"><span class="bill-kv-label">Taxable Amount</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">AED {{ bill.taxable_amount|floatformat:2 }}</span></div>
+      </div>
+      <div class="bill-row2">
+        <div class="col-a"><span class="bill-kv-label">Card Discount</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">AED {{ bill.card_discount|floatformat:2 }}</span></div>
+        <div class="col-b"><span class="bill-kv-label">VAT @{{ bill.vat_pct|floatformat:1 }}%</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">AED {{ bill.vat_amount|floatformat:2 }}</span></div>
+      </div>
+      <div class="bill-row2">
+        <div class="col-a"><span class="bill-kv-label">Rounded Off</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">AED {{ bill.rounded_off|floatformat:2 }}</span></div>
+        <div class="col-b"></div>
+      </div>
+
+      <hr class="bill-rule" />
+
+      <div class="bill-net">
+        <span>NET TOTAL :</span>
+        <span>AED {{ bill.net_total|floatformat:2 }}</span>
+      </div>
+
+      <hr class="bill-rule" />
+
+      <div class="bill-foot">
+        <div class="bill-row2">
+          <div class="col-a"><span class="bill-kv-label">Name</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.customer_name }}</span></div>
+          <div class="col-b"><span class="bill-kv-label">Mobile</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.mobile }}</span></div>
+        </div>
+        <div class="bill-row2">
+          <div class="col-a"><span class="bill-kv-label">ID Type</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.id_type }}</span></div>
+          <div class="col-b"><span class="bill-kv-label">ID No</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.id_no }}</span></div>
+        </div>
+        <div class="bill-row2">
+          <div class="col-a"><span class="bill-kv-label">Balance to Pay</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">AED {{ bill.balance_to_pay|floatformat:2 }}</span></div>
+          <div class="col-b"><span class="bill-kv-label">Time</span><span class="bill-kv-colon">:</span><span class="bill-kv-value">{{ bill.time }}</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="scr-modal-foot no-print" style="justify-content:center">
+    <button type="button" class="scr-btn-primary" data-scr-print>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z"></path></svg>
+      Print
+    </button>
+  </div>
+</div>
+{% endblock %}

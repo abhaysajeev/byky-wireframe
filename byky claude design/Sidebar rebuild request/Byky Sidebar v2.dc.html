@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Sora',sans-serif;background:#f4f5fa;color:#1a1640}
+  a{color:#d81f26;text-decoration:none}
+  a:hover{color:#a8161c}
+  .sb{scrollbar-width:thin;scrollbar-color:#e4e3ee transparent}
+  .sb.rail{scrollbar-width:none}
+  .sb.rail::-webkit-scrollbar{display:none}
+  .sb::-webkit-scrollbar{width:6px}
+  .sb::-webkit-scrollbar-thumb{background:#e4e3ee;border-radius:99px}
+  .sb::-webkit-scrollbar-track{background:transparent}
+  @keyframes tipIn{from{opacity:0;transform:translateY(-50%) translateX(-4px)}to{opacity:1;transform:translateY(-50%) translateX(0)}}
+  @keyframes brandSlide{from{opacity:0;transform:translateX(-12px)}to{opacity:1;transform:translateX(0)}}
+  @keyframes brandRise{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes subIn{from{opacity:0;max-height:0}to{opacity:1;max-height:520px}}
+</style>
+</helmet>
+
+<div style="display:flex;height:100vh;min-height:600px;overflow:hidden;position:relative;background:#f4f5fa">
+
+  <div style="width:{{ spacerW }};flex:0 0 auto"></div>
+
+  <aside onMouseEnter="{{ railEnter }}" onMouseLeave="{{ railLeave }}" style="width:{{ railW }};flex:0 0 auto;background:#fff;border-right:1px solid #e8e8f0;display:flex;flex-direction:column;position:{{ railPos }};top:0;left:0;height:100%;box-shadow:{{ railShadow }};overflow-x:hidden;z-index:6;transition:{{ railTransition }}">
+
+    <div style="display:flex;flex-direction:{{ headDir }};align-items:center;justify-content:center;gap:{{ headGap }};padding:{{ headPad }}">
+      <img src="./byky-mark.png" alt="Byky" style="width:32px;height:auto;flex:0 0 auto" />
+      <sc-if value="{{ brandOpen }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1;min-width:0;overflow:hidden">
+          <div style="font-size:19px;font-weight:800;letter-spacing:-.4px;white-space:nowrap;line-height:1.1">
+            <span style="color:#1a1640;display:inline-block;animation:brandSlide .34s cubic-bezier(.2,.8,.2,1) both">Byky</span><span style="color:#d81f26;display:inline-block;animation:brandSlide .34s cubic-bezier(.2,.8,.2,1) .07s both">RMS</span>
+          </div>
+          <div style="font-size:10.5px;font-weight:500;color:#9490bb;letter-spacing:.6px;text-transform:uppercase;white-space:nowrap;margin-top:2px;animation:brandRise .3s ease-out .15s both">Rental Management</div>
+        </div>
+      </sc-if>
+      <button onClick="{{ toggleRail }}" title="Toggle menu width" style="flex:0 0 auto;width:28px;height:28px;border:1.5px solid #e8e7f2;background:#fff;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:#9490bb;transition:border-color .16s,color .16s,transform .18s" style-hover="border-color:#d81f26;color:#d81f26;transform:scale(1.08)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" style="transform:{{ chevFlip }};transition:transform .22s"><path d="m14 6-6 6 6 6"></path></svg>
+      </button>
+    </div>
+
+    <nav class="{{ navClass }}" style="flex:1;overflow-y:auto;overflow-x:hidden;padding:6px 10px 24px">
+
+      <div style="margin-bottom:14px">
+        <a href="#" onMouseEnter="{{ enterActive }}" onMouseLeave="{{ leaveRow }}" style="display:flex;align-items:center;gap:{{ rowGap }};justify-content:{{ rowJustify }};padding:{{ activePad }};border-radius:11px;background:linear-gradient(100deg,#c2141a 0%,#e8272e 55%,#f04a50 100%);color:#fff;box-shadow:0 6px 16px -7px rgba(216,31,38,.5);font-size:14.5px;font-weight:600;transition:box-shadow .2s,transform .2s" style-hover="box-shadow:0 10px 22px -8px rgba(216,31,38,.6);transform:translateY(-1px)">
+          <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><path d="M3 10.5 12 3l9 7.5"></path><path d="M5 9.8V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V9.8"></path></svg>
+          <span data-label="1" style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:{{ labelDisplay }};opacity:{{ labelOpacity }};transition:opacity .16s">Dashboard</span>
+        </a>
+      </div>
+
+      <sc-for list="{{ sections }}" as="section" hint-placeholder-count="3">
+        <div style="margin-bottom:8px">
+          <div style="padding:10px 13px 6px;font-size:10.5px;font-weight:600;letter-spacing:1.1px;color:#a9a6c4;text-transform:uppercase;white-space:nowrap;overflow:hidden;opacity:{{ section.headerOpacity }};height:{{ section.headerHeight }};transition:opacity .16s">{{ section.header }}</div>
+          <div style="height:{{ section.ruleHeight }};margin:0 13px 6px;background:#eeedf5;overflow:hidden"></div>
+
+          <sc-for list="{{ section.items }}" as="item" hint-placeholder-count="6">
+            <div>
+              <a href="#" onClick="{{ item.toggle }}" onMouseEnter="{{ item.enter }}" onMouseLeave="{{ leaveRow }}" style="display:flex;align-items:center;gap:{{ rowGap }};justify-content:{{ rowJustify }};padding:{{ rowPad }};border-radius:10px;font-size:14px;font-weight:500;background:{{ item.rowBg }};color:{{ item.rowColor }};transition:background .16s,color .16s">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto;color:{{ item.iconColor }};transform:translateX({{ item.nudge }});transition:transform .2s cubic-bezier(.4,0,.2,1),color .16s"><path d="{{ item.icon }}"></path><path d="{{ item.icon2 }}"></path></svg>
+                <span data-label="1" style="flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:{{ labelDisplay }};opacity:{{ labelOpacity }};transition:opacity .16s">{{ item.name }}</span>
+                <span style="flex:0 0 auto;position:relative;width:26px;height:20px;display:{{ slotDisplay }};opacity:{{ labelOpacity }};transition:opacity .16s">
+                  <span style="position:absolute;inset:0;border-radius:99px;background:{{ item.badgeBg }};color:{{ item.badgeColor }};font-size:11px;font-weight:600;display:grid;place-items:center;opacity:{{ item.badgeOpacity }};transform:scale({{ item.badgeScale }});transition:opacity .16s,transform .16s">{{ item.count }}</span>
+                  <span style="position:absolute;inset:0;display:grid;place-items:center;color:#d81f26;opacity:{{ item.caretOpacity }};transition:opacity .16s">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" style="transform:{{ item.caret }};transition:transform .2s"><path d="m9 6 6 6-6 6"></path></svg>
+                  </span>
+                </span>
+              </a>
+              <sc-if value="{{ item.open }}" hint-placeholder-val="{{ false }}">
+                <ul style="list-style:none;margin:2px 0 6px 22px;padding-left:14px;border-left:1.5px solid #eeedf5;display:flex;flex-direction:column;gap:1px;overflow:hidden;animation:subIn .24s cubic-bezier(.4,0,.2,1) both">
+                  <sc-for list="{{ item.submenu }}" as="sub" hint-placeholder-count="3">
+                    <li>
+                      <a href="#" onMouseEnter="{{ enterSub }}" onMouseLeave="{{ leaveRow }}" style="display:block;padding:7px 11px;border-radius:8px;font-size:13.5px;font-weight:450;color:#6b6790;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .14s,color .14s,padding-left .18s" style-hover="background:#faf9fd;color:#d81f26;padding-left:15px">
+                        <span data-label="1" style="display:block;overflow:hidden;text-overflow:ellipsis">{{ sub }}</span>
+                      </a>
+                    </li>
+                  </sc-for>
+                </ul>
+              </sc-if>
+            </div>
+          </sc-for>
+        </div>
+      </sc-for>
+    </nav>
+
+    <div onPointerDown="{{ startResize }}" onMouseEnter="{{ handleEnter }}" onMouseLeave="{{ handleLeave }}" title="Drag to resize" style="position:absolute;top:0;right:0;width:6px;height:100%;cursor:col-resize;z-index:5;display:{{ handleDisplay }}">
+      <div style="position:absolute;top:0;right:0;width:2px;height:100%;background:{{ handleBg }};transition:background .16s"></div>
+    </div>
+  </aside>
+
+  <sc-if value="{{ tip.show }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;top:{{ tip.top }};left:{{ tip.left }};transform:translateY(-50%);background:#1a1640;color:#fff;font-size:12.5px;font-weight:500;padding:6px 10px;border-radius:7px;white-space:nowrap;pointer-events:none;z-index:50;box-shadow:0 8px 20px -8px rgba(26,22,64,.5);animation:tipIn .14s ease-out">
+      {{ tip.text }}
+      <span style="position:absolute;left:-3px;top:50%;width:7px;height:7px;background:#1a1640;transform:translateY(-50%) rotate(45deg);border-radius:1px"></span>
+    </div>
+  </sc-if>
+
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden">
+    <header style="height:64px;flex:0 0 auto;background:#fff;border-bottom:1px solid #e8e8f0;display:flex;align-items:center;gap:16px;padding:0 24px">
+      <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;max-width:380px;background:#f6f5fc;border:1px solid #eeedf5;border-radius:9px;padding:9px 12px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <span style="font-size:13px;color:#a9a6c4">Search vehicles, riders, stations…</span>
+      </div>
+    </header>
+    <div style="flex:1;overflow-y:auto;padding:28px 24px">
+      <div style="max-width:1100px">
+        <h1 style="font-size:22px;font-weight:700;letter-spacing:-.4px;margin-bottom:4px">Dashboard</h1>
+        <p style="font-size:13.5px;color:#9490bb;margin-bottom:22px;max-width:60ch">Content area placeholder. Drag the sidebar's right edge to resize it, or use the toggle to switch to the icon rail — long labels reveal in full on hover.</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+          <div style="background:#fff;border:1px solid #eeedf5;border-radius:12px;height:110px"></div>
+          <div style="background:#fff;border:1px solid #eeedf5;border-radius:12px;height:110px"></div>
+          <div style="background:#fff;border:1px solid #eeedf5;border-radius:12px;height:110px"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+// exact 8-tooth gear outline, computed so the teeth are evenly spaced and equal
+const GEAR = (() => {
+  const teeth = 8, cx = 12, cy = 12, rOut = 10, rIn = 7.4;
+  const step = (Math.PI * 2) / teeth, half = step / 2, tooth = half * 0.52;
+  const P = (r, a) => (cx + r * Math.cos(a)).toFixed(2) + ' ' + (cy + r * Math.sin(a)).toFixed(2);
+  let d = '';
+  for (let i = 0; i < teeth; i++) {
+    const a = -Math.PI / 2 + i * step;
+    d += (i ? 'L' : 'M') + P(rIn, a - half + tooth * 0.5);
+    d += 'L' + P(rOut, a - tooth);
+    d += 'L' + P(rOut, a + tooth);
+    d += 'L' + P(rIn, a + half - tooth * 0.5);
+  }
+  return d + 'Z';
+})();
+
+const MENU = [
+  { header: 'Operations', items: [
+    { name: 'Company Management', count: 9, icon: 'M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3',
+      submenu: ['Companies', 'Branches', 'Departments', 'Designations', 'Documents', 'Contracts', 'Vendors', 'Approvals', 'Settings'] },
+    { name: 'Human Resources', count: 6, icon: 'M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2M21 20v-1.4a3 3 0 0 0-2.3-2.9M16.6 5a3 3 0 0 1 0 5.8',
+      submenu: ['Employees', 'Attendance', 'Leaves', 'Payroll', 'Shifts', 'Roles'] },
+    { name: 'Inventory', count: 20, icon: 'm12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10',
+      submenu: ['Vehicles', 'Spare Parts', 'Stock In', 'Stock Out', 'Warehouses', 'Suppliers', 'Purchase Orders', 'Audits'] },
+    { name: 'Rental Management', count: 8, icon: 'M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7',
+      submenu: ['Bookings', 'Active Rentals', 'Returns', 'Extensions', 'Damages', 'Refunds', 'Agreements', 'History'] },
+    { name: 'Fare & Schemes', count: 2, icon: 'm2.5 12.5 9-9a2 2 0 0 1 1.4-.6H20a1 1 0 0 1 1 1v7.1a2 2 0 0 1-.6 1.4l-9 9a1.5 1.5 0 0 1-2.1 0l-6.8-6.8a1.5 1.5 0 0 1 0-2.1M16.5 7.5h.01',
+      submenu: ['Fare Plans', 'Promo Schemes'] },
+    { name: 'Tracking & Telematics', count: 4, icon: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z',
+      submenu: ['Live Map', 'Trip History', 'Geofences', 'Device Health'] },
+    { name: 'RFID Gates', count: 5, icon: 'M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3',
+      submenu: ['Gates', 'Tags', 'Access Logs', 'Rules', 'Diagnostics'] }
+  ]},
+  { header: 'Business', items: [
+    { name: 'Reports', count: 8, icon: 'M4 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM8 16v-4M12 16V8M16 16v-6',
+      submenu: ['Revenue', 'Utilisation', 'Fleet Health', 'Rider Activity', 'Collections', 'Taxes', 'Custom Reports', 'Exports'] },
+    { name: 'Sales Force', count: 6, icon: 'm3 17 5.5-6.5 4 3.5L21 6M21 6h-5M21 6v5',
+      submenu: ['Agents', 'Targets', 'Leads', 'Visits', 'Commissions', 'Leaderboard'] },
+    { name: 'Mobile App', count: 7, icon: 'M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2',
+      submenu: ['Rider App', 'Onboarding', 'Banners', 'Versions', 'Push Config', 'Feedback', 'Crash Logs'] },
+    { name: 'Notifications', count: 5, icon: 'M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9M13.7 21a2 2 0 0 1-3.4 0',
+      submenu: ['Templates', 'Campaigns', 'SMS', 'Email', 'Logs'] },
+    { name: 'Wallet & Payments', count: 5, icon: 'M3 7a2 2 0 0 1 2-2h11l4 4v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM16 13h2',
+      submenu: ['Wallets', 'Top-ups', 'Transactions', 'Gateways', 'Settlements'] }
+  ]},
+  { header: 'System', items: [
+    { name: 'Scheduler', count: 5, icon: 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2',
+      submenu: ['Jobs', 'Cron Tasks', 'Queues', 'Run History', 'Failures'] },
+    { name: 'System Administration', count: 5, icon: GEAR, icon2: 'M12 15.1a3.1 3.1 0 1 0 0-6.2 3.1 3.1 0 0 0 0 6.2',
+      submenu: ['Users', 'Roles & Permissions', 'Audit Trail', 'Backups', 'Configuration'] },
+    { name: 'Mobile API', count: 5, icon: 'M4 7h3.5a2 2 0 0 1 0 4H4v6M4 7v4M11 17V7h2.5a2 2 0 0 1 0 5H11M18 7v10',
+      submenu: ['Endpoints', 'API Keys', 'Webhooks', 'Rate Limits', 'Docs'] },
+    { name: 'System Security', count: 5, icon: 'M12 22s8-4 8-10V5.5L12 2 4 5.5V12c0 6 8 10 8 10M9 12l2.2 2.2L15.5 10',
+      submenu: ['Login Policy', 'Sessions', 'IP Allowlist', 'Encryption', 'Alerts'] }
+  ]}
+];
+
+const MIN_W = 232, MAX_W = 400, RAIL_W = 76, KEY = 'byky.sidebar.v2';
+
+class Component extends DCLogic {
+  state = {
+    collapsed: false, peek: false, width: 276, openKeys: [], hovered: null,
+    dragging: false, handleHot: false,
+    tip: { show: false, text: '', top: '0px', left: '0px' }
+  };
+
+  componentDidMount() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (s && typeof s.width === 'number') {
+        this.setState({ width: Math.min(MAX_W, Math.max(MIN_W, s.width)), collapsed: !!s.collapsed });
+      }
+    } catch (e) {}
+    this._move = (e) => {
+      if (!this.state.dragging) return;
+      const w = Math.min(MAX_W, Math.max(MIN_W, e.clientX));
+      this.setState({ width: w });
+    };
+    this._up = () => {
+      if (!this.state.dragging) return;
+      this.setState({ dragging: false });
+      this.persist();
+    };
+    window.addEventListener('pointermove', this._move);
+    window.addEventListener('pointerup', this._up);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('pointermove', this._move);
+    window.removeEventListener('pointerup', this._up);
+  }
+
+  persist() {
+    try { localStorage.setItem(KEY, JSON.stringify({ width: this.state.width, collapsed: this.state.collapsed })); } catch (e) {}
+  }
+
+  showTip(e, text) {
+    const row = e.currentTarget;
+    const label = row.querySelector('[data-label]');
+    const clipped = (this.state.collapsed && !this.state.peek) || (label && label.scrollWidth > label.clientWidth + 1);
+    if (!clipped) return;
+    const r = row.getBoundingClientRect();
+    const aside = row.closest('aside');
+    const x = (aside ? aside.getBoundingClientRect().right : r.right) + 12;
+    this.setState({ tip: { show: true, text, top: (r.top + r.height / 2) + 'px', left: x + 'px' } });
+  }
+
+  hideTip = () => this.setState(st => ({ hovered: null, tip: { ...st.tip, show: false } }));
+
+  renderVals() {
+    const { collapsed, peek, width, openKeys, hovered, dragging, handleHot } = this.state;
+    const shut = collapsed && !peek;
+
+    const sections = MENU.map((s, si) => ({
+      header: s.header,
+      headerOpacity: shut ? 0 : 1,
+      headerHeight: shut ? '0px' : 'auto',
+      ruleHeight: shut ? '1px' : '0px',
+      items: s.items.map((it, ii) => {
+        const key = si + '-' + ii;
+        const isOpen = openKeys.indexOf(key) >= 0 && !shut;
+        const hot = hovered === key;
+        return {
+          ...it,
+          icon2: it.icon2 || 'M12 12',
+          open: isOpen,
+          rowBg: isOpen ? '#fdf3f3' : (hot ? '#f7f6fc' : 'transparent'),
+          rowColor: isOpen || hot ? '#1a1640' : '#4b4770',
+          iconColor: isOpen ? '#d81f26' : (hot ? '#1a1640' : '#6b6790'),
+          nudge: hot && !shut ? '2px' : '0px',
+          badgeBg: isOpen ? '#fbe3e4' : '#eeedf5',
+          badgeColor: isOpen ? '#c2141a' : '#7d7aa0',
+          badgeOpacity: hot || isOpen ? 0 : 1,
+          badgeScale: hot || isOpen ? 0.85 : 1,
+          caretOpacity: hot || isOpen ? 1 : 0,
+          caret: isOpen ? 'rotate(90deg)' : 'rotate(0deg)',
+          enter: (e) => { this.setState({ hovered: key }); this.showTip(e, it.name); },
+          toggle: (e) => {
+            e.preventDefault();
+            if (shut) { this.setState({ collapsed: false, peek: false }, () => this.persist()); return; }
+            if (peek) { this.setState({ collapsed: false, peek: false }, () => this.persist()); }
+            // groups expand independently — opening one never collapses another,
+            // so rows below never jump under the cursor
+            this.setState(st => ({
+              openKeys: st.openKeys.indexOf(key) >= 0 ? st.openKeys.filter(k => k !== key) : st.openKeys.concat(key)
+            }));
+          }
+        };
+      })
+    }));
+
+    return {
+      sections,
+      tip: this.state.tip,
+      railW: (shut ? RAIL_W : width) + 'px',
+      spacerW: peek ? RAIL_W + 'px' : '0px',
+      railPos: peek ? 'absolute' : 'relative',
+      railShadow: peek ? '0 20px 50px -18px rgba(26,22,64,.34)' : 'none',
+      railEnter: () => { if (this.state.collapsed && !this.state.peek) this.setState({ peek: true }); },
+      railLeave: () => this.setState(st => (st.peek ? { peek: false, hovered: null, tip: { ...st.tip, show: false } } : { hovered: null, tip: { ...st.tip, show: false } })),
+      railTransition: dragging ? 'none' : 'width .24s cubic-bezier(.4,0,.2,1)',
+      navClass: shut ? 'sb rail' : 'sb',
+      rowPad: shut ? '10px 0' : '10px 13px',
+      activePad: shut ? '12px 0' : '12px 13px',
+      rowGap: shut ? '0px' : '11px',
+      rowJustify: shut ? 'center' : 'flex-start',
+      labelDisplay: shut ? 'none' : 'block',
+      slotDisplay: shut ? 'none' : 'block',
+      labelOpacity: shut ? 0 : 1,
+      headDir: shut ? 'column' : 'row',
+      headGap: '10px',
+      headPad: shut ? '16px 8px 12px' : '18px 14px 14px 18px',
+      brandOpen: !shut,
+      chevFlip: collapsed ? 'rotate(180deg)' : 'rotate(0deg)',
+      handleDisplay: collapsed ? 'none' : 'block',
+      handleBg: dragging || handleHot ? '#d81f26' : 'transparent',
+      leaveRow: this.hideTip,
+      enterActive: (e) => this.showTip(e, 'Dashboard'),
+      enterSub: (e) => {
+        const el = e.currentTarget.querySelector('[data-label]');
+        if (el && el.scrollWidth > el.clientWidth + 1) this.showTip(e, el.textContent);
+      },
+      handleEnter: () => this.setState({ handleHot: true }),
+      handleLeave: () => this.setState({ handleHot: false }),
+      startResize: (e) => {
+        e.preventDefault();
+        this.setState({ dragging: true });
+      },
+      toggleRail: () => this.setState(st => ({ collapsed: !st.collapsed }), () => this.persist())
+    };
+  }
+}
+
+</script>
+</body>
+</html>

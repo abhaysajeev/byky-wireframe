@@ -29,27 +29,108 @@ class CmsScreenView(BykyScreenView):
 
 
 class CompanyDetailsView(CmsScreenView):
+    """No company is registered yet on this screen -- the list shows the empty
+    state and the Company Record form below is blank, ready for first-time
+    entry. This is scoped to this page only: data.company() (and the fleet,
+    station and workforce data every other screen uses) is untouched."""
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context.update({"company": data.company(), "companies": [data.company()]})
+        sections = data.company_sections({})
+        completeness = data.company_completeness(sections)
+        context.update(
+            {
+                "companies": [],
+                "form_sections": sections,
+                "completeness": completeness,
+                "approved_count": 0,
+                "pending_count": 0,
+                "form_active_default": True,
+                "company_logo": "",
+            }
+        )
         return context
 
 
 class CountryStateView(CmsScreenView):
-    pass
+    """FSD 1.2 -- Tier A, tabbed dual grid. Countries and their states/emirates,
+    each with its own Add drawer, on the shared byky-screen.css/js base."""
 
-
-class CoreLocationView(CmsScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["awaiting"] = data.AWAITING["core_locations"]
+        countries = [dict(c) for c in data.countries()]
+        states = [dict(s) for s in data.states()]
+
+        for i, c in enumerate(countries):
+            c["json_id"] = f"scr-record-country-{i}"
+            c["fields_json"] = {"name": c["name"], "code": c["code"], "active": c["active"]}
+
+        for i, s in enumerate(states):
+            s["json_id"] = f"scr-record-state-{i}"
+            s["fields_json"] = {
+                "name": s["name"],
+                "code": s["code"],
+                "country": s["country"],
+                "active": s["active"],
+            }
+
+        context.update(
+            {
+                "countries": countries,
+                "states": states,
+                "total_branches": sum(s["branches"] for s in states),
+                "total_fleet": sum(s["fleet"] for s in states),
+            }
+        )
+        return context
+
+
+class LocationView(CmsScreenView):
+    """FSD 1.3 -- Tier A. No source data (CLAUDE.md 12); the grid shows its
+    column headers with the awaiting-data state in the body, on the shared
+    byky-screen.css/js base."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["awaiting"] = data.AWAITING["locations"]
         return context
 
 
 class BranchView(CmsScreenView):
+    """FSD 1.4 -- Tier B rental station branch hubs, on the shared
+    byky-screen.css/js base. All 36 rows are real stations from seed data."""
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        rows = data.branches()
+        rows = [dict(b) for b in data.branches()]
+        for i, b in enumerate(rows):
+            b["json_id"] = f"scr-record-branch-{i}"
+            b["vehicles_json_id"] = f"scr-vehicles-branch-{i}"
+            b["vehicles_json"] = [
+                {
+                    "number": v["number"],
+                    "rfid_epc": v["barcode"],  # the client's Barcode column is the RFID tag EPC
+                    "nfc_id": data.NOT_CAPTURED,  # no NFC data in the client files
+                    "category": v["category"],
+                    "vtype": v["vtype"],
+                }
+                for v in seed.vehicles_at(b["station_code"])
+            ]
+            b["fields_json"] = {
+                "code": b["code"],
+                "name": b["name"],
+                "company": b["company"],
+                "country": data.country_of_state(b["location"]),
+                "state": b["location"],
+                "location": b["location"],
+                "is_ho": b["is_ho"],
+                "is_hotel": b["is_hotel"],
+                "app_payment": b["app_payment"],
+                "multi_user": b["multi_user"],
+                "test_vehicle": b["test_vehicle"],
+                "hotel_commission": b["hotel_commission"],
+                "active": b["active"],
+            }
         context.update(
             {
                 "branches": rows,
@@ -81,12 +162,29 @@ class BranchDepartmentView(CmsScreenView):
 
 
 class StationAddressView(CmsScreenView):
+    """FSD 1.7 -- Tier A, on the shared byky-screen.css/js base. All 36 rows are
+    real stations; GPS, address and contact have no source in the client files
+    (CLAUDE.md 12) and render blank, not fabricated. The map preview uses the
+    same real (if not survey-grade) coordinates as the dashboard's network map,
+    drawn with the same hand-rolled SVG technique -- see byky-station-address.js."""
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        addresses = [dict(a) for a in data.station_addresses()]
+        for i, a in enumerate(addresses):
+            a["json_id"] = f"scr-record-station-{i}"
+            a["fields_json"] = {
+                "station_no": a["station_no"],
+                "branch": a["branch"],
+                "state": a["state"],
+                "latitude": "" if a["latitude"] == data.SHORT else a["latitude"],
+                "longitude": "" if a["longitude"] == data.SHORT else a["longitude"],
+                "contact_no": "" if a["contact_no"] == data.SHORT else a["contact_no"],
+            }
         context.update(
             {
-                "addresses": data.station_addresses(),
-                "map_data": geo.station_points(),
+                "addresses": addresses,
+                "map_points": geo.station_points(),
             }
         )
         return context
@@ -115,12 +213,12 @@ class CmsPrivilegeView(CmsScreenView):
     SCREENS = [
         ("Company Details", "CompanyManagement.aspx", [1, 1, 1, 1, 1, 1, 0]),
         ("Country & State Management", "CountryManagement.aspx", [1, 1, 1, 1, 0, 1, 0]),
-        ("Core Location Management", "CoreLocationManagement.aspx", [1, 1, 1, 1, 0, 0, 0]),
+        ("Location Management", "CoreLocationManagement.aspx", [1, 1, 1, 1, 0, 0, 0]),
         ("Branch Management", "BranchManagement.aspx", [1, 1, 1, 1, 0, 0, 0]),
         ("Department Management", "DepartmentManagement.aspx", [1, 1, 1, 1, 0, 0, 0]),
         ("Branch Department Mapping", "BranchDepartmentManagement.aspx", [1, 1, 1, 0, 0, 0, 0]),
         ("Station Address Mapping", "StationAddressMapping.aspx", [1, 0, 1, 0, 0, 0, 0]),
-        ("Station Working Time", "StationWorkingTime.aspx", [1, 0, 1, 1, 0, 0, 0]),
+        ("Branch Working Time", "StationWorkingTime.aspx", [1, 0, 1, 1, 0, 0, 0]),
         ("CMS Privilege Management", "CMSPrivilegeManagement.aspx", [1, 0, 1, 0, 0, 0, 0]),
     ]
 

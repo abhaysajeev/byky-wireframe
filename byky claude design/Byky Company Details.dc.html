@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Sora',sans-serif;background:#f4f5fa;color:#1a1640;-webkit-font-smoothing:antialiased}
+  a{color:#d81f26;text-decoration:none}
+  a:hover{color:#a8161c}
+  table{border-collapse:collapse;width:100%}
+  input,select,textarea,button{font-family:inherit}
+  .sb{scrollbar-width:thin;scrollbar-color:#e4e3ee transparent}
+  .sb::-webkit-scrollbar{width:6px;height:6px}
+  .sb::-webkit-scrollbar-thumb{background:#e4e3ee;border-radius:99px}
+  .sb::-webkit-scrollbar-track{background:transparent}
+  @keyframes drawerIn{from{transform:translateX(24px);opacity:0}to{transform:translateX(0);opacity:1}}
+  @keyframes veilIn{from{opacity:0}to{opacity:1}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#f4f5fa;position:relative;overflow:hidden">
+
+  <div class="sb" style="height:100vh;overflow-y:auto;padding:26px 26px 60px">
+    <div style="max-width:1320px;margin:0 auto;display:flex;flex-direction:column;gap:20px">
+
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap">
+        <div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:500;color:#a9a6c4;margin-bottom:8px">
+            <span>Company Management</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+            <span style="color:#6b6790;font-weight:600">Company Details</span>
+          </div>
+          <h1 style="font-size:24px;font-weight:700;letter-spacing:-.6px;line-height:1.15">Company Details</h1>
+          <p style="font-size:13px;color:#9490bb;margin-top:5px;font-weight:450">Legal entities that own fleet, stations and staff. Codes are immutable once approved.</p>
+        </div>
+        <div style="display:flex;align-items:center;gap:10px">
+          <button style="display:flex;align-items:center;gap:8px;border:1px solid #eeedf5;background:#fff;cursor:pointer;font-size:12.5px;font-weight:600;color:#4b4770;padding:10px 14px;border-radius:10px;transition:border-color .16s,color .16s" style-hover="border-color:#d3d0e6;color:#1a1640">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+            Export
+          </button>
+          <button onClick="{{ openAdd }}" style="display:flex;align-items:center;gap:8px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;color:#fff;padding:11px 16px;border-radius:10px;background:linear-gradient(100deg,#c2141a,#e8272e);box-shadow:0 6px 16px -8px rgba(216,31,38,.55);transition:transform .18s,box-shadow .2s" style-hover="transform:translateY(-1px);box-shadow:0 10px 22px -9px rgba(216,31,38,.6)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+            Add Company
+          </button>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-wrap:wrap;gap:14px">
+        <sc-for list="{{ tiles }}" as="t" hint-placeholder-count="4">
+          <div style="flex:1 1 190px;min-width:0;background:#fff;border:1px solid #eeedf5;border-radius:14px;padding:16px 18px;display:flex;align-items:center;gap:13px;box-shadow:0 1px 2px rgba(26,22,64,.03);animation:fadeUp .3s ease-out both">
+            <span style="width:36px;height:36px;border-radius:11px;background:{{ t.bg }};display:grid;place-items:center;flex:0 0 auto">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{ t.fg }}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ t.icon }}"></path></svg>
+            </span>
+            <div style="min-width:0">
+              <div style="font-size:20px;font-weight:700;letter-spacing:-.6px;font-variant-numeric:tabular-nums;line-height:1">{{ t.value }}</div>
+              <div style="font-size:11.5px;color:#9490bb;font-weight:500;margin-top:4px;line-height:1.35">{{ t.label }}</div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+
+      <div style="background:#fff;border:1px solid #eeedf5;border-radius:16px;box-shadow:0 1px 2px rgba(26,22,64,.03);overflow:hidden">
+
+        <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:18px 20px;border-bottom:1px solid #f0eff7">
+          <div style="display:flex;align-items:center;gap:9px;flex:1 1 240px;min-width:0;max-width:320px;height:38px;background:#f6f5fc;border:1px solid #eeedf5;border-radius:10px;padding:0 12px;transition:border-color .16s,background .16s" style-hover="border-color:#e0deee">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round" style="flex:0 0 auto"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+            <input type="text" placeholder="Search company, code or contact" style="flex:1;min-width:0;border:none;background:transparent;outline:none;font-size:12.5px;color:#1a1640" />
+          </div>
+          <sc-for list="{{ filters }}" as="f" hint-placeholder-count="2">
+            <div style="position:relative;flex:0 0 auto">
+            <button onClick="{{ f.toggle }}" style="display:flex;align-items:center;gap:8px;height:38px;padding:0 13px;border-radius:10px;border:1px solid {{ f.border }};background:{{ f.bg }};color:{{ f.color }};font-size:12.5px;font-weight:{{ f.weight }};cursor:pointer;transition:border-color .16s,background .16s,color .16s">
+              {{ f.label }}
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </button>
+            <sc-if value="{{ f.open }}" hint-placeholder-val="{{ false }}">
+              <div style="position:absolute;top:44px;left:0;z-index:12;min-width:190px;background:#fff;border:1px solid #eeedf5;border-radius:12px;box-shadow:0 18px 40px -22px rgba(26,22,64,.4);padding:6px;display:flex;flex-direction:column;gap:1px">
+                <sc-for list="{{ f.items }}" as="o" hint-placeholder-count="4">
+                  <button onClick="{{ o.pick }}" style="text-align:left;border:none;cursor:pointer;font-size:12.5px;font-weight:500;padding:9px 11px;border-radius:8px;background:{{ o.bg }};color:{{ o.color }};transition:background .14s" style-hover="background:#faf9fd">{{ o.label }}</button>
+                </sc-for>
+              </div>
+            </sc-if>
+            </div>
+          </sc-for>
+          <div style="flex:1"></div>
+          <span style="font-size:11.5px;color:#9490bb;font-weight:500">{{ rowCount }} companies</span>
+        </div>
+
+        <div class="sb" style="overflow-x:auto">
+          <table>
+            <thead>
+              <tr style="background:#fbfaff;border-bottom:1px solid #f0eff7">
+                <th style="text-align:left;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a9a6c4;padding:12px 20px;white-space:nowrap">Company</th>
+                <th style="text-align:left;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a9a6c4;padding:12px 16px;white-space:nowrap">Code</th>
+                <th style="text-align:left;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a9a6c4;padding:12px 16px;white-space:nowrap">Emirate</th>
+                <th style="text-align:left;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a9a6c4;padding:12px 16px;white-space:nowrap">Contact</th>
+                <th style="text-align:left;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a9a6c4;padding:12px 16px;white-space:nowrap">Completeness</th>
+                <th style="text-align:left;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a9a6c4;padding:12px 16px;white-space:nowrap">Approval</th>
+                <th style="text-align:right;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#a9a6c4;padding:12px 20px;white-space:nowrap">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <sc-if value="{{ hasRows }}" hint-placeholder-val="{{ false }}">
+              <sc-for list="{{ companies }}" as="c" hint-placeholder-count="6">
+                <tr onMouseEnter="{{ c.enter }}" onMouseLeave="{{ c.leave }}" style="border-bottom:1px solid #f6f5fb;background:{{ c.rowBg }};transition:background .14s">
+                  <td style="padding:13px 20px">
+                    <div style="display:flex;align-items:center;gap:12px">
+                      <span style="width:34px;height:34px;border-radius:10px;background:{{ c.monoBg }};color:{{ c.monoFg }};display:grid;place-items:center;font-size:11.5px;font-weight:700;letter-spacing:.3px;flex:0 0 auto">{{ c.initials }}</span>
+                      <div style="min-width:0">
+                        <div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.name }}</div>
+                        <div style="font-size:11px;color:#9490bb;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.city }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td style="padding:13px 16px"><span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#4b4770;background:#f4f3f9;padding:4px 8px;border-radius:6px;white-space:nowrap">{{ c.code }}</span></td>
+                  <td style="padding:13px 16px;font-size:12.5px;color:#4b4770;white-space:nowrap">{{ c.state }}</td>
+                  <td style="padding:13px 16px">
+                    <div style="font-size:12.5px;color:#4b4770;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.contact }}</div>
+                    <div style="font-size:11px;color:#9490bb;margin-top:2px;font-variant-numeric:tabular-nums;white-space:nowrap">{{ c.phone }}</div>
+                  </td>
+                  <td style="padding:13px 16px">
+                    <div style="display:flex;align-items:center;gap:9px">
+                      <div style="width:62px;height:6px;border-radius:99px;background:#f0eff7;overflow:hidden;flex:0 0 auto"><div style="width:{{ c.fillW }};height:100%;border-radius:99px;background:{{ c.fillC }}"></div></div>
+                      <span style="font-size:11.5px;font-weight:600;color:{{ c.fillC }};font-variant-numeric:tabular-nums">{{ c.fill }}%</span>
+                    </div>
+                  </td>
+                  <td style="padding:13px 16px">
+                    <span style="display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:5px 10px;border-radius:99px;background:{{ c.statusBg }};color:{{ c.statusFg }};white-space:nowrap">
+                      <span style="width:6px;height:6px;border-radius:50%;background:{{ c.statusFg }};display:block"></span>{{ c.status }}
+                    </span>
+                  </td>
+                  <td style="padding:13px 20px">
+                    <div style="display:flex;align-items:center;justify-content:flex-end;gap:6px;opacity:{{ c.actionsOpacity }};transition:opacity .16s">
+                      <button onClick="{{ c.edit }}" title="Edit" style="width:30px;height:30px;border-radius:9px;border:1px solid #eeedf5;background:#fff;color:#6b6790;display:grid;place-items:center;cursor:pointer;transition:border-color .16s,color .16s" style-hover="border-color:#f3c3c5;color:#d81f26">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      </button>
+                      <button title="Approve" style="width:30px;height:30px;border-radius:9px;border:1px solid #eeedf5;background:#fff;color:#6b6790;display:grid;place-items:center;cursor:pointer;transition:border-color .16s,color .16s" style-hover="border-color:#c4e9d5;color:#1f9d63">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                      </button>
+                      <button title="More" style="width:30px;height:30px;border-radius:9px;border:1px solid #eeedf5;background:#fff;color:#6b6790;display:grid;place-items:center;cursor:pointer;transition:border-color .16s,color .16s" style-hover="border-color:#d3d0e6;color:#1a1640">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </sc-for>
+              </sc-if>
+              <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ true }}">
+                <tr>
+                  <td colspan="7" style="padding:0">
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;padding:64px 24px">
+                      <span style="width:52px;height:52px;border-radius:16px;background:#f6f5fc;display:grid;place-items:center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
+                      </span>
+                      <div style="text-align:center">
+                        <div style="font-size:14px;font-weight:600">No companies yet</div>
+                        <p style="font-size:12.5px;color:#9490bb;margin-top:5px;max-width:44ch">Add the first legal entity — stations, fleet and staff attach to it afterwards.</p>
+                      </div>
+                      <button onClick="{{ openAdd }}" style="display:flex;align-items:center;gap:8px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;color:#fff;padding:10px 16px;border-radius:10px;background:linear-gradient(100deg,#c2141a,#e8272e);box-shadow:0 6px 16px -8px rgba(216,31,38,.55);transition:transform .18s" style-hover="transform:translateY(-1px)">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                        Add Company
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </sc-if>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:14px 20px;border-top:1px solid #f0eff7;background:#fbfaff">
+          <span style="font-size:11.5px;color:#9490bb">Showing {{ rowCount }} of {{ rowCount }}</span>
+          <div style="display:flex;align-items:center;gap:6px">
+            <button style="width:30px;height:30px;border-radius:9px;border:1px solid #eeedf5;background:#fff;color:#c9c6dd;display:grid;place-items:center;cursor:not-allowed">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+            </button>
+            <span style="width:30px;height:30px;border-radius:9px;background:#fdeced;color:#c2141a;display:grid;place-items:center;font-size:12px;font-weight:600">1</span>
+            <button style="width:30px;height:30px;border-radius:9px;border:1px solid #eeedf5;background:#fff;color:#c9c6dd;display:grid;place-items:center;cursor:not-allowed">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div style="background:#fff;border:1px solid #eeedf5;border-radius:16px;box-shadow:0 1px 2px rgba(26,22,64,.03);overflow:hidden">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:20px 22px;border-bottom:1px solid #f0eff7">
+          <div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <h2 style="font-size:15px;font-weight:600;letter-spacing:-.1px">Company Record</h2>
+              <span style="font-size:10.5px;font-weight:600;letter-spacing:.5px;color:#7d7aa0;background:#f4f3f9;padding:4px 9px;border-radius:6px">Full page · Tier B</span>
+            </div>
+            <p style="font-size:12px;color:#9490bb;margin-top:5px">Every field on one page — for first-time setup and audit review.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 460px;min-width:0;padding:22px">
+            <sc-for list="{{ formSections }}" as="s" hint-placeholder-count="4">
+              <div style="margin-bottom:26px">
+                <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:14px">
+                  <h3 style="font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:#a9a6c4">{{ s.title }}</h3>
+                  <div style="flex:1;height:1px;background:#f4f3f9"></div>
+                </div>
+                <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px">
+                  <sc-for list="{{ s.fields }}" as="f" hint-placeholder-count="4">
+                    <div style="grid-column:{{ f.span }};min-width:0">
+                      <label style="display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:500;color:#6b6790;margin-bottom:7px">
+                        {{ f.label }}<span style="color:#d81f26;display:{{ f.reqShow }}">*</span>
+                        <span style="font-size:10px;font-weight:600;color:#8a5300;background:#fdf3e3;padding:2px 6px;border-radius:5px;display:{{ f.pendShow }}">awaiting</span>
+                      </label>
+                      <input type="text" value="{{ f.value }}" placeholder="{{ f.placeholder }}" readOnly="{{ f.locked }}" style="width:100%;height:40px;border:1px solid #e8e7f2;background:{{ f.inputBg }};border-radius:10px;padding:0 12px;font-size:12.5px;color:#1a1640;outline:none;transition:border-color .16s,box-shadow .16s" style-focus="border-color:#d81f26;box-shadow:0 0 0 3px rgba(216,31,38,.11)" style-hover="border-color:#d3d0e6" />
+                      <div style="font-size:10.5px;color:#a9a6c4;margin-top:6px;display:{{ f.helpShow }}">{{ f.help }}</div>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-for>
+
+            <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding-top:6px;border-top:1px solid #f4f3f9">
+              <div style="display:flex;align-items:center;gap:10px;margin-top:18px;flex:1">
+                <button onClick="{{ toggleActive }}" style="width:38px;height:22px;border-radius:99px;border:none;cursor:pointer;background:{{ activeBg }};position:relative;transition:background .18s;flex:0 0 auto">
+                  <span style="position:absolute;top:3px;left:{{ knobX }};width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(26,22,64,.3);transition:left .18s"></span>
+                </button>
+                <span style="font-size:12.5px;font-weight:500;color:#4b4770">Company is active</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:10px;margin-top:18px">
+                <button style="border:1px solid #eeedf5;background:#fff;cursor:pointer;font-size:12.5px;font-weight:600;color:#8b87b0;padding:10px 16px;border-radius:10px;transition:border-color .16s,color .16s" style-hover="border-color:#d3d0e6;color:#1a1640">Cancel</button>
+                <button style="border:1px solid #f3c3c5;background:#fdeced;cursor:pointer;font-size:12.5px;font-weight:600;color:#c2141a;padding:10px 16px;border-radius:10px;transition:background .16s" style-hover="background:#fbdcde">Save &amp; New</button>
+                <button style="border:none;cursor:pointer;font-size:12.5px;font-weight:600;color:#fff;padding:11px 20px;border-radius:10px;background:linear-gradient(100deg,#c2141a,#e8272e);box-shadow:0 6px 16px -8px rgba(216,31,38,.55);transition:transform .18s,box-shadow .2s" style-hover="transform:translateY(-1px);box-shadow:0 10px 22px -9px rgba(216,31,38,.6)">Save company</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <sc-if value="{{ drawerOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeDrawer }}" style="position:absolute;inset:0;background:rgba(26,22,64,.34);backdrop-filter:blur(2px);z-index:20;animation:veilIn .2s ease-out"></div>
+    <aside style="position:absolute;top:0;right:0;bottom:0;width:min(560px,100%);background:#fff;z-index:21;display:flex;flex-direction:column;box-shadow:-24px 0 60px -30px rgba(26,22,64,.5);animation:drawerIn .26s cubic-bezier(.2,.8,.2,1)">
+
+      <div style="flex:0 0 auto;padding:20px 24px 16px;border-bottom:1px solid #f0eff7">
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:14px">
+          <div style="display:flex;align-items:center;gap:12px;min-width:0">
+            <span style="width:38px;height:38px;border-radius:11px;background:linear-gradient(140deg,#c2141a,#e8272e);color:#fff;display:grid;place-items:center;flex:0 0 auto">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
+            </span>
+            <div style="min-width:0">
+              <h2 style="font-size:16px;font-weight:600;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ drawerTitle }}</h2>
+            </div>
+          </div>
+          <button onClick="{{ closeDrawer }}" style="width:32px;height:32px;border-radius:10px;border:1px solid #eeedf5;background:#fff;color:#8b87b0;display:grid;place-items:center;cursor:pointer;flex:0 0 auto;transition:border-color .16s,color .16s" style-hover="border-color:#f3c3c5;color:#d81f26">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <div style="display:flex;gap:22px;margin-top:16px;margin-bottom:-17px;overflow-x:auto;border-bottom:1px solid #f0eff7" class="sb">
+          <sc-for list="{{ drawerTabs }}" as="t" hint-placeholder-count="4">
+            <button onClick="{{ t.pick }}" style="flex:0 0 auto;border:none;background:none;padding:0 0 11px;font-size:12.5px;font-weight:{{ t.weight }};color:{{ t.color }};cursor:pointer;border-bottom:2px solid {{ t.underline }};transition:color .16s,border-color .16s" style-hover="color:#1a1640">{{ t.label }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div class="sb" style="flex:1;overflow-y:auto;padding:22px 24px 26px">
+        <sc-for list="{{ drawerFields }}" as="f" hint-placeholder-count="6">
+          <div style="margin-bottom:16px">
+            <label style="display:flex;align-items:center;gap:6px;font-size:11.5px;font-weight:500;color:#6b6790;margin-bottom:7px">
+              {{ f.label }}<span style="color:#d81f26;display:{{ f.reqShow }}">*</span>
+              <span style="font-size:10px;font-weight:600;color:#8a5300;background:#fdf3e3;padding:2px 6px;border-radius:5px;display:{{ f.pendShow }}">awaiting</span>
+            </label>
+            <input type="text" value="{{ f.value }}" placeholder="{{ f.placeholder }}" style="width:100%;height:42px;border:1px solid #e8e7f2;background:{{ f.inputBg }};border-radius:11px;padding:0 13px;font-size:13px;color:#1a1640;outline:none;transition:border-color .16s,box-shadow .16s" style-focus="border-color:#d81f26;box-shadow:0 0 0 3px rgba(216,31,38,.11)" style-hover="border-color:#d3d0e6" />
+            <div style="font-size:10.5px;color:#a9a6c4;margin-top:6px;display:{{ f.helpShow }}">{{ f.help }}</div>
+          </div>
+        </sc-for>
+
+        <div style="display:flex;align-items:flex-start;gap:10px;background:#fbfaff;border:1px solid #f0eff7;border-radius:12px;padding:13px 14px;margin-top:6px">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b87b0" stroke-width="1.9" stroke-linecap="round" style="flex:0 0 auto;margin-top:1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01M12 11v5"></path></svg>
+          <p style="font-size:11.5px;color:#6b6790;line-height:1.55">{{ drawerHint }}</p>
+        </div>
+      </div>
+
+      <div style="flex:0 0 auto;padding:16px 24px;border-top:1px solid #f0eff7;background:#fbfaff;display:flex;align-items:center;gap:12px">
+        <div style="display:flex;align-items:center;gap:9px;flex:1;min-width:0">
+          <button onClick="{{ toggleActive }}" style="width:38px;height:22px;border-radius:99px;border:none;cursor:pointer;background:{{ activeBg }};position:relative;transition:background .18s;flex:0 0 auto">
+            <span style="position:absolute;top:3px;left:{{ knobX }};width:16px;height:16px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(26,22,64,.3);transition:left .18s"></span>
+          </button>
+          <span style="font-size:12px;font-weight:500;color:#4b4770;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">Active</span>
+        </div>
+        <button onClick="{{ closeDrawer }}" style="border:1px solid #eeedf5;background:#fff;cursor:pointer;font-size:12.5px;font-weight:600;color:#8b87b0;padding:10px 15px;border-radius:10px;transition:border-color .16s,color .16s" style-hover="border-color:#d3d0e6;color:#1a1640">Cancel</button>
+        <button style="border:1px solid #f3c3c5;background:#fdeced;cursor:pointer;font-size:12.5px;font-weight:600;color:#c2141a;padding:10px 15px;border-radius:10px;transition:background .16s" style-hover="background:#fbdcde">Save &amp; New</button>
+        <button style="border:none;cursor:pointer;font-size:12.5px;font-weight:600;color:#fff;padding:11px 18px;border-radius:10px;background:linear-gradient(100deg,#c2141a,#e8272e);box-shadow:0 6px 16px -8px rgba(216,31,38,.55);transition:transform .18s,box-shadow .2s" style-hover="transform:translateY(-1px);box-shadow:0 10px 22px -9px rgba(216,31,38,.6)">Save</button>
+      </div>
+    </aside>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:900}}">
+const COMPANIES = [];
+
+const STATUS = { Approved: ['#e9f8f0', '#14764a'], Pending: ['#fdf3e3', '#8a5300'], Rejected: ['#f4f3f9', '#6b6790'] };
+const MONO = [['#fdeced', '#c2141a'], ['#eaf1fd', '#2b52a0'], ['#e9f8f0', '#14764a'], ['#f4f3f9', '#6b6790'], ['#fdf3e3', '#8a5300'], ['#fdeced', '#c2141a']];
+
+// field: [label, value, placeholder, required, awaiting, help, span]
+const SECTIONS = [
+  { key: 'basic', title: 'Basic Information', label: 'Basics', fields: [
+    ['Company Code', '', '', true, false, 'Immutable once approved.', 'span 1'],
+    ['Company Name', '', '', true, false, '', 'span 2'],
+    ['CEO Name', '', '', false, false, '', 'span 1'],
+    ['DTO Name', '', '', false, false, '', 'span 1']
+  ]},
+  { key: 'address', title: 'Address', label: 'Address', fields: [
+    ['Address', '', '', false, false, '', 'span 2'],
+    ['Emirate / State', '', '', true, false, '', 'span 1'],
+    ['City', '', '', false, false, '', 'span 1'],
+    ['ZIP Code', '', '', false, false, '', 'span 1']
+  ]},
+  { key: 'tax', title: 'Registration & Tax', label: 'Registration', fields: [
+    ['Incorporation Certificate No', '', '', false, false, '', 'span 1'],
+    ['Business Certificate No', '', '', false, false, '', 'span 1'],
+    ['Income Tax No', '', '', false, false, '', 'span 1'],
+    ['Tax %', '', '', false, false, 'UAE standard VAT is 5%.', 'span 1'],
+    ['TIN', '', '', false, false, '', 'span 1'],
+    ['CST', '', '', false, false, '', 'span 1'],
+    ['Service Tax No', '', '', false, false, '', 'span 1']
+  ]},
+  { key: 'contact', title: 'Contact', label: 'Contact', fields: [
+    ['Contact Person', '', '', false, false, '', 'span 1'],
+    ['Phone Number', '', '', true, false, '', 'span 1'],
+    ['Fax', '', '', false, false, '', 'span 1'],
+    ['Email Address', '', '', true, false, '', 'span 1'],
+    ['Web Address', '', '', false, false, '', 'span 1']
+  ]}
+];
+
+const HINTS = {
+  basic: 'The company code is written into every station, vehicle and agreement reference — it cannot be changed after approval.',
+  address: 'The emirate drives which fare plans and RFID gate rules a company inherits.',
+  tax: 'Seven registration fields stay empty until the client sends the trade licence pack; nothing here is invented.',
+  contact: 'This contact receives approval, settlement and device-health notifications for every station the company owns.'
+};
+
+const EMIRATE_OPTS = ['Dubai', 'Abu Dhabi', 'Sharjah', 'Al Ain', 'Fujairah', 'Kuwait'];
+
+const TILES = [
+  ['0', 'Companies', '#fdeced', '#d81f26', 'M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3'],
+  ['0', 'Approved', '#e9f8f0', '#1f9d63', 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M8.5 12l2.4 2.4 4.6-4.8'],
+  ['0', 'Awaiting approval', '#fdf3e3', '#e08700', 'M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2'],
+  ['20', 'Fields per record', '#eaf1fd', '#3b6fd4', 'M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1M14 3v5h5M9 14h6M9 17h4']
+];
+
+class Component extends DCLogic {
+  state = { drawer: false, mode: 'add', tab: 'basic', navKey: 'basic', hover: null, active: true, editing: null, menu: null, emirate: null, status: null };
+
+  renderVals() {
+    const { drawer, mode, tab, navKey, hover, active, editing, menu } = this.state;
+    const section = SECTIONS.find(s => s.key === tab) || SECTIONS[0];
+
+    const blank = mode === 'add';
+    const field = f => ({
+      label: f[0],
+      value: blank ? '' : f[1],
+      placeholder: f[2],
+      reqShow: f[3] ? 'inline' : 'none',
+      pendShow: !blank && f[4] ? 'inline-block' : 'none',
+      help: f[5], helpShow: f[5] ? 'block' : 'none',
+      span: f[6] || 'span 1',
+      locked: f[0] === 'Company Code' && mode === 'edit',
+      inputBg: !blank && f[4] ? '#fdfcff' : '#fff'
+    });
+
+    const visible = COMPANIES.filter(c => (!this.state.emirate || c[2] === this.state.emirate) && (!this.state.status || c[7] === this.state.status));
+    const allFields = SECTIONS.reduce((a, s) => a.concat(s.fields), []);
+    const filled = blank ? 0 : allFields.filter(f => f[1]).length;
+    const pct = Math.round((filled / allFields.length) * 100);
+
+    return {
+      tiles: TILES.map(t => ({ value: t[0], label: t[1], bg: t[2], fg: t[3], icon: t[4] })),
+      rowCount: visible.length,
+      filters: [
+        { key: 'emirate', all: 'All emirates', options: EMIRATE_OPTS },
+        { key: 'status', all: 'All approval status', options: ['Approved', 'Pending', 'Rejected'] }
+      ].map(f => {
+        const picked = this.state[f.key];
+        const open = menu === f.key;
+        return {
+          label: picked || f.all,
+          border: picked || open ? '#f3c3c5' : '#eeedf5',
+          bg: picked ? '#fdeced' : '#fff',
+          color: picked ? '#c2141a' : '#6b6790',
+          weight: picked ? 600 : 500,
+          open,
+          toggle: () => this.setState(st => ({ menu: st.menu === f.key ? null : f.key })),
+          items: [f.all].concat(f.options).map(o => ({
+            label: o,
+            bg: (picked || f.all) === o ? '#fdf3f3' : 'transparent',
+            color: (picked || f.all) === o ? '#c2141a' : '#4b4770',
+            pick: () => this.setState({ [f.key]: o === f.all ? null : o, menu: null })
+          }))
+        };
+      }),
+      companies: visible.map((c, i) => {
+        const hot = hover === i;
+        return {
+          name: c[0], code: c[1], state: c[2], city: c[3], contact: c[4], phone: c[5],
+          fill: c[6], fillW: c[6] + '%',
+          fillC: c[6] >= 80 ? '#1f9d63' : (c[6] >= 55 ? '#e08700' : '#d81f26'),
+          status: c[7], statusBg: STATUS[c[7]][0], statusFg: STATUS[c[7]][1],
+          initials: c[0].replace('Byky ', '').slice(0, 2).toUpperCase(),
+          monoBg: MONO[i % MONO.length][0], monoFg: MONO[i % MONO.length][1],
+          rowBg: hot ? '#fbfaff' : '#fff',
+          actionsOpacity: hot ? 1 : 0.35,
+          enter: () => this.setState({ hover: i }),
+          leave: () => this.setState(st => (st.hover === i ? { hover: null } : null)),
+          edit: () => this.setState({ drawer: true, mode: 'edit', tab: 'basic', editing: c[0] })
+        };
+      }),
+      formNav: SECTIONS.map((s, i) => {
+        const on = navKey === s.key;
+        return {
+          num: i + 1, label: s.label, count: s.fields.length,
+          bg: on ? '#fdf3f3' : 'transparent',
+          weight: on ? 600 : 500,
+          color: on ? '#1a1640' : '#6b6790',
+          numBg: on ? '#d81f26' : '#f4f3f9',
+          numFg: on ? '#fff' : '#8b87b0',
+          countColor: on ? '#c2141a' : '#c9c6dd',
+          pick: () => this.setState({ navKey: s.key })
+        };
+      }),
+      formSections: SECTIONS.map(s => ({ title: s.title, fields: s.fields.map(field) })),
+      drawerOpen: drawer,
+      drawerTitle: mode === 'edit' ? (editing || 'Company') : 'Add Company',
+      drawerSub: mode === 'edit' ? 'Editing an approved record · code is locked' : 'FSD 1.1 · ' + allFields.length + ' fields, 4 required',
+      drawerProgress: pct + '%',
+      drawerFilled: filled,
+      drawerTabs: SECTIONS.map(s => {
+        const on = tab === s.key;
+        const pending = s.fields.filter(f => f[4]).length;
+        return {
+          label: s.label,
+          weight: on ? 600 : 500,
+          color: on ? '#1a1640' : '#8b87b0',
+          underline: on ? '#d81f26' : 'transparent',
+          pick: () => this.setState({ tab: s.key })
+        };
+      }),
+      hasRows: visible.length > 0,
+      isEmpty: visible.length === 0,
+      drawerTotal: allFields.length,
+      formFilled: allFields.filter(f => f[1]).length,
+      drawerFields: section.fields.map(field),
+      drawerHint: HINTS[section.key],
+      openAdd: () => this.setState({ drawer: true, mode: 'add', tab: 'basic', editing: null }),
+      closeDrawer: () => this.setState({ drawer: false }),
+      activeBg: active ? '#1f9d63' : '#dcd9ea',
+      knobX: active ? '19px' : '3px',
+      toggleActive: () => this.setState(st => ({ active: !st.active }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

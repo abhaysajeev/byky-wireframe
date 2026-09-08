@@ -20,7 +20,9 @@ TEMPLATE_CONFIG = {
     "content_layout": "compact",      # options[String]: 'compact', 'wide' (compact=container-xxl, wide=container-fluid)
     "navbar_type": "fixed",           # options[String]: 'fixed', 'static', 'hidden' (Only for vertical Layout)
     "header_type": "fixed",           # options[String]: 'static', 'fixed' (for horizontal layout only)
-    "menu_fixed": True,               # options[Boolean]: True(default), False # Layout(menu) Fixed (Only for vertical Layout)
+    "menu_fixed": False,              # False: the Byky sidebar pins itself via sidebar-integration.css / --byky-sb-w,
+                                       # not Vuexy's .layout-menu-fixed padding-inline-start hack -- leaving this True
+                                       # would fight that rule on .layout-page with a static, wrong value.
     "menu_collapsed": False,          # options[Boolean]: False(default), True # Show menu collapsed, Only for vertical Layout
     "footer_fixed": False,            # options[Boolean]: False(default), True # Footer Fixed
     "show_dropdown_onhover": True,    # True, False (for horizontal layout only)

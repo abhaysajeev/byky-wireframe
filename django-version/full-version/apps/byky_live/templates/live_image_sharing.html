@@ -1,0 +1,149 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Image Sharing - Live Monitoring{% endblock title %}
+
+{% comment %}
+New module, not one of the 16 FSD modules -- requested against the client's
+RMS Web feedback doc (RMS WEB 07.09.2026-1.pdf, "Image Sharing" page). Built
+on the shared byky-screen.css/js base (see byky-screen-design-system.md and
+cms_branch_management.html for a populated Tier A list reference).
+
+Unlike Live Monitor / Search Order, a shared photo carries no money -- just
+a real station and a real staff member -- so this one is populated rather
+than left as an awaiting-data screen (apps/byky_live/data.py's docstring).
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Live Monitoring</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Image Sharing</b>
+      </div>
+      <h1 class="scr-title">Image Sharing</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="m21 15-5-5L5 21"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Shared photos</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.approved }}</div><div class="scr-tile-lab">Approved</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.pending }}</div><div class="scr-tile-lab">Awaiting review</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6 5.6 18.4M5.6 5.6l12.8 12.8"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.rejected }}</div><div class="scr-tile-lab">Rejected</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="image" data-scr-noun-plural="images">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search branch or shared by" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="status">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All status</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All status</button>
+          {% for s in approval_statuses %}<button type="button" class="scr-filter-opt" data-value="{{ s }}">{{ s }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">{{ images|length }} images</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Image</th>
+            <th>Branch Name</th>
+            <th>Shared By</th>
+            <th>Remarks</th>
+            <th style="text-align:center">Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for img in images %}
+          <tr class="scr-row" data-search="{{ img.branch|lower }} {{ img.shared_by|lower }}" data-status="{{ img.status }}">
+            <td>
+              <div class="scr-avatar {% cycle 'scr-avatar-0' 'scr-avatar-1' 'scr-avatar-2' 'scr-avatar-3' 'scr-avatar-4' as img_avatar_cls %}" style="width:34px; height:34px">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><path d="m21 15-5-5L5 21"></path></svg>
+              </div>
+            </td>
+            <td style="font-weight:600">{{ img.branch }}</td>
+            <td class="scr-contact">{{ img.shared_by }}</td>
+            <td class="scr-contact">{{ img.remarks|default:"—" }}</td>
+            <td style="text-align:center">
+              <span class="scr-badge {% if img.status == 'Approved' %}scr-badge-approved{% elif img.status == 'Rejected' %}scr-badge-rejected{% else %}scr-badge-pending{% endif %}"><i></i>{{ img.status }}</span>
+            </td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn" title="View">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+                <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                </button>
+                <button type="button" class="scr-icon-btn" title="Reject">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ images|length }} of {{ images|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

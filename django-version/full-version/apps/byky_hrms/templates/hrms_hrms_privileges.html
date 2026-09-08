@@ -4,17 +4,23 @@
 {% block title %}HRMS Privileges - Human Resources{% endblock title %}
 
 {% comment %}
-FSD 2.6 -- Tier D. Reuses the shared privilege matrix. HRMS defines SIX permissions
-(Access, Create, Read, Update, Approve, Block Staff), not the seven CMS uses -- the
-partial is parameterised by the module's own permission list.
+FSD 2.6 -- Tier D. Reuses the shared privilege matrix, now migrated onto the
+shared byky-screen.css/js base (see byky-screen-design-system.md). HRMS defines
+SIX permissions (Access, Create, Read, Update, Approve, Block Staff), not the
+seven CMS uses -- the partial is parameterised by the module's own permission
+list.
 {% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="HRMS Privileges" parent="Human Resources" subtitle=purpose %}
-{% include "byky/partials/privilege_matrix.html" with roles=roles screens=screens permissions=permissions module="HRMS" %}
+{% include "byky/partials/privilege_matrix.html" with title="HRMS Privileges" parent="Human Resources" subtitle=purpose roles=roles screens=screens permissions=permissions module="HRMS" %}
 {% endblock %}

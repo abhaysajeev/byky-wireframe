@@ -1,0 +1,170 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Card Discount Approval - Request Management{% endblock title %}
+
+{% comment %}
+Not an FSD module of its own -- card discount requests submitted by
+customers through the mobile app (FSD Module 9), pending admin review before
+the configuration in apps.byky_discount takes effect for that customer.
+Closest FSD precedent for the list + approve/reject shape: 11.1 Wallet Refund
+Request & Approval Management. Built on the shared byky-screen.css/js base
+(see byky-screen-design-system.md). No request has ever been submitted, so
+the list is genuinely empty -- honest, not invented (CLAUDE.md 12). Each row
+that DID exist would link to its own full detail page (View action), not a
+drawer -- a request needs review of every field before a decision, which a
+drawer's edit-in-place shape isn't built for.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-request-approval.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Request Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Card Discount Approval</b>
+      </div>
+      <h1 class="scr-title">Card Discount Approval</h1>
+      <p class="scr-sub">Discount card requests submitted by customers through the mobile app.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn" data-scr-export-table data-export-name="card-discount-requests">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="request" data-scr-noun-plural="requests">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search request no or customer" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="type">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All card types</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All card types</button>
+          {% for t in card_types_list %}
+          <button type="button" class="scr-filter-opt" data-value="{{ t }}">{{ t }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="status">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All statuses</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All statuses</button>
+          {% for s in statuses %}
+          <button type="button" class="scr-filter-opt" data-value="{{ s }}">{{ s }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">0 requests</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Request No</th>
+            <th>Customer</th>
+            <th>Mobile No</th>
+            <th>Card Type</th>
+            <th>Card Grade</th>
+            <th>Requested %</th>
+            <th>Request Date</th>
+            <th data-status-cell>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for r in requests %}
+          <tr class="scr-row" data-search="{{ r.request_no|lower }} {{ r.customer|lower }}" data-type="{{ r.card_type }}" data-status="{{ r.status }}">
+            <td><span class="scr-code">{{ r.request_no }}</span></td>
+            <td style="font-weight:600">{{ r.customer }}</td>
+            <td class="scr-contact">{{ r.mobile }}</td>
+            <td class="scr-contact">{{ r.card_type }}</td>
+            <td class="scr-contact">{{ r.card_grade }}</td>
+            <td class="scr-contact">{{ r.discount_pct }}%</td>
+            <td class="scr-contact">{{ r.request_date }}</td>
+            <td data-status-cell><span class="scr-badge {% if r.status == 'Approved' %}scr-badge-approved{% elif r.status == 'Rejected' %}scr-badge-rejected{% else %}scr-badge-pending{% endif %}"><i></i>{{ r.status }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <a href="{% url 'request-card-discount-approval-detail' request_no=r.request_no %}" class="scr-icon-btn" title="View">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 12S5 5 12 5s10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </a>
+                <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve" data-request-approve>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                </button>
+                <button type="button" class="scr-icon-btn" title="Reject" data-request-reject>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="9" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"></rect><path d="M3 10h18"></path><path d="m9 15 2 2 4-4"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No card discount requests yet</div>
+                  <p class="scr-empty-sub">Requests submitted through the customer app will appear here, ready to review and decide.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

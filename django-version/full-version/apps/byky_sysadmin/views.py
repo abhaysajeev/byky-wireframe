@@ -8,6 +8,8 @@ Wireframe phase: no writes, no CRUD, no API.
 from apps.byky_core import refdata, screens
 from apps.byky_core.views import GenericScreenView, BykyScreenView
 
+from . import config_data
+
 
 PERMISSIONS = [
     "Access",
@@ -25,6 +27,23 @@ ROLES = [
 class SysadminScreen(GenericScreenView):
     def reference_lists(self):
         return refdata.lists()
+
+
+class GlobalConfigView(BykyScreenView):
+    """FSD 13.3 -- the enterprise-wide settings form, built on the shared
+    byky-screen.css/js base rather than the generic grid template: this screen
+    is one configuration record, not a list of rows. Field definitions and the
+    honesty rules behind their values live in config_data.py."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                "config_sections": config_data.sections(),
+                "integrations": config_data.integrations(),
+            }
+        )
+        return context
 
 
 class SysadminPrivileges(BykyScreenView):

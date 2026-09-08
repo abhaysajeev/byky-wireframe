@@ -1,90 +1,155 @@
 {% extends layout_path %}
 {% load static %}
 
-{% block title %}Station Working Time - Company Management{% endblock title %}
+{% block title %}Branch Working Time - Company Management{% endblock title %}
 
 {% comment %}
-FSD 1.8 -- not a list/form screen. Section 4 specifies a branch dropdown, a 7-row
-weekly schedule table with 8 time inputs per day (4 shifts x start/end), and a
-Save/Reset toolbar. Time inputs start empty: the client files contain no schedule.
+FSD 1.8 -- migrated onto the shared byky-screen.css/js base (see
+byky-screen-design-system.md and apps/byky_cms/templates/cms_company_details.html
+for the styling reference). Not a list/form screen: FSD section 4 specifies a
+branch dropdown, a 7-row weekly schedule table with 8 time inputs per day (4
+shifts x start/end), and a Save/Reset toolbar -- built here as a scr-section
+config card with a real <table> instead of a scr-grid.
+
+Shift 1 defaults to 04:00-03:59 (the standard 24h rental-day window) on every
+day; shifts 2-4 start empty since the source files carry no schedule data
+(CLAUDE.md 12) -- honest defaults, not invented ones.
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
-{% endblock vendor_js %}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-schedule.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Station Working Time" parent="Company Management" subtitle=purpose %}
+<div class="scr">
 
-<div class="card mb-6">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Station Working Time Configuration</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-6">
-        <label class="form-label" for="wt-branch">Select Branch <span class="text-danger">*</span></label>
-        <select id="wt-branch" class="select2 form-select">
-          <option value="">Select</option>
-          {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
-        </select>
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Company Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Branch Working Time</b>
       </div>
-      <div class="col-md-4 d-flex align-items-end">
-        <button type="button" class="btn btn-label-secondary w-100">
-          <i class="icon-base ti tabler-refresh icon-xs me-1_5"></i>Load Existing Schedule
-        </button>
+      <h1 class="scr-title">Branch Working Time</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V7a2 2 0 0 1 2-2h4V3h4v2h4a2 2 0 0 1 2 2v14M4 21h16M9 9h.01M15 9h.01M9 13h.01M15 13h.01M9 17h.01M15 17h.01"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ branches_list|length }}</div><div class="scr-tile-lab">Branches</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 2v4M16 2v4M3.5 9h17M4 5h16a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ days|length }}</div><div class="scr-tile-lab">Days per week</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ shifts|length }}</div><div class="scr-tile-lab">Shifts per day</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h13.6A1.2 1.2 0 0 1 20 4.2V21M4 21h16M8 21v-5h8v5"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">0</div><div class="scr-tile-lab">Saved schedules</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">Load a Schedule</h2>
+          <span class="scr-form-badge">By branch</span>
+        </div>
+        <p class="scr-form-sub">Pick a branch to view or configure its weekly shift matrix.</p>
+      </div>
+    </div>
+
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field" style="grid-column:span 2">
+          <label class="scr-label" for="wt-branch">Select Branch<span class="scr-required">*</span></label>
+          <select id="wt-branch" class="scr-input">
+            <option value="">Select</option>
+            {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field" style="grid-column:span 1; align-self:end">
+          <button type="button" class="scr-btn" style="width:100%; justify-content:center">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg>
+            Load Existing Schedule
+          </button>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="card-body">
-    <div class="alert alert-warning d-flex align-items-center" role="alert">
-      <i class="icon-base ti tabler-calendar-off icon-md me-3"></i>
-      <div>No saved schedules &mdash; the source files contain no weekly shift windows. The matrix below is ready for entry.</div>
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">Weekly Shift Configuration</h2>
+          <span class="scr-form-badge">7 days &middot; 4 shifts</span>
+        </div>
+        <p class="scr-form-sub">Enter up to 4 shift windows per day, 24-hour clock.</p>
+      </div>
+    </div>
+
+    <div class="scr-form-body">
+      <div class="scr-drawer-hint" style="margin-bottom:20px">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b87b0" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8h.01M12 11v5"></path></svg>
+        <p>No saved schedules.</p>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th style="min-width:120px">Day</th>
+              {% for n in shifts %}<th class="scr-shift-col" style="min-width:200px; text-align:center">Shift {{ n }} Start / End</th>{% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for day in days %}
+            <tr class="scr-row">
+              <td style="font-weight:600">{{ day }}</td>
+              {% for n in shifts %}
+              <td>
+                <div style="display:flex; align-items:center; gap:8px; justify-content:center">
+                  <input type="time" class="scr-input scr-shift-time" style="min-width:0" value="{% if n == 1 %}04:00{% endif %}" aria-label="{{ day }} shift {{ n }} start" />
+                  <span style="color:#a9a6c4">&ndash;</span>
+                  <input type="time" class="scr-input scr-shift-time" style="min-width:0" value="{% if n == 1 %}03:59{% endif %}" aria-label="{{ day }} shift {{ n }} end" />
+                </div>
+              </td>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-form-foot">
+        <div class="scr-form-actions" style="margin-left:auto">
+          <button type="button" class="scr-btn-secondary">Reset Schedule</button>
+          <button type="button" class="scr-btn-primary">Save Weekly Schedule</button>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="table-responsive">
-    <table class="table table-bordered mb-0">
-      <thead>
-        <tr>
-          <th style="min-width:120px">Day</th>
-          {% for n in shifts %}<th class="text-center" style="min-width:200px">Shift {{ n }} Start / End</th>{% endfor %}
-        </tr>
-      </thead>
-      <tbody>
-        {% for day in days %}
-        <tr>
-          <td class="fw-medium align-middle">{{ day }}</td>
-          {% for n in shifts %}
-          <td>
-            <div class="d-flex align-items-center gap-2">
-              <input type="text" class="form-control form-control-sm shift-time" placeholder="--:--" aria-label="{{ day }} shift {{ n }} start" />
-              <span class="text-body-secondary">&ndash;</span>
-              <input type="text" class="form-control form-control-sm shift-time" placeholder="--:--" aria-label="{{ day }} shift {{ n }} end" />
-            </div>
-          </td>
-          {% endfor %}
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <div class="card-footer d-flex gap-4">
-    <button type="button" class="btn btn-primary">Save Weekly Schedule</button>
-    <button type="button" class="btn btn-label-secondary">Reset Schedule</button>
-  </div>
 </div>
 {% endblock %}

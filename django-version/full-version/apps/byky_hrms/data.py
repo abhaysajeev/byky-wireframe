@@ -6,10 +6,23 @@ identity, document and bank field renders seed.NOT_CAPTURED. No passport numbers
 Emirates IDs, dates of birth or bank details are invented (CLAUDE.md section 12).
 """
 
+import datetime
+
 from apps.byky_core import seed
 
 NOT_CAPTURED = seed.NOT_CAPTURED
 SHORT = seed.NOT_CAPTURED_SHORT
+
+# The four documents FSD 2.1's Identity Documents tab tracks expiry for.
+# (field key on an employees() row, display label)
+DOCUMENTS = [
+    ("visa_expiry", "Visa"),
+    ("eid_expiry", "Emirates ID"),
+    ("labor_expiry", "Labour Card"),
+    ("passport_expiry", "Passport"),
+]
+
+NEARING_EXPIRY_DAYS = 30
 
 # FSD 2.6: six permissions for HRMS, not the seven CMS uses.
 PERMISSIONS = ["Access", "Create", "Read", "Update", "Approve", "Block Staff"]
@@ -43,7 +56,14 @@ def employees():
                 "branch": SHORT,
                 "department": SHORT,
                 "joining_date": SHORT,
-                "emirates_id_expiry": SHORT,
+                "nationality": SHORT,
+                "visa_no": SHORT,
+                "visa_expiry": SHORT,
+                "eid_expiry": SHORT,
+                "labor_expiry": SHORT,
+                "passport_expiry": SHORT,
+                "salary_bank": SHORT,
+                "salary_bank_account": SHORT,
                 "mobile": SHORT,
                 "active": True,
                 "status": "Active",
@@ -92,3 +112,51 @@ def counts():
         "branches": len(seed.STATIONS),
         "blocked": 0,
     }
+
+
+def _expiry_status(value):
+    """expired / nearing / valid / unknown, from one employee's raw expiry
+    value. The staff sheet carries none of these dates today, so every
+    employee currently resolves to "unknown" for all four documents -- this
+    is the real logic that will light up red/amber/green the moment the
+    client supplies actual dates, not a placeholder invented in the meantime
+    (CLAUDE.md 12)."""
+    if not value or value in (SHORT, NOT_CAPTURED):
+        return "unknown"
+    try:
+        expiry = datetime.date.fromisoformat(value)
+    except (TypeError, ValueError):
+        return "unknown"
+    days_left = (expiry - datetime.date.today()).days
+    if days_left < 0:
+        return "expired"
+    if days_left <= NEARING_EXPIRY_DAYS:
+        return "nearing"
+    return "valid"
+
+
+def document_expiry_summary(employee_rows):
+    """Per-document expired/nearing/valid/unknown counts across every
+    employee row passed in, for the four-document expiry tile row."""
+    out = []
+    for key, label in DOCUMENTS:
+        tally = {"expired": 0, "nearing": 0, "valid": 0, "unknown": 0}
+        for e in employee_rows:
+            tally[_expiry_status(e.get(key))] += 1
+        total = len(employee_rows) or 1
+        out.append(
+            {
+                "key": key,
+                "label": label,
+                "total": len(employee_rows),
+                "expired": tally["expired"],
+                "nearing": tally["nearing"],
+                "valid": tally["valid"],
+                "unknown": tally["unknown"],
+                "pct_expired": round(tally["expired"] / total * 100, 2),
+                "pct_nearing": round(tally["nearing"] / total * 100, 2),
+                "pct_valid": round(tally["valid"] / total * 100, 2),
+                "pct_unknown": round(tally["unknown"] / total * 100, 2),
+            }
+        )
+    return out

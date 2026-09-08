@@ -4,143 +4,248 @@
 {% block title %}Station Address Mapping - Company Management{% endblock title %}
 
 {% comment %}
-FSD 1.7 -- Tier A. Stations come from the client's data; the source files carry no
-GPS, address or contact columns, so those cells render "not captured" (CLAUDE.md 12)
-rather than fabricated coordinates.
+FSD 1.7 -- Tier A. Built on the shared byky-screen.css/js base (see
+apps/byky_cms/templates/cms_company_details.html for the styling reference).
+All 36 rows are real stations from seed data; GPS, address and contact number
+have no source in the client files (CLAUDE.md 12) and render blank rather than
+fabricated. The network map below is drawn as plain SVG from the same real (if
+not survey-grade) station coordinates the dashboard's map uses -- no Leaflet,
+see byky-station-address.js.
 {% endcomment %}
 
 {% block vendor_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
 <link rel="stylesheet" href="{% static 'vendor/libs/leaflet/leaflet.css' %}" />
 {% endblock vendor_css %}
 
 {% block vendor_js %}
 {{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
 <script src="{% static 'vendor/libs/leaflet/leaflet.js' %}"></script>
 {% endblock vendor_js %}
 
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
-<script src="{% static 'js/byky-map.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-leaflet-map.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Station Address Mapping" parent="Company Management" subtitle=purpose action_label="Add Station Address" action_url="#offcanvasAddStation" %}
+<div class="scr">
 
-{% include "byky/partials/station_map.html" with title="Station Locations" subtitle="Approximate positions across the network — exact GPS to be confirmed per station" height="380px" %}
-
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4"><input type="text" class="form-control" placeholder="Station Number" /></div>
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Branches</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select>
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Company Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Station Address Mapping</b>
       </div>
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All States</option>{% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}</select>
+      <h1 class="scr-title">Station Address Mapping</h1>
+      <p class="scr-sub">Physical addresses and GPS coordinates for every rental station.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+      <button type="button" class="scr-btn-primary" data-scr-open="station:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Station Address
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-card" style="padding:22px">
+    <h3 class="scr-form-title">Station Network</h3>
+    <p class="scr-form-sub">Approximate positions across the network — exact GPS to be confirmed per station.</p>
+    <div class="scr-map-frame">
+      {{ map_points|json_script:"scr-map-data" }}
+      <div id="scr-map" class="byky-map" data-map-points="scr-map-data"></div>
+      <div class="scr-map-legend">
+        <b>Fleet</b>
+        <span><i style="width:8px;height:8px"></i>10</span>
+        <span><i style="width:14px;height:14px"></i>30</span>
+        <span><i style="width:20px;height:20px"></i>56</span>
       </div>
     </div>
   </div>
 
-  <div class="card-datatable table-responsive">
-    <table class="datatables-stations-addr table" data-search-label="Search station">
-      <thead class="border-top">
-        <tr>
-          <th>Station No</th><th>Branch Name</th><th>State</th>
-          <th class="text-center">Latitude</th><th class="text-center">Longitude</th>
-          <th>Contact No</th><th class="text-center">Approval</th><th class="text-center">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for a in addresses %}
-        <tr>
-          <td><span class="fw-medium">{{ a.station_no }}</span></td>
-          <td>{{ a.branch }}</td>
-          <td><span class="badge bg-label-secondary">{{ a.state }}</span></td>
-          <td class="text-center text-body-secondary"><small>{{ a.latitude }}</small></td>
-          <td class="text-center text-body-secondary"><small>{{ a.longitude }}</small></td>
-          <td class="text-body-secondary"><small>{{ a.contact_no }}</small></td>
-          <td class="text-center">{% include "byky/partials/status_badge.html" with status=a.status %}</td>
-          <td class="text-center">
-            <div class="d-inline-block">
-              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddStation">Edit</a>
-                <a href="javascript:void(0);" class="dropdown-item">Approve</a>
-                <div class="dropdown-divider"></div>
-                <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
+  <div class="scr-card" data-scr-noun-singular="station" data-scr-noun-plural="stations">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search station or branch" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="state">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All states</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All states</button>
+          {% for s in states_list %}
+          <button type="button" class="scr-filter-opt" data-value="{{ s.name }}">{{ s.name }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">{{ addresses|length }} stations</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Station No</th>
+            <th>Branch</th>
+            <th>State</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Contact No</th>
+            <th>Approval</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in addresses %}
+          <tr class="scr-row" data-search="{{ a.station_no|lower }} {{ a.branch|lower }}" data-state="{{ a.state }}" data-record-id="{{ a.json_id }}">
+            <td><span class="scr-code">{{ a.station_no }}</span></td>
+            <td class="scr-state">{{ a.branch }}</td>
+            <td class="scr-state">{{ a.state }}</td>
+            <td class="scr-state">{{ a.latitude }}</td>
+            <td class="scr-state">{{ a.longitude }}</td>
+            <td class="scr-state">{{ a.contact_no }}</td>
+            <td><span class="scr-badge scr-badge-{{ a.status|lower }}"><i></i>{{ a.status }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="station:edit">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                </button>
+                <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                </button>
+                <button type="button" class="scr-icon-btn" title="More">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                </button>
               </div>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
-
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddStation">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">Add Station Address</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </td>
+          </tr>
+          {{ a.fields_json|json_script:a.json_id }}
+          {% empty %}
+          <tr>
+            <td colspan="8" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No stations yet</div>
+                  <p class="scr-empty-sub">Add the first station address to place it on the network map.</p>
+                </div>
+                <button type="button" class="scr-btn-primary" data-scr-open="station:add">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  Add Station Address
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
-    <div class="offcanvas-body p-6">
-      <form onsubmit="return false">
-        <div class="mb-6">
-          <label class="form-label" for="st-no">Station No <span class="text-danger">*</span></label>
-          <input type="text" class="form-control" id="st-no" maxlength="30" placeholder="ST001" />
-        </div>
-        <div class="mb-6">
-          <label class="form-label" for="st-branch">Branch <span class="text-danger">*</span></label>
-          <select id="st-branch" class="select2 form-select">
-            <option value="">Select</option>
-            {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
-          </select>
-        </div>
-        <div class="mb-6">
-          <label class="form-label" for="st-state">State <span class="text-danger">*</span></label>
-          <select id="st-state" class="select2 form-select">
-            <option value="">Select</option>
-            {% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}
-          </select>
-        </div>
-        <div class="mb-6">
-          <label class="form-label" for="st-address">Address</label>
-          <textarea class="form-control" id="st-address" rows="2"></textarea>
-        </div>
-        <div class="row g-4 mb-6">
-          <div class="col-6">
-            <label class="form-label" for="st-lat">Latitude <span class="text-danger">*</span></label>
-            <input type="number" step="0.000001" min="-90" max="90" class="form-control" id="st-lat" value="0.000000" />
-            <div class="form-text">-90 to +90</div>
-          </div>
-          <div class="col-6">
-            <label class="form-label" for="st-lng">Longitude <span class="text-danger">*</span></label>
-            <input type="number" step="0.000001" min="-180" max="180" class="form-control" id="st-lng" value="0.000000" />
-            <div class="form-text">-180 to +180</div>
-          </div>
-        </div>
-        <div class="mb-6">
-          <label class="form-label" for="st-contact">Contact No</label>
-          <input type="text" class="form-control" id="st-contact" />
-        </div>
-        <div class="mb-6">
-          <label class="form-label" for="st-logo">Station Image</label>
-          <input type="file" class="form-control" id="st-logo" accept="image/*" />
-        </div>
-        <div class="d-flex gap-4">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
-        </div>
-      </form>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ addresses|length }} of {{ addresses|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+{% comment %} Add/Edit drawer -- Station Address. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="station" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="station" data-add-title="Add Station Address" data-title-field="station_no" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Station Address</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Station No<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="station_no" data-lock-on-edit="true" value="" placeholder="ST001" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Branch<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="branch">
+        <option value="">Select</option>
+        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">State<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="state">
+        <option value="">Select</option>
+        {% for s in states_list %}<option>{{ s.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Address</label>
+      <textarea class="scr-drawer-input" data-field="address" rows="2"></textarea>
+    </div>
+
+    <div class="scr-drawer-row">
+      <div class="scr-drawer-field" data-tab="_">
+        <label class="scr-label">Latitude<span class="scr-required">*</span></label>
+        <input type="number" step="0.000001" min="-90" max="90" class="scr-drawer-input" data-field="latitude" value="" placeholder="0.000000" />
+        <div class="scr-help">-90 to +90</div>
+      </div>
+      <div class="scr-drawer-field" data-tab="_">
+        <label class="scr-label">Longitude<span class="scr-required">*</span></label>
+        <input type="number" step="0.000001" min="-180" max="180" class="scr-drawer-input" data-field="longitude" value="" placeholder="0.000000" />
+        <div class="scr-help">-180 to +180</div>
+      </div>
+    </div>
+
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Contact No</label>
+      <input type="text" class="scr-drawer-input" data-field="contact_no" value="" placeholder="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Station Image</label>
+      <input type="file" class="scr-drawer-input" accept="image/*" />
+    </div>
+  </div>
+
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

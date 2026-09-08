@@ -4,178 +4,360 @@
 {% block title %}Country &amp; State Management - Company Management{% endblock title %}
 
 {% comment %}
-FSD 1.2 -- Tier A. Section 17 specifies tab switching between the Country and
-State grids, each with its own form. Tabs use the Vuexy nav-pills pattern from
-apps/users/templates/app_user_view_account.html.
+FSD 1.2 -- Tier A, tabbed dual grid. Built on the shared byky-screen.css/js base
+(apps/byky_cms/templates/cms_company_details.html is the styling reference).
+Two independent grids -- Countries and States -- switched by a content-tab pair,
+each filtering and searching on its own, each with its own Add drawer.
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-{% endblock vendor_js %}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Country & State Management" parent="Company Management" subtitle=purpose action_label="Add Country" action_url="#offcanvasAddCountry" %}
+<div class="scr">
 
-<div class="nav-align-top">
-  <ul class="nav nav-pills flex-column flex-md-row flex-wrap mb-6 row-gap-2" role="tablist">
-    <li class="nav-item">
-      <button type="button" class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-country" role="tab" data-add-target="#offcanvasAddCountry" data-add-label="Add Country">
-        <i class="icon-base ti tabler-world icon-sm me-1_5"></i>Countries
-        <span class="badge bg-label-secondary ms-2">{{ countries_list|length }}</span>
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Company Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Country &amp; State Management</b>
+      </div>
+      <h1 class="scr-title">Country &amp; State Management</h1>
+      <p class="scr-sub">International countries and the emirates registered under them.</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
       </button>
-    </li>
-    <li class="nav-item">
-      <button type="button" class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-state" role="tab" data-add-target="#offcanvasAddState" data-add-label="Add State">
-        <i class="icon-base ti tabler-map-2 icon-sm me-1_5"></i>States
-        <span class="badge bg-label-secondary ms-2">{{ states_list|length }}</span>
-      </button>
-    </li>
-  </ul>
+    </div>
+  </div>
 
-  <div class="tab-content p-0">
-    <div class="tab-pane fade show active" id="tab-country" role="tabpanel">
-      <div class="card">
-        <div class="card-header border-bottom"><h5 class="card-title mb-0">Countries</h5></div>
-        <div class="card-datatable table-responsive">
-          <table class="datatables-countries table" data-search-label="Search country">
-            <thead class="border-top">
-              <tr><th>Country Code</th><th>Country Name</th><th>States</th><th class="text-center">Approval</th><th class="text-center">Actions</th></tr>
-            </thead>
-            <tbody>
-              {% for c in countries_list %}
-              <tr>
-                <td><span class="fw-medium">{{ c.code }}</span></td>
-                <td>{{ c.name }}</td>
-                <td>{{ c.states }}</td>
-                <td class="text-center">{% include "byky/partials/status_badge.html" with status=c.status %}</td>
-                <td class="text-center">
-                  <div class="d-inline-block">
-                    <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddCountry">Edit</a>
-                      <a href="javascript:void(0);" class="dropdown-item">Approve</a>
-                      <div class="dropdown-divider"></div>
-                      <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
-                    </div>
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.5 4 5.7 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.7-4-9s1.5-6.5 4-9z"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ countries|length }}</div><div class="scr-tile-lab">Countries</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ states|length }}</div><div class="scr-tile-lab">States</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ total_branches }}</div><div class="scr-tile-lab">Total branches</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ total_fleet }}</div><div class="scr-tile-lab">Total fleet</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card">
+
+    <div class="scr-content-tabs" data-scr-tabgroup="geo">
+      <button type="button" class="scr-content-tab is-on" data-tab="country">
+        Countries <span class="scr-content-tab-count">{{ countries|length }}</span>
+      </button>
+      <button type="button" class="scr-content-tab" data-tab="state">
+        States <span class="scr-content-tab-count">{{ states|length }}</span>
+      </button>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="geo" data-tab="country" data-scr-noun-singular="country" data-scr-noun-plural="countries">
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search country or code" />
+        </div>
+        <span class="scr-toolbar-count">{{ countries|length }} countr{{ countries|length|pluralize:"y,ies" }}</span>
+        <button type="button" class="scr-btn-primary" data-scr-open="country:add">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Add Country
+        </button>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Country</th>
+              <th>Code</th>
+              <th>States</th>
+              <th>Approval</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in countries %}
+            <tr class="scr-row" data-search="{{ c.name|lower }} {{ c.code|lower }}" data-record-id="{{ c.json_id }}">
+              <td>
+                <div class="scr-co">
+                  <span class="scr-avatar {% cycle 'scr-avatar-0' 'scr-avatar-1' 'scr-avatar-2' 'scr-avatar-3' 'scr-avatar-4' as country_avatar_cls %}">{{ c.code|slice:":2" }}</span>
+                  <div style="min-width:0">
+                    <div class="scr-co-name">{{ c.name }}</div>
                   </div>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+                </div>
+              </td>
+              <td><span class="scr-code">{{ c.code }}</span></td>
+              <td class="scr-state">{{ c.states }}</td>
+              <td><span class="scr-badge scr-badge-{{ c.status|lower }}"><i></i>{{ c.status }}</span></td>
+              <td>
+                <div class="scr-row-actions">
+                  <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="country:edit">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                  </button>
+                  <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                  </button>
+                  <button type="button" class="scr-icon-btn" title="More">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {{ c.fields_json|json_script:c.json_id }}
+            {% empty %}
+            <tr>
+              <td colspan="5" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.5 4 5.7 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.7-4-9s1.5-6.5 4-9z"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No countries yet</div>
+                    <p class="scr-empty-sub">Add the first country before registering states under it.</p>
+                  </div>
+                  <button type="button" class="scr-btn-primary" data-scr-open="country:add">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                    Add Country
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing {{ countries|length }} of {{ countries|length }}</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
         </div>
       </div>
     </div>
 
-    <div class="tab-pane fade" id="tab-state" role="tabpanel">
-      <div class="card">
-        <div class="card-header border-bottom"><h5 class="card-title mb-0">States</h5></div>
-        <div class="card-datatable table-responsive">
-          <table class="datatables-states table" data-search-label="Search state">
-            <thead class="border-top">
-              <tr><th>State Code</th><th>State Name</th><th>Country</th><th>Branches</th><th class="text-center">Approval</th><th class="text-center">Actions</th></tr>
-            </thead>
-            <tbody>
-              {% for s in states_list %}
-              <tr>
-                <td><span class="fw-medium">{{ s.code }}</span></td>
-                <td>{{ s.name }}</td>
-                <td>{{ s.country }}</td>
-                <td>{{ s.branches }}</td>
-                <td class="text-center">{% include "byky/partials/status_badge.html" with status=s.status %}</td>
-                <td class="text-center">
-                  <div class="d-inline-block">
-                    <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a href="javascript:void(0);" class="dropdown-item" data-bs-toggle="offcanvas" data-bs-target="#offcanvasAddState">Edit</a>
-                      <a href="javascript:void(0);" class="dropdown-item">Approve</a>
-                      <div class="dropdown-divider"></div>
-                      <a href="javascript:void(0);" class="dropdown-item text-danger">Delete</a>
-                    </div>
+    <div class="scr-panel" data-tabgroup="geo" data-tab="state" data-scr-noun-singular="state" data-scr-noun-plural="states" hidden>
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search state or code" />
+        </div>
+
+        <div class="scr-filter-wrap" data-filter-key="country">
+          <button type="button" class="scr-filter-btn">
+            <span class="scr-filter-label">All countries</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="scr-filter-menu" hidden>
+            <button type="button" class="scr-filter-opt is-active" data-value="">All countries</button>
+            {% for c in countries %}
+            <button type="button" class="scr-filter-opt" data-value="{{ c.name }}">{{ c.name }}</button>
+            {% endfor %}
+          </div>
+        </div>
+
+        <span class="scr-toolbar-count">{{ states|length }} states</span>
+        <button type="button" class="scr-btn-primary" data-scr-open="state:add">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Add State
+        </button>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>State</th>
+              <th>Code</th>
+              <th>Country</th>
+              <th>Branches</th>
+              <th>Fleet</th>
+              <th>Approval</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for s in states %}
+            <tr class="scr-row" data-search="{{ s.name|lower }} {{ s.code|lower }}" data-country="{{ s.country }}" data-record-id="{{ s.json_id }}">
+              <td>
+                <div class="scr-co">
+                  <span class="scr-avatar {% cycle 'scr-avatar-0' 'scr-avatar-1' 'scr-avatar-2' 'scr-avatar-3' 'scr-avatar-4' as state_avatar_cls %}">{{ s.code|slice:":2" }}</span>
+                  <div style="min-width:0">
+                    <div class="scr-co-name">{{ s.name }}</div>
                   </div>
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+                </div>
+              </td>
+              <td><span class="scr-code">{{ s.code }}</span></td>
+              <td class="scr-state">{{ s.country }}</td>
+              <td class="scr-state">{{ s.branches }}</td>
+              <td class="scr-state">{{ s.fleet }}</td>
+              <td><span class="scr-badge scr-badge-{{ s.status|lower }}"><i></i>{{ s.status }}</span></td>
+              <td>
+                <div class="scr-row-actions">
+                  <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="state:edit">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                  </button>
+                  <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                  </button>
+                  <button type="button" class="scr-icon-btn" title="More">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {{ s.fields_json|json_script:s.json_id }}
+            {% empty %}
+            <tr>
+              <td colspan="7" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No states yet</div>
+                    <p class="scr-empty-sub">Add a state and assign it to one of the registered countries.</p>
+                  </div>
+                  <button type="button" class="scr-btn-primary" data-scr-open="state:add">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                    Add State
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing {{ states|length }} of {{ states|length }}</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
         </div>
       </div>
     </div>
+
   </div>
 </div>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddCountry">
-  <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title">Add Country</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+{% comment %} Add/Edit drawer -- Country. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="country" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="country" data-add-title="Add Country" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.5 4 5.7 4 9s-1.5 6.5-4 9c-2.5-2.5-4-5.7-4-9s1.5-6.5 4-9z"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Country</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
   </div>
-  <div class="offcanvas-body p-6">
-    <form onsubmit="return false">
-      <div class="mb-6">
-        <label class="form-label" for="country-code">Country Code <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="country-code" maxlength="10" placeholder="UAE" />
-      </div>
-      <div class="mb-6">
-        <label class="form-label" for="country-name">Country Name <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="country-name" maxlength="100" placeholder="United Arab Emirates" />
-      </div>
-      <div class="form-check mb-6">
-        <input class="form-check-input" type="checkbox" id="country-active" checked />
-        <label class="form-check-label" for="country-active">Is Active</label>
-      </div>
-      <div class="d-flex gap-4">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
-      </div>
-    </form>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Country Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" placeholder="UAE" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Country Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" placeholder="United Arab Emirates" />
+    </div>
   </div>
-</div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 
-<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddState">
-  <div class="offcanvas-header border-bottom">
-    <h5 class="offcanvas-title">Add State</h5>
-    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+{% comment %} Add/Edit drawer -- State. {% endcomment %}
+<div class="scr-veil" data-scr-drawer="state" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="state" data-add-title="Add State" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add State</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
   </div>
-  <div class="offcanvas-body p-6">
-    <form onsubmit="return false">
-      <div class="mb-6">
-        <label class="form-label" for="state-country">Country <span class="text-danger">*</span></label>
-        <select id="state-country" class="form-select">
-          <option value="">Select</option>
-          {% for c in countries_list %}<option>{{ c.name }}</option>{% endfor %}
-        </select>
-      </div>
-      <div class="mb-6">
-        <label class="form-label" for="state-code">State Code <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="state-code" maxlength="10" placeholder="DXB" />
-      </div>
-      <div class="mb-6">
-        <label class="form-label" for="state-name">State Name <span class="text-danger">*</span></label>
-        <input type="text" class="form-control" id="state-name" maxlength="100" placeholder="Dubai" />
-      </div>
-      <div class="form-check mb-6">
-        <input class="form-check-input" type="checkbox" id="state-active" checked />
-        <label class="form-check-label" for="state-active">Is Active</label>
-      </div>
-      <div class="d-flex gap-4">
-        <button type="submit" class="btn btn-primary">Save</button>
-        <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-        <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
-      </div>
-    </form>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Country<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="country">
+        <option value="">Select</option>
+        {% for c in countries %}<option>{{ c.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">State Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" placeholder="DXB" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">State Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" placeholder="Dubai" />
+    </div>
   </div>
-</div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

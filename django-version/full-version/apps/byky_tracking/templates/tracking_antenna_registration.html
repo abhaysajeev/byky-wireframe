@@ -1,0 +1,237 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Antenna Registration - Vehicle Tracking Management{% endblock title %}
+
+{% comment %}
+FSD 8.1 (Module 8 -- RFID & Hardware Antenna System), built here per the
+follow-up instruction to implement it inside Vehicle Tracking Management
+rather than the hidden RFID Gates module. Built on the shared
+byky-screen.css/js base (see byky-screen-design-system.md and
+cms_branch_management.html for a populated Tier A list reference).
+
+Two antenna gates (Entry/Exit) per real station -- see
+apps/byky_tracking/data.py's docstring for why this is populated rather
+than awaiting-data (same treatment as apps/byky_device's device rows).
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Vehicle Tracking Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Antenna Registration</b>
+      </div>
+      <h1 class="scr-title">Antenna Registration</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="antenna:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Antenna
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Registered antennas</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.online }}</div><div class="scr-tile-lab">Online</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.offline }}</div><div class="scr-tile-lab">Offline</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.branches }}</div><div class="scr-tile-lab">Branches covered</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="antenna" data-scr-noun-plural="antennas">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search antenna code or IP" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="branch">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All branches</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All branches</button>
+          {% for b in branches_list %}<button type="button" class="scr-filter-opt" data-value="{{ b.name }}">{{ b.name }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="direction">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All directions</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All directions</button>
+          <button type="button" class="scr-filter-opt" data-value="Entry">Entry</button>
+          <button type="button" class="scr-filter-opt" data-value="Exit">Exit</button>
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">{{ antennas|length }} antennas</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Antenna Code</th>
+            <th>Antenna Name</th>
+            <th>Branch</th>
+            <th>IP Address</th>
+            <th>Direction</th>
+            <th>RF Power</th>
+            <th style="text-align:center">Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in antennas %}
+          <tr class="scr-row" data-search="{{ a.code|lower }} {{ a.ip|lower }}" data-branch="{{ a.branch }}" data-direction="{{ a.direction }}" data-record-id="{{ a.json_id }}">
+            <td><span class="scr-code">{{ a.code }}</span></td>
+            <td style="font-weight:600">{{ a.name }}</td>
+            <td class="scr-contact">{{ a.branch }}</td>
+            <td><span class="scr-code">{{ a.ip }}</span></td>
+            <td><span class="scr-badge {% if a.direction == 'Entry' %}scr-badge-approved{% else %}scr-badge-pending{% endif %}"><i></i>{{ a.direction }}</span></td>
+            <td class="scr-contact">{{ a.rf_power }} dBm</td>
+            <td style="text-align:center">
+              <span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:{% if a.online %}#1f9d63{% else %}#dcd9ea{% endif %}" title="{{ a.status }}"></span>
+            </td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="antenna:edit">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                </button>
+                <button type="button" class="scr-icon-btn" title="Test TCP Connection">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9a9 9 0 0 1 16 0M7.5 12.5a4.5 4.5 0 0 1 9 0M12 16v.01"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {{ a.fields_json|json_script:a.json_id }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ antennas|length }} of {{ antennas|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="scr-veil" data-scr-drawer="antenna" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="antenna" data-add-title="Add Antenna" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Antenna</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Antenna Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" placeholder="ANT-MAR-01" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Antenna Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" placeholder="Gate 1 North In" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Station Branch<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="branch">
+        <option value="">Select</option>
+        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Reader IP Address<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="ip" value="192.168.1.101" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">TCP Port<span class="scr-required">*</span></label>
+      <input type="number" class="scr-drawer-input" data-field="port" value="10001" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">MAC Address<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="mac" value="" placeholder="AA:BB:CC:DD:EE:FF" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Gate Direction<span class="scr-required">*</span></label>
+      <div style="display:flex; gap:16px; height:40px; align-items:center">
+        <label class="scr-check-label" style="display:flex; align-items:center; gap:6px">
+          <input type="radio" class="scr-check" name="antDirection" checked /> Entry
+        </label>
+        <label class="scr-check-label" style="display:flex; align-items:center; gap:6px">
+          <input type="radio" class="scr-check" name="antDirection" /> Exit
+        </label>
+      </div>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">RF Power Gain</label>
+      <input type="number" class="scr-drawer-input" data-field="rf_power" value="22" min="10" max="30" />
+      <div class="scr-help">10 to 30 dBm.</div>
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
+{% endblock %}

@@ -1,0 +1,126 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Antenna Tracking Monitor - Vehicle Tracking Management{% endblock title %}
+
+{% comment %}
+FSD 8.4 -- RFID Gate Event Telemetry & Security Monitor, built here per the
+follow-up instruction (refer FSD, implement inside Vehicle Tracking
+Management, and replace the "Live Monitoring" entry that previously lived
+under Customer App Management -- see vertical_menu.json). Built on the
+shared byky-screen.css/js base (see byky-screen-design-system.md).
+
+Online Antennas is real, derived from the same antenna registry Antenna
+Registration/Antenna Branch Mapping use. The live tag-read event stream has
+no source without an actual SignalR/gate feed, so it renders the
+awaiting-data state rather than invented telemetry (CLAUDE.md 12) -- the
+same treatment IMS's Live RFID Monitoring and Inventory System Alerts
+already use.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Vehicle Tracking Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Antenna Tracking Monitor</b>
+      </div>
+      <h1 class="scr-title">Antenna Tracking Monitor</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field" style="grid-column:span 1">
+          <label class="scr-label">Select Station Branch</label>
+          <select class="scr-input">
+            <option value="">All Branches</option>
+            {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.online }}</div><div class="scr-tile-lab">Online antennas</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16.5a4.5 4.5 0 1 1 8 0M5 13a8 8 0 0 1 14 0M12 20h.01"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">0</div><div class="scr-tile-lab">Total reads today</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01M10.3 3.9 2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">0</div><div class="scr-tile-lab">Unauthorized alarms today</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="event" data-scr-noun-plural="events">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row"><h2 class="scr-form-title">Real-Time RFID Gate Event Stream</h2></div>
+        <p class="scr-form-sub">Live tag reads at station entry/exit gates, with clearance status.</p>
+      </div>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Time</th>
+            <th>Gate ID</th>
+            <th>RFID Tag EPC</th>
+            <th>Vehicle Code</th>
+            <th>Agreement No</th>
+            <th style="text-align:center">Clearance</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No live reads yet</div>
+                  <p class="scr-empty-sub">This screen is ready &mdash; {{ awaiting }} will appear here once the antenna gates start reporting.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display:flex; align-items:center; gap:10px; padding:14px 20px; border-top:1px solid #f0eff7">
+      <button type="button" class="scr-btn-secondary">Clear Event Log Display</button>
+      <button type="button" class="scr-btn-danger" style="margin-left:auto">Mute Siren Alarm</button>
+    </div>
+  </div>
+</div>
+{% endblock %}

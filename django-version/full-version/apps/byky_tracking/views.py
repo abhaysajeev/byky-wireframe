@@ -7,6 +7,7 @@ Wireframe phase: no writes, no CRUD, no API.
 
 from apps.byky_core import geo, refdata, screens
 from apps.byky_core.views import GenericScreenView, BykyScreenView
+from apps.byky_cms import data as cms_data
 from . import data
 
 PERMISSIONS = [
@@ -592,3 +593,93 @@ class Screen5_3(TrackingScreen):
 }
     def get_rows(self):
         return data.vehicle_types()
+
+
+class AntennaScreenView(BykyScreenView):
+    """FSD Module 8 (RFID & Hardware Antenna System) screens, built here per
+    the follow-up instruction to implement them inside Vehicle Tracking
+    Management. See apps/byky_tracking/data.py's docstring for why the
+    antenna dataset is populated rather than awaiting-data."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["branches_list"] = cms_data.branches()
+        return context
+
+
+class AntennaRegistrationView(AntennaScreenView):
+    """FSD 8.1 -- Station Antenna Gate Setup & IP Configuration."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = data.antennas()
+        for i, a in enumerate(rows):
+            a["json_id"] = f"scr-record-antenna-{i}"
+            a["fields_json"] = {
+                "code": a["code"],
+                "name": a["name"],
+                "branch": a["branch"],
+                "ip": a["ip"],
+                "port": a["port"],
+                "mac": a["mac"],
+                "direction": a["direction"],
+                "rf_power": a["rf_power"],
+            }
+        context.update({"antennas": rows, "counts": data.antenna_counts(rows)})
+        return context
+
+
+class AntennaBranchMappingView(AntennaScreenView):
+    """FSD 8.1's Station Branch binding, surfaced as its own lighter mapping
+    view -- same pattern as IMS's Vehicle Station Mapping being a simpler
+    subset view of Vehicle Management."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = data.antennas()
+        context.update({"antennas": rows, "counts": data.antenna_counts(rows)})
+        return context
+
+
+class RfidTagMappingView(AntennaScreenView):
+    """FSD 8.2 -- RFID Tag EPC Encoding & Vehicle Tagging, reframed as
+    Branch - Vehicle - RFID Tag Mapping with view and edit, per the
+    follow-up instruction."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = data.vehicle_rfid_mappings()
+        for i, m in enumerate(rows):
+            m["json_id"] = f"scr-record-rfidmap-{i}"
+            m["fields_json"] = {
+                "vehicle_code": m["vehicle_code"],
+                "epc": m["epc"],
+                "position": "" if m["position"] == data.SHORT else m["position"],
+            }
+        context.update(
+            {
+                "mappings": rows,
+                "tag_positions": data.TAG_POSITIONS,
+                "counts": {"total": len(rows), "branches": len(cms_data.branches())},
+            }
+        )
+        return context
+
+
+class AntennaTrackingMonitorView(AntennaScreenView):
+    """FSD 8.4 -- RFID Gate Event Telemetry & Security Monitor. Read-only;
+    Online Antennas is real (derived from the antenna registry above), the
+    live read-event stream has no source without an actual SignalR/gate
+    feed, so it renders the awaiting-data state rather than invented
+    telemetry (CLAUDE.md 12)."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = data.antennas()
+        context.update(
+            {
+                "counts": data.antenna_counts(rows),
+                "awaiting": data.AWAITING["gate_events"],
+            }
+        )
+        return context

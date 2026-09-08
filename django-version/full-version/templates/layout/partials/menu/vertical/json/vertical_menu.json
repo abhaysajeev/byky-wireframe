@@ -283,18 +283,13 @@
    "slug": "customerapp",
    "badge": [
     "label-secondary",
-    "10"
+    "9"
    ],
    "submenu": [
     {
+     "url": "customerapp-mail-template",
      "name": "Mail Template & Mapping",
-     "slug": "customerapp-mail-template",
-     "disabled": true
-    },
-    {
-     "url": "ims-live-rfid-antenna-fleet-monitoring",
-     "name": "Live Monitoring",
-     "slug": "ims-live-rfid-antenna-fleet-monitoring"
+     "slug": "customerapp-mail-template"
     },
     {
      "url": "ims-order-status-management",
@@ -327,14 +322,14 @@
      "slug": "ims-push-notification-dispatch"
     },
     {
+     "url": "customerapp-advertisement",
      "name": "Advertisement",
-     "slug": "customerapp-advertisement",
-     "disabled": true
+     "slug": "customerapp-advertisement"
     },
     {
+     "url": "customerapp-customer-management",
      "name": "Customer Management",
-     "slug": "customerapp-customer-management",
-     "disabled": true
+     "slug": "customerapp-customer-management"
     }
    ]
   },
@@ -345,13 +340,33 @@
    "slug": "tracking",
    "badge": [
     "label-secondary",
-    "2"
+    "6"
    ],
    "submenu": [
     {
      "url": "tracking-gps-iot-hardware-device-registration",
      "name": "GPS & IoT Hardware Device Registration",
      "slug": "tracking-gps-iot-hardware-device-registration"
+    },
+    {
+     "url": "tracking-antenna-registration",
+     "name": "Antenna Registration",
+     "slug": "tracking-antenna-registration"
+    },
+    {
+     "url": "tracking-antenna-branch-mapping",
+     "name": "Antenna Branch Mapping",
+     "slug": "tracking-antenna-branch-mapping"
+    },
+    {
+     "url": "tracking-branch-vehicle-rfid-tag-mapping",
+     "name": "Branch - Vehicle - RFID Tag Mapping",
+     "slug": "tracking-branch-vehicle-rfid-tag-mapping"
+    },
+    {
+     "url": "tracking-antenna-tracking-monitor",
+     "name": "Antenna Tracking Monitor",
+     "slug": "tracking-antenna-tracking-monitor"
     },
     {
      "url": "tracking-tracking-security-privilege-management",
@@ -419,7 +434,8 @@
    "name": "Print Invoice",
    "icon": "menu-icon icon-base ti tabler-printer",
    "svg": "M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z",
-   "slug": "invoice-print-invoice"
+   "slug": "invoice-print-invoice",
+   "flat": true
   },
   {
    "menu_header": "Business"

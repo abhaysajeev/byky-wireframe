@@ -6,6 +6,7 @@ urlpatterns = [
     path(
         "tracking/gps-iot-hardware-device-registration/",
         views.Screen5_1.as_view(
+            template_name="tracking_gps_iot_hardware_device_registration.html",
             screen_no="5.1",
             screen_title="GPS & IoT Hardware Device Registration",
             module_label="Tracking & Telematics",

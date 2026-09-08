@@ -1,121 +1,172 @@
 {% extends layout_path %}
 {% load static %}
-{% load humanize %}
 
 {% block title %}Vehicle Station Mapping - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.6 -- Tier A, running on real records. Every one of the client's 1,060
-vehicles carries its station, so all 1,060 mappings are genuine. Mapped Date is
-not in the source.
+FSD 3.6 -- Tier A, running on real records. Built on the shared
+byky-screen.css/js base (see byky-screen-design-system.md). Every one of the
+client's 1,060 vehicles carries its station, so all 1,060 mappings are
+genuine. Mapped Date is not in the source.
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
-{% endblock vendor_js %}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Vehicle Station Mapping" parent="Inventory" subtitle=purpose action_label="Map Vehicle" action_url="#offcanvasMapVehicle" %}
+<div class="scr">
 
-<div class="row g-6 mb-6">
-  <div class="col-sm-6 col-xl-4">
-    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
-      <div class="content-left"><span class="text-heading">Mapped Vehicles</span>
-        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.items|intcomma }}</h4></div>
-        <small class="mb-0">Every vehicle is assigned</small></div>
-      <div class="avatar"><span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-map-pin-check icon-26px"></i></span></div>
-    </div></div></div>
-  </div>
-  <div class="col-sm-6 col-xl-4">
-    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
-      <div class="content-left"><span class="text-heading">Stations</span>
-        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.stations }}</h4></div>
-        <small class="mb-0">Holding inventory</small></div>
-      <div class="avatar"><span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-building-store icon-26px"></i></span></div>
-    </div></div></div>
-  </div>
-  <div class="col-sm-6 col-xl-4">
-    <div class="card"><div class="card-body"><div class="d-flex align-items-start justify-content-between">
-      <div class="content-left"><span class="text-heading">RFID Tagged</span>
-        <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ counts.tagged|intcomma }}</h4></div>
-        <small class="mb-0">EPC on every unit</small></div>
-      <div class="avatar"><span class="avatar-initial rounded bg-label-success"><i class="icon-base ti tabler-nfc icon-26px"></i></span></div>
-    </div></div></div>
-  </div>
-</div>
-
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4"><select class="form-select"><option value="">All Branches</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select></div>
-      <div class="col-md-4"><select class="form-select"><option value="">All Categories</option>{% for c in categories_list %}<option>{{ c.name }}</option>{% endfor %}</select></div>
-      <div class="col-md-4"><input type="text" class="form-control" placeholder="RFID Tag EPC" /></div>
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Vehicle Station Mapping</b>
+      </div>
+      <h1 class="scr-title">Vehicle Station Mapping</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="mapping:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Map Vehicle
+      </button>
     </div>
   </div>
 
-  <div class="card-datatable table-responsive">
-    <table class="datatables-mappings table" data-search-label="Search branch, item or RFID">
-      <thead class="border-top">
-        <tr><th>Branch Name</th><th>Item Code</th><th>Item Name</th><th>Serial No</th><th>RFID Tag EPC</th><th class="text-center">Mapped Date</th><th class="text-center">Actions</th></tr>
-      </thead>
-      <tbody>
-        {% for m in mappings %}
-        <tr>
-          <td>{{ m.branch }}</td>
-          <td><span class="fw-medium">{{ m.code }}</span></td>
-          <td>{{ m.name }}</td>
-          <td class="text-body-secondary"><small>{{ m.serial }}</small></td>
-          <td><code>{{ m.rfid }}</code></td>
-          <td class="text-center text-body-secondary">{{ m.mapped_date }}</td>
-          <td class="text-center">
-            <div class="d-inline-block">
-              <a href="javascript:void(0);" class="btn btn-icon btn-text-secondary rounded-pill dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="icon-base ti tabler-dots-vertical"></i></a>
-              <div class="dropdown-menu dropdown-menu-end">
-                <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="dropdown-item">Transfer</a>
-                <div class="dropdown-divider"></div>
-                <a href="javascript:void(0);" class="dropdown-item text-danger">Unmap</a>
-              </div>
-            </div>
-          </td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11M9 12l2 2 4-4"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.items }}</div><div class="scr-tile-lab">Mapped vehicles &mdash; every vehicle is assigned</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.stations }}</div><div class="scr-tile-lab">Stations holding inventory</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16.5a4.5 4.5 0 1 1 8 0M5 13a8 8 0 0 1 14 0M12 20h.01"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.tagged }}</div><div class="scr-tile-lab">RFID tagged &mdash; EPC on every unit</div></div>
+    </div>
   </div>
 
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasMapVehicle">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">Map Vehicle to Station</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-    </div>
-    <div class="offcanvas-body p-6">
-      <form onsubmit="return false">
-        <div class="mb-6"><label class="form-label" for="mp-branch">Branch <span class="text-danger">*</span></label>
-          <select id="mp-branch" class="select2 form-select"><option value="">Select</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select></div>
-        <div class="mb-6"><label class="form-label" for="mp-item">Item Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="mp-item" placeholder="KB113" /></div>
-        <div class="mb-6"><label class="form-label" for="mp-rfid">RFID Tag EPC</label><input type="text" class="form-control" id="mp-rfid" placeholder="10113" /></div>
-        <div class="d-flex gap-4">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
+  <div class="scr-card" data-scr-noun-singular="mapping" data-scr-noun-plural="mappings">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search branch, item or RFID" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="branch">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All branches</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All branches</button>
+          {% for b in branches_list %}<button type="button" class="scr-filter-opt" data-value="{{ b.name }}">{{ b.name }}</button>{% endfor %}
         </div>
-      </form>
+      </div>
+
+      <span class="scr-toolbar-count">{{ mappings|length }} mappings</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Branch Name</th>
+            <th>Item Code</th>
+            <th>Item Name</th>
+            <th>RFID Tag EPC</th>
+            <th>Mapped Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in mappings %}
+          <tr class="scr-row" data-search="{{ m.branch|lower }} {{ m.code|lower }} {{ m.rfid|lower }}" data-branch="{{ m.branch }}">
+            <td class="scr-contact">{{ m.branch }}</td>
+            <td><span class="scr-code">{{ m.code }}</span></td>
+            <td style="font-weight:600">{{ m.name }}</td>
+            <td><span class="scr-code">{{ m.rfid }}</span></td>
+            <td class="scr-contact">{{ m.mapped_date }}</td>
+            <td>
+              <div class="scr-row-actions">
+                <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-icon-btn" title="Transfer">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3 21 7l-4 4M21 7H9M7 21l-4-4 4-4M3 17h12"></path></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ mappings|length }} of {{ mappings|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+<div class="scr-veil" data-scr-drawer="mapping" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="mapping" data-add-title="Map Vehicle to Station" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11M9 12l2 2 4-4"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Map Vehicle to Station</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Branch<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="branch">
+        <option value="">Select</option>
+        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Item Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" value="" placeholder="KB113" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">RFID Tag EPC</label>
+      <input type="text" class="scr-drawer-input" data-field="rfid" value="" placeholder="10113" />
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

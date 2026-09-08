@@ -35,21 +35,47 @@ class ImsScreenView(BykyScreenView):
 class StockItemView(ImsScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["items"] = data.stock_items()
+        items = data.stock_items()
+        for i, it in enumerate(items):
+            it["json_id"] = f"scr-record-item-{i}"
+            it["fields_json"] = {
+                "code": it["code"],
+                "name": it["name"],
+                "category": it["category"],
+                "subcategory": it["subcategory"],
+            }
+        context["items"] = items
         return context
 
 
 class CategoryView(ImsScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["categories"] = data.categories()
+        categories = data.categories()
+        for i, c in enumerate(categories):
+            c["json_id"] = f"scr-record-category-{i}"
+            c["fields_json"] = {
+                "code": c["code"],
+                "name": c["name"],
+                "description": "" if c["description"] == data.SHORT else c["description"],
+            }
+        context["categories"] = categories
         return context
 
 
 class SubCategoryView(ImsScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["subcategories"] = data.subcategories()
+        subcategories = data.subcategories()
+        for i, s in enumerate(subcategories):
+            s["json_id"] = f"scr-record-subcategory-{i}"
+            s["fields_json"] = {
+                "code": s["code"],
+                "name": s["name"],
+                "parent": s["parent"],
+                "description": "" if s["description"] == data.SHORT else s["description"],
+            }
+        context["subcategories"] = subcategories
         return context
 
 

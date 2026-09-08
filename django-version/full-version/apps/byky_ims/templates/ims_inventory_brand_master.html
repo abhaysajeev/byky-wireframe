@@ -4,69 +4,142 @@
 {% block title %}Inventory Brand Master - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.4 -- fields, filters and defaults follow the FSD. The client's source files
-contain no records for this entity, so the grid shows the awaiting-data state
-rather than invented rows.
+FSD 3.4 -- Tier A. Built on the shared byky-screen.css/js base (see
+byky-screen-design-system.md and cms_department_management.html for the
+zero-data Tier A reference). The client's source files contain no records for
+this entity, so the grid shows the awaiting-data state rather than invented
+rows.
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
-<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
-{% endblock vendor_js %}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
-<script src="{% static 'js/byky-hrms.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Inventory Brand Master" parent="Inventory" subtitle=purpose action_label="Add Brand" action_url="#offcanvasAddBrand" %}
+<div class="scr">
 
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Brand Code" />
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Inventory Brand Master</b>
       </div>
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="Brand Name" />
-      </div>
+      <h1 class="scr-title">Inventory Brand Master</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="brand:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Brand
+      </button>
     </div>
   </div>
-  <div class="card-body">
-    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
-  </div>
 
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasAddBrand">
-    <div class="offcanvas-header border-bottom">
-      <h5 class="offcanvas-title">Add Brand</h5>
-      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  <div class="scr-card" data-scr-noun-singular="brand" data-scr-noun-plural="brands">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search brand code or name" />
+      </div>
+      <span class="scr-toolbar-count">0 brands</span>
     </div>
-    <div class="offcanvas-body p-6">
-      <form onsubmit="return false">
-        <div class="mb-6"><label class="form-label" for="br-code">Brand Code <span class="text-danger">*</span></label><input type="text" class="form-control" id="br-code" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="br-name">Brand Name <span class="text-danger">*</span></label><input type="text" class="form-control" id="br-name" placeholder="" /></div>
-        <div class="mb-6"><label class="form-label" for="br-web">Website</label><input type="text" class="form-control" id="br-web" placeholder="https://" /></div>
-        <div class="mb-6"><label class="form-label" for="br-logo">Logo</label><input type="file" class="form-control" id="br-logo" accept="image/*" /></div>
-        <div class="form-check mb-6"><input class="form-check-input" type="checkbox" id="offcanvasAddBrand-active" checked /><label class="form-check-label" for="offcanvasAddBrand-active">Is Active</label></div>
-        <div class="d-flex gap-4">
-          <button type="submit" class="btn btn-primary">Save</button>
-          <button type="submit" class="btn btn-label-primary">Save &amp; New</button>
-          <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>
-        </div>
-      </form>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Brand Code</th>
+            <th>Brand Name</th>
+            <th>Website</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No brands yet</div>
+                  <p class="scr-empty-sub">Brands will appear here once the client supplies {{ awaiting }}.</p>
+                </div>
+                <button type="button" class="scr-btn-primary" data-scr-open="brand:add">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  Add Brand
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
     </div>
   </div>
 </div>
+
+<div class="scr-veil" data-scr-drawer="brand" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="brand" data-add-title="Add Brand" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Brand</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+  </div>
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Brand Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Brand Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Website</label>
+      <input type="text" class="scr-drawer-input" data-field="website" value="" placeholder="https://" />
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Logo</label>
+      <input type="file" class="scr-drawer-input" accept="image/*" />
+    </div>
+  </div>
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
 {% endblock %}

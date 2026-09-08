@@ -4,48 +4,100 @@
 {% block title %}Live RFID & Antenna Fleet Monitoring - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.18 -- fields, filters and defaults follow the FSD. The client's source files
-contain no records for this entity, so the grid shows the awaiting-data state
-rather than invented rows.
+FSD 3.18 -- Tier C read-only monitor. Built on the shared byky-screen.css/js
+base (see byky-screen-design-system.md). No Add action -- this screen only
+ever displays gate read telemetry, it never creates records. The client's
+source files contain no records for this entity, so the grid shows the
+awaiting-data state rather than invented rows.
 {% endcomment %}
 
-{% block vendor_css %}
+{% block page_css %}
 {{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
-<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
-<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
-<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
-{% endblock vendor_js %}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
 
 {% block page_js %}
 {{ block.super }}
-<script src="{% static 'js/byky-cms-list.js' %}"></script>
-<script src="{% static 'js/byky-hrms.js' %}"></script>
+<script src="{% static 'js/byky-screen.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/page_header.html" with title="Live RFID & Antenna Fleet Monitoring" parent="Inventory" subtitle=purpose  %}
+<div class="scr">
 
-<div class="card">
-  <div class="card-header border-bottom">
-    <h5 class="card-title mb-0">Filters</h5>
-    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
-      <div class="col-md-4">
-        <select class="form-select"><option value="">All Station Branches</option>{% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}</select>
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Live RFID &amp; Antenna Fleet Monitoring</b>
       </div>
-      <div class="col-md-4">
-        <input type="text" class="form-control" placeholder="RFID Tag EPC" />
-      </div>
+      <h1 class="scr-title">Live RFID &amp; Antenna Fleet Monitoring</h1>
+      <p class="scr-sub">{{ purpose }}</p>
     </div>
   </div>
-  <div class="card-body">
-    {% include "byky/partials/awaiting_data.html" with needs=awaiting %}
+
+  <div class="scr-card" data-scr-noun-singular="read event" data-scr-noun-plural="read events">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search RFID tag EPC" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="branch">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All station branches</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All station branches</button>
+          {% for b in branches_list %}<button type="button" class="scr-filter-opt" data-value="{{ b.name }}">{{ b.name }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">0 read events</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>RFID Tag EPC</th>
+            <th>Branch</th>
+            <th>Gate</th>
+            <th>Direction</th>
+            <th>Read At</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colspan="5" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No live reads yet</div>
+                  <p class="scr-empty-sub">This screen is ready &mdash; {{ awaiting }} will appear here once the antenna gates start reporting.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

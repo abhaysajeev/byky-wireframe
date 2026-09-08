@@ -15,9 +15,4 @@ urlpatterns = [
         ),
         name="invoice-print-invoice",
     ),
-    path(
-        "invoice/print-invoice/bill/",
-        views.PrintBillView.as_view(),
-        name="invoice-print-bill",
-    ),
 ]

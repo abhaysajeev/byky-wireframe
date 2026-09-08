@@ -316,6 +316,14 @@
     });
   });
 
+  /* ── print trigger (data-scr-print) -- e.g. the Print button inside
+     the Print Invoice bill modal. Kept as a tiny delegated handler here
+     rather than an inline onclick, consistent with every other action
+     being wired through a data-scr-* attribute. */
+  document.querySelectorAll('[data-scr-print]').forEach(function (btn) {
+    btn.addEventListener('click', function () { window.print(); });
+  });
+
   /* ── small action dropdown menu (data-scr-menu-toggle) ────────────
      Generic open/close for a header "More actions" button, sibling to
      .scr-filter-wrap's own dropdown but not tied to filtering -- clicking

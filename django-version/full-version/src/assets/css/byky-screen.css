@@ -21,6 +21,7 @@
 @keyframes cdDrawerIn { from { transform: translateX(24px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 @keyframes cdVeilIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes cdFadeUp { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes cdModalIn { from { opacity: 0; transform: translate(-50%, -50%) scale(0.96); } to { opacity: 1; transform: translate(-50%, -50%) scale(1); } }
 
 /* ── page header ──────────────────────────────────────────────────── */
 .scr-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
@@ -425,7 +426,13 @@ textarea.scr-drawer-input { height: auto; min-height: 72px; padding: 10px 13px; 
   position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 1091;
   width: min(480px, 100%); max-height: 88vh; background: #fff; border-radius: 16px;
   box-shadow: 0 30px 70px -30px rgba(26, 22, 64, 0.5); display: flex; flex-direction: column;
-  animation: cdFadeUp 0.22s ease-out;
+  /* cdFadeUp's translateY would replace this element's own centering
+     transform for the length of the animation (transform is a single
+     property -- the keyframe's value wins outright, not additively),
+     which is what made the modal appear to rise from the bottom instead
+     of opening centered. cdModalIn keeps the translate(-50%,-50%) centering
+     baked into every keyframe and animates scale instead. */
+  animation: cdModalIn 0.22s ease-out;
 }
 .scr-modal[hidden] { display: none; }
 .scr-modal-head { padding: 20px 22px 16px; border-bottom: 1px solid #f0eff7; display: flex; align-items: flex-start; justify-content: space-between; gap: 14px; }

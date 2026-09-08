@@ -17,7 +17,7 @@ apps/byky_invoice/data.py's docstring. Every row's Print action, and the
 header Print button, open the same representative bill in a scr-modal --
 not a new tab -- built to be a pinpoint recreation of the legacy screen's
 own printed receipt (byky-invoice-print.css), sized to the station
-printer's real 80mm paper width when actually printed.
+printer's real 100mm paper width when actually printed.
 {% endcomment %}
 
 {% block page_css %}
@@ -155,10 +155,10 @@ screen's own printed receipt: same station/logo header, TAX INVOICE + TRN,
 bike-rental line table, discount/tax/net breakdown, customer footer. The
 print-isolation rule in that stylesheet hides everything else on the page
 when Print is pressed, so only .bill reaches the printer, at the station's
-real 80mm paper width.
+real 100mm paper width.
 {% endcomment %}
 <div class="scr-modal-veil" data-scr-modal-veil="bill" hidden></div>
-<div class="scr-modal" data-scr-modal="bill" hidden style="width:min(94vw, 100mm)">
+<div class="scr-modal" data-scr-modal="bill" hidden style="width:min(94vw, 118mm)">
   <div class="scr-modal-head no-print" style="padding-bottom:0; border-bottom:none">
     <div></div>
     <button type="button" class="scr-drawer-close" data-scr-modal-close>

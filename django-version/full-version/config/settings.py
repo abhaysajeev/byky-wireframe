@@ -215,7 +215,13 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # replaying that stale copy indefinitely, no matter how many times the file
 # is fixed and the server restarted -- only a hard/cache-clearing reload
 # would ever see the change. This produced exactly that symptom on the
-# station-address and dashboard map scripts. Disable caching in DEBUG instead.
+# station-address and dashboard map scripts, and again on the dashboard's
+# KPI charts (byky-dashboard.js) -- a browser that had loaded the dashboard
+# even once before a redeploy kept replaying its cached copy of the script
+# indefinitely, since CompressedStaticFilesStorage never changed the file's
+# URL. Manifest storage (below) is the actual fix: content-hashed filenames
+# mean a changed file gets a new URL, so this class of bug can no longer
+# recur regardless of what max-age is set to.
 WHITENOISE_MAX_AGE = 31536000 if not DEBUG else 0
 
 # Finders let WhiteNoise serve straight from src/assets without collectstatic,
@@ -226,8 +232,15 @@ WHITENOISE_USE_FINDERS = DEBUG
 if not DEBUG:
     STORAGES = {
         "default": {"BACKEND": "django.core.files.storage.FileSystemStorage"},
-        "staticfiles": {"BACKEND": "whitenoise.storage.CompressedStaticFilesStorage"},
+        "staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"},
     }
+    # Belt-and-braces: if a template ever references a static path with no
+    # manifest entry (e.g. a typo, or a file dropped after collectstatic ran),
+    # fall back to serving it unhashed instead of a 500 at request time. This
+    # does NOT cover collectstatic-time failures (a CSS file's own url()
+    # references, e.g. raty-js's missing font files below, are resolved
+    # during build, before any manifest exists to fall back on).
+    WHITENOISE_MANIFEST_STRICT = False
 
 
 STATICFILES_DIRS = [

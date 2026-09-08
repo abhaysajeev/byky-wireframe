@@ -39,8 +39,8 @@
     <!-- /Left Text -->
     <div class="d-none d-xl-flex col-xl-8 p-0">
       <div class="auth-cover-bg d-flex justify-content-center align-items-center">
-        <img src="{% static 'img/illustrations/auth-register-illustration-' %}{{ COOKIES.theme|default:theme }}.png" alt="auth-register-cover" class="my-5 auth-illustration" data-app-light-img="illustrations/auth-register-illustration-light.png" data-app-dark-img="illustrations/auth-register-illustration-dark.png" />
-        <img src="{% static 'img/illustrations/bg-shape-image-' %}{{ COOKIES.theme|default:theme }}.png" alt="auth-register-cover" class="platform-bg" data-app-light-img="illustrations/bg-shape-image-light.png" data-app-dark-img="illustrations/bg-shape-image-dark.png" />
+{% with byky_theme_val=COOKIES.theme|default:theme %}        <img src="{% static 'img/illustrations/auth-register-illustration-'|add:byky_theme_val|add:'.png' %}" alt="auth-register-cover" class="my-5 auth-illustration" data-app-light-img="illustrations/auth-register-illustration-light.png" data-app-dark-img="illustrations/auth-register-illustration-dark.png" />{% endwith %}
+{% with byky_theme_val=COOKIES.theme|default:theme %}        <img src="{% static 'img/illustrations/bg-shape-image-'|add:byky_theme_val|add:'.png' %}" alt="auth-register-cover" class="platform-bg" data-app-light-img="illustrations/bg-shape-image-light.png" data-app-dark-img="illustrations/bg-shape-image-dark.png" />{% endwith %}
       </div>
     </div>
     <!-- /Left Text -->

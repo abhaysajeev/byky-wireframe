@@ -238,6 +238,50 @@
    ]
   },
   {
+   "name": "Request Management",
+   "icon": "menu-icon icon-base ti tabler-clipboard-check",
+   "svg": "M9 5h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2M9 3h6v3H9zM9 13l2 2 4-4",
+   "slug": "request",
+   "badge": [
+    "label-secondary",
+    "2"
+   ],
+   "submenu": [
+    {
+     "url": "request-request-approval",
+     "name": "Request Approval",
+     "slug": "request-request-approval"
+    },
+    {
+     "url": "request-card-discount-approval",
+     "name": "Card Discount Approval",
+     "slug": "request-card-discount-approval"
+    }
+   ]
+  },
+  {
+   "name": "Credit Note Management",
+   "icon": "menu-icon icon-base ti tabler-receipt-refund",
+   "svg": "M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17l-3-2-2 2-2-2-2 2-2-2M8 7h6M8 11h6",
+   "slug": "creditnote",
+   "badge": [
+    "label-secondary",
+    "2"
+   ],
+   "submenu": [
+    {
+     "url": "creditnote-credit-note-request",
+     "name": "Credit Note Request",
+     "slug": "creditnote-credit-note-request"
+    },
+    {
+     "url": "creditnote-credit-note",
+     "name": "Credit Note",
+     "slug": "creditnote-credit-note"
+    }
+   ]
+  },
+  {
    "name": "Vehicle Tracking Management",
    "icon": "menu-icon icon-base ti tabler-gps",
    "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z",
@@ -312,6 +356,13 @@
      "disabled": true
     }
    ]
+  },
+  {
+   "url": "invoice-print-invoice",
+   "name": "Print Invoice",
+   "icon": "menu-icon icon-base ti tabler-printer",
+   "svg": "M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z",
+   "slug": "invoice-print-invoice"
   },
   {
    "menu_header": "Business"

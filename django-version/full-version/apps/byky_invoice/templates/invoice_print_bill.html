@@ -1,0 +1,127 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tax Invoice - {{ bill.inv_no }}</title>
+  <link rel="icon" type="image/png" href="{% static 'img/favicon/favicon.png' %}" />
+  <link rel="stylesheet" href="{% static 'css/byky-invoice-print.css' %}" />
+</head>
+<body>
+
+  {% comment %}
+  Deliberately not extending the site's layout -- a receipt is its own
+  document, never the admin shell (see views.py's PrintBillView docstring
+  and byky-screen-design-system.md section 9). Nothing here submits or
+  persists; "Print" just opens the browser's print dialog against the
+  @page 80mm rule in byky-invoice-print.css.
+  {% endcomment %}
+  <div class="bill-toolbar no-print">
+    <a href="{% url 'invoice-print-invoice' %}">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+      Back to list
+    </a>
+    <button type="button" onclick="window.print()">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z"></path></svg>
+      Print
+    </button>
+  </div>
+
+  <div class="bill-page">
+    <div class="bill" id="bill">
+      <div class="bill-head">
+        <div class="station">{{ bill.station_name|upper }}</div>
+        <div class="emirate">{{ bill.emirate|upper }}</div>
+        <img class="bill-logo" src="{% static 'img/branding/byky-logo.png' %}" alt="BYKY" />
+        <div class="bill-title">TAX INVOICE</div>
+        <div class="bill-trn">TRN : {{ bill.trn }}</div>
+      </div>
+
+      <hr class="bill-rule" />
+
+      <div class="bill-kv-row">
+        <div class="bill-kv">Date : {{ bill.date }}</div>
+        <div class="bill-kv">Trans No : {{ bill.trans_no }}</div>
+      </div>
+      <div class="bill-kv-row">
+        <div class="bill-kv">Inv No : {{ bill.inv_no }}</div>
+        <div class="bill-kv">Starting Time : {{ bill.starting_time }}</div>
+      </div>
+      <div class="bill-kv-row">
+        <div class="bill-kv">Open By : {{ bill.open_by }}</div>
+        <div class="bill-kv">Returning Time : {{ bill.returning_time }}</div>
+      </div>
+      <div class="bill-kv-row">
+        <div class="bill-kv">Closed By : {{ bill.closed_by }}</div>
+        <div class="bill-kv">Closing Time : {{ bill.closing_time }}</div>
+      </div>
+
+      <div class="bill-section-title">Bike Rental Details</div>
+      <table class="bill-table">
+        <thead>
+          <tr>
+            <th>SNo</th>
+            <th>Bike No</th>
+            <th>Base Rate</th>
+            <th>Extra Rate</th>
+            <th>Rtn Time</th>
+            <th>Dur</th>
+            <th>Amt IncVat</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for l in bill.lines %}
+          <tr>
+            <td>{{ l.sno|stringformat:"02d" }}</td>
+            <td>{{ l.bike_no }}</td>
+            <td>{{ l.base_rate }}</td>
+            <td>{{ l.extra_rate }}</td>
+            <td>{{ l.rtn_time }}</td>
+            <td>{{ l.dur }}</td>
+            <td>{{ l.amount|floatformat:2 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+      <hr class="bill-rule" />
+
+      <div class="bill-totals-row">
+        <div class="bill-kv">Discount : AED {{ bill.discount|floatformat:2 }}</div>
+        <div class="bill-kv">Taxable Amount : AED {{ bill.taxable_amount|floatformat:2 }}</div>
+      </div>
+      <div class="bill-totals-row">
+        <div class="bill-kv">Card Discount : AED {{ bill.card_discount|floatformat:2 }}</div>
+        <div class="bill-kv">VAT @{{ bill.vat_pct|floatformat:1 }}% : AED {{ bill.vat_amount|floatformat:2 }}</div>
+      </div>
+      <div class="bill-totals-row">
+        <div class="bill-kv">Rounded Off : AED {{ bill.rounded_off|floatformat:2 }}</div>
+        <div class="bill-kv"></div>
+      </div>
+
+      <div class="bill-net">
+        <span>NET TOTAL :</span>
+        <span>AED {{ bill.net_total|floatformat:2 }}</span>
+      </div>
+
+      <hr class="bill-rule" />
+
+      <div class="bill-foot">
+        <div class="bill-kv-row">
+          <div class="bill-kv">Name : {{ bill.customer_name }}</div>
+          <div class="bill-kv">Mobile : {{ bill.mobile }}</div>
+        </div>
+        <div class="bill-kv-row">
+          <div class="bill-kv">ID Type : {{ bill.id_type|default:"—" }}</div>
+          <div class="bill-kv">ID No : {{ bill.id_no|default:"—" }}</div>
+        </div>
+        <div class="bill-kv-row">
+          <div class="bill-kv">Balance to Pay : AED {{ bill.balance_to_pay|floatformat:2 }}</div>
+          <div class="bill-kv">Time : {{ bill.time }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

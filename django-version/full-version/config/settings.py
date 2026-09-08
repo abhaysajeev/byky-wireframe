@@ -69,6 +69,8 @@ INSTALLED_APPS = [
     "apps.byky_cms",
     "apps.byky_fare",
     "apps.byky_discount",
+    "apps.byky_request",
+    "apps.byky_creditnote",
     "apps.byky_hrms",
     "apps.byky_ims",
     "apps.byky_rms",
@@ -86,6 +88,7 @@ INSTALLED_APPS = [
     "apps.byky_integration",
     "apps.byky_device",
     "apps.byky_live",
+    "apps.byky_invoice",
 ]
 
 MIDDLEWARE = [

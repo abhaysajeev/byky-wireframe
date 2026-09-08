@@ -1,0 +1,89 @@
+/* BYKY printed bill -- a real 80mm thermal-receipt document, not a screen
+   inside the admin shell (see byky-screen-design-system.md section 9: this
+   is genuinely one-of-a-kind, so it doesn't extend .scr-*). 80mm is the
+   client's actual station receipt-printer paper width; @page pins the
+   printed page to that exact width with the height left to flow with
+   content, the same way a thermal printer's continuous roll does -- this
+   is what "matches the print ratio" means here, not a fixed A4/A5 page. */
+
+@page {
+  size: 80mm auto;
+  margin: 0;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #e9e9ee;
+  font-family: 'Courier New', 'IBM Plex Mono', ui-monospace, monospace;
+  color: #111;
+}
+
+/* ── on-screen preview chrome (never printed) ─────────────────────── */
+.bill-toolbar {
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px; background: #1a1640;
+}
+.bill-toolbar button {
+  display: flex; align-items: center; gap: 8px; border: none; cursor: pointer;
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; color: #fff;
+  padding: 10px 18px; border-radius: 10px; background: linear-gradient(100deg, #c2141a, #e8272e);
+}
+.bill-toolbar a {
+  display: flex; align-items: center; gap: 8px; text-decoration: none;
+  font-family: 'Sora', sans-serif; font-size: 13px; font-weight: 600; color: #cfcde3;
+  padding: 10px 18px; border-radius: 10px; border: 1px solid #34305e;
+}
+.bill-page {
+  padding: 28px 16px 60px;
+  display: flex; justify-content: center;
+}
+
+/* ── the receipt itself: 80mm wide, height flows with content ────── */
+.bill {
+  width: 80mm;
+  background: #fff;
+  padding: 4mm 5mm 6mm;
+  box-shadow: 0 12px 30px -14px rgba(26, 22, 64, 0.35);
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.bill-head { text-align: center; margin-bottom: 2mm; }
+.bill-head .station { font-weight: 700; font-size: 13px; letter-spacing: 0.3px; }
+.bill-head .emirate { font-size: 11px; margin-top: 1px; }
+.bill-logo { display: block; margin: 2mm auto; height: 11mm; width: auto; }
+.bill-title { font-weight: 700; font-size: 12px; letter-spacing: 0.5px; margin-top: 1mm; }
+.bill-trn { font-size: 10px; margin-top: 1px; }
+
+.bill-rule { border: none; border-top: 1px dashed #444; margin: 2.5mm 0; }
+
+.bill-kv-row { display: flex; justify-content: space-between; gap: 6mm; margin-bottom: 0.8mm; }
+.bill-kv { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bill-kv b { font-weight: 700; }
+
+.bill-section-title { font-weight: 700; margin: 2mm 0 1mm; }
+
+.bill-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+.bill-table th { text-align: left; font-weight: 700; border-bottom: 1px solid #444; padding: 1mm 0.5mm; white-space: nowrap; }
+.bill-table td { padding: 1mm 0.5mm; vertical-align: top; }
+.bill-table th:last-child, .bill-table td:last-child { text-align: right; }
+.bill-table th:first-child, .bill-table td:first-child { width: 6mm; }
+
+.bill-totals-row { display: flex; justify-content: space-between; gap: 6mm; margin-bottom: 0.8mm; }
+.bill-net {
+  display: flex; justify-content: space-between; font-weight: 700; font-size: 13px;
+  margin-top: 1mm; padding-top: 1mm;
+}
+
+.bill-foot .bill-kv-row { margin-bottom: 1mm; }
+
+@media print {
+  html, body { background: #fff; }
+  .bill-toolbar, .no-print { display: none !important; }
+  .bill-page { padding: 0; }
+  .bill { width: 80mm; box-shadow: none; padding: 4mm 5mm 6mm; }
+}

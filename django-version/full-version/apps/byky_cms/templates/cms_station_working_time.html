@@ -7,6 +7,8 @@
 FSD 1.8 -- not a list/form screen. Section 4 specifies a branch dropdown, a 7-row
 weekly schedule table with 8 time inputs per day (4 shifts x start/end), and a
 Save/Reset toolbar. Time inputs start empty: the client files contain no schedule.
+Header, KPI and button markup mirror cms_branch_management.html so this screen
+reads as the same product as the rest of Company Management.
 {% endcomment %}
 
 {% block vendor_css %}
@@ -31,130 +33,92 @@ Save/Reset toolbar. Time inputs start empty: the client files contain no schedul
 
 <div class="row g-6 mb-6">
   <div class="col-sm-6 col-xl-3">
-    <div class="card">
-      <div class="card-body d-flex align-items-start justify-content-between">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-start justify-content-between">
         <div class="content-left">
           <span class="text-heading">Branches</span>
-          <h4 class="mb-0 my-1">{{ branches_list|length }}</h4>
-          <small class="mb-0">available to configure</small>
+          <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ branches_list|length }}</h4></div>
+          <small class="mb-0">Available to configure</small>
         </div>
-        <div class="avatar">
-          <span class="avatar-initial rounded bg-label-primary">
-            <i class="icon-base ti tabler-building icon-26px"></i>
-          </span>
-        </div>
+        <div class="avatar"><span class="avatar-initial rounded bg-label-primary"><i class="icon-base ti tabler-building icon-26px"></i></span></div>
       </div>
-    </div>
+    </div></div>
   </div>
   <div class="col-sm-6 col-xl-3">
-    <div class="card">
-      <div class="card-body d-flex align-items-start justify-content-between">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-start justify-content-between">
         <div class="content-left">
           <span class="text-heading">Days per Week</span>
-          <h4 class="mb-0 my-1">{{ days|length }}</h4>
+          <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ days|length }}</h4></div>
           <small class="mb-0">Sunday &ndash; Saturday</small>
         </div>
-        <div class="avatar">
-          <span class="avatar-initial rounded bg-label-info">
-            <i class="icon-base ti tabler-calendar-week icon-26px"></i>
-          </span>
-        </div>
+        <div class="avatar"><span class="avatar-initial rounded bg-label-info"><i class="icon-base ti tabler-calendar-week icon-26px"></i></span></div>
       </div>
-    </div>
+    </div></div>
   </div>
   <div class="col-sm-6 col-xl-3">
-    <div class="card">
-      <div class="card-body d-flex align-items-start justify-content-between">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-start justify-content-between">
         <div class="content-left">
           <span class="text-heading">Shifts per Day</span>
-          <h4 class="mb-0 my-1">{{ shifts|length }}</h4>
-          <small class="mb-0">start / end each</small>
+          <div class="d-flex align-items-center my-1"><h4 class="mb-0">{{ shifts|length }}</h4></div>
+          <small class="mb-0">Start / end each</small>
         </div>
-        <div class="avatar">
-          <span class="avatar-initial rounded bg-label-warning">
-            <i class="icon-base ti tabler-clock-hour-4 icon-26px"></i>
-          </span>
-        </div>
+        <div class="avatar"><span class="avatar-initial rounded bg-label-warning"><i class="icon-base ti tabler-clock-hour-4 icon-26px"></i></span></div>
       </div>
-    </div>
+    </div></div>
   </div>
   <div class="col-sm-6 col-xl-3">
-    <div class="card">
-      <div class="card-body d-flex align-items-start justify-content-between">
+    <div class="card"><div class="card-body">
+      <div class="d-flex align-items-start justify-content-between">
         <div class="content-left">
           <span class="text-heading">Saved Schedules</span>
-          <h4 class="mb-0 my-1">0</h4>
-          <small class="mb-0">awaiting data</small>
+          <div class="d-flex align-items-center my-1"><h4 class="mb-0">0</h4></div>
+          <small class="mb-0">Awaiting data</small>
         </div>
-        <div class="avatar">
-          <span class="avatar-initial rounded bg-label-secondary">
-            <i class="icon-base ti tabler-calendar-off icon-26px"></i>
-          </span>
-        </div>
+        <div class="avatar"><span class="avatar-initial rounded bg-label-secondary"><i class="icon-base ti tabler-calendar-off icon-26px"></i></span></div>
       </div>
-    </div>
+    </div></div>
   </div>
 </div>
 
 <div class="card mb-6">
   <div class="card-header border-bottom">
-    <h5 class="card-title mb-1">Load a Schedule</h5>
-    <p class="mb-0 text-body-secondary small">Pick a branch to view or configure its weekly shift matrix.</p>
-  </div>
-  <div class="card-body">
-    <div class="row g-4 align-items-end">
-      <div class="col-md-6">
-        <label class="form-label" for="wt-branch">Select Branch <span class="text-danger">*</span></label>
+    <h5 class="card-title mb-0">Load a Schedule</h5>
+    <div class="d-flex justify-content-between align-items-center row pt-4 gap-4 gap-md-0">
+      <div class="col-md-4">
         <select id="wt-branch" class="select2 form-select">
-          <option value="">Select</option>
+          <option value="">Select Branch</option>
           {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
         </select>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <button type="button" class="btn btn-label-secondary w-100">
           <i class="icon-base ti tabler-refresh icon-xs me-1_5"></i>Load Existing Schedule
         </button>
       </div>
     </div>
   </div>
-</div>
 
-<div class="card mb-6">
-  <div class="card-header border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
-    <div>
-      <h5 class="card-title mb-1">Weekly Shift Configuration</h5>
-      <p class="mb-0 text-body-secondary small">Enter up to 4 shift windows for each day of the week, in 24-hour HH:mm.</p>
-    </div>
-    <span class="badge bg-label-warning">
-      <i class="icon-base ti tabler-calendar-off icon-xs me-1_5"></i>{{ awaiting|default:"Not captured"|capfirst }}
-    </span>
-  </div>
-
-  <div class="card-body pb-0">
+  <div class="card-body">
     <div class="alert alert-warning d-flex align-items-center mb-0" role="alert">
-      <i class="icon-base ti tabler-alert-triangle icon-md me-3"></i>
+      <i class="icon-base ti tabler-calendar-off icon-md me-3"></i>
       <div>No saved schedules &mdash; the source files contain no weekly shift windows. The matrix below is ready for entry.</div>
     </div>
   </div>
 
-  <div class="table-responsive mt-4">
-    <table class="table table-bordered mb-0 align-middle">
-      <thead>
+  <div class="table-responsive">
+    <table class="table table-bordered mb-0">
+      <thead class="border-top">
         <tr>
           <th style="min-width:120px">Day</th>
-          {% for n in shifts %}
-          <th class="text-center" style="min-width:200px">
-            <span class="badge bg-label-primary me-1_5">{{ n }}</span>Start / End
-          </th>
-          {% endfor %}
+          {% for n in shifts %}<th class="text-center" style="min-width:200px">Shift {{ n }} Start / End</th>{% endfor %}
         </tr>
       </thead>
       <tbody>
         {% for day in days %}
         <tr>
-          <td class="fw-medium">
-            <i class="icon-base ti tabler-calendar-event icon-sm me-1_5 text-body-secondary"></i>{{ day }}
-          </td>
+          <td class="fw-medium align-middle">{{ day }}</td>
           {% for n in shifts %}
           <td>
             <div class="d-flex align-items-center gap-2">
@@ -171,12 +135,8 @@ Save/Reset toolbar. Time inputs start empty: the client files contain no schedul
   </div>
 
   <div class="card-footer d-flex gap-4">
-    <button type="button" class="btn btn-primary">
-      <i class="icon-base ti tabler-device-floppy icon-xs me-1_5"></i>Save Weekly Schedule
-    </button>
-    <button type="button" class="btn btn-label-secondary">
-      <i class="icon-base ti tabler-rotate-clockwise icon-xs me-1_5"></i>Reset Schedule
-    </button>
+    <button type="button" class="btn btn-primary">Save Weekly Schedule</button>
+    <button type="button" class="btn btn-label-secondary">Reset Schedule</button>
   </div>
 </div>
 {% endblock %}

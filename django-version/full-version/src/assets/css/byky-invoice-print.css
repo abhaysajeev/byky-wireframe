@@ -6,10 +6,16 @@
    one-of-a-kind doesn't belong in .scr-* styling) -- a receipt reads as a
    receipt, plain black-on-white, the same condensed sans-serif and colon-
    aligned label/value rows the legacy screen printed. .bill is scoped so
-   nothing here leaks onto (or is overridden by) the surrounding .scr page. */
+   nothing here leaks onto (or is overridden by) the surrounding .scr page.
+
+   Width is 100mm, not 80mm -- the Bike Rental Details table has 7 columns,
+   two of them compound values ("45.00/45 MINS"), and at true 80mm that
+   content overflowed the printable area no matter the font size. 100mm is
+   still a genuine narrow-receipt width, just wide enough for that table to
+   sit on one line per row instead of spilling past the page edge. */
 
 .bill {
-  width: 80mm;
+  width: 100mm;
   margin: 0 auto;
   background: #fff;
   padding: 4mm 5mm 6mm;
@@ -36,7 +42,7 @@
    run long), second narrower (times/short numbers), matching the
    reference's own proportions rather than an even 50/50 split. */
 .bill-row2 { display: flex; gap: 2mm; margin-bottom: 0.5mm; }
-.bill-row2 .col-a { flex: 0 0 60%; display: flex; }
+.bill-row2 .col-a { flex: 0 0 58%; display: flex; }
 .bill-row2 .col-b { flex: 1; min-width: 0; display: flex; }
 .bill-kv-label { flex: 0 0 auto; width: 15mm; }
 .bill-row2 .col-b .bill-kv-label { width: 17mm; }
@@ -45,11 +51,21 @@
 
 .bill-section-title { font-weight: 700; margin: 2mm 0 1mm; }
 
-.bill-table { width: 100%; border-collapse: collapse; font-size: 9.5px; }
-.bill-table th { text-align: left; font-weight: 700; border-bottom: 1px solid #555; padding: 0.8mm 0.6mm; white-space: nowrap; }
-.bill-table td { padding: 0.8mm 0.6mm; vertical-align: top; white-space: nowrap; }
+/* fixed layout + a column width per column keeps the compound rate values
+   ("45.00/45 MINS") from forcing the table (and so the whole receipt)
+   wider than the page -- they wrap onto a second line inside their own
+   cell instead of pushing the table's total width past 100mm. */
+.bill-table { width: 100%; table-layout: fixed; border-collapse: collapse; font-size: 9px; }
+.bill-table th { text-align: left; font-weight: 700; border-bottom: 1px solid #555; padding: 0.8mm 0.5mm; }
+.bill-table td { padding: 0.8mm 0.5mm; vertical-align: top; word-break: break-word; }
 .bill-table th:last-child, .bill-table td:last-child { text-align: right; }
-.bill-table th:first-child, .bill-table td:first-child { width: 6mm; }
+.bill-table th:nth-child(1), .bill-table td:nth-child(1) { width: 7%; }
+.bill-table th:nth-child(2), .bill-table td:nth-child(2) { width: 14%; }
+.bill-table th:nth-child(3), .bill-table td:nth-child(3) { width: 20%; }
+.bill-table th:nth-child(4), .bill-table td:nth-child(4) { width: 20%; }
+.bill-table th:nth-child(5), .bill-table td:nth-child(5) { width: 15%; white-space: nowrap; }
+.bill-table th:nth-child(6), .bill-table td:nth-child(6) { width: 10%; white-space: nowrap; }
+.bill-table th:nth-child(7), .bill-table td:nth-child(7) { width: 14%; white-space: nowrap; }
 
 .bill-net {
   display: flex; justify-content: space-between; font-weight: 700; font-size: 12.5px;
@@ -60,12 +76,12 @@
 /* ── print isolation: only .bill prints, at the real receipt width,
    height flowing with content the way a thermal roll actually prints ── */
 @page {
-  size: 80mm auto;
+  size: 100mm auto;
   margin: 0;
 }
 @media print {
   body * { visibility: hidden; }
   .bill, .bill * { visibility: visible; }
-  .bill { position: absolute; top: 0; left: 0; margin: 0; width: 80mm; }
+  .bill { position: absolute; top: 0; left: 0; margin: 0; width: 100mm; }
   .no-print { display: none !important; }
 }

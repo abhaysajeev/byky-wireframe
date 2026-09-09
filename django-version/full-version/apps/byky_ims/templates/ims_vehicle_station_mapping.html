@@ -64,6 +64,20 @@ genuine. Mapped Date is not in the source.
       </span>
       <div><div class="scr-tile-val">{{ counts.tagged }}</div><div class="scr-tile-lab">RFID tagged &mdash; EPC on every unit</div></div>
     </div>
+    {% comment %}
+    Company equipment posted to a branch, across all branches -- antennas,
+    readers, terminals, cameras. A link, because the register it counts lives
+    on the Assets screen, so the number and the list are one click apart.
+    Reads 0 until an equipment inventory is supplied; the count is derived,
+    never seeded (see data.asset_counts).
+    {% endcomment %}
+    <a class="scr-tile" href="{% url 'ims-asset-management' %}" title="Open Assets">
+      <span class="scr-tile-ico scr-tile-ico-purple">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4zM4 7l2-3h12l2 3M9 19v2M15 19v2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ asset_counts.mapped }}</div><div class="scr-tile-lab">Mapped assets &mdash; equipment across all branches</div></div>
+      <svg class="scr-tile-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+    </a>
   </div>
 
   <div class="scr-card" data-scr-noun-singular="mapping" data-scr-noun-plural="mappings">

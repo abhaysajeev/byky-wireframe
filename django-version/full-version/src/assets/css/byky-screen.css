@@ -9,8 +9,15 @@
 .scr *, .scr *::before, .scr *::after { box-sizing: border-box; }
 .scr p, .scr h1, .scr h2, .scr h3 { margin: 0; padding: 0; }
 .scr h1, .scr h2, .scr h3 { color: inherit; } /* core.css sets h1..h3 { color: var(--bs-heading-color) }; keep this component's own ink */
-.scr a { color: #d81f26; text-decoration: none; }
-.scr a:hover { color: #a8161c; }
+/* Link ink -- but not for anchors that are really buttons. .scr a is more
+   specific than .scr-btn-primary, so an <a class="scr-btn-primary"> was
+   getting brand-red text on its brand-red fill, and since the icons draw with
+   stroke="currentColor" the whole control read as one red blob. Excluding
+   anything button-shaped fixes every such anchor at once rather than one
+   screen at a time. */
+.scr a:not([class*="btn"]) { color: #d81f26; text-decoration: none; }
+.scr a:not([class*="btn"]):hover { color: #a8161c; }
+.scr a[class*="btn"] { text-decoration: none; }
 .scr table { border-collapse: collapse; width: 100%; }
 .scr input, .scr select, .scr textarea, .scr button { font-family: inherit; }
 .scr-sb { scrollbar-width: thin; scrollbar-color: #e4e3ee transparent; }

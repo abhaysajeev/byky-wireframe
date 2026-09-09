@@ -272,5 +272,9 @@ def asset_counts():
         "types": len(types),
         "classes": len({t["asset_class"] for t in types}),
         "registered": len(rows),
+        # Assets actually posted to a branch, as opposed to registered but
+        # unassigned. Real arithmetic over an empty register today, so it
+        # reads 0 -- it will move on its own once equipment is supplied.
+        "mapped": sum(1 for r in rows if r.get("station_key")),
         "stations": len(seed.STATIONS),
     }

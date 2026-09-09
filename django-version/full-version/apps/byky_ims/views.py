@@ -27,6 +27,9 @@ class ImsScreenView(BykyScreenView):
                 "branches_list": cms_data.branches(),
                 "permissions": data.PERMISSIONS,
                 "counts": data.counts(),
+                # available to every IMS screen, not just Asset Management --
+                # Vehicle Station Mapping shows the mapped-asset figure too
+                "asset_counts": data.asset_counts(),
             }
         )
         if self.awaiting_key:

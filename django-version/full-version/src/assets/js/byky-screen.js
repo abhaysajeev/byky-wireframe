@@ -64,8 +64,12 @@
   function applyKpiFilter(tile, value) {
     var sep = tile.dataset.scrKpiFilter.indexOf(':');
     var key = tile.dataset.scrKpiFilter.slice(0, sep);
-    var scope = scopeOf(tile);
-    var wrap = scope.querySelector('.scr-filter-wrap[data-filter-key="' + key + '"]');
+    // Not scopeOf(tile): a KPI tile's own .scr-card (if it's inside one,
+    // e.g. Document Expiry Status's card) is almost never the card holding
+    // the rows it filters -- those live in a different .scr-card further
+    // down the same screen. This mechanism is page-wide by design, so it
+    // searches the whole .scr root, same as the click delegated below.
+    var wrap = root.querySelector('.scr-filter-wrap[data-filter-key="' + key + '"]');
     if (!wrap) return;
     var opt = wrap.querySelector('.scr-filter-opt[data-value="' + value + '"]');
     if (!opt) return;
@@ -76,18 +80,17 @@
       var sep = tile.dataset.scrKpiFilter.indexOf(':');
       var key = tile.dataset.scrKpiFilter.slice(0, sep);
       var value = tile.dataset.scrKpiFilter.slice(sep + 1);
-      var scope = scopeOf(tile);
       var group = tile.dataset.scrKpiGroup;
       var wasActive = tile.classList.contains('is-active');
 
       if (group) {
-        scope.querySelectorAll('[data-scr-kpi-group="' + group + '"]').forEach(function (t) {
+        root.querySelectorAll('[data-scr-kpi-group="' + group + '"]').forEach(function (t) {
           if (t !== tile) applyKpiFilter(t, '');
         });
       }
       applyKpiFilter(tile, wasActive ? '' : value);
 
-      scope.querySelectorAll('[data-scr-kpi-filter]').forEach(function (t) {
+      root.querySelectorAll('[data-scr-kpi-filter]').forEach(function (t) {
         var tSep = t.dataset.scrKpiFilter.indexOf(':');
         var tKey = t.dataset.scrKpiFilter.slice(0, tSep);
         if (group && t.dataset.scrKpiGroup === group) {

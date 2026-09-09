@@ -324,6 +324,20 @@ EMPLOYEE = {
                     "placeholder": "Not captured"
                 },
                 {
+                    "id": "uae_address",
+                    "label": "UAE Address",
+                    "kind": "textarea",
+                    "required": False,
+                    "width": 12
+                },
+                {
+                    "id": "home_country_address",
+                    "label": "Home Country Address",
+                    "kind": "textarea",
+                    "required": False,
+                    "width": 12
+                },
+                {
                     "id": "emergency_person",
                     "label": "Emergency Contact Person",
                     "kind": "text",

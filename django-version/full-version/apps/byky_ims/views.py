@@ -30,6 +30,7 @@ class ImsScreenView(BykyScreenView):
                 # available to every IMS screen, not just Asset Management --
                 # Vehicle Station Mapping shows the mapped-asset figure too
                 "asset_counts": data.asset_counts(),
+                "item_types": data.ITEM_TYPES,
             }
         )
         if self.awaiting_key:
@@ -140,6 +141,17 @@ class AssetManagementView(ImsScreenView):
                 "employees_list": seed.EMPLOYEES,
             }
         )
+        return context
+
+
+class AssetBranchMapView(ImsScreenView):
+    """Map Asset to Branch -- the equipment counterpart of FSD 3.6's Map
+    Vehicle, reached from the Map Item menu on Inventory Branch Mapping.
+    See data.unmapped_assets() for why the pool is empty today."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["unmapped"] = data.unmapped_assets()
         return context
 
 

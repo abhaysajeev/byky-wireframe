@@ -38,10 +38,29 @@ genuine. Mapped Date is not in the source.
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
         Export
       </button>
-      <a href="{% url 'ims-vehicle-station-mapping-map' %}" class="scr-btn-primary">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
-        Map Vehicle
-      </a>
+      {% comment %}
+      One Map Item action covering both kinds of thing a branch holds. Uses the
+      shared .scr-menu dropdown (byky-screen.js wires data-scr-menu-toggle), with
+      the primary button as its toggle so the page's main action still reads as
+      the main action.
+      {% endcomment %}
+      <div class="scr-menu-wrap">
+        <button type="button" class="scr-btn-primary" data-scr-menu-toggle>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Map Item
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-menu" hidden>
+          <a class="scr-menu-item" href="{% url 'ims-vehicle-station-mapping-map' %}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10"></path></svg>
+            Map Vehicle
+          </a>
+          <a class="scr-menu-item" href="{% url 'ims-asset-branch-mapping-map' %}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4zM4 7l2-3h12l2 3M9 19v2M15 19v2"></path></svg>
+            Map Asset
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -87,6 +106,22 @@ genuine. Mapped Date is not in the source.
         <input type="text" placeholder="Search branch, item or RFID" />
       </div>
 
+      {% comment %}
+      The grid holds both vehicles and company assets, so this filter is how
+      you look at either on its own. Assets read empty until an equipment
+      inventory is supplied -- see data.station_mappings().
+      {% endcomment %}
+      <div class="scr-filter-wrap" data-filter-key="itemtype">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All items</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All items</button>
+          {% for t in item_types %}<button type="button" class="scr-filter-opt" data-value="{{ t }}">{{ t }}s</button>{% endfor %}
+        </div>
+      </div>
+
       <div class="scr-filter-wrap" data-filter-key="branch">
         <button type="button" class="scr-filter-btn">
           <span class="scr-filter-label">All branches</span>
@@ -106,6 +141,7 @@ genuine. Mapped Date is not in the source.
         <thead>
           <tr>
             <th>Branch Name</th>
+            <th>Type</th>
             <th>Item Code</th>
             <th>Item Name</th>
             <th>RFID Tag EPC</th>
@@ -115,8 +151,9 @@ genuine. Mapped Date is not in the source.
         </thead>
         <tbody>
           {% for m in mappings %}
-          <tr class="scr-row" data-search="{{ m.branch|lower }} {{ m.code|lower }} {{ m.rfid|lower }}" data-branch="{{ m.branch }}">
+          <tr class="scr-row" data-search="{{ m.branch|lower }} {{ m.code|lower }} {{ m.rfid|lower }}" data-branch="{{ m.branch }}" data-itemtype="{{ m.item_type }}">
             <td class="scr-contact">{{ m.branch }}</td>
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ m.item_type }}</span></td>
             <td><span class="scr-code">{{ m.code }}</span></td>
             <td style="font-weight:600">{{ m.name }}</td>
             <td><span class="scr-code">{{ m.rfid }}</span></td>

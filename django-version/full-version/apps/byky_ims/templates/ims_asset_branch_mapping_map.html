@@ -1,20 +1,17 @@
 {% extends layout_path %}
 {% load static %}
 
-{% block title %}Map Vehicle to Branch - Inventory{% endblock title %}
+{% block title %}Map Asset to Branch - Inventory{% endblock title %}
 
 {% comment %}
-FSD 3.6's "Map Vehicle" action -- a full page, not a drawer, per the FSD's own
-layout note for this screen ("Branch Selection Dropdown, Item Multi-select
-Grid with Checkboxes, Assigned Station Vehicles DataGrid"). Built on the
-shared byky-screen.css/js base (see byky-screen-design-system.md).
+Map Asset to Branch -- the equipment counterpart of FSD 3.6's Map Vehicle:
+same full-page shape, same byky-ims-map-to-branch.js behind it, only the
+noun on the card and the pool's columns differ.
 
-The unmapped-vehicle pool is genuinely empty: every vehicle in the source data
-already carries a real station (see ims_vehicle_station_mapping.html and
-data.station_mappings()). data.unmapped_vehicles() is real, working logic --
-not a placeholder -- that will list actual rows the moment an unassigned
-vehicle enters the fleet; nothing here is invented to make the demo busier
-(CLAUDE.md 12).
+The pool is genuinely empty -- no equipment inventory has been supplied, so
+the asset register holds nothing to assign. data.unmapped_assets() is real
+logic that lists rows the moment equipment is registered without a branch;
+nothing is invented to make the demo busier (CLAUDE.md 12).
 {% endcomment %}
 
 {% block page_css %}
@@ -36,12 +33,12 @@ vehicle enters the fleet; nothing here is invented to make the demo busier
       <div class="scr-crumb">
         <span>Inventory</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
-        <a href="{% url 'ims-vehicle-station-mapping' %}">Vehicle Station Mapping</a>
+        <a href="{% url 'ims-vehicle-station-mapping' %}">Inventory Branch Mapping</a>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
-        <b>Map Vehicle</b>
+        <b>Map Asset</b>
       </div>
-      <h1 class="scr-title">Map Vehicle to Branch</h1>
-      <p class="scr-sub">Choose a branch, then select the unmapped vehicles to assign to it.</p>
+      <h1 class="scr-title">Map Asset to Branch</h1>
+      <p class="scr-sub">Choose a branch, then select the unmapped assets to assign to it.</p>
     </div>
     <div class="scr-head-actions">
       <a href="{% url 'ims-vehicle-station-mapping' %}" class="scr-btn">
@@ -63,7 +60,7 @@ vehicle enters the fleet; nothing here is invented to make the demo busier
 
   <div class="scr-card" style="padding:20px">
     <h3 class="scr-form-title" style="margin-bottom:4px">1. Choose a branch</h3>
-    <p class="scr-form-sub" style="margin-bottom:14px">Selected vehicles below will be assigned to this branch.</p>
+    <p class="scr-form-sub" style="margin-bottom:14px">Selected assets below will be assigned to this branch.</p>
     <div style="max-width:360px">
       <select class="scr-input" id="map-branch-select">
         <option value="">Select a branch</option>
@@ -72,18 +69,18 @@ vehicle enters the fleet; nothing here is invented to make the demo busier
     </div>
   </div>
 
-  <div class="scr-card" id="map-items-card" data-scr-noun-singular="vehicle" data-scr-noun-plural="vehicles">
+  <div class="scr-card" id="map-items-card" data-scr-noun-singular="asset" data-scr-noun-plural="assets">
     <div class="scr-toolbar">
       <div>
-        <h3 class="scr-form-title" style="margin-bottom:2px">2. Select unmapped vehicles</h3>
-        <p class="scr-form-sub" style="margin:0">Vehicles with no branch assigned yet.</p>
+        <h3 class="scr-form-title" style="margin-bottom:2px">2. Select unmapped assets</h3>
+        <p class="scr-form-sub" style="margin:0">Assets with no branch assigned yet.</p>
       </div>
       <div style="flex:1"></div>
       <div class="scr-search">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
-        <input type="text" placeholder="Search vehicle or RFID" />
+        <input type="text" placeholder="Search asset tag or name" />
       </div>
-      <span class="scr-toolbar-count">{{ unmapped|length }} vehicles</span>
+      <span class="scr-toolbar-count">{{ unmapped|length }} assets</span>
     </div>
 
     <div class="scr-table-scroll scr-sb">
@@ -91,20 +88,20 @@ vehicle enters the fleet; nothing here is invented to make the demo busier
         <thead>
           <tr>
             <th style="width:36px"><input type="checkbox" id="map-select-all" aria-label="Select all"></th>
-            <th>Item Code</th>
-            <th>Item Name</th>
-            <th>Category</th>
-            <th>RFID Tag EPC</th>
+            <th>Asset Tag</th>
+            <th>Asset Name</th>
+            <th>Class</th>
+            <th>Identifier</th>
           </tr>
         </thead>
         <tbody>
-          {% for v in unmapped %}
-          <tr class="scr-row" data-search="{{ v.code|lower }} {{ v.rfid|lower }}">
-            <td><input type="checkbox" data-map-check value="{{ v.code }}"></td>
-            <td><span class="scr-code">{{ v.code }}</span></td>
-            <td style="font-weight:600">{{ v.name }}</td>
-            <td class="scr-contact">{{ v.category }}</td>
-            <td><span class="scr-code">{{ v.rfid }}</span></td>
+          {% for a in unmapped %}
+          <tr class="scr-row" data-search="{{ a.code|lower }} {{ a.name|lower }}">
+            <td><input type="checkbox" data-map-check value="{{ a.code }}"></td>
+            <td><span class="scr-code">{{ a.code }}</span></td>
+            <td style="font-weight:600">{{ a.name }}</td>
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ a.asset_class }}</span></td>
+            <td class="scr-contact">{{ a.identifier }}</td>
           </tr>
           {% empty %}
           <tr>
@@ -114,8 +111,8 @@ vehicle enters the fleet; nothing here is invented to make the demo busier
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="m9 15 5-5"></path><circle cx="12" cy="12" r="9"></circle></svg>
                 </span>
                 <div>
-                  <div class="scr-empty-title">No unmapped vehicles</div>
-                  <p class="scr-empty-sub">Every vehicle in the fleet already carries a branch. This list fills automatically the moment a vehicle needs one.</p>
+                  <div class="scr-empty-title">No unmapped assets</div>
+                  <p class="scr-empty-sub">Equipment appears here once it is registered without a branch. Nothing is listed yet because no equipment inventory has been supplied.</p>
                 </div>
               </div>
             </td>

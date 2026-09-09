@@ -125,6 +125,20 @@ urlpatterns = [
         name="ims-vehicle-station-mapping-map",
     ),
     path(
+        "ims/asset-branch-mapping/map/",
+        views.AssetBranchMapView.as_view(
+            template_name="ims_asset_branch_mapping_map.html",
+            screen_no="3.6a",
+            screen_title="Map Asset to Branch",
+            module_label="Inventory",
+            tier="A",
+            phase=3,
+            purpose="Assign unmapped company assets to a branch.",
+            layout="Branch Selection Dropdown, Asset Multi-select Grid with Checkboxes.",
+        ),
+        name="ims-asset-branch-mapping-map",
+    ),
+    path(
         "ims/vehicle-transfer-relocation/",
         views.ImsAwaitingView.as_view(
             template_name="ims_vehicle_transfer_relocation.html",

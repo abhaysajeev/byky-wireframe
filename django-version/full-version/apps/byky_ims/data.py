@@ -114,10 +114,18 @@ def stock_items():
 
 
 def station_mappings():
+    """Everything a branch holds, vehicles and company assets together.
+
+    Each row carries item_type so the screen can show them in one grid and
+    filter to either. Only vehicles have rows today -- the asset register is
+    empty -- so the Assets view of this list is honestly blank rather than
+    padded out.
+    """
     out = []
     for v in seed.VEHICLES:
         out.append(
             {
+                "item_type": "Vehicle",
                 "branch": v["station"],
                 "code": v["number"],
                 "name": f'{v["vtype"]} {v["number"]}',
@@ -126,7 +134,24 @@ def station_mappings():
                 "mapped_date": SHORT,
             }
         )
+    for a in assets():
+        if not a.get("station_key"):
+            continue
+        out.append(
+            {
+                "item_type": "Asset",
+                "branch": a["station_key"],
+                "code": a["code"],
+                "name": a["name"],
+                "serial": a["serial"],
+                "rfid": a["identifier"],
+                "mapped_date": SHORT,
+            }
+        )
     return out
+
+
+ITEM_TYPES = ["Vehicle", "Asset"]
 
 
 def unmapped_vehicles():
@@ -263,6 +288,26 @@ def assets():
     through end to end in a demo. Never seed this with invented serials.
     """
     return []
+
+
+def unmapped_assets():
+    """Assets registered but not yet posted to a branch -- the pool the
+    Map Asset page assigns from.
+
+    Mirrors unmapped_vehicles(): real logic over the real register, which is
+    empty today, so the page shows an honest empty state rather than invented
+    equipment (CLAUDE.md 12).
+    """
+    return [
+        {
+            "code": a["code"],
+            "name": a["name"],
+            "asset_class": a["asset_class"],
+            "identifier": a["identifier"],
+        }
+        for a in assets()
+        if not a.get("station_key")
+    ]
 
 
 def asset_counts():

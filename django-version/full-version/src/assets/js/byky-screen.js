@@ -215,6 +215,33 @@
     // The toolbar count is the size of the whole filtered set, not the page.
     var singular = scope.dataset.scrNounSingular || 'row';
     var plural = scope.dataset.scrNounPlural || singular + 's';
+
+    /* A filter or search that matches nothing used to leave an empty table
+       body: the {% empty %} state is rendered server-side, so it only ever
+       covers "this list has no rows at all", not "none of them match". Most
+       visible on Inventory Branch Mapping, where filtering to Assets is
+       legitimately zero. Injected rather than added to 56 templates. */
+    var tbody = scope.querySelector('tbody');
+    if (tbody && rows.length) {
+      var none = tbody.querySelector('[data-scr-no-match]');
+      if (!matches.length) {
+        if (!none) {
+          none = document.createElement('tr');
+          none.setAttribute('data-scr-no-match', '');
+          none.innerHTML =
+            '<td colspan="' + (scope.querySelectorAll('thead th').length || 1) + '" style="padding:0">' +
+            '<div class="scr-empty"><span class="scr-empty-ico">' +
+            '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>' +
+            '</span><div><div class="scr-empty-title">No matching ' + plural + '</div>' +
+            '<p class="scr-empty-sub">Nothing here matches the current search and filters.</p>' +
+            '</div></div></td>';
+          tbody.appendChild(none);
+        }
+        none.hidden = false;
+      } else if (none) {
+        none.hidden = true;
+      }
+    }
     scope.querySelectorAll('.scr-toolbar-count').forEach(function (el) {
       el.textContent = matches.length + ' ' + (matches.length === 1 ? singular : plural);
     });

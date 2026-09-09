@@ -239,6 +239,19 @@ EMPLOYEE = {
             "title": "Documents",
             "fields": [
                 {
+                    "id": "passport_no",
+                    "label": "Passport Number",
+                    "kind": "text",
+                    "required": False,
+                    "placeholder": "Not captured"
+                },
+                {
+                    "id": "passport_expiry",
+                    "label": "Passport Expiry",
+                    "kind": "date",
+                    "required": False
+                },
+                {
                     "id": "visa_no",
                     "label": "Visa Number",
                     "kind": "text",
@@ -265,28 +278,15 @@ EMPLOYEE = {
                     "required": False
                 },
                 {
-                    "id": "passport_no",
-                    "label": "Passport Number",
-                    "kind": "text",
-                    "required": False,
-                    "placeholder": "Not captured"
-                },
-                {
-                    "id": "passport_expiry",
-                    "label": "Passport Expiry",
-                    "kind": "date",
-                    "required": False
-                },
-                {
                     "id": "labor_no",
-                    "label": "Labor Card Number",
+                    "label": "Labour Card Number",
                     "kind": "text",
                     "required": False,
                     "placeholder": "Not captured"
                 },
                 {
                     "id": "labor_expiry",
-                    "label": "Labor Card Expiry",
+                    "label": "Labour Card Expiry",
                     "kind": "date",
                     "required": False
                 },
@@ -299,7 +299,7 @@ EMPLOYEE = {
                 },
                 {
                     "id": "salary_bank_account",
-                    "label": "Salary Bank Account Details",
+                    "label": "Salary Account Details",
                     "kind": "text",
                     "required": False,
                     "placeholder": "Not captured"

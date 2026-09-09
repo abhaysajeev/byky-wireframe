@@ -297,7 +297,6 @@ ITEM = {
                     "label": "Item Code",
                     "kind": "text",
                     "required": True,
-                    "placeholder": "KB113",
                     "lock_on_edit": True
                 },
                 {
@@ -317,7 +316,7 @@ ITEM = {
                     "label": "RFID Tag EPC",
                     "kind": "text",
                     "required": False,
-                    "placeholder": "10113"
+                    "placeholder": "Enter RFID tag EPC"
                 }
             ]
         },

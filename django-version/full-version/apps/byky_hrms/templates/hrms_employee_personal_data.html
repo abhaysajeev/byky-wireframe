@@ -99,11 +99,6 @@ Emirates ID or date of birth (CLAUDE.md 12).
   <div class="scr-card scr-doc-expiry">
     <div class="scr-doc-expiry-head">
       <span class="scr-doc-expiry-title">Document Expiry Status</span>
-      <div class="scr-doc-expiry-legend">
-        <span><i class="scr-seg-expired"></i>Expired</span>
-        <span><i class="scr-seg-nearing"></i>Nearing</span>
-        <span><i class="scr-seg-valid"></i>Valid</span>
-      </div>
     </div>
     <div class="scr-doc-expiry-grid">
       {% for d in doc_expiry %}
@@ -111,11 +106,6 @@ Emirates ID or date of birth (CLAUDE.md 12).
         <div class="scr-doc-item-label">
           {{ d.label }}
           <small>{{ d.expired }} expired &middot; {{ d.nearing }} nearing</small>
-        </div>
-        <div class="scr-segbar" title="{{ d.expired }} expired, {{ d.nearing }} nearing expiry, {{ d.valid }} valid">
-          {% if d.expired %}<span class="scr-seg-expired" style="flex-basis:{{ d.pct_expired }}%"></span>{% endif %}
-          {% if d.nearing %}<span class="scr-seg-nearing" style="flex-basis:{{ d.pct_nearing }}%"></span>{% endif %}
-          {% if d.valid %}<span class="scr-seg-valid" style="flex-basis:{{ d.pct_valid }}%"></span>{% endif %}
         </div>
       </button>
       {% endfor %}

@@ -153,7 +153,6 @@ def document_expiry_summary(employee_rows):
         tally = {"expired": 0, "nearing": 0, "valid": 0}
         for e in employee_rows:
             tally[e[key + "_bucket"]] += 1
-        total = len(employee_rows) or 1
         out.append(
             {
                 "key": key,
@@ -162,9 +161,6 @@ def document_expiry_summary(employee_rows):
                 "nearing": tally["nearing"],
                 "valid": tally["valid"],
                 "attention": tally["expired"] + tally["nearing"],
-                "pct_expired": round(tally["expired"] / total * 100, 2),
-                "pct_nearing": round(tally["nearing"] / total * 100, 2),
-                "pct_valid": round(tally["valid"] / total * 100, 2),
             }
         )
     return out

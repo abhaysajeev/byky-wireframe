@@ -254,7 +254,9 @@ MAPPING = {
                     "id": "department",
                     "label": "Department",
                     "kind": "select",
-                    "required": True
+                    "required": True,
+                    "options_from": "departments_list",
+                    "option_key": "name"
                 },
                 {
                     "id": "authority",

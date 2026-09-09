@@ -270,16 +270,39 @@ SHIFTS = [1, 2, 3, 4]
 
 # Entities the FSD specifies but the client's two files contain no source for.
 # These render an "awaiting data" state naming exactly what is needed.
+# Demo departments. A narrow, explicit, user-requested exception to the
+# no-invented-data rule (CLAUDE.md 12): the client has supplied no department
+# list, and the Branch drawer's department chips and Branch Department Mapping
+# cannot be shown working against an empty master. Asked for, and scoped to
+# this one master -- the same treatment HRMS's _demo_expiry_bucket() has.
+#
+# Replace this list with the client's own the moment it arrives; nothing else
+# needs to change, because every screen that offers departments reads
+# departments() rather than holding its own copy.
+_DEMO_DEPARTMENTS = [
+    ("OPS", "Operations"),
+    ("FLT", "Fleet Maintenance"),
+    ("CS", "Customer Service"),
+    ("FIN", "Finance & Accounts"),
+    ("HR", "Human Resources"),
+    ("SLS", "Sales & Marketing"),
+    ("IT", "IT & Systems"),
+    ("SEC", "Security"),
+    ("STR", "Warehouse & Stores"),
+]
+
+
 def departments():
     """The department master (FSD 1.5).
 
-    Empty, and deliberately so: the client has supplied no departments, and
-    CLAUDE.md records that inventing them is not on the table. Everything that
-    offers departments -- the Branch drawer's multi-select, Branch Department
-    Mapping -- reads this, so all of them fill themselves the moment real
-    departments arrive, and until then all of them say the same honest thing.
+    Demo rows -- see _DEMO_DEPARTMENTS above for why these exist and what to
+    do with them. Every screen that offers departments reads this one
+    function, so they all move together.
     """
-    return []
+    return [
+        {"code": code, "name": name, "active": True, "status": "Active"}
+        for code, name in _DEMO_DEPARTMENTS
+    ]
 
 
 AWAITING = {

@@ -162,8 +162,15 @@ class BranchView(CmsScreenView):
 
 
 class DepartmentView(CmsScreenView):
+    """FSD 1.5. Rows are demo data -- see data._DEMO_DEPARTMENTS."""
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        rows = [dict(d) for d in data.departments()]
+        for i, d in enumerate(rows):
+            d["json_id"] = f"scr-record-department-{i}"
+            d["fields_json"] = {"code": d["code"], "name": d["name"]}
+        context["departments"] = rows
         context["awaiting"] = data.AWAITING["departments"]
         return context
 

@@ -131,7 +131,10 @@
    so the count and the list it counts are one click apart. Only tiles that
    genuinely lead somewhere get this -- a link that returns to the page it is
    on teaches the user the tiles are not clickable. */
-a.scr-tile { text-decoration: none; color: inherit; transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease; }
+/* .scr a:not([class*="btn"]) below is (0,2,1) and would otherwise paint a
+   linked tile's number brand red -- a KPI value is a figure, not a link. So
+   this rule matches its specificity and, sitting later in the file, wins. */
+.scr a.scr-tile { text-decoration: none; color: inherit; transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease; }
 a.scr-tile:hover { border-color: #d9d5ea; box-shadow: 0 4px 14px rgba(26, 22, 64, 0.07); transform: translateY(-1px); }
 a.scr-tile:focus-visible { outline: 2px solid #cc0000; outline-offset: 2px; }
 a.scr-tile .scr-tile-go { margin-inline-start: auto; color: #c3bfd8; flex: 0 0 auto; transition: color 0.15s ease, transform 0.15s ease; }
@@ -538,6 +541,11 @@ textarea.scr-drawer-input { height: auto; min-height: 72px; padding: 10px 13px; 
   color: #4b4770; transition: background 0.14s; width: 100%;
 }
 .scr-menu-item:hover { background: #faf9fd; color: #1a1640; }
+/* Menu items are anchors in the Map Item / Move Item menus and buttons in
+   Device Settings' -- without this the anchors take the link ink and the two
+   menus disagree. Matches .scr a's specificity and sits later, so it wins. */
+.scr a.scr-menu-item { color: #4b4770; }
+.scr a.scr-menu-item:hover { color: #1a1640; }
 
 /* ── network map card (real coordinates, hand-drawn SVG -- no Leaflet) ──
    Generalised from byky-dashboard.css's .bd-map-* rules for any screen that

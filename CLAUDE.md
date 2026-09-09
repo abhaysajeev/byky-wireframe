@@ -1081,21 +1081,38 @@ loyalty, refunds, campaigns, RFID telemetry, alerts — have no source data and 
 the awaiting-data state. IMS privileges use six flags across all 20 screens.
 
 **Asset Management is IMS's one non-FSD screen** (`/ims/asset-management/`,
-`ims-asset-management`). The FSD has no standalone asset screen — physical assets
-live in `tbl_ItemMaster` beside rental stock (3.1) and FSD 3.2 is what classifies
-them ("top-level asset classifications … Bicycles, E-Scooters, Quad Bikes, Spare
-Parts, Helmets, Maintenance Tools"). So this screen is the **custody and lifecycle**
-view of that same register — where an asset sits, who holds it, what it cost, when
-its warranty lapses — where Vehicle Management (3.1) is the **catalogue** view. Tier
-A, `.scr-*` list + drawer, over the same 1,060 real vehicles.
+`ims-asset-management`). It holds the company's **own operating equipment** —
+RFID antennas and readers, GPS trackers and SIMs, counter terminals, scanners,
+cameras, network and workshop kit.
 
-`data.ASSET_CLASSES` is dropdown vocabulary taken from FSD 3.2's own examples, not
-client records: **Fleet Vehicle is the only class carrying rows today**, and the KPI
-tile says so ("1 / 6 asset classes carrying records") rather than hiding it. Custodian
-(a real staff dropdown from `seed.EMPLOYEES`), acquisition date, purchase cost,
-warranty expiry and condition have no source and render short-form blank — do not
-backfill them with invented values. Assignment (Assigned / Unassigned) *is* derivable
-and is computed, not assumed.
+**It must never contain vehicles.** Rental stock is Vehicle Management's job
+(FSD 3.1); the two screens answer different questions, and a vehicle appearing in
+both is the exact defect this split exists to prevent. An earlier build did put the
+1,060 vehicles here and was corrected — don't reintroduce it.
+
+The FSD specifies no asset screen but does specify the hardware itself in detail, so
+the type catalogue in `data._ASSET_TYPES` is **derived, not invented**, and each of
+its 14 entries carries a `source` recording how firmly:
+
+| `source` | Meaning | Examples |
+|---|---|---|
+| `specified` | the FSD masters this device in its own table/screen | Gate antenna & reader (8.1 `tbl_AntennaMaster`), GPS tracker & SIM (5.1 `tbl_GPSDeviceMaster`), relay kill switch, FSD 3.2's tools and helmets |
+| `implied` | an FSD screen depends on the device but never masters it | RFID desktop scanner (4.2), barcode scanner / POS / printer (4.6), staff handheld (9.6), station network gear (8.1 LAN addressing) |
+| `client` | named by the client, outside the FSD | CCTV surveillance camera |
+
+That column is the honest part and surfaces as a filter and a badge — keep it
+truthful when adding a type. Type codes are **written out, not derived** from the
+name: the initialism collided (`Cellular SIM Card` and `CCTV Surveillance Camera`
+both reduce to `CSC`) and one leaked an ampersand.
+
+The screen is a tabbed dual-panel (same shape as `cms_country_state_management.html`,
+so the grids filter and paginate independently):
+
+- **Asset Register** — individual units. `data.assets()` returns `[]` and the panel
+  shows the awaiting-data empty state. **Never seed this with invented serials,
+  IMEIs, MACs or IP addresses.** The drawer is live so a unit can be walked through
+  in a demo, and Custodian is a genuine dropdown off `seed.EMPLOYEES`.
+- **Asset Types** — the derived catalogue above, with real content.
 
 **Phase 2 (HRMS) — done.** All 6 screens. Employee Personal Data (Tier B) carries all
 22 FSD inputs over the 99 real staff records; Designation Master is **derived from the

@@ -99,31 +99,38 @@ class StationMappingMapView(ImsScreenView):
 
 
 class AssetManagementView(ImsScreenView):
-    """Asset Management -- the custody/lifecycle view of tbl_ItemMaster.
+    """Asset Management -- company-owned operating equipment.
 
-    Not an FSD screen of its own; see data.ASSET_CLASSES for where its
-    vocabulary comes from. Custodians are the client's real staff list, so the
-    dropdown is genuine even though no asset is assigned to one yet.
+    Deliberately holds no vehicles: rental stock is Vehicle Management's job
+    (FSD 3.1). Two panels -- the unit register (empty until the client
+    supplies an equipment inventory) and the type catalogue derived from the
+    FSD hardware specs. See data._ASSET_TYPES for each type's provenance.
+
+    Custodians are the client's real staff list, so that dropdown is genuine
+    even though no unit is assigned to one yet.
     """
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        types = data.asset_types()
+        for i, t in enumerate(types):
+            t["json_id"] = f"scr-record-assettype-{i}"
+            t["fields_json"] = {
+                "code": t["code"],
+                "name": t["name"],
+                "asset_class": t["asset_class"],
+                "identifier": t["identifier"],
+                "location": t["location"],
+                "reference": t["reference"],
+            }
         rows = data.assets()
         for i, a in enumerate(rows):
             a["json_id"] = f"scr-record-asset-{i}"
-            a["fields_json"] = {
-                "code": a["code"],
-                "name": a["name"],
-                "asset_class": a["asset_class"],
-                "category": a["category"],
-                "subcategory": a["subcategory"],
-                "serial": a["serial"],
-                "rfid": a["rfid"],
-                "station": a["station_key"],
-            }
+            a["fields_json"] = {k: a[k] for k in ("code", "name", "asset_class")}
         context.update(
             {
                 "assets": rows,
+                "asset_types": types,
                 "asset_counts": data.asset_counts(),
                 "asset_classes": data.ASSET_CLASSES,
                 "asset_conditions": data.ASSET_CONDITIONS,

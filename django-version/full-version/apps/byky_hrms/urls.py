@@ -83,7 +83,7 @@ urlpatterns = [
         views.HrmsPrivilegeView.as_view(
             template_name="hrms_hrms_privileges.html",
             screen_no="2.6",
-            screen_title="HRMS Privileges",
+            screen_title="Privileges",
             module_label="Human Resources",
             legacy_page="Privileges.aspx",
             tier="D",

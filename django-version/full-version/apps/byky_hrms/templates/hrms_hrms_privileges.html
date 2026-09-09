@@ -1,7 +1,7 @@
 {% extends layout_path %}
 {% load static %}
 
-{% block title %}HRMS Privileges - Human Resources{% endblock title %}
+{% block title %}Privileges - Human Resources{% endblock title %}
 
 {% comment %}
 FSD 2.6 -- Tier D. Reuses the shared privilege matrix, now migrated onto the
@@ -22,5 +22,5 @@ list.
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/privilege_matrix.html" with title="HRMS Privileges" parent="Human Resources" subtitle=purpose roles=roles screens=screens permissions=permissions module="HRMS" %}
+{% include "byky/partials/privilege_matrix.html" with title="Privileges" parent="Human Resources" subtitle=purpose roles=roles screens=screens permissions=permissions module="HRMS" %}
 {% endblock %}

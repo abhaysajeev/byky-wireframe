@@ -101,7 +101,7 @@ class HrmsPrivilegeView(HrmsScreenView):
         ("Designation", [1, 1, 1, 1, 0, 0]),
         ("Employee Grade Master", [1, 0, 1, 0, 0, 0]),
         ("Employee Block / Unblock", [1, 0, 1, 0, 1, 1]),
-        ("HRMS Privileges", [1, 0, 1, 0, 0, 0]),
+        ("Privileges", [1, 0, 1, 0, 0, 0]),
     ]
 
     def get_context_data(self, **kwargs):

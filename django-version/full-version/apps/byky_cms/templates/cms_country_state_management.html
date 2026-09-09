@@ -101,10 +101,15 @@ each filtering and searching on its own, each with its own Add drawer.
           <input type="text" placeholder="Search country or code" />
         </div>
         <span class="scr-toolbar-count">{{ countries|length }} countr{{ countries|length|pluralize:"y,ies" }}</span>
-        <button type="button" class="scr-btn-primary" data-scr-open="country:add">
+        {% comment %}
+        Hidden for the demo: it runs as a single company in a single country, so
+        offering to add another only invites a dead end. The drawer itself is left
+        wired -- delete this comment wrapper to bring the button back.
+        {% endcomment %}
+        {% comment %}        <button type="button" class="scr-btn-primary" data-scr-open="country:add">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
           Add Country
-        </button>
+        </button>{% endcomment %}
       </div>
 
       <div class="scr-table-scroll scr-sb">
@@ -155,10 +160,15 @@ each filtering and searching on its own, each with its own Add drawer.
                     <div class="scr-empty-title">No countries yet</div>
                     <p class="scr-empty-sub">Add the first country before registering states under it.</p>
                   </div>
-                  <button type="button" class="scr-btn-primary" data-scr-open="country:add">
+                  {% comment %}
+                  Hidden for the demo: it runs as a single company in a single country, so
+                  offering to add another only invites a dead end. The drawer itself is left
+                  wired -- delete this comment wrapper to bring the button back.
+                  {% endcomment %}
+                  {% comment %}                  <button type="button" class="scr-btn-primary" data-scr-open="country:add">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
                     Add Country
-                  </button>
+                  </button>{% endcomment %}
                 </div>
               </td>
             </tr>

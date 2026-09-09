@@ -39,10 +39,15 @@ contain render blank with an "awaiting" chip (CLAUDE.md 12); none are invented.
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
         Export
       </button>
-      <button type="button" class="scr-btn-primary" data-scr-open="company:add">
+      {% comment %}
+      Hidden for the demo: it runs as a single company, so offering to add another
+      only invites a dead end. The drawer itself is left wired -- delete this
+      comment wrapper to bring the button back.
+      {% endcomment %}
+      {% comment %}      <button type="button" class="scr-btn-primary" data-scr-open="company:add">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
         Add Company
-      </button>
+      </button>{% endcomment %}
     </div>
   </div>
 
@@ -164,12 +169,17 @@ contain render blank with an "awaiting" chip (CLAUDE.md 12); none are invented.
                 </span>
                 <div>
                   <div class="scr-empty-title">No companies yet</div>
-                  <p class="scr-empty-sub">Add the first legal entity — stations, fleet and staff attach to it afterwards.</p>
+                  <p class="scr-empty-sub">The demo runs as a single company. Its details are captured in the Company Record form below, and stations, fleet and staff attach to it.</p>
                 </div>
-                <button type="button" class="scr-btn-primary" data-scr-open="company:add">
+                {% comment %}
+                Hidden for the demo: it runs as a single company, so offering to add another
+                only invites a dead end. The drawer itself is left wired -- delete this
+                comment wrapper to bring the button back.
+                {% endcomment %}
+                {% comment %}                <button type="button" class="scr-btn-primary" data-scr-open="company:add">
                   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
                   Add Company
-                </button>
+                </button>{% endcomment %}
               </div>
             </td>
           </tr>

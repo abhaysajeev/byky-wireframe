@@ -193,25 +193,6 @@ EMPLOYEE = {
                     "label": "Last Name",
                     "kind": "text",
                     "required": False
-                }
-            ]
-        },
-        {
-            "title": "Placement",
-            "fields": [
-                {
-                    "id": "branch",
-                    "label": "Branch",
-                    "kind": "select",
-                    "required": True,
-                    "options_from": "branches_list",
-                    "option_key": "name"
-                },
-                {
-                    "id": "department",
-                    "label": "Department",
-                    "kind": "select",
-                    "required": False
                 },
                 {
                     "id": "designation",
@@ -220,12 +201,6 @@ EMPLOYEE = {
                     "required": True,
                     "options_from": "designations_list",
                     "option_key": "title"
-                },
-                {
-                    "id": "grade",
-                    "label": "Grade",
-                    "kind": "select",
-                    "required": False
                 }
             ]
         },

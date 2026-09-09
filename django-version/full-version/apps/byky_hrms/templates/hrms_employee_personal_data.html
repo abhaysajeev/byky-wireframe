@@ -34,6 +34,13 @@ Emirates ID or date of birth (CLAUDE.md 12).
 {% block page_js %}
 {{ block.super }}
 <script src="{% static 'js/byky-screen.js' %}"></script>
+{% comment %}
+byky-hrms.js is what actually binds flatpickr to .byky-date. The page was
+loading flatpickr's vendor file but never this, so every date in the drawer
+-- Date of Birth and the four document expiries -- behaved as a plain text
+box with a calendar glyph beside it.
+{% endcomment %}
+<script src="{% static 'js/byky-hrms.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}

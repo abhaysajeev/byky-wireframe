@@ -43,6 +43,7 @@ class PersonalDataView(HrmsScreenView):
                 "designation": e["designation"],
             }
         context["employees"] = employees
+        context["doc_expiry"] = data.document_expiry_summary(employees)
         return context
 
 

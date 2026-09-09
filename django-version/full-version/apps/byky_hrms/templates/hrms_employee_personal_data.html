@@ -84,6 +84,79 @@ Emirates ID or date of birth (CLAUDE.md 12).
     </button>
   </div>
 
+  {% comment %}
+  Document Expiry Status -- see apps/byky_hrms/data.py's _demo_expiry_bucket()
+  docstring: the client's staff sheet has no real expiry dates, so this uses
+  a deterministic per-employee demo bucket at the user's explicit request,
+  purely so the click-to-filter interaction below has something real to
+  filter against. Every other document field on this screen (drawer inputs,
+  etc.) still renders "Not captured" honestly. Clicking a document filters
+  the employee list to everyone needing attention (expired or nearing) on
+  that document -- reusing the same filter+search+pagination mechanism as
+  the toolbar dropdowns, via data-scr-kpi-filter, just with the backing
+  scr-filter-wrap kept out of the toolbar since these 4 aren't dropdowns.
+  {% endcomment %}
+  <div class="scr-card scr-doc-expiry">
+    <div class="scr-doc-expiry-head">
+      <span class="scr-doc-expiry-title">Document Expiry Status</span>
+      <div class="scr-doc-expiry-legend">
+        <span><i class="scr-seg-expired"></i>Expired</span>
+        <span><i class="scr-seg-nearing"></i>Nearing</span>
+        <span><i class="scr-seg-valid"></i>Valid</span>
+      </div>
+    </div>
+    <div class="scr-doc-expiry-grid">
+      {% for d in doc_expiry %}
+      <button type="button" class="scr-doc-item" data-scr-kpi-filter="{{ d.key }}Attention:yes" data-scr-kpi-group="docExpiry">
+        <div class="scr-doc-item-label">
+          {{ d.label }}
+          <small>{{ d.expired }} expired &middot; {{ d.nearing }} nearing</small>
+        </div>
+        <div class="scr-segbar" title="{{ d.expired }} expired, {{ d.nearing }} nearing expiry, {{ d.valid }} valid">
+          {% if d.expired %}<span class="scr-seg-expired" style="flex-basis:{{ d.pct_expired }}%"></span>{% endif %}
+          {% if d.nearing %}<span class="scr-seg-nearing" style="flex-basis:{{ d.pct_nearing }}%"></span>{% endif %}
+          {% if d.valid %}<span class="scr-seg-valid" style="flex-basis:{{ d.pct_valid }}%"></span>{% endif %}
+        </div>
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+
+  {% comment %}
+  Backing filter-wraps for the Document Expiry Status clicks above -- not
+  shown as toolbar dropdowns (hidden), they exist purely so
+  data-scr-kpi-filter can reuse the exact same filter/search/pagination
+  mechanism the visible dropdowns below use, rather than a second one.
+  {% endcomment %}
+  <div class="scr-filter-wrap" data-filter-key="visaAttention" hidden>
+    <button type="button" class="scr-filter-btn"></button>
+    <div class="scr-filter-menu" hidden>
+      <button type="button" class="scr-filter-opt is-active" data-value="">All</button>
+      <button type="button" class="scr-filter-opt" data-value="yes">Needs attention</button>
+    </div>
+  </div>
+  <div class="scr-filter-wrap" data-filter-key="eidAttention" hidden>
+    <button type="button" class="scr-filter-btn"></button>
+    <div class="scr-filter-menu" hidden>
+      <button type="button" class="scr-filter-opt is-active" data-value="">All</button>
+      <button type="button" class="scr-filter-opt" data-value="yes">Needs attention</button>
+    </div>
+  </div>
+  <div class="scr-filter-wrap" data-filter-key="laborAttention" hidden>
+    <button type="button" class="scr-filter-btn"></button>
+    <div class="scr-filter-menu" hidden>
+      <button type="button" class="scr-filter-opt is-active" data-value="">All</button>
+      <button type="button" class="scr-filter-opt" data-value="yes">Needs attention</button>
+    </div>
+  </div>
+  <div class="scr-filter-wrap" data-filter-key="passportAttention" hidden>
+    <button type="button" class="scr-filter-btn"></button>
+    <div class="scr-filter-menu" hidden>
+      <button type="button" class="scr-filter-opt is-active" data-value="">All</button>
+      <button type="button" class="scr-filter-opt" data-value="yes">Needs attention</button>
+    </div>
+  </div>
+
   <div class="scr-card" data-scr-noun-singular="employee" data-scr-noun-plural="employees">
     <div class="scr-toolbar">
       <div class="scr-search">
@@ -132,7 +205,7 @@ Emirates ID or date of birth (CLAUDE.md 12).
         </thead>
         <tbody>
           {% for e in employees %}
-          <tr class="scr-row" data-search="{{ e.emp_no|lower }} {{ e.name|lower }}" data-designation="{{ e.designation }}" data-status="{{ e.status }}" data-record-id="{{ e.json_id }}">
+          <tr class="scr-row" data-search="{{ e.emp_no|lower }} {{ e.name|lower }}" data-designation="{{ e.designation }}" data-status="{{ e.status }}" data-visa-attention="{{ e.visa_attention }}" data-eid-attention="{{ e.eid_attention }}" data-labor-attention="{{ e.labor_attention }}" data-passport-attention="{{ e.passport_attention }}" data-record-id="{{ e.json_id }}">
             <td><span class="scr-code">{{ e.emp_no }}</span></td>
             <td>
               <div class="scr-co">

@@ -48,25 +48,51 @@
   });
 
   /* ── KPI tiles as filter shortcuts (data-scr-kpi-filter) ───────────
-     data-scr-kpi-filter="<filter key>:<value>" on a .scr-tile button
-     clicks the matching .scr-filter-opt for that key in the same scope --
-     e.g. Employee Personal Data's Active/Blocked tiles reuse the existing
-     Status filter dropdown instead of a separate mechanism. An empty value
-     (e.g. "status:") clicks the dropdown's "All ..." option. */
+     data-scr-kpi-filter="<filter key>:<value>" on a .scr-tile/.scr-doc-item
+     button clicks the matching .scr-filter-opt for that key in the same
+     scope -- e.g. Employee Personal Data's Active/Blocked tiles reuse the
+     existing Status filter dropdown instead of a separate mechanism. An
+     empty value (e.g. "status:") clicks the dropdown's "All ..." option.
+
+     Tiles that also share a data-scr-kpi-group (e.g. the 4 Document Expiry
+     Status buttons, each a different filter key) act as one mutually-
+     exclusive set: clicking one resets every other tile in the group back
+     to its own "all" value first, and clicking an already-active tile
+     toggles it off (back to "all") instead of re-applying it -- otherwise
+     two document filters would silently AND together, which reads as
+     "filter is broken" rather than "pick one document". */
+  function applyKpiFilter(tile, value) {
+    var sep = tile.dataset.scrKpiFilter.indexOf(':');
+    var key = tile.dataset.scrKpiFilter.slice(0, sep);
+    var scope = scopeOf(tile);
+    var wrap = scope.querySelector('.scr-filter-wrap[data-filter-key="' + key + '"]');
+    if (!wrap) return;
+    var opt = wrap.querySelector('.scr-filter-opt[data-value="' + value + '"]');
+    if (!opt) return;
+    opt.click();
+  }
   root.querySelectorAll('[data-scr-kpi-filter]').forEach(function (tile) {
     tile.addEventListener('click', function () {
       var sep = tile.dataset.scrKpiFilter.indexOf(':');
       var key = tile.dataset.scrKpiFilter.slice(0, sep);
       var value = tile.dataset.scrKpiFilter.slice(sep + 1);
       var scope = scopeOf(tile);
-      var wrap = scope.querySelector('.scr-filter-wrap[data-filter-key="' + key + '"]');
-      if (!wrap) return;
-      var opt = wrap.querySelector('.scr-filter-opt[data-value="' + value + '"]');
-      if (!opt) return;
-      opt.click();
+      var group = tile.dataset.scrKpiGroup;
+      var wasActive = tile.classList.contains('is-active');
+
+      if (group) {
+        scope.querySelectorAll('[data-scr-kpi-group="' + group + '"]').forEach(function (t) {
+          if (t !== tile) applyKpiFilter(t, '');
+        });
+      }
+      applyKpiFilter(tile, wasActive ? '' : value);
+
       scope.querySelectorAll('[data-scr-kpi-filter]').forEach(function (t) {
         var tSep = t.dataset.scrKpiFilter.indexOf(':');
-        if (t.dataset.scrKpiFilter.slice(0, tSep) === key) {
+        var tKey = t.dataset.scrKpiFilter.slice(0, tSep);
+        if (group && t.dataset.scrKpiGroup === group) {
+          t.classList.toggle('is-active', t === tile && !wasActive);
+        } else if (tKey === key) {
           t.classList.toggle('is-active', t === tile);
         }
       });

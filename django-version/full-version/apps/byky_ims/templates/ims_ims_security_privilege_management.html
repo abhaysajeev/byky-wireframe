@@ -1,7 +1,7 @@
 {% extends layout_path %}
 {% load static %}
 
-{% block title %}IMS Security Privilege Management - Inventory{% endblock title %}
+{% block title %}Privileges - Inventory{% endblock title %}
 
 {% comment %}
 FSD 3.20 -- Tier D. Reuses the shared privilege matrix with the IMS permission set
@@ -20,5 +20,5 @@ byky-screen.css/js base (see byky-screen-design-system.md).
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/privilege_matrix.html" with title="IMS Security Privilege Management" parent="Inventory" subtitle=purpose roles=roles screens=screens permissions=permissions module="IMS" %}
+{% include "byky/partials/privilege_matrix.html" with title="Privileges" parent="Inventory" subtitle=purpose roles=roles screens=screens permissions=permissions module="IMS" %}
 {% endblock %}

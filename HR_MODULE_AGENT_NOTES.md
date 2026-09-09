@@ -13,6 +13,54 @@ you're about to commit.
 
 ---
 
+## 0. Update — Employee Personal Data changed after this doc was first written
+
+`apps/byky_hrms/data.py`, `apps/byky_hrms/views.py`, and
+`apps/byky_hrms/templates/hrms_employee_personal_data.html` were all touched
+again in a follow-up round of commits (after this doc's original §4 was
+written) — the "no one else is working there right now" note in §3 is only
+true as of *this* update; **pull latest `main` before editing any of these
+three files** so you're not diffing against a stale copy.
+
+What changed, and why, so you don't "fix" it back:
+
+- The **Document Expiry Status** card (Visa / Emirates ID / Labour Card /
+  Passport) is now interactive: clicking a document filters the employee
+  table to everyone needing attention (expired or nearing) on it. This
+  reuses the existing filter+search+pagination mechanism via a new
+  **`data-scr-kpi-filter="<filter key>:<value>"`** attribute on a
+  `.scr-tile`/`.scr-doc-item` button (added to `byky-screen.js`) — clicking
+  it just clicks the matching `.scr-filter-opt` under a `.scr-filter-wrap`
+  with that `data-filter-key`, so it works with zero new filtering logic.
+  A second new attribute, **`data-scr-kpi-group="<name>"`**, makes a set of
+  tiles mutually exclusive (picking one resets the others, clicking the
+  active one again clears it) — used so the 4 documents don't silently AND
+  together. Both are documented inline in `byky-screen.js` right above
+  where they're implemented; read that if you need to reuse either.
+- The 4 document buckets (expired/nearing/valid) shown on that card are
+  **synthetic demo data**, generated deterministically per employee by
+  `_demo_expiry_bucket()` in `apps/byky_hrms/data.py`. This is a **narrow,
+  explicit, user-requested exception** to the no-invented-data rule in §6
+  below — the client's staff sheet genuinely has no expiry dates, and the
+  user explicitly asked for a working click-to-filter demo anyway. **Read
+  that function's docstring before touching this screen** — it explains
+  the exception is scoped to this one interaction only. Every other
+  document field on the screen (drawer inputs, expiry dates, numbers) still
+  renders `seed.NOT_CAPTURED` honestly; do not extend the demo-bucket
+  pattern to any other field or screen without the same explicit user
+  sign-off.
+- The card's visual style went through two iterations and settled on:
+  no tricolor proportion bar, no colour legend, just each document's name
+  + "`N` expired · `M` nearing" as plain text, with a minimal (text-colour
+  only, no border/background box) active state when clicked. If you're
+  restyling this card, match that — the tricolour bar was deliberately
+  removed, not missed.
+- New shared CSS added: `.scr-doc-expiry*`, `.scr-doc-item*` in
+  `byky-screen.css` (this card had no CSS at all before this round, in any
+  earlier session either — it was rendering unstyled).
+
+---
+
 ## 1. Why the last clash happened (so you know what to avoid)
 
 Two worktrees branched off `main` at the same old commit and then each ran
@@ -68,8 +116,10 @@ possible (e.g. one menu entry, not a whole reorder):
 | `django-version/full-version/config/urls.py` | Nothing — HRMS urls are already included | Low (don't need to touch) |
 
 Everything under `apps/byky_hrms/` itself (`views.py`, `data.py`, `urls.py`,
-`templates/hrms_*.html`) is yours alone — no one else is working there right
-now, so no conflict risk there. Work freely.
+`templates/hrms_*.html`) is otherwise yours alone — but see **§0 above**
+first: `data.py`, `views.py`, and `hrms_employee_personal_data.html`
+specifically were touched again after this doc was first written, so pull
+`main` before editing those three.
 
 **Before adding a genuinely new `.scr-*` class or `data-scr-*` attribute**:
 grep both shared files first (`byky-screen-design-system.md` §9 covers this)

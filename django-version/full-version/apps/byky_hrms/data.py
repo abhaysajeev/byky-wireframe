@@ -6,7 +6,7 @@ identity, document and bank field renders seed.NOT_CAPTURED. No passport numbers
 Emirates IDs, dates of birth or bank details are invented (CLAUDE.md section 12).
 """
 
-import datetime
+import hashlib
 
 from apps.byky_core import seed
 
@@ -14,19 +14,30 @@ NOT_CAPTURED = seed.NOT_CAPTURED
 SHORT = seed.NOT_CAPTURED_SHORT
 
 # The four documents FSD 2.1's Identity Documents tab tracks expiry for.
-# (field key on an employees() row, display label)
+# (field key, display label)
 DOCUMENTS = [
-    ("visa_expiry", "Visa"),
-    ("eid_expiry", "Emirates ID"),
-    ("labor_expiry", "Labour Card"),
-    ("passport_expiry", "Passport"),
+    ("visa", "Visa"),
+    ("eid", "Emirates ID"),
+    ("labor", "Labour Card"),
+    ("passport", "Passport"),
 ]
 
-NEARING_EXPIRY_DAYS = 30
 
-# Order the nearing-expiry KPI tiles are read in, which is not the order the
-# Document Expiry Status card uses -- that one groups by residency document.
-TILE_ORDER = ["passport_expiry", "visa_expiry", "eid_expiry", "labor_expiry"]
+def _demo_expiry_bucket(emp_no, doc_key):
+    """Explicit, user-requested exception to CLAUDE.md 12: the client's staff
+    sheet carries no real Visa/Emirates ID/Labour Card/Passport expiry dates,
+    so there is nothing genuine to bucket. The Document Expiry Status KPI
+    tiles need *some* real, clickable, filterable difference between
+    employees to demonstrate the click-to-filter interaction in this
+    wireframe -- so this assigns each employee a deterministic (stable
+    across requests, not random) demo bucket per document, for that purpose
+    only. It is never shown as a real date, document number or anything an
+    operator could mistake for actual client data -- only as a coloured
+    segment and a filter value. Do not extend this pattern to any other
+    field; every other document/date field on this screen still renders
+    seed.NOT_CAPTURED, honestly, per CLAUDE.md 12."""
+    digest = hashlib.md5(f"{emp_no}:{doc_key}".encode()).hexdigest()
+    return ["expired", "nearing", "valid"][int(digest, 16) % 3]
 
 # FSD 2.6: six permissions for HRMS, not the seven CMS uses.
 PERMISSIONS = ["Access", "Create", "Read", "Update", "Approve", "Block Staff"]
@@ -52,6 +63,7 @@ def employees():
     """The 99 staff records. Only three columns carry data."""
     out = []
     for e in seed.EMPLOYEES:
+        buckets = {key: _demo_expiry_bucket(e["emp_no"], key) for key, _ in DOCUMENTS}
         out.append(
             {
                 "emp_no": e["emp_no"],
@@ -71,6 +83,19 @@ def employees():
                 "mobile": SHORT,
                 "active": True,
                 "status": "Active",
+                # Demo-only buckets -- see _demo_expiry_bucket()'s docstring.
+                # "attention" collapses expired+nearing into one filterable
+                # value, since that's the useful click target on the KPI tile
+                # (an HR user cares "does this employee need action", not
+                # which of the two sub-states).
+                "visa_bucket": buckets["visa"],
+                "visa_attention": "yes" if buckets["visa"] in ("expired", "nearing") else "no",
+                "eid_bucket": buckets["eid"],
+                "eid_attention": "yes" if buckets["eid"] in ("expired", "nearing") else "no",
+                "labor_bucket": buckets["labor"],
+                "labor_attention": "yes" if buckets["labor"] in ("expired", "nearing") else "no",
+                "passport_bucket": buckets["passport"],
+                "passport_attention": "yes" if buckets["passport"] in ("expired", "nearing") else "no",
             }
         )
     return out
@@ -118,88 +143,24 @@ def counts():
     }
 
 
-def _expiry_status(value):
-    """expired / nearing / valid / unknown, from one employee's raw expiry
-    value. The staff sheet carries none of these dates today, so every
-    employee currently resolves to "unknown" for all four documents -- this
-    is the real logic that will light up red/amber/green the moment the
-    client supplies actual dates, not a placeholder invented in the meantime
-    (CLAUDE.md 12)."""
-    if not value or value in (SHORT, NOT_CAPTURED):
-        return "unknown"
-    try:
-        expiry = datetime.date.fromisoformat(value)
-    except (TypeError, ValueError):
-        return "unknown"
-    days_left = (expiry - datetime.date.today()).days
-    if days_left < 0:
-        return "expired"
-    if days_left <= NEARING_EXPIRY_DAYS:
-        return "nearing"
-    return "valid"
-
-
-def nearing_expiry_tokens(employee_row):
-    """Space-separated tokens naming every document this employee has nearing
-    expiry, plus "any" when there is at least one.
-
-    A row can be nearing on several documents at once, so this is a token list
-    rather than a single value -- the Document status filter matches it with
-    data-filter-match="token" (see byky-screen.js).
-    """
-    tokens = [key.split("_")[0] for key, _ in DOCUMENTS
-              if _expiry_status(employee_row.get(key)) == "nearing"]
-    return " ".join(["any"] + tokens) if tokens else ""
-
-
-def nearing_expiry_tiles(employee_rows):
-    """The KPI row for documents inside NEARING_EXPIRY_DAYS.
-
-    Counts are **employees, not documents**, so a tile's number always equals
-    the number of rows you get when you click it -- one employee nearing on
-    both passport and visa is one row, and a tile promising 12 that filtered
-    down to 9 would just look broken.
-
-    Every count is 0 today: the staff sheet carries no expiry dates at all, so
-    _expiry_status() resolves every document to "unknown". The arithmetic is
-    real and will light up the moment dates arrive; nothing here is seeded to
-    make the tiles look populated (CLAUDE.md 12).
-    """
-    by_key = dict(DOCUMENTS)
-    tiles = [{"token": "any", "label": "Documents nearing expiry (≤30d)", "count": 0}]
-    tiles += [{"token": key.split("_")[0],
-               "label": f"{by_key[key]} nearing expiry (≤30d)",
-               "count": 0} for key in TILE_ORDER]
-    by_token = {t["token"]: t for t in tiles}
-    for e in employee_rows:
-        for token in nearing_expiry_tokens(e).split():
-            if token in by_token:
-                by_token[token]["count"] += 1
-    return tiles
-
-
 def document_expiry_summary(employee_rows):
-    """Per-document expired/nearing/valid/unknown counts across every
-    employee row passed in, for the four-document expiry tile row."""
+    """Per-document expired/nearing/valid counts across every employee row
+    passed in, for the Document Expiry Status KPI tiles. Reads the demo
+    buckets from employees() -- see _demo_expiry_bucket()'s docstring for
+    why those exist and what they are not."""
     out = []
     for key, label in DOCUMENTS:
-        tally = {"expired": 0, "nearing": 0, "valid": 0, "unknown": 0}
+        tally = {"expired": 0, "nearing": 0, "valid": 0}
         for e in employee_rows:
-            tally[_expiry_status(e.get(key))] += 1
-        total = len(employee_rows) or 1
+            tally[e[key + "_bucket"]] += 1
         out.append(
             {
                 "key": key,
                 "label": label,
-                "total": len(employee_rows),
                 "expired": tally["expired"],
                 "nearing": tally["nearing"],
                 "valid": tally["valid"],
-                "unknown": tally["unknown"],
-                "pct_expired": round(tally["expired"] / total * 100, 2),
-                "pct_nearing": round(tally["nearing"] / total * 100, 2),
-                "pct_valid": round(tally["valid"] / total * 100, 2),
-                "pct_unknown": round(tally["unknown"] / total * 100, 2),
+                "attention": tally["expired"] + tally["nearing"],
             }
         )
     return out

@@ -47,28 +47,58 @@
     input.addEventListener('input', function () { applyFilters(scopeOf(input)); });
   });
 
-  /* ── KPI tile as a filter shortcut ────────────────────────────────
-     data-scr-filter="<filter-key>:<value>" on a tile drives the real filter
-     dropdown of that key, so the count on a tile and the list it filters to
-     can never disagree -- there is only one filtering path, not two. Clicking
-     the tile that is already on clears it, which is the only way back to "all"
-     without hunting for the dropdown. Tiles sit outside the list card, so the
-     scope comes from the wrap we find, not from the tile. */
-  root.querySelectorAll('[data-scr-filter]').forEach(function (tile) {
+  /* ── KPI tiles as filter shortcuts (data-scr-kpi-filter) ───────────
+     data-scr-kpi-filter="<filter key>:<value>" on a .scr-tile/.scr-doc-item
+     button clicks the matching .scr-filter-opt for that key in the same
+     scope -- e.g. Employee Personal Data's Active/Blocked tiles reuse the
+     existing Status filter dropdown instead of a separate mechanism. An
+     empty value (e.g. "status:") clicks the dropdown's "All ..." option.
+
+     Tiles that also share a data-scr-kpi-group (e.g. the 4 Document Expiry
+     Status buttons, each a different filter key) act as one mutually-
+     exclusive set: clicking one resets every other tile in the group back
+     to its own "all" value first, and clicking an already-active tile
+     toggles it off (back to "all") instead of re-applying it -- otherwise
+     two document filters would silently AND together, which reads as
+     "filter is broken" rather than "pick one document". */
+  function applyKpiFilter(tile, value) {
+    var sep = tile.dataset.scrKpiFilter.indexOf(':');
+    var key = tile.dataset.scrKpiFilter.slice(0, sep);
+    // Not scopeOf(tile): a KPI tile's own .scr-card (if it's inside one,
+    // e.g. Document Expiry Status's card) is almost never the card holding
+    // the rows it filters -- those live in a different .scr-card further
+    // down the same screen. This mechanism is page-wide by design, so it
+    // searches the whole .scr root, same as the click delegated below.
+    var wrap = root.querySelector('.scr-filter-wrap[data-filter-key="' + key + '"]');
+    if (!wrap) return;
+    var opt = wrap.querySelector('.scr-filter-opt[data-value="' + value + '"]');
+    if (!opt) return;
+    opt.click();
+  }
+  root.querySelectorAll('[data-scr-kpi-filter]').forEach(function (tile) {
     tile.addEventListener('click', function () {
-      var parts = (tile.dataset.scrFilter || '').split(':');
-      var wrap = root.querySelector('.scr-filter-wrap[data-filter-key="' + parts[0] + '"]');
-      if (!wrap) return;
-      var turningOff = tile.classList.contains('is-on');
-      var want = turningOff ? '' : (parts[1] || '');
-      var opt = wrap.querySelector('.scr-filter-opt[data-value="' + want + '"]');
-      if (!opt) return;
-      opt.click();
-      tile.closest('.scr-tiles').querySelectorAll('[data-scr-filter]').forEach(function (t) {
-        t.classList.remove('is-on');
+      var sep = tile.dataset.scrKpiFilter.indexOf(':');
+      var key = tile.dataset.scrKpiFilter.slice(0, sep);
+      var value = tile.dataset.scrKpiFilter.slice(sep + 1);
+      var group = tile.dataset.scrKpiGroup;
+      var wasActive = tile.classList.contains('is-active');
+
+      if (group) {
+        root.querySelectorAll('[data-scr-kpi-group="' + group + '"]').forEach(function (t) {
+          if (t !== tile) applyKpiFilter(t, '');
+        });
+      }
+      applyKpiFilter(tile, wasActive ? '' : value);
+
+      root.querySelectorAll('[data-scr-kpi-filter]').forEach(function (t) {
+        var tSep = t.dataset.scrKpiFilter.indexOf(':');
+        var tKey = t.dataset.scrKpiFilter.slice(0, tSep);
+        if (group && t.dataset.scrKpiGroup === group) {
+          t.classList.toggle('is-active', t === tile && !wasActive);
+        } else if (tKey === key) {
+          t.classList.toggle('is-active', t === tile);
+        }
       });
-      if (!turningOff) tile.classList.add('is-on');
-      scopeOf(wrap).scrollIntoView({ behavior: 'smooth', block: 'start' });
     });
   });
 
@@ -156,28 +186,17 @@
     var q = (searchInput && searchInput.value || '').trim().toLowerCase();
     var rows = scope.querySelectorAll('.scr-row');
     var active = {};
-    var tokenKeys = {};
     scope.querySelectorAll('.scr-filter-wrap').forEach(function (w) {
       var key = w.dataset.filterKey;
       var picked = w.querySelector('.scr-filter-opt.is-active');
       active[key] = picked ? (picked.dataset.value || '') : '';
-      if (w.dataset.filterMatch === 'token') tokenKeys[key] = true;
     });
 
     var matches = [];
     rows.forEach(function (tr) {
       var matchesQ = !q || (tr.dataset.search || '').indexOf(q) > -1;
       var matchesAll = Object.keys(active).every(function (key) {
-        if (!active[key]) return true;
-        /* A row can belong to several buckets of one filter at once -- an
-           employee whose passport AND visa are both near expiry. Those rows
-           carry a space-separated token list instead of a single value, and
-           the wrap opts in with data-filter-match="token". Plain equality
-           stays the default so no existing filter changes behaviour. */
-        if (tokenKeys[key]) {
-          return (' ' + (tr.dataset[key] || '') + ' ').indexOf(' ' + active[key] + ' ') > -1;
-        }
-        return tr.dataset[key] === active[key];
+        return !active[key] || tr.dataset[key] === active[key];
       });
       if (matchesQ && matchesAll) matches.push(tr);
     });

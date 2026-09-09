@@ -80,6 +80,11 @@
    ],
    "submenu": [
     {
+     "url": "hrms-employee-designation-master",
+     "name": "Employee Designation Master",
+     "slug": "hrms-employee-designation-master"
+    },
+    {
      "url": "hrms-employee-personal-data",
      "name": "Employee Personal Data",
      "slug": "hrms-employee-personal-data"
@@ -88,11 +93,6 @@
      "url": "hrms-employee-temporary-address",
      "name": "Employee Temporary Address",
      "slug": "hrms-employee-temporary-address"
-    },
-    {
-     "url": "hrms-employee-designation-master",
-     "name": "Employee Designation Master",
-     "slug": "hrms-employee-designation-master"
     },
     {
      "url": "hrms-employee-block-unblock",

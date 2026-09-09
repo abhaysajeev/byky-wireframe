@@ -136,14 +136,25 @@ field.readonly       always read-only -- a value this screen displays but
               </div>
 
             {% elif f.kind == "multiselect" %}
-              <div class="byky-multi" data-field="{{ f.id }}">
-                <button type="button" class="byky-input byky-multi-btn">
-                  <span class="byky-multi-label">{{ f.placeholder|default:"Select one or more" }}</span>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-                </button>
-                <div class="byky-multi-menu" hidden>
+              {% comment %}
+              Picked values sit inside the control as removable pills rather
+              than as a count or a comma list: with several departments on a
+              branch, "3 selected" makes you open the menu again to find out
+              which three. byky-drawer.js keeps the pills and the checkboxes
+              in step -- the checkboxes stay the source of truth, so the value
+              survives prefill and reset like any other field.
+              {% endcomment %}
+              <div class="byky-multi" data-field="{{ f.id }}" data-placeholder="{{ f.placeholder|default:'Select one or more' }}">
+                <div class="byky-multi-control" tabindex="0" role="button" aria-haspopup="listbox">
+                  <span class="byky-multi-pills"></span>
+                  <span class="byky-multi-placeholder">{{ f.placeholder|default:"Select one or more" }}</span>
+                  <svg class="byky-multi-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+                </div>
+                <div class="byky-multi-menu" hidden role="listbox">
                   {% for o in f.resolved %}
                   <label class="byky-multi-opt"><input type="checkbox" value="{{ o }}" /><span>{{ o }}</span></label>
+                  {% empty %}
+                  <p class="byky-multi-none">{{ f.empty_text|default:"Nothing to choose from yet." }}</p>
                   {% endfor %}
                 </div>
               </div>

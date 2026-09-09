@@ -270,6 +270,18 @@ SHIFTS = [1, 2, 3, 4]
 
 # Entities the FSD specifies but the client's two files contain no source for.
 # These render an "awaiting data" state naming exactly what is needed.
+def departments():
+    """The department master (FSD 1.5).
+
+    Empty, and deliberately so: the client has supplied no departments, and
+    CLAUDE.md records that inventing them is not on the table. Everything that
+    offers departments -- the Branch drawer's multi-select, Branch Department
+    Mapping -- reads this, so all of them fill themselves the moment real
+    departments arrive, and until then all of them say the same honest thing.
+    """
+    return []
+
+
 AWAITING = {
     "locations": "locations",
     "departments": "departments",

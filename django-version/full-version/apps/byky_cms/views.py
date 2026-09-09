@@ -25,6 +25,7 @@ class CmsScreenView(BykyScreenView):
                 "states_list": data.states(),
                 "countries_list": data.countries(),
                 "branches_list": data.branches(),
+                "departments_list": data.departments(),
                 "permissions": data.PERMISSIONS,
             }
         )

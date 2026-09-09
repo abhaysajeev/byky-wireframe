@@ -79,6 +79,52 @@ BRANCH = {
                     "kind": "checkbox",
                     "required": False,
                     "enables": "hotel_commission"
+                },
+                {
+                    "id": "address",
+                    "label": "Address",
+                    "kind": "textarea",
+                    "required": False,
+                    "width": 12
+                },
+                {
+                    "id": "latitude",
+                    "label": "Latitude",
+                    "kind": "number",
+                    "required": False,
+                    "help": "-90 to +90"
+                },
+                {
+                    "id": "longitude",
+                    "label": "Longitude",
+                    "kind": "number",
+                    "required": False,
+                    "help": "-180 to +180"
+                },
+                {
+                    "id": "contact_no",
+                    "label": "Contact No",
+                    "kind": "text",
+                    "required": False
+                },
+                {
+                    "id": "departments",
+                    "label": "Departments",
+                    "kind": "multiselect",
+                    "required": False,
+                    "width": 12,
+                    "placeholder": "Select departments",
+                    "options_from": "departments_list",
+                    "option_key": "name",
+                    "empty_text": "No departments have been added yet — add them in Department Master and they will appear here.",
+                    "help": "A branch can run several departments; each one you pick stays visible as a chip."
+                },
+                {
+                    "id": "image",
+                    "label": "Branch Image",
+                    "kind": "file",
+                    "required": False,
+                    "width": 12
                 }
             ]
         }

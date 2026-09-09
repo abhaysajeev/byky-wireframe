@@ -11,6 +11,8 @@ from django.views.generic import TemplateView
 from web_project import TemplateLayout
 from web_project.template_helpers.theme import TemplateHelper
 
+from . import drawers as core_drawers
+
 
 class BykyScreenView(TemplateView):
     # Set per-route in each module's urls.py.
@@ -22,6 +24,10 @@ class BykyScreenView(TemplateView):
     phase = 0
     purpose = ""
     layout = ""
+
+    # {template_var: drawer spec} for the module, set on each module's base
+    # view (e.g. CmsScreenView.drawer_specs = drawers.SPECS).
+    drawer_specs = {}
 
     TIER_LABEL = {
         "A": "List + drawer form",
@@ -47,6 +53,18 @@ class BykyScreenView(TemplateView):
         )
         TemplateHelper.map_context(context)
         return context
+
+    def render_to_response(self, context, **kwargs):
+        """Resolve the module's drawer specs against the finished context.
+
+        Done here rather than in get_context_data because a select's options
+        come from lists a *subclass* adds after calling super() -- by then the
+        base has already returned and cannot see them. At render time the
+        context is complete.
+        """
+        if self.drawer_specs:
+            context.update(core_drawers.resolve_all(self.drawer_specs, context))
+        return super().render_to_response(context, **kwargs)
 
 
 class BykyDashboardView(TemplateView):

@@ -1,0 +1,54 @@
+"""Drawer specs for the screens that use the shared byky drawer.
+
+Every create/edit drawer on a converted screen is declared as a spec dict and
+rendered by byky/partials/drawer.html -- one template, never forked per screen
+(byky-drawer README section 8).
+
+A spec looks like:
+
+    {
+      "drawer_id": "drawerCountry",     # DOM id
+      "scr_name": "country",            # data-scr-open="country:add|edit"
+      "add_label": "Add Country",
+      "title_field": "name",            # titles the drawer in edit mode
+      "sections": [
+        {"title": "", "fields": [ ...field dicts... ]},
+      ],
+    }
+
+A field's dropdown options usually come from the view context (branches,
+categories, employees...), which a static dict cannot hold. So a select carries
+`options_from`, the name of a context key, and resolve() copies the spec and
+fills each `resolved` list at render time. The specs themselves stay importable,
+inspectable data with no Django context bound into them.
+"""
+
+import copy
+
+
+def resolve(spec, context):
+    """Return a render-ready copy of `spec` with every select's options filled.
+
+    `options_from` names a context key holding either a list of strings or a
+    list of dicts; for dicts, `option_key` says which key to read (default
+    "name"). A key the context does not carry resolves to an empty list rather
+    than raising -- a drawer with an empty dropdown is a visible, honest gap,
+    where a 500 on an unrelated screen is not.
+    """
+    out = copy.deepcopy(spec)
+    for section in out.get("sections", []):
+        for field in section.get("fields", []):
+            src = field.get("options_from")
+            if not src:
+                continue
+            key = field.get("option_key", "name")
+            values = context.get(src) or []
+            field["resolved"] = [
+                v.get(key, "") if isinstance(v, dict) else v for v in values
+            ]
+    return out
+
+
+def resolve_all(specs, context):
+    """resolve() over a {template_var: spec} mapping."""
+    return {name: resolve(spec, context) for name, spec in specs.items()}

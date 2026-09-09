@@ -7,14 +7,16 @@ Wireframe phase: no writes, no CRUD, no API. Forms submit nowhere.
 """
 
 from apps.byky_core.views import BykyScreenView
-from apps.byky_core import geo, seed
+from apps.byky_core import drawers as core_drawers, geo, seed
 from apps.byky_ims import data as ims_data
 
-from . import data
+from . import data, drawers
 
 
 class CmsScreenView(BykyScreenView):
     """Adds the CMS reference lists every screen's dropdowns need."""
+
+    drawer_specs = drawers.SPECS
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -47,6 +49,8 @@ class CompanyDetailsView(CmsScreenView):
                 "active_count": 0,
                 "form_active_default": True,
                 "company_logo": "",
+                # generated, not a literal spec -- see drawers.company_spec
+                "drawer_company": drawers.company_spec(sections),
             }
         )
         return context

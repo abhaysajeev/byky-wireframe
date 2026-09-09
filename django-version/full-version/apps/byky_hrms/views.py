@@ -7,11 +7,13 @@ from apps.byky_core.views import BykyScreenView
 from apps.byky_core import refdata, seed
 from apps.byky_cms import data as cms_data
 
-from . import data
+from . import data, drawers
 
 
 class HrmsScreenView(BykyScreenView):
     """Reference lists the HRMS dropdowns need."""
+
+    drawer_specs = drawers.SPECS
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

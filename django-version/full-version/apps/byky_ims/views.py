@@ -9,13 +9,14 @@ from apps.byky_core import seed
 from apps.byky_core.views import BykyScreenView
 from apps.byky_cms import data as cms_data
 
-from . import data
+from . import data, drawers
 
 
 class ImsScreenView(BykyScreenView):
     """Reference lists the IMS dropdowns need, plus an optional awaiting key."""
 
     awaiting_key = None
+    drawer_specs = drawers.SPECS
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

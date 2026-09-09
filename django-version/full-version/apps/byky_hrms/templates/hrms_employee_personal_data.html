@@ -58,60 +58,30 @@ Emirates ID or date of birth (CLAUDE.md 12).
   </div>
 
   <div class="scr-tiles">
-    <div class="scr-tile">
+    <button type="button" class="scr-tile" data-scr-kpi-filter="status:">
       <span class="scr-tile-ico scr-tile-ico-red">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2M21 20v-1.4a3 3 0 0 0-2.3-2.9M16.6 5a3 3 0 0 1 0 5.8"></path></svg>
       </span>
       <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Employees on record</div></div>
-    </div>
+    </button>
     <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-blue">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12 12 3.4 4.4 12 12 20.6zM12 8v.01M12 12v4"></path></svg>
       </span>
       <div><div class="scr-tile-val">{{ counts.designations }}</div><div class="scr-tile-lab">Distinct designations</div></div>
     </div>
-    <div class="scr-tile">
+    <button type="button" class="scr-tile" data-scr-kpi-filter="status:Active">
       <span class="scr-tile-ico scr-tile-ico-green">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
       </span>
       <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Active</div></div>
-    </div>
-    <div class="scr-tile">
+    </button>
+    <button type="button" class="scr-tile" data-scr-kpi-filter="status:Blocked">
       <span class="scr-tile-ico scr-tile-ico-amber">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6 5.6 18.4M5.6 5.6l12.8 12.8"></path></svg>
       </span>
       <div><div class="scr-tile-val">{{ counts.blocked }}</div><div class="scr-tile-lab">Blocked &mdash; no history yet</div></div>
-    </div>
-  </div>
-
-  <div class="scr-card scr-doc-expiry">
-    <div class="scr-doc-expiry-head">
-      <span class="scr-doc-expiry-title">Document Expiry Status</span>
-      <div class="scr-doc-expiry-legend">
-        <span><i class="scr-seg-expired"></i>Expired</span>
-        <span><i class="scr-seg-nearing"></i>Nearing (&le;30d)</span>
-        <span><i class="scr-seg-valid"></i>Valid</span>
-        <span><i class="scr-seg-unknown"></i>Not captured</span>
-      </div>
-    </div>
-    <div class="scr-doc-expiry-grid">
-      {% for d in doc_expiry %}
-      <div>
-        <div class="scr-doc-item-label">
-          {{ d.label }}
-          <small>
-            {% if d.expired or d.nearing or d.valid %}{{ d.expired }} expired · {{ d.nearing }} nearing{% else %}awaiting client data{% endif %}
-          </small>
-        </div>
-        <div class="scr-segbar" title="{{ d.expired }} expired, {{ d.nearing }} nearing expiry, {{ d.valid }} valid, {{ d.unknown }} not captured">
-          {% if d.expired %}<span class="scr-seg-expired" style="flex-basis:{{ d.pct_expired }}%"></span>{% endif %}
-          {% if d.nearing %}<span class="scr-seg-nearing" style="flex-basis:{{ d.pct_nearing }}%"></span>{% endif %}
-          {% if d.valid %}<span class="scr-seg-valid" style="flex-basis:{{ d.pct_valid }}%"></span>{% endif %}
-          {% if d.unknown %}<span class="scr-seg-unknown" style="flex-basis:{{ d.pct_unknown }}%"></span>{% endif %}
-        </div>
-      </div>
-      {% endfor %}
-    </div>
+    </button>
   </div>
 
   <div class="scr-card" data-scr-noun-singular="employee" data-scr-noun-plural="employees">
@@ -134,6 +104,18 @@ Emirates ID or date of birth (CLAUDE.md 12).
         </div>
       </div>
 
+      <div class="scr-filter-wrap" data-filter-key="status">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All statuses</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All statuses</button>
+          <button type="button" class="scr-filter-opt" data-value="Active">Active</button>
+          <button type="button" class="scr-filter-opt" data-value="Blocked">Blocked</button>
+        </div>
+      </div>
+
       <span class="scr-toolbar-count">{{ employees|length }} employees</span>
     </div>
 
@@ -150,7 +132,7 @@ Emirates ID or date of birth (CLAUDE.md 12).
         </thead>
         <tbody>
           {% for e in employees %}
-          <tr class="scr-row" data-search="{{ e.emp_no|lower }} {{ e.name|lower }}" data-designation="{{ e.designation }}" data-record-id="{{ e.json_id }}">
+          <tr class="scr-row" data-search="{{ e.emp_no|lower }} {{ e.name|lower }}" data-designation="{{ e.designation }}" data-status="{{ e.status }}" data-record-id="{{ e.json_id }}">
             <td><span class="scr-code">{{ e.emp_no }}</span></td>
             <td>
               <div class="scr-co">

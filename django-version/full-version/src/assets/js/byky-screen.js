@@ -47,6 +47,32 @@
     input.addEventListener('input', function () { applyFilters(scopeOf(input)); });
   });
 
+  /* ── KPI tiles as filter shortcuts (data-scr-kpi-filter) ───────────
+     data-scr-kpi-filter="<filter key>:<value>" on a .scr-tile button
+     clicks the matching .scr-filter-opt for that key in the same scope --
+     e.g. Employee Personal Data's Active/Blocked tiles reuse the existing
+     Status filter dropdown instead of a separate mechanism. An empty value
+     (e.g. "status:") clicks the dropdown's "All ..." option. */
+  root.querySelectorAll('[data-scr-kpi-filter]').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      var sep = tile.dataset.scrKpiFilter.indexOf(':');
+      var key = tile.dataset.scrKpiFilter.slice(0, sep);
+      var value = tile.dataset.scrKpiFilter.slice(sep + 1);
+      var scope = scopeOf(tile);
+      var wrap = scope.querySelector('.scr-filter-wrap[data-filter-key="' + key + '"]');
+      if (!wrap) return;
+      var opt = wrap.querySelector('.scr-filter-opt[data-value="' + value + '"]');
+      if (!opt) return;
+      opt.click();
+      scope.querySelectorAll('[data-scr-kpi-filter]').forEach(function (t) {
+        var tSep = t.dataset.scrKpiFilter.indexOf(':');
+        if (t.dataset.scrKpiFilter.slice(0, tSep) === key) {
+          t.classList.toggle('is-active', t === tile);
+        }
+      });
+    });
+  });
+
   /* ── pagination ───────────────────────────────────────────────────
      15 rows a page, matching the DataTables screens (byky-cms-list.js).
      Paging runs over the *filtered* set, not the raw rows, so searching

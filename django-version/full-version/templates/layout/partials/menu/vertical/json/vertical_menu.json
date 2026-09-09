@@ -76,7 +76,7 @@
    "slug": "hrms",
    "badge": [
     "label-secondary",
-    "5"
+    "4"
    ],
    "submenu": [
     {
@@ -88,11 +88,6 @@
      "url": "hrms-employee-personal-data",
      "name": "Employee",
      "slug": "hrms-employee-personal-data"
-    },
-    {
-     "url": "hrms-employee-temporary-address",
-     "name": "Employee Temporary Address",
-     "slug": "hrms-employee-temporary-address"
     },
     {
      "url": "hrms-employee-block-unblock",

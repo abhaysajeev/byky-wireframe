@@ -1,0 +1,291 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Return Vehicle - Inventory{% endblock title %}
+
+{% comment %}
+Return into a branch -- the counterpart of the Transfer page. Same full-page
+shape and the same two scripts, run the other way: the Return Type says where
+the items are coming FROM (a warehouse or an event), To Branch is where they
+land, and the pool lists what is currently out rather than what a branch holds.
+
+That pool is empty today -- no branch is registered as a warehouse, no venue
+exists, and every vehicle sits at a station. See data.returnable_items().
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% comment %}
+byky-ims-map-to-branch.js owns select-all, the button's selection state and the
+success banner; this page carries the same ids so it reuses all of it, and
+byky-ims-transfer.js only adds what a transfer needs on top.
+{% endcomment %}
+<script src="{% static 'js/byky-ims-map-to-branch.js' %}"></script>
+<script src="{% static 'js/byky-ims-transfer.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <a href="{% url 'ims-vehicle-transfer-relocation' %}">Inventory Transfer &amp; Return</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Return</b>
+      </div>
+      <h1 class="scr-title">Return Vehicle</h1>
+      <p class="scr-sub">Bring vehicles and assets back into a branch after maintenance, storage or an event.</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        Back to list
+      </a>
+    </div>
+  </div>
+
+  <div class="scr-banner scr-banner-success" id="map-success-banner" hidden>
+    <span class="scr-banner-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>
+    </span>
+    <span class="scr-banner-text" id="map-success-text">Returned successfully.</span>
+    <button type="button" class="scr-banner-close" aria-label="Dismiss">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+
+  <div class="scr-card scr-form-body" id="transfer-header">
+    <div class="scr-section">
+      <div class="scr-section-head">
+        <h3 class="scr-section-title">1. Return details</h3>
+        <div class="scr-section-rule"></div>
+      </div>
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Return Doc. No</label>
+          <input type="text" class="scr-input" value="{{ doc_no }}" readonly />
+          <div class="scr-help">Generated from the RET series &mdash; not typed.</div>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Return Type<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="return_type" id="transfer-type">
+            <option value="">Select</option>
+            {% for t in return_types %}<option>{{ t }}</option>{% endfor %}
+          </select>
+        </div>
+
+        {% comment %}
+        Where the items are coming back from. One field per return type,
+        swapped by data-scr-show-if; both scope the pool below, which is why
+        they carry data-scr-pool-source.
+        {% endcomment %}
+        <div class="scr-field" data-scr-show-if="return_type:From Maintenance|From Storage" hidden>
+          <label class="scr-label">From Warehouse<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="from_warehouse" data-scr-pool-source>
+            <option value="">Select</option>
+            {% for w in warehouses_list %}<option>{{ w.name }}</option>{% endfor %}
+          </select>
+          {% if not warehouses_list %}<div class="scr-help">No branch is registered as a warehouse yet &mdash; this fills itself once one is.</div>{% endif %}
+        </div>
+        <div class="scr-field" data-scr-show-if="return_type:From Events" hidden>
+          <label class="scr-label">From Event Location<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="from_event_location" data-scr-pool-source>
+            <option value="">Select</option>
+            {% for e in event_locations %}<option>{{ e }}</option>{% endfor %}
+          </select>
+          {% if not event_locations %}<div class="scr-help">Event venues will appear here once they are added.</div>{% endif %}
+        </div>
+
+        <div class="scr-field">
+          <label class="scr-label">To Branch<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="to_branch">
+            <option value="">Select</option>
+            {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+          </select>
+          <div class="scr-help">The branch receiving these items back.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card" id="map-items-card" data-scr-noun-singular="item" data-scr-noun-plural="items">
+    <div class="scr-toolbar">
+      <div>
+        <h3 class="scr-form-title" style="margin-bottom:2px">2. Select vehicles &amp; assets to bring back</h3>
+        <p class="scr-form-sub" style="margin:0" id="transfer-pool-hint">Choose where the items are coming back from to see what is out there.</p>
+      </div>
+      <div style="flex:1"></div>
+
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search code, name or tag" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="itemtype">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All items</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All items</button>
+          {% for t in item_types %}<button type="button" class="scr-filter-opt" data-value="{{ t }}">{{ t }}s</button>{% endfor %}
+        </div>
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="category">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All categories</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All categories</button>
+          {% for c in categories_in_pool %}<button type="button" class="scr-filter-opt" data-value="{{ c }}">{{ c }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="vtype">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All vehicle types</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All vehicle types</button>
+          {% for v in vtypes_in_pool %}<button type="button" class="scr-filter-opt" data-value="{{ v }}">{{ v }}</button>{% endfor %}
+        </div>
+      </div>
+
+      {% comment %}
+      Driven by the From Warehouse / From Event Location select above, not picked here -- two controls
+      for one thing would only disagree. Kept in the DOM because filtering,
+      counting and pagination all run off .scr-filter-wrap; byky-ims-transfer.js
+      clicks the matching option when the source changes.
+      {% endcomment %}
+      <div class="scr-filter-wrap" data-filter-key="branch" hidden>
+        <button type="button" class="scr-filter-btn"><span class="scr-filter-label">All branches</span></button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All branches</button>
+          {% for b in branches_list %}<button type="button" class="scr-filter-opt" data-value="{{ b.name }}">{{ b.name }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">{{ items|length }} items</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px"><input type="checkbox" id="map-select-all" aria-label="Select all"></th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Vehicle Type</th>
+            <th>Tag / EPC</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for i in items %}
+          <tr class="scr-row" data-search="{{ i.code|lower }} {{ i.name|lower }} {{ i.rfid|lower }}" data-branch="{{ i.branch }}" data-itemtype="{{ i.item_type }}" data-category="{{ i.category }}" data-vtype="{{ i.vtype }}">
+            <td><input type="checkbox" data-map-check value="{{ i.code }}"></td>
+            <td><span class="scr-code">{{ i.code }}</span></td>
+            <td style="font-weight:600">{{ i.name }}</td>
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ i.item_type }}</span></td>
+            <td class="scr-contact">{{ i.category }}</td>
+            <td class="scr-contact">{{ i.vtype }}</td>
+            <td><span class="scr-code">{{ i.rfid }}</span></td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4zM4 7l2-3h12l2 3"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">Nothing is out at the moment</div>
+                  <p class="scr-empty-sub">Items appear here once they are sitting in a warehouse or at an event. Nothing is, because no branch is registered as a warehouse yet.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ items|length }} of {{ items|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-section">
+      <div class="scr-section-head">
+        <h3 class="scr-section-title">3. Receipt</h3>
+        <div class="scr-section-rule"></div>
+      </div>
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Return Date</label>
+          <input type="text" class="scr-input byky-date" data-field="return_date" placeholder="Select date" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Driver Name</label>
+          <input type="text" class="scr-input" data-field="driver_name" placeholder="Enter driver name" />
+        </div>
+        <div class="scr-field" style="grid-column:span 2">
+          <label class="scr-label">Remarks</label>
+          <textarea class="scr-input" rows="3" data-field="remarks" placeholder="Anything about the condition it came back in"></textarea>
+        </div>
+        <div class="scr-field" style="grid-column:span 2">
+          <label class="scr-label">Condition Photos</label>
+          <div class="scr-upload-row">
+            <label class="scr-upload"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg><span>Photo 1</span><input type="file" accept="image/*" hidden /></label>
+            <label class="scr-upload"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg><span>Photo 2</span><input type="file" accept="image/*" hidden /></label>
+            <label class="scr-upload"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg><span>Photo 3</span><input type="file" accept="image/*" hidden /></label>
+          </div>
+          <div class="scr-help">Three shots of the vehicle's condition on return.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scr-form-foot">
+      <div style="flex:1"></div>
+      <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn-secondary">Cancel</a>
+      <button type="button" class="scr-btn-primary" id="map-items-btn" data-verb="Return" disabled>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3 21 7l-4 4M21 7H9M7 21l-4-4 4-4M3 17h12"></path></svg>
+        Return Selected
+      </button>
+    </div>
+  </div>
+</div>
+{% endblock %}

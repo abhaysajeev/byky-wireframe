@@ -23,9 +23,15 @@
   var branchSelect = document.getElementById('map-branch-select');
   var selectAll = document.getElementById('map-select-all');
   var mapBtn = document.getElementById('map-items-btn');
+  /* "Map" on the Map pages, "Transfer"/"Return" on the movement ones. */
+  var verb = (mapBtn && mapBtn.dataset.verb) || 'Map';
   var banner = document.getElementById('map-success-banner');
   var bannerText = document.getElementById('map-success-text');
-  if (!card || !branchSelect || !mapBtn) return;
+  /* branchSelect is optional: the Map pages put the branch picker inside this
+     card, while Transfer/Return carry their own header with several
+     destination fields and gate the button themselves (byky-ims-transfer.js).
+     Requiring it here silently disabled select-all on those two pages. */
+  if (!card || !mapBtn) return;
 
   function visibleCheckboxes() {
     return card.querySelectorAll('.scr-row:not([hidden]) input[data-map-check]');
@@ -33,18 +39,23 @@
 
   function updateButton() {
     var checkedCount = card.querySelectorAll('input[data-map-check]:checked').length;
-    var branch = branchSelect.value;
-    mapBtn.disabled = !(branch && checkedCount > 0);
+    var branch = branchSelect ? branchSelect.value : '';
+    /* A page with its own header conditions (Transfer/Return need a type and
+       a destination) publishes window.bykyMapGate and this asks it. A hook,
+       not a second disable pass: a pass that only ever disables can never let
+       the button come back once its own condition is met. */
+    var extra = (typeof window.bykyMapGate === 'function') ? window.bykyMapGate() : true;
+    mapBtn.disabled = !(checkedCount > 0 && (!branchSelect || branch) && extra);
     mapBtn.textContent = ''; // rebuilt below with the icon kept
     var icon = 'M5 13l4 4L19 7';
     mapBtn.innerHTML =
       '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="' + icon + '"></path></svg>' +
       (checkedCount > 0
-        ? 'Map ' + things(checkedCount) + (branch ? ' to ' + branch : '')
-        : 'Map Selected');
+        ? verb + ' ' + things(checkedCount) + (branch ? ' to ' + branch : '')
+        : verb + ' Selected');
   }
 
-  branchSelect.addEventListener('change', updateButton);
+  if (branchSelect) branchSelect.addEventListener('change', updateButton);
 
   if (selectAll) {
     selectAll.addEventListener('change', function () {
@@ -58,10 +69,10 @@
   });
 
   mapBtn.addEventListener('click', function () {
-    var branch = branchSelect.value;
+    var branch = branchSelect ? branchSelect.value : '';
     var checked = card.querySelectorAll('.scr-row input[data-map-check]:checked');
     var count = checked.length;
-    if (!branch || !count) return;
+    if (!count || (branchSelect && !branch)) return;
 
     checked.forEach(function (cb) {
       var row = cb.closest('.scr-row');
@@ -83,15 +94,25 @@
           '</td></tr>';
       }
     }
-    var countEl = card.querySelector('.scr-toolbar-count');
-    if (countEl) countEl.textContent = things(remaining);
-    var pagerInfo = card.querySelector('.scr-pager-info');
-    if (pagerInfo) pagerInfo.textContent = 'Showing ' + remaining + ' of ' + remaining;
+    /* Hand-counting the remaining rows was wrong the moment a filter was on:
+       it counted every row still in the DOM, so a branch-filtered pool of 48
+       reported 1,045 after a transfer. Nudge byky-screen.js to re-filter
+       instead -- it owns the count, the pager and the paging, and gets all
+       three right for the filtered set. */
+    var searchInput = card.querySelector('.scr-search input');
+    if (searchInput) {
+      searchInput.dispatchEvent(new Event('input', { bubbles: true }));
+    } else {
+      var countEl = card.querySelector('.scr-toolbar-count');
+      if (countEl) countEl.textContent = things(remaining);
+      var pagerInfo = card.querySelector('.scr-pager-info');
+      if (pagerInfo) pagerInfo.textContent = 'Showing ' + remaining + ' of ' + remaining;
+    }
 
     updateButton();
 
     if (banner && bannerText) {
-      bannerText.textContent = things(count) + ' mapped to ' + branch + ' successfully.';
+      bannerText.textContent = things(count) + ' moved' + (branch ? ' to ' + branch : '') + ' successfully.';
       banner.hidden = false;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -99,6 +120,9 @@
 
   var bannerClose = banner && banner.querySelector('.scr-banner-close');
   if (bannerClose) bannerClose.addEventListener('click', function () { banner.hidden = true; });
+
+  /* let a page re-ask after its own fields change */
+  window.bykyMapRefresh = updateButton;
 
   updateButton();
 })();

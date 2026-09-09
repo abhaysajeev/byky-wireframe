@@ -35,10 +35,29 @@ rows.
       <p class="scr-sub">{{ purpose }}</p>
     </div>
     <div class="scr-head-actions">
-      <button type="button" class="scr-btn-primary" data-scr-open="transfer:add">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
-        New Transfer
-      </button>
+      {% comment %}
+      One Move Item action covering both directions, same .scr-menu dropdown as
+      Inventory Branch Mapping's Map Item. Both open a full page rather than a
+      drawer -- a transfer carries a document header, a multi-select pool and
+      dispatch details, which is more than a drawer holds.
+      {% endcomment %}
+      <div class="scr-menu-wrap">
+        <button type="button" class="scr-btn-primary" data-scr-menu-toggle>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Move Item
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-menu" hidden>
+          <a class="scr-menu-item" href="{% url 'ims-vehicle-transfer-new' %}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3 21 7l-4 4M21 7H9"></path><path d="M7 21l-4-4 4-4M3 17h12"></path></svg>
+            Transfer Vehicle
+          </a>
+          <a class="scr-menu-item" href="{% url 'ims-vehicle-transfer-return' %}">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 5 5v6"></path></svg>
+            Return Vehicle
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 

@@ -155,6 +155,37 @@ class AssetBranchMapView(ImsScreenView):
         return context
 
 
+class TransferFormView(ImsScreenView):
+    """The full-page Transfer / Return flows behind Inventory Transfer &
+    Return's Move Item menu.
+
+    doc_prefix picks the naming series: TRF for a transfer out of a branch,
+    RET for one coming back. The pool, the destination lists and the document
+    number all come from data.py so the two pages stay in step.
+    """
+
+    doc_prefix = "TRF"
+    # a return picks from what is out at a warehouse or event, not from a branch
+    returning = False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        items = data.returnable_items() if self.returning else data.transferable_items()
+        context.update(
+            {
+                "doc_no": data.next_doc_no(self.doc_prefix),
+                "transfer_types": data.TRANSFER_TYPES,
+                "return_types": data.RETURN_TYPES,
+                "warehouses_list": data.warehouses(),
+                "event_locations": data.event_locations(),
+                "items": items,
+                "categories_in_pool": sorted({i["category"] for i in items}),
+                "vtypes_in_pool": sorted({i["vtype"] for i in items if i["vtype"]}),
+            }
+        )
+        return context
+
+
 class ImsAwaitingView(ImsScreenView):
     """Screens the FSD specifies but the client data has no source for."""
 

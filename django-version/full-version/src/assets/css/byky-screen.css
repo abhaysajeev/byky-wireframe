@@ -559,3 +559,37 @@ textarea.scr-drawer-input { height: auto; min-height: 72px; padding: 10px 13px; 
 @media (max-width: 768px) {
   .scr-drawer { width: 100%; }
 }
+
+/* ── inline success banner ────────────────────────────────────────────
+   Used by the Map and Transfer flows to confirm what just happened without
+   a modal. The markup already existed on Map Vehicle but had no CSS at all,
+   so it was rendering as loose inline text above the form. */
+.scr-banner {
+  display: flex; align-items: center; gap: 11px; padding: 13px 16px;
+  border: 1px solid #eeedf5; border-radius: 12px; background: #fff;
+  font-size: 12.5px; font-weight: 500; color: #4b4770;
+  animation: cdFadeUp 0.3s ease-out both;
+}
+.scr-banner[hidden] { display: none; }
+.scr-banner-success { background: #e9f8f0; border-color: #c4e9d5; color: #14764a; }
+.scr-banner-icon { display: grid; place-items: center; flex: 0 0 auto; color: #1f9d63; }
+.scr-banner-text { flex: 1 1 auto; min-width: 0; }
+.scr-banner-close {
+  flex: 0 0 auto; border: none; background: transparent; cursor: pointer;
+  color: inherit; opacity: 0.6; padding: 2px; border-radius: 6px; display: grid; place-items: center;
+}
+.scr-banner-close:hover { opacity: 1; }
+
+/* ── file upload wells ────────────────────────────────────────────────
+   A row of dashed drop targets, e.g. the three condition photos a transfer
+   records. The label doubles as the control, so the real <input type="file">
+   stays hidden and the well shows the chosen filename once picked. */
+.scr-upload-row { display: flex; flex-wrap: wrap; gap: 10px; }
+.scr-upload {
+  flex: 1 1 160px; min-width: 0; display: flex; align-items: center; justify-content: center;
+  gap: 8px; padding: 14px 12px; border: 1px dashed #d9d5ea; border-radius: 11px;
+  background: #fbfaff; color: #8b87b0; font-size: 12px; font-weight: 500; cursor: pointer;
+  transition: border-color 0.16s, color 0.16s, background 0.16s;
+}
+.scr-upload:hover { border-color: #c2141a; color: #c2141a; background: #fff; }
+.scr-upload span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

@@ -14,6 +14,8 @@ refunds, campaigns, telemetry, alerts) has no source in the client files and sho
 the awaiting-data state rather than invented rows.
 """
 
+import datetime
+
 from apps.byky_core import seed
 
 NOT_CAPTURED = seed.NOT_CAPTURED
@@ -152,6 +154,114 @@ def station_mappings():
 
 
 ITEM_TYPES = ["Vehicle", "Asset"]
+
+# --- Transfer & Return -----------------------------------------------------
+
+# FSD 3.7's movement reasons, as the client listed them.
+TRANSFER_TYPES = [
+    "Branch to Branch",
+    "To Maintenance",
+    "To Storage",
+    "Dismissed",
+    "To Events",
+]
+
+# Which extra destination field each transfer type asks for. Kept here rather
+# than in the template so the form and any later validation read the same list.
+TRANSFER_DESTINATION = {
+    "Branch to Branch": "to_branch",
+    "To Maintenance": "to_warehouse",
+    "To Storage": "to_warehouse",
+    "Dismissed": "to_warehouse",
+    "To Events": "event_location",
+}
+
+
+# A return comes back FROM somewhere, so it has its own short list rather than
+# reusing the transfer reasons -- there is no "return from branch to branch".
+RETURN_TYPES = ["From Maintenance", "From Storage", "From Events"]
+
+RETURN_SOURCE = {
+    "From Maintenance": "from_warehouse",
+    "From Storage": "from_warehouse",
+    "From Events": "from_event_location",
+}
+
+
+def returnable_items():
+    """Everything currently sitting in a warehouse or at an event -- the pool
+    a return brings back.
+
+    An item is returnable exactly when it is not at a branch. Nothing is today:
+    no branch is registered as a warehouse, no event venue exists, and every
+    vehicle in the client's data sits at a station. Real logic over real data,
+    so it fills itself rather than being seeded (CLAUDE.md 12).
+    """
+    branch_names = {b["name"] for b in warehouses()}
+    return [i for i in transferable_items() if i["branch"] in branch_names]
+
+
+def next_doc_no(prefix, year=None, existing=0):
+    """Next number in a naming series, ERPNext style: TRF-2026-00001.
+
+    Nothing persists in this phase, so the counter starts from whatever
+    `existing` says -- zero today. Real once a transfer table exists; the
+    format is the part that matters now, so the field can be shown read-only
+    and auto-filled rather than typed.
+    """
+    year = year or datetime.date.today().year
+    return "%s-%s-%05d" % (prefix, year, existing + 1)
+
+
+def warehouses():
+    """Branches that are warehouses -- the destinations for maintenance,
+    storage and dismissal.
+
+    Derived from the branch master's own type, so it fills itself the moment a
+    branch is registered as a warehouse. Empty today: all 36 stations in the
+    client's data are Branch Offices.
+    """
+    from apps.byky_cms import data as cms_data
+
+    return [b for b in cms_data.branches() if "Warehouse" in b.get("branch_type", "")]
+
+
+def event_locations():
+    """Venues a vehicle can be sent to for an event. No source data yet."""
+    return []
+
+
+def transferable_items():
+    """Everything currently held at a branch, vehicles and assets alike --
+    the pool a transfer picks from. Carries the columns the grid filters on."""
+    out = []
+    for v in seed.VEHICLES:
+        out.append(
+            {
+                "item_type": "Vehicle",
+                "branch": v["station"],
+                "code": v["number"],
+                "name": f'{v["vtype"]} {v["number"]}',
+                "category": v["category"],
+                "vtype": v["vtype"],
+                "rfid": v["barcode"],
+            }
+        )
+    for a in assets():
+        if not a.get("station_key"):
+            continue
+        out.append(
+            {
+                "item_type": "Asset",
+                "branch": a["station_key"],
+                "code": a["code"],
+                "name": a["name"],
+                "category": a["asset_class"],
+                "vtype": a["type"] if a.get("type") else SHORT,
+                "rfid": a["identifier"],
+            }
+        )
+    return out
 
 
 def unmapped_vehicles():

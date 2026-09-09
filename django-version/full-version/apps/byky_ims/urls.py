@@ -155,6 +155,37 @@ urlpatterns = [
         name="ims-vehicle-transfer-relocation",
     ),
     path(
+        "ims/vehicle-transfer-relocation/transfer/",
+        views.TransferFormView.as_view(
+            template_name="ims_vehicle_transfer_new.html",
+            doc_prefix="TRF",
+            screen_no="3.7a",
+            screen_title="Transfer Vehicle",
+            module_label="Inventory",
+            tier="A",
+            phase=3,
+            purpose="Move vehicles and assets out of a branch -- to another branch, to maintenance, to storage, to an event, or out of service.",
+            layout="Full page: transfer header (auto document number, type, source and destination), multi-select pool of everything held at the source branch, and dispatch details.",
+        ),
+        name="ims-vehicle-transfer-new",
+    ),
+    path(
+        "ims/vehicle-transfer-relocation/return/",
+        views.TransferFormView.as_view(
+            template_name="ims_vehicle_transfer_return.html",
+            doc_prefix="RET",
+            returning=True,
+            screen_no="3.7b",
+            screen_title="Return Vehicle",
+            module_label="Inventory",
+            tier="A",
+            phase=3,
+            purpose="Bring vehicles and assets back into a branch after maintenance, storage or an event.",
+            layout="Full page: return header (auto document number, source, receiving branch), multi-select pool, and receipt details.",
+        ),
+        name="ims-vehicle-transfer-return",
+    ),
+    path(
         "ims/e-commerce-category-master/",
         views.ImsAwaitingView.as_view(
             template_name="ims_e_commerce_category_master.html",

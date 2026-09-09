@@ -45,7 +45,6 @@ class CompanyDetailsView(CmsScreenView):
                 "form_sections": sections,
                 "completeness": completeness,
                 "active_count": 0,
-                "pending_count": 0,
                 "form_active_default": True,
                 "company_logo": "",
             }

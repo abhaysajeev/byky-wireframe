@@ -170,17 +170,14 @@ def counts():
 # screens answer different questions, and a vehicle appearing in both is the
 # defect this split exists to prevent.
 #
-# The FSD has no asset-management screen, but it does specify the hardware
-# itself in detail, so the type catalogue below is derived, not invented. Each
-# entry records where it comes from, and "source" says how firmly:
+# The type catalogue below is derived from the hardware the rest of the system
+# already specifies, not invented -- the per-entry comments record where each
+# one comes from so the list stays auditable. That provenance is deliberately
+# NOT rendered: it is build metadata, and a client-facing screen has no reason
+# to carry spec references (same rule as the legacy .aspx filenames).
 #
-#   specified  the FSD masters this device in its own table/screen
-#   implied    an FSD screen depends on the device but never masters it
-#   client     named by the client, outside the FSD
-#
-# That column is the honest part. Everything the FSD does not pin down --
-# how many units exist, their serials, custodians, costs -- stays empty until
-# the client supplies it (CLAUDE.md 12).
+# What the spec does not pin down -- how many units exist, their serials,
+# custodians, costs -- stays empty until the client supplies it (CLAUDE.md 12).
 
 ASSET_CLASSES = [
     "RFID Hardware",
@@ -191,60 +188,57 @@ ASSET_CLASSES = [
     "Workshop & Safety",
 ]
 
-ASSET_SOURCES = {
-    "specified": "FSD-specified",
-    "implied": "FSD-implied",
-    "client": "Client-named",
-}
-
 ASSET_CONDITIONS = ["New", "Good", "Fair", "Needs Repair", "Retired"]
 
-# code, type, class, the identifier the FSD tracks it by, where it lives,
-# source, spec reference. Codes are written out rather than derived from the
-# name -- initialism collided ("Cellular SIM Card" and "CCTV Surveillance
-# Camera" both reduce to CSC) and an ampersand leaked into one, which is not
-# something a master-table code should ever carry.
+# code, type, class, the identifier a unit is looked up by, where it is
+# deployed. Codes are written out rather than derived from the name -- the
+# initialism collided ("Cellular SIM Card" and "CCTV Surveillance Camera" both
+# reduce to CSC) and an ampersand leaked into one, which is not something a
+# master-table code should ever carry.
+#
+# Trailing comment on each row is its provenance, kept for maintainers only.
 _ASSET_TYPES = [
     ("ANT", "UHF RFID Gate Antenna", "RFID Hardware", "Antenna Code · IP · MAC",
-     "Station gate", "specified", "FSD 8.1 · tbl_AntennaMaster"),
+     "Station gate"),                        # 8.1 tbl_AntennaMaster
     ("RDR", "UHF RFID Reader Unit", "RFID Hardware", "Reader IP · TCP port",
-     "Station gate", "specified", "FSD 8.1 · Reader IP / Port"),
+     "Station gate"),                        # 8.1 reader IP / port
     ("RSC", "RFID Desktop Card Scanner", "RFID Hardware", "Asset tag",
-     "Station counter", "implied", "FSD 4.2 · Tap card on RFID scanner"),
+     "Station counter"),                     # 4.2 tap card on RFID scanner
     ("GPS", "GPS / IoT Tracker Unit", "Telematics Device", "IMEI · Serial No",
-     "Fitted to vehicle", "specified", "FSD 5.1 · tbl_GPSDeviceMaster"),
+     "Fitted to vehicle"),                   # 5.1 tbl_GPSDeviceMaster
     ("SIM", "Cellular SIM Card", "Telematics Device", "MSISDN · Carrier",
-     "Fitted in tracker", "specified", "FSD 5.1 · SIM MSISDN / Carrier"),
+     "Fitted in tracker"),                   # 5.1 SIM MSISDN / carrier
     ("RLY", "Relay Immobilizer Kit", "Telematics Device", "Asset tag",
-     "Fitted to vehicle", "specified", "FSD 5.1 · Relay kill switch"),
+     "Fitted to vehicle"),                   # 5.1 relay kill switch
     ("HHD", "Staff Handheld Device", "Counter Equipment", "IMEI · Asset tag",
-     "Station staff", "implied", "FSD 9.6 · Camera document capture"),
+     "Station staff"),                       # 9.6 camera document capture
     ("BCS", "Barcode Scanner", "Counter Equipment", "Asset tag",
-     "Station counter", "implied", "FSD 4.6 · Barcode scanner input"),
+     "Station counter"),                     # 4.6 barcode scanner input
     ("POS", "POS Checkout Terminal", "Counter Equipment", "Asset tag",
-     "Station counter", "implied", "FSD 4.6 · Station POS checkout"),
+     "Station counter"),                     # 4.6 station POS checkout
     ("PRN", "Receipt & Invoice Printer", "Counter Equipment", "Asset tag",
-     "Station counter", "implied", "FSD 4.6 · Printed invoice"),
+     "Station counter"),                     # 4.6 printed invoice
     ("NET", "Network Router / Switch", "IT & Network", "IP · MAC",
-     "Station back office", "implied", "FSD 8.1 · Reader LAN addressing"),
+     "Station back office"),                 # 8.1 reader LAN addressing
     ("CCTV", "CCTV Surveillance Camera", "Site Security", "Asset tag · IP",
-     "Station forecourt", "client", "Client-named — no FSD screen"),
+     "Station forecourt"),                   # client-named
     ("TKIT", "Maintenance Tool Kit", "Workshop & Safety", "Asset tag",
-     "Workshop", "specified", "FSD 3.2 · Maintenance Tools"),
+     "Workshop"),                            # 3.2 maintenance tools
     ("HLMT", "Safety Helmet Stock", "Workshop & Safety", "Asset tag",
-     "Station counter", "specified", "FSD 3.2 · Helmets"),
+     "Station counter"),                     # 3.2 helmets
 ]
 
 
 def asset_types():
     """The catalogue of equipment kinds the business operates.
 
-    Real content, derived from the FSD hardware specs (see _ASSET_TYPES). Unit
-    counts are zero across the board because no equipment inventory has been
-    supplied -- the catalogue is what the system knows, not what it owns.
+    Real content, derived from the hardware the rest of the system specifies
+    (see _ASSET_TYPES). Unit counts are zero across the board because no
+    equipment inventory has been supplied -- the catalogue is what the system
+    knows about, not what it owns.
     """
     out = []
-    for code, name, cls, identifier, location, source, ref in _ASSET_TYPES:
+    for code, name, cls, identifier, location in _ASSET_TYPES:
         out.append(
             {
                 "code": code,
@@ -252,9 +246,6 @@ def asset_types():
                 "asset_class": cls,
                 "identifier": identifier,
                 "location": location,
-                "source": source,
-                "source_label": ASSET_SOURCES[source],
-                "reference": ref,
                 "units": 0,
                 "status": "Active",
             }
@@ -280,7 +271,6 @@ def asset_counts():
     return {
         "types": len(types),
         "classes": len({t["asset_class"] for t in types}),
-        "specified": sum(1 for t in types if t["source"] == "specified"),
         "registered": len(rows),
         "stations": len(seed.STATIONS),
     }

@@ -28,7 +28,7 @@ urlpatterns = [
             tier="A",
             phase=3,
             purpose="To register the company's own operating equipment -- RFID antennas and readers, GPS trackers and SIMs, counter terminals, scanners, cameras, network and workshop kit -- with the station it is posted to, its custodian, cost, warranty and condition. Rental vehicles are not assets here; they belong to Vehicle Management.",
-            layout="Two panels behind content tabs: the Asset Register of individual units (KPI tiles, class and station filters, Add Asset drawer grouped into Identification, Deployment and Lifecycle) and the Asset Types catalogue of equipment kinds, each citing the FSD specification it derives from.",
+            layout="Two panels behind content tabs: the Asset Register of individual units (KPI tiles, class and station filters, Add Asset drawer grouped into Identification, Deployment and Lifecycle) and the Asset Types catalogue of equipment kinds.",
         ),
         name="ims-asset-management",
     ),

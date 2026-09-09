@@ -13,8 +13,9 @@ Tabbed dual-panel on the shared byky-screen.css/js base, same shape as
 cms_country_state_management.html so the two grids filter and paginate
 independently. Panel 1 is the unit register, honestly empty until the client
 supplies an equipment inventory. Panel 2 is the type catalogue, derived from
-the FSD hardware specs with each row citing where it comes from -- see
-apps/byky_ims/data.py:_ASSET_TYPES.
+the hardware the rest of the system specifies. Each type's provenance is kept
+as a code comment in apps/byky_ims/data.py:_ASSET_TYPES and deliberately not
+rendered -- spec references are build metadata, like the legacy .aspx names.
 {% endcomment %}
 
 {% block page_css %}
@@ -63,9 +64,9 @@ apps/byky_ims/data.py:_ASSET_TYPES.
     </div>
     <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-amber">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16.5a4.5 4.5 0 1 1 8 0M5 13a8 8 0 0 1 14 0M12 20h.01"></path></svg>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h18M3 12h18M3 17h18"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ asset_counts.specified }} / {{ asset_counts.types }}</div><div class="scr-tile-lab">Types the FSD specifies outright</div></div>
+      <div><div class="scr-tile-val">{{ asset_counts.classes }}</div><div class="scr-tile-lab">Asset classes</div></div>
     </div>
     <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-green">
@@ -194,8 +195,8 @@ apps/byky_ims/data.py:_ASSET_TYPES.
     </div>
 
     {% comment %}
-    Panel 2 -- the equipment type catalogue. Real content, derived from the FSD
-    hardware specs; the Source column says how firmly each one is specified.
+    Panel 2 -- the equipment type catalogue, and the source of the register
+    drawer's Equipment Type dropdown.
     {% endcomment %}
     <div class="scr-panel" data-tabgroup="assets" data-tab="types" data-scr-noun-singular="type" data-scr-noun-plural="types" hidden>
       <div class="scr-toolbar">
@@ -212,19 +213,6 @@ apps/byky_ims/data.py:_ASSET_TYPES.
           <div class="scr-filter-menu" hidden>
             <button type="button" class="scr-filter-opt is-active" data-value="">All classes</button>
             {% for c in asset_classes %}<button type="button" class="scr-filter-opt" data-value="{{ c }}">{{ c }}</button>{% endfor %}
-          </div>
-        </div>
-
-        <div class="scr-filter-wrap" data-filter-key="source">
-          <button type="button" class="scr-filter-btn">
-            <span class="scr-filter-label">All sources</span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-          </button>
-          <div class="scr-filter-menu" hidden>
-            <button type="button" class="scr-filter-opt is-active" data-value="">All sources</button>
-            <button type="button" class="scr-filter-opt" data-value="specified">FSD-specified</button>
-            <button type="button" class="scr-filter-opt" data-value="implied">FSD-implied</button>
-            <button type="button" class="scr-filter-opt" data-value="client">Client-named</button>
           </div>
         </div>
 
@@ -245,28 +233,18 @@ apps/byky_ims/data.py:_ASSET_TYPES.
               <th>Tracked By</th>
               <th>Typically Deployed</th>
               <th>Units</th>
-              <th>Source</th>
-              <th>Specification</th>
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
             {% for t in asset_types %}
-            <tr class="scr-row" data-search="{{ t.name|lower }} {{ t.asset_class|lower }} {{ t.identifier|lower }}" data-assetclass="{{ t.asset_class }}" data-source="{{ t.source }}" data-record-id="{{ t.json_id }}">
+            <tr class="scr-row" data-search="{{ t.name|lower }} {{ t.asset_class|lower }} {{ t.identifier|lower }}" data-assetclass="{{ t.asset_class }}" data-record-id="{{ t.json_id }}">
               <td><span class="scr-code">{{ t.code }}</span></td>
               <td style="font-weight:600">{{ t.name }}</td>
               <td><span class="scr-badge scr-badge-pending"><i></i>{{ t.asset_class }}</span></td>
               <td class="scr-contact">{{ t.identifier }}</td>
               <td class="scr-contact">{{ t.location }}</td>
               <td class="scr-contact">{{ t.units }}</td>
-              <td>
-                {% if t.source == "specified" %}
-                <span class="scr-badge scr-badge-approved"><i></i>{{ t.source_label }}</span>
-                {% else %}
-                <span class="scr-badge scr-badge-pending"><i></i>{{ t.source_label }}</span>
-                {% endif %}
-              </td>
-              <td class="scr-contact">{{ t.reference }}</td>
               <td>
                 <div class="scr-row-actions">
                   <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="assettype:edit">
@@ -357,9 +335,9 @@ placeholder hinting at the shape and never a prefilled value.
     </div>
 
     {% comment %}
-    One identifier field per addressing scheme the FSD actually specifies:
-    IP/MAC/port for antennas and readers (8.1), IMEI/MSISDN for trackers and
-    SIMs (5.1). Left blank for equipment that carries none of them.
+    One identifier field per addressing scheme the system actually uses:
+    IP/MAC for antennas and readers, IMEI/MSISDN for trackers and SIMs.
+    Left blank for equipment that carries none of them.
     {% endcomment %}
     <div class="scr-drawer-field" data-tab="deployment" hidden>
       <label class="scr-label">Posted To (Station)</label>
@@ -472,11 +450,6 @@ placeholder hinting at the shape and never a prefilled value.
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">Typically Deployed</label>
       <input type="text" class="scr-drawer-input" data-field="location" value="" placeholder="Station counter" />
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">Specification Reference</label>
-      <input type="text" class="scr-drawer-input" data-field="reference" value="" placeholder="FSD 8.1 &middot; tbl_AntennaMaster" />
-      <div class="scr-help">Where this type is specified, so the catalogue stays auditable.</div>
     </div>
   </div>
   <div class="scr-drawer-foot">

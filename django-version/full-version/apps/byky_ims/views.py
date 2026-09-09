@@ -121,7 +121,6 @@ class AssetManagementView(ImsScreenView):
                 "asset_class": t["asset_class"],
                 "identifier": t["identifier"],
                 "location": t["location"],
-                "reference": t["reference"],
             }
         rows = data.assets()
         for i, a in enumerate(rows):

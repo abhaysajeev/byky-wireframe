@@ -1091,19 +1091,22 @@ both is the exact defect this split exists to prevent. An earlier build did put 
 1,060 vehicles here and was corrected — don't reintroduce it.
 
 The FSD specifies no asset screen but does specify the hardware itself in detail, so
-the type catalogue in `data._ASSET_TYPES` is **derived, not invented**, and each of
-its 14 entries carries a `source` recording how firmly:
+the 14-entry type catalogue in `data._ASSET_TYPES` is **derived, not invented** —
+gate antenna and reader from 8.1 `tbl_AntennaMaster`, GPS tracker and SIM from 5.1
+`tbl_GPSDeviceMaster`, the relay kill switch, tools and helmets from 3.2, the RFID
+desktop scanner from 4.2, barcode scanner / POS / printer from 4.6, staff handheld
+from 9.6, station network gear from 8.1's LAN addressing, and the CCTV camera the
+client named outside the FSD.
 
-| `source` | Meaning | Examples |
-|---|---|---|
-| `specified` | the FSD masters this device in its own table/screen | Gate antenna & reader (8.1 `tbl_AntennaMaster`), GPS tracker & SIM (5.1 `tbl_GPSDeviceMaster`), relay kill switch, FSD 3.2's tools and helmets |
-| `implied` | an FSD screen depends on the device but never masters it | RFID desktop scanner (4.2), barcode scanner / POS / printer (4.6), staff handheld (9.6), station network gear (8.1 LAN addressing) |
-| `client` | named by the client, outside the FSD | CCTV surveillance camera |
+**That provenance stays a code comment and is never rendered.** An earlier build put
+it on screen as a Source badge, a source filter, a Specification column and an
+"FSD-specified" KPI; all four were removed. Spec references are build metadata — the
+same rule that keeps legacy `.aspx` filenames off finished screens. Keep the
+per-entry comments truthful when adding a type, but don't surface them.
 
-That column is the honest part and surfaces as a filter and a badge — keep it
-truthful when adding a type. Type codes are **written out, not derived** from the
-name: the initialism collided (`Cellular SIM Card` and `CCTV Surveillance Camera`
-both reduce to `CSC`) and one leaked an ampersand.
+Type codes are **written out, not derived** from the name: the initialism collided
+(`Cellular SIM Card` and `CCTV Surveillance Camera` both reduce to `CSC`) and one
+leaked an ampersand.
 
 The screen is a tabbed dual-panel (same shape as `cms_country_state_management.html`,
 so the grids filter and paginate independently):

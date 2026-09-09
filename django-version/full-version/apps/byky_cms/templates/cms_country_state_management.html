@@ -54,18 +54,33 @@ each filtering and searching on its own, each with its own Add drawer.
       </span>
       <div><div class="scr-tile-val">{{ states|length }}</div><div class="scr-tile-lab">States</div></div>
     </div>
-    <div class="scr-tile">
+    {% comment %}
+    The last three tiles count populations that live on other screens, so each
+    is a link to the screen that owns its list -- see a.scr-tile in
+    byky-screen.css. Countries and States are not links: their lists are the
+    two grids directly below.
+    {% endcomment %}
+    <a class="scr-tile" href="{% url 'cms-branch-management' %}" title="Open Branch Management">
       <span class="scr-tile-ico scr-tile-ico-red">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ total_branches }}</div><div class="scr-tile-lab">Total branches</div></div>
-    </div>
-    <div class="scr-tile">
+      <div><div class="scr-tile-val">{{ total_branches }}</div><div class="scr-tile-lab">Total Branches</div></div>
+      <svg class="scr-tile-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+    </a>
+    <a class="scr-tile" href="{% url 'ims-vehicle-management' %}" title="Open Vehicle Management">
       <span class="scr-tile-ico scr-tile-ico-green">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ total_fleet }}</div><div class="scr-tile-lab">Total fleet</div></div>
-    </div>
+      <div><div class="scr-tile-val">{{ total_fleet }}</div><div class="scr-tile-lab">Total Vehicles</div></div>
+      <svg class="scr-tile-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+    </a>
+    <a class="scr-tile" href="{% url 'ims-asset-management' %}" title="Open Asset Management">
+      <span class="scr-tile-ico scr-tile-ico-purple">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4zM4 7l2-3h12l2 3M9 19v2M15 19v2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ total_assets }}</div><div class="scr-tile-lab">Total Assets</div></div>
+      <svg class="scr-tile-go" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+    </a>
   </div>
 
   <div class="scr-card">

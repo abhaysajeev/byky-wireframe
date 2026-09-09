@@ -8,6 +8,7 @@ Wireframe phase: no writes, no CRUD, no API. Forms submit nowhere.
 
 from apps.byky_core.views import BykyScreenView
 from apps.byky_core import geo, seed
+from apps.byky_ims import data as ims_data
 
 from . import data
 
@@ -80,6 +81,12 @@ class CountryStateView(CmsScreenView):
                 "states": states,
                 "total_branches": sum(s["branches"] for s in states),
                 "total_fleet": sum(s["fleet"] for s in states),
+                # Company equipment, not vehicles -- the count the Asset
+                # Management register holds, which these tiles link through to.
+                # Zero until an equipment inventory is supplied; adding
+                # branches and fleet together would put a number here that
+                # counts nothing anyone can go and look at.
+                "total_assets": ims_data.asset_counts()["registered"],
             }
         )
         return context

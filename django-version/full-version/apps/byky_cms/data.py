@@ -45,7 +45,6 @@ def countries():
                 "code": "UAE" if name.startswith("United") else "KWT",
                 "name": name,
                 "states": n,
-                "status": "Approved",
                 "active": True,
             }
         )
@@ -69,20 +68,27 @@ def states():
                 "country": _COUNTRY_OF.get(name, _DEFAULT_COUNTRY),
                 "branches": v["branches"],
                 "fleet": v["fleet"],
-                "status": "Approved",
                 "active": True,
             }
         )
     return out
 
 
+BRANCH_TYPES = ["Head Office", "Regional Office", "Regional Warehouse", "Branch Office", "Branch Warehouse"]
+
+
 def branches():
     """Each rental station is a branch hub (FSD 1.4: 'rental station branch hubs').
-    Is Hotel, Is App Payment and Is Test Vehicle have no source in the client
-    files either, so they default to False alongside Is HO -- not invented,
-    just not yet flagged true for any real branch."""
+    All 36 are real, operating rental stations, so Branch Type defaults to
+    "Branch Office" -- the client's files carry no head-office/warehouse
+    designation, so nothing is invented, just the type these rows actually
+    are. Is Hotel, Is App Payment and Is Test Vehicle have no source in the
+    client files either, so they default to False -- not invented, just not
+    yet flagged true for any real branch. Is HO is derived from Branch Type,
+    not a separate flag, so the two can't disagree."""
     out = []
     for s in seed.STATIONS:
+        branch_type = "Branch Office"
         out.append(
             {
                 "code": s["code"].replace("ST", "BR"),
@@ -91,13 +97,19 @@ def branches():
                 "company": "BYKY",
                 "location": s["emirate"],
                 "fleet": s["vehicle_count"],
-                "is_ho": False,
+                # Same real number as "fleet" -- the vehicles stationed here
+                # are exactly what's deployed to this branch. Not tracked
+                # separately from fleet for Head Office (no vehicles sit at
+                # an admin office), which the drawer field also reflects by
+                # hiding for that one branch type.
+                "assets_deployed": s["vehicle_count"],
+                "branch_type": branch_type,
+                "is_ho": branch_type == "Head Office",
                 "is_hotel": False,
                 "app_payment": False,
                 "multi_user": True,
                 "test_vehicle": False,
                 "hotel_commission": "0.00",
-                "status": "Approved" if s["vehicle_count"] else "Pending",
                 "active": True,
             }
         )

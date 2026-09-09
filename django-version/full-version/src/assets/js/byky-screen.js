@@ -222,6 +222,33 @@
     child.value = '';
   });
 
+  /* ── conditional field groups (data-scr-show-if) ───────────────────
+     data-scr-show-if="<field key>:<value>[|<value>...]" on a .scr-drawer-field
+     hides it unless the named field (another select/input in the same
+     drawer/form) currently holds one of the given values -- e.g. Branch
+     Management's Flags group only applies when Branch Type is "Branch
+     Office", and Count of Assets Deployed applies to every branch type
+     except Head Office. Delegated at document level for the same reason as
+     the cascade listener above: drawers sit outside .scr, so a listener
+     rooted there works regardless of which drawer changed. Also re-synced
+     from wireDrawer's open() below, so edit mode shows the right state for
+     the record being edited. */
+  function syncShowIf(scope) {
+    scope.querySelectorAll('[data-scr-show-if]').forEach(function (el) {
+      var sep = el.dataset.scrShowIf.indexOf(':');
+      var key = el.dataset.scrShowIf.slice(0, sep);
+      var wants = el.dataset.scrShowIf.slice(sep + 1).split('|');
+      var input = scope.querySelector('[data-field="' + key + '"]');
+      el.hidden = !input || wants.indexOf(input.value) === -1;
+    });
+  }
+  document.addEventListener('change', function (e) {
+    var input = e.target;
+    if (!(input.matches && input.matches('[data-field]'))) return;
+    var scope = input.closest('.scr-drawer, .scr-form-body, .scr') || document;
+    syncShowIf(scope);
+  });
+
   /* ── logo / image upload preview ─────────────────────────────────
      Any input[type=file][data-scr-logo-preview="<target id>"] renders the
      chosen image into that element (an <img>, created if not already
@@ -438,6 +465,7 @@
         toggle.classList.toggle('is-on', isActive);
       }
       if (tabs.length) selectTab(tabs[0].dataset.tab);
+      syncShowIf(drawer);
       veil.hidden = false;
       drawer.hidden = false;
     }

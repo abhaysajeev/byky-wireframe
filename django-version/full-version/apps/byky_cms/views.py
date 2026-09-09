@@ -43,7 +43,7 @@ class CompanyDetailsView(CmsScreenView):
                 "companies": [],
                 "form_sections": sections,
                 "completeness": completeness,
-                "approved_count": 0,
+                "active_count": 0,
                 "pending_count": 0,
                 "form_active_default": True,
                 "company_logo": "",
@@ -74,12 +74,18 @@ class CountryStateView(CmsScreenView):
                 "active": s["active"],
             }
 
+        total_branches = sum(s["branches"] for s in states)
+        total_fleet = sum(s["fleet"] for s in states)
         context.update(
             {
                 "countries": countries,
                 "states": states,
-                "total_branches": sum(s["branches"] for s in states),
-                "total_fleet": sum(s["fleet"] for s in states),
+                "total_branches": total_branches,
+                "total_fleet": total_fleet,
+                # Every physical asset the network holds under a country/state --
+                # branch hubs plus the vehicles stationed at them. Both figures
+                # are already real (seed.STATIONS), just summed together.
+                "total_assets": total_branches + total_fleet,
             }
         )
         return context
@@ -123,7 +129,7 @@ class BranchView(CmsScreenView):
                 "country": data.country_of_state(b["location"]),
                 "state": b["location"],
                 "location": b["location"],
-                "is_ho": b["is_ho"],
+                "branch_type": b["branch_type"],
                 "is_hotel": b["is_hotel"],
                 "app_payment": b["app_payment"],
                 "multi_user": b["multi_user"],
@@ -135,8 +141,14 @@ class BranchView(CmsScreenView):
             {
                 "branches": rows,
                 "total_fleet": sum(b["fleet"] for b in rows),
+                "assets_deployed": sum(b["assets_deployed"] for b in rows),
                 "ho_count": sum(1 for b in rows if b["is_ho"]),
-                "pending": sum(1 for b in rows if b["status"] == "Pending"),
+                "inactive_count": sum(1 for b in rows if not b["active"]),
+                "branch_types_list": data.BRANCH_TYPES,
+                "regional_office_count": sum(1 for b in rows if b["branch_type"] == "Regional Office"),
+                "regional_warehouse_count": sum(1 for b in rows if b["branch_type"] == "Regional Warehouse"),
+                "branch_office_count": sum(1 for b in rows if b["branch_type"] == "Branch Office"),
+                "branch_warehouse_count": sum(1 for b in rows if b["branch_type"] == "Branch Warehouse"),
             }
         )
         return context

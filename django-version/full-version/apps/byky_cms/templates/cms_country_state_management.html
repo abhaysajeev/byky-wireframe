@@ -1,7 +1,7 @@
 {% extends layout_path %}
 {% load static %}
 
-{% block title %}Country &amp; State Management - Company Management{% endblock title %}
+{% block title %}Country and State - Country &amp; State Management{% endblock title %}
 
 {% comment %}
 FSD 1.2 -- Tier A, tabbed dual grid. Built on the shared byky-screen.css/js base
@@ -26,11 +26,11 @@ each filtering and searching on its own, each with its own Add drawer.
   <div class="scr-head">
     <div>
       <div class="scr-crumb">
-        <span>Company Management</span>
+        <span>Country &amp; State Management</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
-        <b>Country &amp; State Management</b>
+        <b>Country and State</b>
       </div>
-      <h1 class="scr-title">Country &amp; State Management</h1>
+      <h1 class="scr-title">Country and State</h1>
       <p class="scr-sub">International countries and the emirates registered under them.</p>
     </div>
     <div class="scr-head-actions">
@@ -64,7 +64,13 @@ each filtering and searching on its own, each with its own Add drawer.
       <span class="scr-tile-ico scr-tile-ico-green">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ total_fleet }}</div><div class="scr-tile-lab">Total fleet</div></div>
+      <div><div class="scr-tile-val">{{ total_fleet }}</div><div class="scr-tile-lab">Total Vehicles</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-purple">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3 8 4.5v9L12 21l-8-4.5v-9z"></path><path d="m4 7.5 8 4.5 8-4.5M12 12v9"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ total_assets }}</div><div class="scr-tile-lab">Total Assets</div></div>
     </div>
   </div>
 
@@ -99,7 +105,7 @@ each filtering and searching on its own, each with its own Add drawer.
               <th>Country</th>
               <th>Code</th>
               <th>States</th>
-              <th>Approval</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -116,14 +122,11 @@ each filtering and searching on its own, each with its own Add drawer.
               </td>
               <td><span class="scr-code">{{ c.code }}</span></td>
               <td class="scr-state">{{ c.states }}</td>
-              <td><span class="scr-badge scr-badge-{{ c.status|lower }}"><i></i>{{ c.status }}</span></td>
+              <td>{% if c.active %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}</td>
               <td>
                 <div class="scr-row-actions">
                   <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="country:edit">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
-                  </button>
-                  <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
                   </button>
                   <button type="button" class="scr-icon-btn" title="More">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
@@ -205,7 +208,7 @@ each filtering and searching on its own, each with its own Add drawer.
               <th>Country</th>
               <th>Branches</th>
               <th>Fleet</th>
-              <th>Approval</th>
+              <th>Status</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -224,14 +227,11 @@ each filtering and searching on its own, each with its own Add drawer.
               <td class="scr-state">{{ s.country }}</td>
               <td class="scr-state">{{ s.branches }}</td>
               <td class="scr-state">{{ s.fleet }}</td>
-              <td><span class="scr-badge scr-badge-{{ s.status|lower }}"><i></i>{{ s.status }}</span></td>
+              <td>{% if s.active %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}</td>
               <td>
                 <div class="scr-row-actions">
                   <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="state:edit">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
-                  </button>
-                  <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
                   </button>
                   <button type="button" class="scr-icon-btn" title="More">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
@@ -299,11 +299,11 @@ each filtering and searching on its own, each with its own Add drawer.
   <div class="scr-drawer-body scr-sb">
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">Country Code<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" placeholder="UAE" />
+      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" />
     </div>
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">Country Name<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="name" value="" placeholder="United Arab Emirates" />
+      <input type="text" class="scr-drawer-input" data-field="name" value="" />
     </div>
   </div>
   <div class="scr-drawer-foot">
@@ -343,11 +343,11 @@ each filtering and searching on its own, each with its own Add drawer.
     </div>
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">State Code<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" placeholder="DXB" />
+      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" />
     </div>
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">State Name<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="name" value="" placeholder="Dubai" />
+      <input type="text" class="scr-drawer-input" data-field="name" value="" />
     </div>
   </div>
   <div class="scr-drawer-foot">

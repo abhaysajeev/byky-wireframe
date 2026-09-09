@@ -11,13 +11,30 @@
    "menu_header": "Operations"
   },
   {
-   "name": "Company Management",
+   "name": "Country & State",
+   "icon": "menu-icon icon-base ti tabler-world",
+   "svg": "M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18",
+   "slug": "cms-geo",
+   "badge": [
+    "label-secondary",
+    "1"
+   ],
+   "submenu": [
+    {
+     "url": "cms-country-state-management",
+     "name": "Country & State",
+     "slug": "cms-country-state-management"
+    }
+   ]
+  },
+  {
+   "name": "Company",
    "icon": "menu-icon icon-base ti tabler-building",
    "svg": "M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3",
    "slug": "cms",
    "badge": [
     "label-secondary",
-    "9"
+    "6"
    ],
    "submenu": [
     {
@@ -26,34 +43,19 @@
      "slug": "cms-company-details"
     },
     {
-     "url": "cms-country-state-management",
-     "name": "Country & State Management",
-     "slug": "cms-country-state-management"
-    },
-    {
      "url": "cms-location-management",
-     "name": "Core Location Management",
+     "name": "Location",
      "slug": "cms-location-management"
     },
     {
-     "url": "cms-branch-management",
-     "name": "Branch Management",
-     "slug": "cms-branch-management"
-    },
-    {
      "url": "cms-department-management",
-     "name": "Department Management",
+     "name": "Department",
      "slug": "cms-department-management"
     },
     {
-     "url": "cms-branch-department-mapping",
-     "name": "Branch Department Mapping",
-     "slug": "cms-branch-department-mapping"
-    },
-    {
-     "url": "cms-station-address-mapping",
-     "name": "Station Address Mapping",
-     "slug": "cms-station-address-mapping"
+     "url": "cms-branch-management",
+     "name": "Branch",
+     "slug": "cms-branch-management"
     },
     {
      "url": "cms-station-working-time",
@@ -62,7 +64,7 @@
     },
     {
      "url": "cms-cms-privilege-management",
-     "name": "CMS Privilege Management",
+     "name": "Privileges",
      "slug": "cms-cms-privilege-management"
     }
    ]
@@ -116,7 +118,7 @@
    "submenu": [
     {
      "url": "ims-vehicle-management",
-     "name": "Vehicle Management",
+     "name": "Vehicle",
      "slug": "ims-vehicle-management"
     },
     {
@@ -156,13 +158,13 @@
     },
     {
      "url": "ims-ims-security-privilege-management",
-     "name": "IMS Security Privilege Management",
+     "name": "IMS Security Privilege",
      "slug": "ims-ims-security-privilege-management"
     }
    ]
   },
   {
-   "name": "Rental Management",
+   "name": "Rental",
    "icon": "menu-icon icon-base ti tabler-receipt",
    "svg": "M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7",
    "slug": "rms",
@@ -178,7 +180,7 @@
     },
     {
      "url": "rms-rms-security-privilege-management",
-     "name": "RMS Security Privilege Management",
+     "name": "RMS Security Privilege",
      "slug": "rms-rms-security-privilege-management"
     }
    ]
@@ -206,7 +208,7 @@
    ]
   },
   {
-   "name": "Discount Card Management",
+   "name": "Discount Card",
    "icon": "menu-icon icon-base ti tabler-credit-card",
    "svg": "M3 6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2zM3 10h18M7 15h4",
    "slug": "discount",
@@ -217,12 +219,12 @@
    "submenu": [
     {
      "url": "discount-card-management",
-     "name": "Card Management",
+     "name": "Card",
      "slug": "discount-card-management"
     },
     {
      "url": "discount-card-grade-management",
-     "name": "Card Grade Management",
+     "name": "Card Grade",
      "slug": "discount-card-grade-management"
     },
     {
@@ -233,7 +235,7 @@
    ]
   },
   {
-   "name": "Request Management",
+   "name": "Request",
    "icon": "menu-icon icon-base ti tabler-clipboard-check",
    "svg": "M9 5h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2M9 3h6v3H9zM9 13l2 2 4-4",
    "slug": "request",
@@ -255,7 +257,7 @@
    ]
   },
   {
-   "name": "Credit Note Management",
+   "name": "Credit Note",
    "icon": "menu-icon icon-base ti tabler-receipt-refund",
    "svg": "M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17l-3-2-2 2-2-2-2 2-2-2M8 7h6M8 11h6",
    "slug": "creditnote",
@@ -277,7 +279,7 @@
    ]
   },
   {
-   "name": "Customer App Management",
+   "name": "Customer App",
    "icon": "menu-icon icon-base ti tabler-device-mobile-star",
    "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2M9 6h6",
    "slug": "customerapp",
@@ -328,13 +330,13 @@
     },
     {
      "url": "customerapp-customer-management",
-     "name": "Customer Management",
+     "name": "Customer",
      "slug": "customerapp-customer-management"
     }
    ]
   },
   {
-   "name": "Vehicle Tracking Management",
+   "name": "Vehicle Tracking",
    "icon": "menu-icon icon-base ti tabler-gps",
    "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z",
    "slug": "tracking",
@@ -370,13 +372,13 @@
     },
     {
      "url": "tracking-tracking-security-privilege-management",
-     "name": "TRACKING Security Privilege Management",
+     "name": "TRACKING Security Privilege",
      "slug": "tracking-tracking-security-privilege-management"
     }
    ]
   },
   {
-   "name": "Device Management",
+   "name": "Device",
    "icon": "menu-icon icon-base ti tabler-device-mobile",
    "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2",
    "slug": "device",
@@ -487,7 +489,7 @@
     },
     {
      "url": "reports-reports-security-privilege-management",
-     "name": "REPORTS Security Privilege Management",
+     "name": "REPORTS Security Privilege",
      "slug": "reports-reports-security-privilege-management"
     }
    ]
@@ -524,7 +526,7 @@
     },
     {
      "url": "notification-notification-security-privilege-management",
-     "name": "Notification Security Privilege Management",
+     "name": "Notification Security Privilege",
      "slug": "notification-notification-security-privilege-management"
     }
    ]
@@ -544,7 +546,7 @@
    "submenu": [
     {
      "url": "scheduler-cron-job-background-scheduler-management",
-     "name": "Cron Job & Background Scheduler Management",
+     "name": "Cron Job & Background Scheduler",
      "slug": "scheduler-cron-job-background-scheduler-management"
     },
     {
@@ -564,7 +566,7 @@
     },
     {
      "url": "scheduler-scheduler-security-privilege-management",
-     "name": "Scheduler Security Privilege Management",
+     "name": "Scheduler Security Privilege",
      "slug": "scheduler-scheduler-security-privilege-management"
     }
    ]
@@ -582,7 +584,7 @@
    "submenu": [
     {
      "url": "sysadmin-global-erp-user-account-management",
-     "name": "Global ERP User Account Management",
+     "name": "Global ERP User Account",
      "slug": "sysadmin-global-erp-user-account-management"
     },
     {
@@ -602,7 +604,7 @@
     },
     {
      "url": "sysadmin-system-administration-privilege-management",
-     "name": "System Administration Privilege Management",
+     "name": "System Administration Privilege",
      "slug": "sysadmin-system-administration-privilege-management"
     }
    ]
@@ -639,7 +641,7 @@
     },
     {
      "url": "api-mobile-api-security-privilege-management",
-     "name": "Mobile API Security Privilege Management",
+     "name": "Mobile API Security Privilege",
      "slug": "api-mobile-api-security-privilege-management"
     }
    ]
@@ -676,7 +678,7 @@
     },
     {
      "url": "security-system-security-privilege-management",
-     "name": "System Security Privilege Management",
+     "name": "System Security Privilege",
      "slug": "security-system-security-privilege-management"
     }
    ]
@@ -713,7 +715,7 @@
     },
     {
      "url": "integration-final-integration-security-privilege-management",
-     "name": "Final Integration Security Privilege Management",
+     "name": "Final Integration Security Privilege",
      "slug": "integration-final-integration-security-privilege-management"
     }
    ]

@@ -2,7 +2,7 @@
 {% load static %}
 {% load humanize %}
 
-{% block title %}Branch Management - Company Management{% endblock title %}
+{% block title %}Branch - Company Management{% endblock title %}
 
 {% comment %}
 FSD 1.4 -- Tier B. Built on the shared byky-screen.css/js base (see
@@ -30,9 +30,9 @@ default false alongside Is HO, same as the data they were already rendering.
       <div class="scr-crumb">
         <span>Company Management</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
-        <b>Branch Management</b>
+        <b>Branch</b>
       </div>
-      <h1 class="scr-title">Branch Management</h1>
+      <h1 class="scr-title">Branch</h1>
       <p class="scr-sub">Rental station hubs, their head-office and multi-user flags.</p>
     </div>
     <div class="scr-head-actions">
@@ -58,7 +58,7 @@ default false alongside Is HO, same as the data they were already rendering.
       <span class="scr-tile-ico scr-tile-ico-green">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ total_fleet|intcomma }}</div><div class="scr-tile-lab">Vehicles deployed</div></div>
+      <div><div class="scr-tile-val">{{ assets_deployed|intcomma }}</div><div class="scr-tile-lab">Assets Deployed</div></div>
     </div>
     <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-blue">
@@ -70,7 +70,31 @@ default false alongside Is HO, same as the data they were already rendering.
       <span class="scr-tile-ico scr-tile-ico-amber">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ pending }}</div><div class="scr-tile-lab">Pending approval</div></div>
+      <div><div class="scr-tile-val">{{ inactive_count }}</div><div class="scr-tile-lab">Inactive branches</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ regional_office_count }}</div><div class="scr-tile-lab">Regional Offices</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ regional_warehouse_count }}</div><div class="scr-tile-lab">Regional Warehouses</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ branch_office_count }}</div><div class="scr-tile-lab">Branch Offices</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ branch_warehouse_count }}</div><div class="scr-tile-lab">Branch Warehouses</div></div>
     </div>
   </div>
 
@@ -96,14 +120,13 @@ default false alongside Is HO, same as the data they were already rendering.
 
       <div class="scr-filter-wrap" data-filter-key="status">
         <button type="button" class="scr-filter-btn">
-          <span class="scr-filter-label">All approval status</span>
+          <span class="scr-filter-label">All statuses</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
         </button>
         <div class="scr-filter-menu" hidden>
-          <button type="button" class="scr-filter-opt is-active" data-value="">All approval status</button>
-          <button type="button" class="scr-filter-opt" data-value="Approved">Approved</button>
-          <button type="button" class="scr-filter-opt" data-value="Pending">Pending</button>
-          <button type="button" class="scr-filter-opt" data-value="Rejected">Rejected</button>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All statuses</button>
+          <button type="button" class="scr-filter-opt" data-value="Active">Active</button>
+          <button type="button" class="scr-filter-opt" data-value="Inactive">Inactive</button>
         </div>
       </div>
 
@@ -121,13 +144,13 @@ default false alongside Is HO, same as the data they were already rendering.
             <th>Is HO</th>
             <th>Multi User</th>
             <th>Vehicles</th>
-            <th>Approval</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for b in branches %}
-          <tr class="scr-row" data-search="{{ b.name|lower }} {{ b.code|lower }}" data-location="{{ b.location }}" data-status="{{ b.status }}" data-record-id="{{ b.json_id }}">
+          <tr class="scr-row" data-search="{{ b.name|lower }} {{ b.code|lower }}" data-location="{{ b.location }}" data-status="{% if b.active %}Active{% else %}Inactive{% endif %}" data-record-id="{{ b.json_id }}">
             <td>
               <div class="scr-co">
                 <span class="scr-avatar {% cycle 'scr-avatar-0' 'scr-avatar-1' 'scr-avatar-2' 'scr-avatar-3' 'scr-avatar-4' as branch_avatar_cls %}">{{ b.name|slice:":2"|upper }}</span>
@@ -148,7 +171,7 @@ default false alongside Is HO, same as the data they were already rendering.
                       data-scr-view-columns='["number","rfid_epc","nfc_id","category","vtype"]'
                       data-scr-view-labels='["Vehicle ID","RFID Tag EPC","NFC ID","Category","Type"]'>{{ b.fleet }}</button>
             </td>
-            <td><span class="scr-badge scr-badge-{{ b.status|lower }}"><i></i>{{ b.status }}</span></td>
+            <td>{% if b.active %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}</td>
             <td>
               <div class="scr-row-actions">
                 <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="branch:edit">
@@ -260,17 +283,26 @@ default false alongside Is HO, same as the data they were already rendering.
       </select>
     </div>
     <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Branch Type<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="branch_type">
+        <option value="">Select</option>
+        {% for t in branch_types_list %}<option>{{ t }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">Hotel Commission %</label>
       <input type="number" step="0.01" class="scr-drawer-input" data-field="hotel_commission" value="0.00" disabled />
       <div class="scr-help">Enabled only when Is Hotel is checked.</div>
     </div>
 
-    <div class="scr-drawer-field" data-tab="_">
+    {% comment %}
+    Flags only apply to Branch Office -- a Head/Regional Office or Warehouse
+    isn't a customer-facing rental counter, so hotel commission, app payment,
+    multi-user access and test-vehicle flagging don't mean anything there.
+    Shown/hidden by data-scr-show-if, keyed off the Branch Type select above.
+    {% endcomment %}
+    <div class="scr-drawer-field" data-tab="_" data-scr-show-if="branch_type:Branch Office">
       <label class="scr-label" style="margin-bottom:2px">Flags</label>
-      <div class="scr-check-row">
-        <input type="checkbox" class="scr-check" id="branch-flag-ho" data-field="is_ho" />
-        <label class="scr-check-label" for="branch-flag-ho">Is Head Office <span class="scr-check-hint">(max 1 per company)</span></label>
-      </div>
       <div class="scr-check-row">
         <input type="checkbox" class="scr-check" id="branch-flag-hotel" data-field="is_hotel" data-scr-enables="hotel_commission" />
         <label class="scr-check-label" for="branch-flag-hotel">Is Hotel</label>

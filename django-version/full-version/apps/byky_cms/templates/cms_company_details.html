@@ -57,7 +57,7 @@ contain render blank with an "awaiting" chip (CLAUDE.md 12); none are invented.
       <span class="scr-tile-ico scr-tile-ico-green">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M8.5 12l2.4 2.4 4.6-4.8"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ approved_count }}</div><div class="scr-tile-lab">Approved</div></div>
+      <div><div class="scr-tile-val">{{ active_count }}</div><div class="scr-tile-lab">Active</div></div>
     </div>
     <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-amber">
@@ -96,14 +96,13 @@ contain render blank with an "awaiting" chip (CLAUDE.md 12); none are invented.
 
       <div class="scr-filter-wrap" data-filter-key="status">
         <button type="button" class="scr-filter-btn">
-          <span class="scr-filter-label">All approval status</span>
+          <span class="scr-filter-label">All statuses</span>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
         </button>
         <div class="scr-filter-menu" hidden>
-          <button type="button" class="scr-filter-opt is-active" data-value="">All approval status</button>
-          <button type="button" class="scr-filter-opt" data-value="Approved">Approved</button>
-          <button type="button" class="scr-filter-opt" data-value="Pending">Pending</button>
-          <button type="button" class="scr-filter-opt" data-value="Rejected">Rejected</button>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All statuses</button>
+          <button type="button" class="scr-filter-opt" data-value="Active">Active</button>
+          <button type="button" class="scr-filter-opt" data-value="Inactive">Inactive</button>
         </div>
       </div>
 
@@ -119,13 +118,13 @@ contain render blank with an "awaiting" chip (CLAUDE.md 12); none are invented.
             <th>Emirate</th>
             <th>Contact</th>
             <th>Completeness</th>
-            <th>Approval</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {% for c in companies %}
-          <tr class="scr-row" data-search="{{ c.name|lower }} {{ c.code|lower }} {{ c.contact_person|lower }}" data-emirate="{{ c.state }}" data-status="{{ c.status }}" data-record-id="{{ c.json_id }}">
+          <tr class="scr-row" data-search="{{ c.name|lower }} {{ c.code|lower }} {{ c.contact_person|lower }}" data-emirate="{{ c.state }}" data-status="{% if c.active %}Active{% else %}Inactive{% endif %}" data-record-id="{{ c.json_id }}">
             <td>
               <div class="scr-co">
                 <span class="scr-avatar {% cycle 'scr-avatar-0' 'scr-avatar-1' 'scr-avatar-2' 'scr-avatar-3' 'scr-avatar-4' as scr_avatar_cls %}">{{ c.name|slice:":2"|upper }}</span>
@@ -148,15 +147,12 @@ contain render blank with an "awaiting" chip (CLAUDE.md 12); none are invented.
               </div>
             </td>
             <td>
-              <span class="scr-badge scr-badge-{{ c.status|lower }}"><i></i>{{ c.status }}</span>
+              {% if c.active %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}
             </td>
             <td>
               <div class="scr-row-actions">
                 <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="company:edit">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
-                </button>
-                <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
                 </button>
                 <button type="button" class="scr-icon-btn" title="More">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>

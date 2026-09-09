@@ -87,6 +87,7 @@
 .scr-tile-ico-green { background: #e9f8f0; color: #1f9d63; }
 .scr-tile-ico-amber { background: #fdf3e3; color: #e08700; }
 .scr-tile-ico-blue { background: #eaf1fd; color: #3b6fd4; }
+.scr-tile-ico-purple { background: #f1ecfd; color: #6d3fd6; }
 .scr-tile-val { font-size: 20px; font-weight: 700; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; line-height: 1; }
 .scr-tile-lab { font-size: 11.5px; color: #9490bb; font-weight: 500; margin-top: 4px; line-height: 1.35; }
 
@@ -230,6 +231,12 @@
 .scr-badge-approved { background: #e9f8f0; color: #14764a; }
 .scr-badge-pending { background: #fdf3e3; color: #8a5300; }
 .scr-badge-rejected { background: #f4f3f9; color: #6b6790; }
+/* Active/Inactive record state -- distinct from the Approved/Pending/Rejected
+   approval-workflow badges above: some screens (e.g. Company Management,
+   Country & State Management) have no approval step at all, just a record
+   that's on or off. */
+.scr-badge-active { background: #e9f8f0; color: #14764a; }
+.scr-badge-inactive { background: #f4f3f9; color: #6b6790; }
 
 /* ── boolean flag pill (Y/N columns) ──────────────────────────────── */
 .scr-flag { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; font-size: 11px; font-weight: 700; }

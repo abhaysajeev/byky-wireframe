@@ -159,3 +159,75 @@ def counts():
         "tagged": sum(1 for v in seed.VEHICLES if v["barcode"]),
         "stations": len(seed.STATIONS),
     }
+
+
+# --- Asset Management ------------------------------------------------------
+#
+# The FSD has no standalone asset screen: physical assets live in
+# tbl_ItemMaster alongside rental stock (FSD 3.1), and FSD 3.2 is what
+# classifies them -- "top-level asset classifications (e.g., Bicycles,
+# E-Scooters, Quad Bikes, Spare Parts, Helmets, Maintenance Tools)". This
+# screen is the custody and lifecycle view of that same register -- where an
+# asset physically sits, who holds it, what it cost, when its warranty lapses
+# -- where Vehicle Management (3.1) is the catalogue view of it.
+#
+# ASSET_CLASSES is dropdown vocabulary lifted from FSD 3.2's own examples and
+# the module overview's asset list, not client records. Fleet Vehicle is the
+# only class the client has supplied rows for (the 1,060-row VehicleDetails
+# extract); the rest stay visible in the filter so the gap is legible.
+ASSET_CLASSES = [
+    "Fleet Vehicle",
+    "Spare Part",
+    "Safety Equipment",
+    "Maintenance Tool",
+    "RFID Hardware",
+    "Station Equipment",
+]
+
+ASSET_CONDITIONS = ["New", "Good", "Fair", "Needs Repair", "Retired"]
+
+
+def assets():
+    """One row per physical asset the business holds.
+
+    Every value shown is derived from the client's own vehicle extract.
+    Custodian, acquisition date, purchase cost, warranty and condition are in
+    no supplied file, so they render short-form blank rather than invented
+    values (CLAUDE.md 12). Assignment is genuinely derivable -- an asset
+    either carries a station in the source data or it does not.
+    """
+    out = []
+    for v in seed.VEHICLES:
+        station = v.get("station") or ""
+        out.append(
+            {
+                "code": v["number"],
+                "name": f'{v["vtype"]} {v["number"]}',
+                "asset_class": "Fleet Vehicle",
+                "category": v["category"],
+                "subcategory": v["vtype"],
+                "serial": v["number"],
+                "rfid": v["barcode"],
+                "station": station or SHORT,
+                "station_key": station,
+                "custodian": SHORT,
+                "acquired": SHORT,
+                "cost": SHORT,
+                "warranty": SHORT,
+                "condition": SHORT,
+                "assignment": "Assigned" if station else "Unassigned",
+            }
+        )
+    return out
+
+
+def asset_counts():
+    rows = assets()
+    return {
+        "total": len(rows),
+        "classes_in_use": len({r["asset_class"] for r in rows}),
+        "classes_defined": len(ASSET_CLASSES),
+        "tagged": sum(1 for r in rows if r["rfid"]),
+        "unassigned": sum(1 for r in rows if r["assignment"] == "Unassigned"),
+        "custody_stations": len({r["station_key"] for r in rows if r["station_key"]}),
+    }

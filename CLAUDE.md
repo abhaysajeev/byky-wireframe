@@ -1080,6 +1080,23 @@ other 15 — brands, units, transfers, e-commerce, features, order status, promo
 loyalty, refunds, campaigns, RFID telemetry, alerts — have no source data and show
 the awaiting-data state. IMS privileges use six flags across all 20 screens.
 
+**Asset Management is IMS's one non-FSD screen** (`/ims/asset-management/`,
+`ims-asset-management`). The FSD has no standalone asset screen — physical assets
+live in `tbl_ItemMaster` beside rental stock (3.1) and FSD 3.2 is what classifies
+them ("top-level asset classifications … Bicycles, E-Scooters, Quad Bikes, Spare
+Parts, Helmets, Maintenance Tools"). So this screen is the **custody and lifecycle**
+view of that same register — where an asset sits, who holds it, what it cost, when
+its warranty lapses — where Vehicle Management (3.1) is the **catalogue** view. Tier
+A, `.scr-*` list + drawer, over the same 1,060 real vehicles.
+
+`data.ASSET_CLASSES` is dropdown vocabulary taken from FSD 3.2's own examples, not
+client records: **Fleet Vehicle is the only class carrying rows today**, and the KPI
+tile says so ("1 / 6 asset classes carrying records") rather than hiding it. Custodian
+(a real staff dropdown from `seed.EMPLOYEES`), acquisition date, purchase cost,
+warranty expiry and condition have no source and render short-form blank — do not
+backfill them with invented values. Assignment (Assigned / Unassigned) *is* derivable
+and is computed, not assumed.
+
 **Phase 2 (HRMS) — done.** All 6 screens. Employee Personal Data (Tier B) carries all
 22 FSD inputs over the 99 real staff records; Designation Master is **derived from the
 client's own Profession column** (9 job titles with headcount), since that column is

@@ -19,6 +19,20 @@ urlpatterns = [
         name="ims-vehicle-management",
     ),
     path(
+        "ims/asset-management/",
+        views.AssetManagementView.as_view(
+            template_name="ims_asset_management.html",
+            screen_no="3.1a",
+            screen_title="Asset Management",
+            module_label="Inventory",
+            tier="A",
+            phase=3,
+            purpose="To hold the register of every physical asset the business owns -- fleet vehicles, spare parts, safety equipment, maintenance tools and station hardware -- with its classification, RFID tag, custody station, custodian, acquisition cost and warranty position.",
+            layout="Full-width asset register: KPI tiles, search and class/category/station filters, grid of registered assets, and an Add Asset drawer grouped into Identification, Classification, and Assignment & Lifecycle.",
+        ),
+        name="ims-asset-management",
+    ),
+    path(
         "ims/inventory-category-master/",
         views.CategoryView.as_view(
             template_name="ims_inventory_category_master.html",

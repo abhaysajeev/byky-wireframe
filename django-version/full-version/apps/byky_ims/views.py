@@ -5,6 +5,7 @@ station mappings). The rest have no source data and show the awaiting-data state
 Wireframe phase: no writes, no CRUD, no API.
 """
 
+from apps.byky_core import seed
 from apps.byky_core.views import BykyScreenView
 from apps.byky_cms import data as cms_data
 
@@ -97,6 +98,41 @@ class StationMappingMapView(ImsScreenView):
         return context
 
 
+class AssetManagementView(ImsScreenView):
+    """Asset Management -- the custody/lifecycle view of tbl_ItemMaster.
+
+    Not an FSD screen of its own; see data.ASSET_CLASSES for where its
+    vocabulary comes from. Custodians are the client's real staff list, so the
+    dropdown is genuine even though no asset is assigned to one yet.
+    """
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = data.assets()
+        for i, a in enumerate(rows):
+            a["json_id"] = f"scr-record-asset-{i}"
+            a["fields_json"] = {
+                "code": a["code"],
+                "name": a["name"],
+                "asset_class": a["asset_class"],
+                "category": a["category"],
+                "subcategory": a["subcategory"],
+                "serial": a["serial"],
+                "rfid": a["rfid"],
+                "station": a["station_key"],
+            }
+        context.update(
+            {
+                "assets": rows,
+                "asset_counts": data.asset_counts(),
+                "asset_classes": data.ASSET_CLASSES,
+                "asset_conditions": data.ASSET_CONDITIONS,
+                "employees_list": seed.EMPLOYEES,
+            }
+        )
+        return context
+
+
 class ImsAwaitingView(ImsScreenView):
     """Screens the FSD specifies but the client data has no source for."""
 
@@ -106,6 +142,7 @@ class ImsPrivilegeView(ImsScreenView):
 
     SCREENS = [
         ("Inventory Stock Item Management", [1, 1, 1, 1, 1, 0]),
+        ("Asset Management", [1, 1, 1, 1, 1, 0]),
         ("Inventory Category Master", [1, 1, 1, 1, 0, 0]),
         ("Inventory Sub-Category Master", [1, 1, 1, 1, 0, 0]),
         ("Inventory Brand Master", [1, 1, 1, 1, 0, 0]),

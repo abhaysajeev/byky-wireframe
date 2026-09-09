@@ -1,0 +1,319 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Asset Management - Inventory{% endblock title %}
+
+{% comment %}
+Asset Management -- Tier A list + drawer on the shared byky-screen.css/js base
+(see byky-screen-design-system.md). Not an FSD screen of its own: it is the
+custody/lifecycle view of tbl_ItemMaster, classified by FSD 3.2's own asset
+vocabulary, where Vehicle Management (3.1) is the catalogue view. Rows are the
+client's 1,060 real vehicles; custodian, acquisition, cost, warranty and
+condition have no source and render short-form blank rather than invented
+values. See apps/byky_ims/data.py:assets().
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Asset Management</b>
+      </div>
+      <h1 class="scr-title">Asset Management</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'ims-vehicle-management' %}" class="scr-btn-secondary">Vehicle catalogue</a>
+      <button type="button" class="scr-btn-primary" data-scr-open="asset:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Asset
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ asset_counts.total }}</div><div class="scr-tile-lab">Registered assets</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16.5a4.5 4.5 0 1 1 8 0M5 13a8 8 0 0 1 14 0M12 20h.01"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ asset_counts.tagged }}</div><div class="scr-tile-lab">RFID tagged &mdash; traceable at a gate</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h7v7H4zM13 4h7v7h-7zM4 13h7v7H4zM13 13h7v7h-7z"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ asset_counts.classes_in_use }} / {{ asset_counts.classes_defined }}</div><div class="scr-tile-lab">Asset classes carrying records</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11M12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ asset_counts.custody_stations }}</div><div class="scr-tile-lab">Stations holding assets</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="asset" data-scr-noun-plural="assets">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search asset code, serial or RFID tag" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="assetclass">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All asset classes</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All asset classes</button>
+          {% for a in asset_classes %}<button type="button" class="scr-filter-opt" data-value="{{ a }}">{{ a }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="category">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All categories</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All categories</button>
+          {% for c in categories_list %}<button type="button" class="scr-filter-opt" data-value="{{ c.name }}">{{ c.name }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="branch">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All stations</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All stations</button>
+          {% for b in branches_list %}<button type="button" class="scr-filter-opt" data-value="{{ b.name }}">{{ b.name }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">{{ assets|length }} assets</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Asset Code</th>
+            <th>Asset Name</th>
+            <th>Asset Class</th>
+            <th>Category</th>
+            <th>RFID Tag EPC</th>
+            <th>Custody Station</th>
+            <th>Custodian</th>
+            <th>Condition</th>
+            <th>Assignment</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for a in assets %}
+          <tr class="scr-row" data-search="{{ a.code|lower }} {{ a.serial|lower }} {{ a.rfid|lower }} {{ a.name|lower }}" data-assetclass="{{ a.asset_class }}" data-category="{{ a.category }}" data-branch="{{ a.station_key }}" data-record-id="{{ a.json_id }}">
+            <td><span class="scr-code">{{ a.code }}</span></td>
+            <td style="font-weight:600">{{ a.name }}</td>
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ a.asset_class }}</span></td>
+            <td class="scr-contact">{{ a.category }}</td>
+            <td><span class="scr-code">{{ a.rfid }}</span></td>
+            <td class="scr-contact">{{ a.station }}</td>
+            <td class="scr-contact">{{ a.custodian }}</td>
+            <td class="scr-contact">{{ a.condition }}</td>
+            <td>
+              {% if a.assignment == "Assigned" %}
+              <span class="scr-badge scr-badge-approved"><i></i>Assigned</span>
+              {% else %}
+              <span class="scr-badge scr-badge-pending"><i></i>Unassigned</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="asset:edit">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                </button>
+                <a href="{% url 'ims-vehicle-station-mapping' %}" class="scr-icon-btn" title="Reassign station">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11M12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"></path></svg>
+                </a>
+              </div>
+            </td>
+          </tr>
+          {{ a.fields_json|json_script:a.json_id }}
+          {% empty %}
+          <tr><td colspan="10" style="padding:0">
+            <div class="scr-empty">
+              <h3>No assets registered yet</h3>
+              <p>Assets will appear here once they are added.</p>
+            </div>
+          </td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ assets|length }} of {{ assets|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% comment %}
+Add/Edit drawer -- three tabs so the register's identification, classification
+and custody halves don't scroll past each other. Fields with no client source
+carry a placeholder hinting at the shape, per the design system's data-honesty
+rule; they are never prefilled with a made-up value.
+{% endcomment %}
+<div class="scr-veil" data-scr-drawer="asset" hidden data-scr-close></div>
+<aside class="scr-drawer" data-scr-drawer="asset" data-add-title="Add Asset" data-title-field="name" hidden>
+  <div class="scr-drawer-head">
+    <div class="scr-drawer-head-top">
+      <div class="scr-drawer-id">
+        <span class="scr-drawer-ico">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10"></path></svg>
+        </span>
+        <h2 class="scr-drawer-title">Add Asset</h2>
+      </div>
+      <button type="button" class="scr-drawer-close" data-scr-close>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+      </button>
+    </div>
+    <div class="scr-drawer-tabs scr-sb">
+      <button type="button" class="scr-drawer-tab is-on" data-tab="identification">Identification</button>
+      <button type="button" class="scr-drawer-tab" data-tab="classification">Classification</button>
+      <button type="button" class="scr-drawer-tab" data-tab="custody">Assignment &amp; Lifecycle</button>
+    </div>
+  </div>
+
+  <div class="scr-drawer-body scr-sb">
+    <div class="scr-drawer-field" data-tab="identification">
+      <label class="scr-label">Asset Code<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" placeholder="KB113" />
+    </div>
+    <div class="scr-drawer-field" data-tab="identification">
+      <label class="scr-label">Asset Name<span class="scr-required">*</span></label>
+      <input type="text" class="scr-drawer-input" data-field="name" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="identification">
+      <label class="scr-label">Serial / Chassis No</label>
+      <input type="text" class="scr-drawer-input" data-field="serial" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="identification">
+      <label class="scr-label">RFID Tag EPC</label>
+      <input type="text" class="scr-drawer-input" data-field="rfid" value="" placeholder="10113" />
+    </div>
+
+    <div class="scr-drawer-field" data-tab="classification" hidden>
+      <label class="scr-label">Asset Class<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="asset_class">
+        <option value="">Select</option>
+        {% for a in asset_classes %}<option>{{ a }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="classification" hidden>
+      <label class="scr-label">Category<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" data-field="category">
+        <option value="">Select</option>
+        {% for c in categories_list %}<option>{{ c.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="classification" hidden>
+      <label class="scr-label">Sub-Category / Model</label>
+      <select class="scr-drawer-input" data-field="subcategory">
+        <option value="">Select</option>
+        {% for s in subcategories_list %}<option>{{ s.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="classification" hidden>
+      <label class="scr-label">Brand</label>
+      <select class="scr-drawer-input" data-field="brand">
+        <option value="">Select</option>
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="classification" hidden>
+      <label class="scr-label">Unit (UOM)</label>
+      <select class="scr-drawer-input" data-field="unit">
+        <option value="">Select</option>
+      </select>
+    </div>
+
+    <div class="scr-drawer-field" data-tab="custody" hidden>
+      <label class="scr-label">Custody Station</label>
+      <select class="scr-drawer-input" data-field="station">
+        <option value="">Unassigned</option>
+        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="custody" hidden>
+      <label class="scr-label">Custodian</label>
+      <select class="scr-drawer-input" data-field="custodian">
+        <option value="">Select</option>
+        {% for e in employees_list %}<option>{{ e.emp_no }} &mdash; {{ e.name }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="custody" hidden>
+      <label class="scr-label">Acquisition Date</label>
+      <input type="date" class="scr-drawer-input is-awaiting" data-field="acquired" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="custody" hidden>
+      <label class="scr-label">Purchase Cost (AED)</label>
+      <input type="number" step="0.01" class="scr-drawer-input is-awaiting" data-field="cost" value="" placeholder="e.g. 3500.00" />
+    </div>
+    <div class="scr-drawer-field" data-tab="custody" hidden>
+      <label class="scr-label">Warranty Expiry</label>
+      <input type="date" class="scr-drawer-input is-awaiting" data-field="warranty" value="" />
+    </div>
+    <div class="scr-drawer-field" data-tab="custody" hidden>
+      <label class="scr-label">Condition</label>
+      <select class="scr-drawer-input" data-field="condition">
+        <option value="">Select</option>
+        {% for c in asset_conditions %}<option>{{ c }}</option>{% endfor %}
+      </select>
+    </div>
+    <div class="scr-drawer-field" data-tab="custody" hidden>
+      <label class="scr-label">Notes</label>
+      <textarea class="scr-drawer-input" data-field="notes" rows="2"></textarea>
+    </div>
+  </div>
+
+  <div class="scr-drawer-foot">
+    <div class="scr-drawer-active">
+      <button type="button" class="scr-toggle is-on"><i></i></button>
+      <span class="scr-drawer-active-label">Active</span>
+    </div>
+    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
+    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
+    <button type="button" class="scr-btn-primary">Save</button>
+  </div>
+</aside>
+{% endblock %}

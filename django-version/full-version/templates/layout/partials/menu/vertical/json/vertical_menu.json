@@ -120,6 +120,11 @@
      "slug": "ims-vehicle-management"
     },
     {
+     "url": "ims-asset-management",
+     "name": "Asset Management",
+     "slug": "ims-asset-management"
+    },
+    {
      "url": "ims-vehicle-station-mapping",
      "name": "Vehicle Station Mapping",
      "slug": "ims-vehicle-station-mapping"

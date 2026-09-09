@@ -24,6 +24,10 @@ DOCUMENTS = [
 
 NEARING_EXPIRY_DAYS = 30
 
+# Order the nearing-expiry KPI tiles are read in, which is not the order the
+# Document Expiry Status card uses -- that one groups by residency document.
+TILE_ORDER = ["passport_expiry", "visa_expiry", "eid_expiry", "labor_expiry"]
+
 # FSD 2.6: six permissions for HRMS, not the seven CMS uses.
 PERMISSIONS = ["Access", "Create", "Read", "Update", "Approve", "Block Staff"]
 
@@ -133,6 +137,45 @@ def _expiry_status(value):
     if days_left <= NEARING_EXPIRY_DAYS:
         return "nearing"
     return "valid"
+
+
+def nearing_expiry_tokens(employee_row):
+    """Space-separated tokens naming every document this employee has nearing
+    expiry, plus "any" when there is at least one.
+
+    A row can be nearing on several documents at once, so this is a token list
+    rather than a single value -- the Document status filter matches it with
+    data-filter-match="token" (see byky-screen.js).
+    """
+    tokens = [key.split("_")[0] for key, _ in DOCUMENTS
+              if _expiry_status(employee_row.get(key)) == "nearing"]
+    return " ".join(["any"] + tokens) if tokens else ""
+
+
+def nearing_expiry_tiles(employee_rows):
+    """The KPI row for documents inside NEARING_EXPIRY_DAYS.
+
+    Counts are **employees, not documents**, so a tile's number always equals
+    the number of rows you get when you click it -- one employee nearing on
+    both passport and visa is one row, and a tile promising 12 that filtered
+    down to 9 would just look broken.
+
+    Every count is 0 today: the staff sheet carries no expiry dates at all, so
+    _expiry_status() resolves every document to "unknown". The arithmetic is
+    real and will light up the moment dates arrive; nothing here is seeded to
+    make the tiles look populated (CLAUDE.md 12).
+    """
+    by_key = dict(DOCUMENTS)
+    tiles = [{"token": "any", "label": "Documents nearing expiry (≤30d)", "count": 0}]
+    tiles += [{"token": key.split("_")[0],
+               "label": f"{by_key[key]} nearing expiry (≤30d)",
+               "count": 0} for key in TILE_ORDER]
+    by_token = {t["token"]: t for t in tiles}
+    for e in employee_rows:
+        for token in nearing_expiry_tokens(e).split():
+            if token in by_token:
+                by_token[token]["count"] += 1
+    return tiles
 
 
 def document_expiry_summary(employee_rows):

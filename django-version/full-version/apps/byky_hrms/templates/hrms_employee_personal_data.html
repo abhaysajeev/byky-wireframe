@@ -84,6 +84,26 @@ Emirates ID or date of birth (CLAUDE.md 12).
     </div>
   </div>
 
+  {% comment %}
+  Second tile row: documents inside 30 days of expiry. Same .scr-tiles/.scr-tile
+  markup as the row above, so the boxes match exactly -- these are buttons
+  rather than divs only because each one applies the Document status filter to
+  the grid below (data-scr-filter, byky-screen.js). Counts are employees, not
+  documents, so a tile's number is always the number of rows it filters to.
+  Every count is 0 until the client supplies expiry dates; see
+  data.nearing_expiry_tiles for why nothing is seeded to fill them.
+  {% endcomment %}
+  <div class="scr-tiles">
+    {% for t in nearing_tiles %}
+    <button type="button" class="scr-tile" data-scr-filter="nearing:{{ t.token }}" title="Filter the list to {{ t.label|lower }}">
+      <span class="scr-tile-ico {% if t.token == 'any' %}scr-tile-ico-red{% else %}scr-tile-ico-amber{% endif %}">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ t.count }}</div><div class="scr-tile-lab">{{ t.label }}</div></div>
+    </button>
+    {% endfor %}
+  </div>
+
   <div class="scr-card scr-doc-expiry">
     <div class="scr-doc-expiry-head">
       <span class="scr-doc-expiry-title">Document Expiry Status</span>
@@ -134,6 +154,26 @@ Emirates ID or date of birth (CLAUDE.md 12).
         </div>
       </div>
 
+      {% comment %}
+      The filter the nearing-expiry tiles drive. It is a real, independently
+      usable dropdown, not a hidden control -- the tiles are a shortcut into
+      it, which is why a tile's count and the filtered list can never drift
+      apart. data-filter-match="token" because a row can be near expiry on
+      several documents at once.
+      {% endcomment %}
+      <div class="scr-filter-wrap" data-filter-key="nearing" data-filter-match="token">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">Any document status</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">Any document status</button>
+          {% for t in nearing_tiles %}
+          <button type="button" class="scr-filter-opt" data-value="{{ t.token }}">{{ t.label }}</button>
+          {% endfor %}
+        </div>
+      </div>
+
       <span class="scr-toolbar-count">{{ employees|length }} employees</span>
     </div>
 
@@ -150,7 +190,7 @@ Emirates ID or date of birth (CLAUDE.md 12).
         </thead>
         <tbody>
           {% for e in employees %}
-          <tr class="scr-row" data-search="{{ e.emp_no|lower }} {{ e.name|lower }}" data-designation="{{ e.designation }}" data-record-id="{{ e.json_id }}">
+          <tr class="scr-row" data-search="{{ e.emp_no|lower }} {{ e.name|lower }}" data-designation="{{ e.designation }}" data-nearing="{{ e.nearing }}" data-record-id="{{ e.json_id }}">
             <td><span class="scr-code">{{ e.emp_no }}</span></td>
             <td>
               <div class="scr-co">

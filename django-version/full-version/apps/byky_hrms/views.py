@@ -37,6 +37,9 @@ class PersonalDataView(HrmsScreenView):
         employees = data.employees()
         for i, e in enumerate(employees):
             e["json_id"] = f"scr-record-employee-{i}"
+            # Which documents are inside 30 days, as a token list the Document
+            # status filter matches against -- see data.nearing_expiry_tokens.
+            e["nearing"] = data.nearing_expiry_tokens(e)
             e["fields_json"] = {
                 "emp_no": e["emp_no"],
                 "name": e["name"],
@@ -44,6 +47,7 @@ class PersonalDataView(HrmsScreenView):
             }
         context["employees"] = employees
         context["doc_expiry"] = data.document_expiry_summary(employees)
+        context["nearing_tiles"] = data.nearing_expiry_tiles(employees)
         return context
 
 

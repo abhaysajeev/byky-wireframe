@@ -47,6 +47,31 @@
     input.addEventListener('input', function () { applyFilters(scopeOf(input)); });
   });
 
+  /* ── KPI tile as a filter shortcut ────────────────────────────────
+     data-scr-filter="<filter-key>:<value>" on a tile drives the real filter
+     dropdown of that key, so the count on a tile and the list it filters to
+     can never disagree -- there is only one filtering path, not two. Clicking
+     the tile that is already on clears it, which is the only way back to "all"
+     without hunting for the dropdown. Tiles sit outside the list card, so the
+     scope comes from the wrap we find, not from the tile. */
+  root.querySelectorAll('[data-scr-filter]').forEach(function (tile) {
+    tile.addEventListener('click', function () {
+      var parts = (tile.dataset.scrFilter || '').split(':');
+      var wrap = root.querySelector('.scr-filter-wrap[data-filter-key="' + parts[0] + '"]');
+      if (!wrap) return;
+      var turningOff = tile.classList.contains('is-on');
+      var want = turningOff ? '' : (parts[1] || '');
+      var opt = wrap.querySelector('.scr-filter-opt[data-value="' + want + '"]');
+      if (!opt) return;
+      opt.click();
+      tile.closest('.scr-tiles').querySelectorAll('[data-scr-filter]').forEach(function (t) {
+        t.classList.remove('is-on');
+      });
+      if (!turningOff) tile.classList.add('is-on');
+      scopeOf(wrap).scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  });
+
   /* ── pagination ───────────────────────────────────────────────────
      15 rows a page, matching the DataTables screens (byky-cms-list.js).
      Paging runs over the *filtered* set, not the raw rows, so searching
@@ -131,17 +156,28 @@
     var q = (searchInput && searchInput.value || '').trim().toLowerCase();
     var rows = scope.querySelectorAll('.scr-row');
     var active = {};
+    var tokenKeys = {};
     scope.querySelectorAll('.scr-filter-wrap').forEach(function (w) {
       var key = w.dataset.filterKey;
       var picked = w.querySelector('.scr-filter-opt.is-active');
       active[key] = picked ? (picked.dataset.value || '') : '';
+      if (w.dataset.filterMatch === 'token') tokenKeys[key] = true;
     });
 
     var matches = [];
     rows.forEach(function (tr) {
       var matchesQ = !q || (tr.dataset.search || '').indexOf(q) > -1;
       var matchesAll = Object.keys(active).every(function (key) {
-        return !active[key] || tr.dataset[key] === active[key];
+        if (!active[key]) return true;
+        /* A row can belong to several buckets of one filter at once -- an
+           employee whose passport AND visa are both near expiry. Those rows
+           carry a space-separated token list instead of a single value, and
+           the wrap opts in with data-filter-match="token". Plain equality
+           stays the default so no existing filter changes behaviour. */
+        if (tokenKeys[key]) {
+          return (' ' + (tr.dataset[key] || '') + ' ').indexOf(' ' + active[key] + ' ') > -1;
+        }
+        return tr.dataset[key] === active[key];
       });
       if (matchesQ && matchesAll) matches.push(tr);
     });

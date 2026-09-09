@@ -307,7 +307,7 @@ ITEM = {
                 },
                 {
                     "id": "serial",
-                    "label": "Serial Number",
+                    "label": "Barcode",
                     "kind": "text",
                     "required": False
                 },
@@ -317,6 +317,12 @@ ITEM = {
                     "kind": "text",
                     "required": False,
                     "placeholder": "Enter RFID tag EPC"
+                },
+                {
+                    "id": "",
+                    "label": "Image",
+                    "kind": "file",
+                    "required": False
                 }
             ]
         },
@@ -378,12 +384,6 @@ ITEM = {
                     "id": "rate",
                     "label": "Rental Rate / hour",
                     "kind": "number",
-                    "required": False
-                },
-                {
-                    "id": "",
-                    "label": "Image",
-                    "kind": "file",
                     "required": False
                 }
             ]

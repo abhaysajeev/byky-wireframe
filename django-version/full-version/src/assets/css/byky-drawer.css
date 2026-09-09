@@ -267,3 +267,27 @@
 }
 .byky-multi-opt:hover { background: #f6f5fc; }
 .byky-multi-opt input { accent-color: #d81f26; width: 14px; height: 14px; margin: 0; }
+
+/* ── read-only fields ─────────────────────────────────────────────────
+   A field whose value this screen displays but does not own -- Add
+   Vehicle's stock and pricing figures arrive from an external system.
+   Tinted and dimmed so it reads as "not yours to type in" before anyone
+   clicks it, rather than only refusing input once they try. Selects use
+   :disabled because readonly does nothing on a <select>. */
+.byky-drawer .byky-input[readonly],
+.byky-drawer .byky-input:disabled {
+  background: #f6f5fc;
+  border-color: #eeedf5;
+  color: #6b6790;
+  cursor: not-allowed;
+}
+.byky-drawer .byky-input[readonly]:focus,
+.byky-drawer .byky-input:disabled:focus { border-color: #eeedf5; box-shadow: none; }
+.byky-drawer .byky-select:disabled + .byky-select-caret { opacity: 0.45; }
+
+/* Grey provenance line under a section header -- says where the section's
+   values come from when the screen only displays them (see sec.note). */
+.byky-section-note {
+  font-size: 11.5px; font-weight: 450; color: #9490bb;
+  margin: -6px 0 14px; line-height: 1.45;
+}

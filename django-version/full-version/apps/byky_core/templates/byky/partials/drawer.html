@@ -9,7 +9,8 @@ Contract
 --------
 spec.add_label   drawer title, e.g. "Add Vehicle"           (required)
 spec.drawer_id   DOM id the trigger targets                 (required)
-spec.sections    [{title, fields:[...]}, ...]               (required)
+spec.sections    [{title, note, fields:[...]}, ...]         (required;
+                 note is an optional grey line under the section header)
 spec.size        "compact" | "standard" | "wide" | omitted  (optional)
 module_label     overline text, e.g. "Inventory · Vehicles" (optional)
 
@@ -36,6 +37,8 @@ spec.title_field     field id whose value titles the drawer in edit mode
 field.lock_on_edit   render read-only in edit mode (a code/PK field)
 field.enables        field id this checkbox enables/disables
 field.checked        default state of a checkbox in add mode
+field.readonly       always read-only -- a value this screen displays but
+                     does not own (fetched from an external system)
 {% endcomment %}
 
 {% if spec.add_label %}
@@ -70,6 +73,11 @@ field.checked        default state of a checkbox in add mode
           <span class="byky-section-count">{{ sec.fields|length }}</span>
         </header>
         {% endif %}
+        {% comment %}
+        Optional grey line under a section header, for saying where the
+        section's values come from when this screen does not own them.
+        {% endcomment %}
+        {% if sec.note %}<p class="byky-section-note">{{ sec.note }}</p>{% endif %}
 
         <div class="byky-fields">
           {% for f in sec.fields %}
@@ -80,7 +88,7 @@ field.checked        default state of a checkbox in add mode
 
             {% if f.kind == "select" %}
               <div class="byky-select-wrap">
-                <select id="{{ f.id }}" class="byky-input byky-select" data-field="{{ f.id }}">
+                <select id="{{ f.id }}" class="byky-input byky-select" data-field="{{ f.id }}"{% if f.readonly %} disabled{% endif %}>
                   <option value="">Select</option>
                   {% for o in f.resolved %}<option>{{ o }}</option>{% endfor %}
                 </select>
@@ -89,12 +97,12 @@ field.checked        default state of a checkbox in add mode
 
             {% elif f.kind == "date" %}
               <div class="byky-select-wrap">
-                <input type="text" id="{{ f.id }}" class="byky-input byky-date has-affix" data-field="{{ f.id }}" placeholder="Select date" />
+                <input type="text" id="{{ f.id }}" class="byky-input byky-date has-affix" data-field="{{ f.id }}"{% if f.readonly %} readonly{% endif %} placeholder="Select date" />
                 <svg class="byky-date-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1M8 3v4M16 3v4M4 11h16"></path></svg>
               </div>
 
             {% elif f.kind == "textarea" %}
-              <textarea id="{{ f.id }}" class="byky-input byky-textarea" rows="3" data-field="{{ f.id }}" placeholder="Enter {{ f.label|lower }}"></textarea>
+              <textarea id="{{ f.id }}" class="byky-input byky-textarea" rows="3" data-field="{{ f.id }}"{% if f.readonly %} readonly{% endif %} placeholder="Enter {{ f.label|lower }}"></textarea>
 
             {% elif f.kind == "file" %}
               <label class="byky-file" for="{{ f.id }}">
@@ -141,10 +149,10 @@ field.checked        default state of a checkbox in add mode
               </div>
 
             {% elif f.kind == "number" %}
-              <input type="number" step="any" id="{{ f.id }}" class="byky-input" data-field="{{ f.id }}" placeholder="Enter {{ f.label|lower }}" />
+              <input type="number" step="any" id="{{ f.id }}" class="byky-input" data-field="{{ f.id }}"{% if f.readonly %} readonly{% endif %} placeholder="Enter {{ f.label|lower }}" />
 
             {% else %}
-              <input type="text" id="{{ f.id }}" class="byky-input" data-field="{{ f.id }}"{% if f.lock_on_edit %} data-lock-on-edit="true"{% endif %} placeholder="{{ f.placeholder|default_if_none:'' }}{% if not f.placeholder %}Enter {{ f.label|lower }}{% endif %}" />
+              <input type="text" id="{{ f.id }}" class="byky-input" data-field="{{ f.id }}"{% if f.lock_on_edit %} data-lock-on-edit="true"{% endif %}{% if f.readonly %} readonly{% endif %} placeholder="{{ f.placeholder|default_if_none:'' }}{% if not f.placeholder %}Enter {{ f.label|lower }}{% endif %}" />
             {% endif %}
 
             {% if f.help %}<div class="byky-help">{{ f.help }}</div>{% endif %}

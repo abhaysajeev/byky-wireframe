@@ -361,30 +361,35 @@ ITEM = {
         },
         {
             "title": "Stock & Pricing",
+            "note": "Data populated from ERP.",
             "fields": [
                 {
                     "id": "reorder_level",
                     "label": "Reorder Level",
                     "kind": "number",
-                    "required": False
+                    "required": False,
+                    "readonly": True
                 },
                 {
                     "id": "min_qty",
                     "label": "Minimum Qty",
                     "kind": "number",
-                    "required": False
+                    "required": False,
+                    "readonly": True
                 },
                 {
                     "id": "cost_price",
                     "label": "Cost Price",
                     "kind": "number",
-                    "required": False
+                    "required": False,
+                    "readonly": True
                 },
                 {
                     "id": "rate",
                     "label": "Rental Rate / hour",
                     "kind": "number",
-                    "required": False
+                    "required": False,
+                    "readonly": True
                 }
             ]
         }

@@ -330,6 +330,12 @@ ITEM = {
             "title": "Classification",
             "fields": [
                 {
+                    "id": "brand",
+                    "label": "Brand",
+                    "kind": "select",
+                    "required": False
+                },
+                {
                     "id": "category",
                     "label": "Category",
                     "kind": "select",
@@ -339,17 +345,11 @@ ITEM = {
                 },
                 {
                     "id": "subcategory",
-                    "label": "Sub-Category",
+                    "label": "Vehicle Type",
                     "kind": "select",
                     "required": False,
                     "options_from": "subcategories_list",
                     "option_key": "name"
-                },
-                {
-                    "id": "brand",
-                    "label": "Brand",
-                    "kind": "select",
-                    "required": False
                 },
                 {
                     "id": "unit",

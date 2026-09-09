@@ -81,12 +81,12 @@
    "submenu": [
     {
      "url": "hrms-employee-designation-master",
-     "name": "Employee Designation Master",
+     "name": "Designation",
      "slug": "hrms-employee-designation-master"
     },
     {
      "url": "hrms-employee-personal-data",
-     "name": "Employee Personal Data",
+     "name": "Employee",
      "slug": "hrms-employee-personal-data"
     },
     {

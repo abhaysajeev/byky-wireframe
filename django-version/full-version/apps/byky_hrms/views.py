@@ -96,9 +96,9 @@ class HrmsPrivilegeView(HrmsScreenView):
 
     # Access, Create, Read, Update, Approve, Block Staff -- per the FSD 2.6 wireframe.
     SCREENS = [
-        ("Employee Personal Data", [1, 1, 1, 1, 1, 0]),
+        ("Employee", [1, 1, 1, 1, 1, 0]),
         ("Employee Temporary Address", [1, 1, 1, 1, 0, 0]),
-        ("Employee Designation Master", [1, 1, 1, 1, 0, 0]),
+        ("Designation", [1, 1, 1, 1, 0, 0]),
         ("Employee Grade Master", [1, 0, 1, 0, 0, 0]),
         ("Employee Block / Unblock", [1, 0, 1, 0, 1, 1]),
         ("HRMS Privileges", [1, 0, 1, 0, 0, 0]),

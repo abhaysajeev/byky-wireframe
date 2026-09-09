@@ -8,7 +8,7 @@ urlpatterns = [
         views.PersonalDataView.as_view(
             template_name="hrms_employee_personal_data.html",
             screen_no="2.1",
-            screen_title="Employee Personal Data",
+            screen_title="Employee",
             module_label="Human Resources",
             legacy_page="PersonalData.aspx",
             tier="B",
@@ -38,7 +38,7 @@ urlpatterns = [
         views.DesignationView.as_view(
             template_name="hrms_employee_designation_master.html",
             screen_no="2.3",
-            screen_title="Employee Designation Master",
+            screen_title="Designation",
             module_label="Human Resources",
             legacy_page="EmployeeDesignation.aspx",
             tier="A",

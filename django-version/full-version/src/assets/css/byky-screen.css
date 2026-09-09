@@ -88,6 +88,15 @@
 .scr-tile-ico-amber { background: #fdf3e3; color: #e08700; }
 .scr-tile-ico-blue { background: #eaf1fd; color: #3b6fd4; }
 .scr-tile-ico-purple { background: #f1ecfd; color: #6d3fd6; }
+/* A tile that stands for a population held on another screen is a link to it,
+   so the count and the list it counts are one click apart. Only tiles that
+   genuinely lead somewhere get this -- a link that returns to the page it is
+   on teaches the user the tiles are not clickable. */
+a.scr-tile { text-decoration: none; color: inherit; transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease; }
+a.scr-tile:hover { border-color: #d9d5ea; box-shadow: 0 4px 14px rgba(26, 22, 64, 0.07); transform: translateY(-1px); }
+a.scr-tile:focus-visible { outline: 2px solid #cc0000; outline-offset: 2px; }
+a.scr-tile .scr-tile-go { margin-inline-start: auto; color: #c3bfd8; flex: 0 0 auto; transition: color 0.15s ease, transform 0.15s ease; }
+a.scr-tile:hover .scr-tile-go { color: #9490bb; transform: translateX(2px); }
 .scr-tile-val { font-size: 20px; font-weight: 700; letter-spacing: -0.6px; font-variant-numeric: tabular-nums; line-height: 1; }
 .scr-tile-lab { font-size: 11.5px; color: #9490bb; font-weight: 500; margin-top: 4px; line-height: 1.35; }
 

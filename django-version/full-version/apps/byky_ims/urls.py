@@ -19,6 +19,20 @@ urlpatterns = [
         name="ims-vehicle-management",
     ),
     path(
+        "ims/asset-management/",
+        views.AssetManagementView.as_view(
+            template_name="ims_asset_management.html",
+            screen_no="3.1a",
+            screen_title="Asset Management",
+            module_label="Inventory",
+            tier="A",
+            phase=3,
+            purpose="To register the company's own operating equipment -- RFID antennas and readers, GPS trackers and SIMs, counter terminals, scanners, cameras, network and workshop kit -- with the station it is posted to, its custodian, cost, warranty and condition. Rental vehicles are not assets here; they belong to Vehicle Management.",
+            layout="Two panels behind content tabs: the Asset Register of individual units (KPI tiles, class and station filters, Add Asset drawer grouped into Identification, Deployment and Lifecycle) and the Asset Types catalogue of equipment kinds.",
+        ),
+        name="ims-asset-management",
+    ),
+    path(
         "ims/inventory-category-master/",
         views.CategoryView.as_view(
             template_name="ims_inventory_category_master.html",

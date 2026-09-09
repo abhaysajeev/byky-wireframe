@@ -5,6 +5,7 @@ station mappings). The rest have no source data and show the awaiting-data state
 Wireframe phase: no writes, no CRUD, no API.
 """
 
+from apps.byky_core import seed
 from apps.byky_core.views import BykyScreenView
 from apps.byky_cms import data as cms_data
 
@@ -97,6 +98,47 @@ class StationMappingMapView(ImsScreenView):
         return context
 
 
+class AssetManagementView(ImsScreenView):
+    """Asset Management -- company-owned operating equipment.
+
+    Deliberately holds no vehicles: rental stock is Vehicle Management's job
+    (FSD 3.1). Two panels -- the unit register (empty until the client
+    supplies an equipment inventory) and the type catalogue derived from the
+    FSD hardware specs. See data._ASSET_TYPES for each type's provenance.
+
+    Custodians are the client's real staff list, so that dropdown is genuine
+    even though no unit is assigned to one yet.
+    """
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        types = data.asset_types()
+        for i, t in enumerate(types):
+            t["json_id"] = f"scr-record-assettype-{i}"
+            t["fields_json"] = {
+                "code": t["code"],
+                "name": t["name"],
+                "asset_class": t["asset_class"],
+                "identifier": t["identifier"],
+                "location": t["location"],
+            }
+        rows = data.assets()
+        for i, a in enumerate(rows):
+            a["json_id"] = f"scr-record-asset-{i}"
+            a["fields_json"] = {k: a[k] for k in ("code", "name", "asset_class")}
+        context.update(
+            {
+                "assets": rows,
+                "asset_types": types,
+                "asset_counts": data.asset_counts(),
+                "asset_classes": data.ASSET_CLASSES,
+                "asset_conditions": data.ASSET_CONDITIONS,
+                "employees_list": seed.EMPLOYEES,
+            }
+        )
+        return context
+
+
 class ImsAwaitingView(ImsScreenView):
     """Screens the FSD specifies but the client data has no source for."""
 
@@ -106,6 +148,7 @@ class ImsPrivilegeView(ImsScreenView):
 
     SCREENS = [
         ("Inventory Stock Item Management", [1, 1, 1, 1, 1, 0]),
+        ("Asset Management", [1, 1, 1, 1, 1, 0]),
         ("Inventory Category Master", [1, 1, 1, 1, 0, 0]),
         ("Inventory Sub-Category Master", [1, 1, 1, 1, 0, 0]),
         ("Inventory Brand Master", [1, 1, 1, 1, 0, 0]),

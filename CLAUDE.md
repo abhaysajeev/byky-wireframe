@@ -1080,6 +1080,43 @@ other 15 — brands, units, transfers, e-commerce, features, order status, promo
 loyalty, refunds, campaigns, RFID telemetry, alerts — have no source data and show
 the awaiting-data state. IMS privileges use six flags across all 20 screens.
 
+**Asset Management is IMS's one non-FSD screen** (`/ims/asset-management/`,
+`ims-asset-management`). It holds the company's **own operating equipment** —
+RFID antennas and readers, GPS trackers and SIMs, counter terminals, scanners,
+cameras, network and workshop kit.
+
+**It must never contain vehicles.** Rental stock is Vehicle Management's job
+(FSD 3.1); the two screens answer different questions, and a vehicle appearing in
+both is the exact defect this split exists to prevent. An earlier build did put the
+1,060 vehicles here and was corrected — don't reintroduce it.
+
+The FSD specifies no asset screen but does specify the hardware itself in detail, so
+the 14-entry type catalogue in `data._ASSET_TYPES` is **derived, not invented** —
+gate antenna and reader from 8.1 `tbl_AntennaMaster`, GPS tracker and SIM from 5.1
+`tbl_GPSDeviceMaster`, the relay kill switch, tools and helmets from 3.2, the RFID
+desktop scanner from 4.2, barcode scanner / POS / printer from 4.6, staff handheld
+from 9.6, station network gear from 8.1's LAN addressing, and the CCTV camera the
+client named outside the FSD.
+
+**That provenance stays a code comment and is never rendered.** An earlier build put
+it on screen as a Source badge, a source filter, a Specification column and an
+"FSD-specified" KPI; all four were removed. Spec references are build metadata — the
+same rule that keeps legacy `.aspx` filenames off finished screens. Keep the
+per-entry comments truthful when adding a type, but don't surface them.
+
+Type codes are **written out, not derived** from the name: the initialism collided
+(`Cellular SIM Card` and `CCTV Surveillance Camera` both reduce to `CSC`) and one
+leaked an ampersand.
+
+The screen is a tabbed dual-panel (same shape as `cms_country_state_management.html`,
+so the grids filter and paginate independently):
+
+- **Asset Register** — individual units. `data.assets()` returns `[]` and the panel
+  shows the awaiting-data empty state. **Never seed this with invented serials,
+  IMEIs, MACs or IP addresses.** The drawer is live so a unit can be walked through
+  in a demo, and Custodian is a genuine dropdown off `seed.EMPLOYEES`.
+- **Asset Types** — the derived catalogue above, with real content.
+
 **Phase 2 (HRMS) — done.** All 6 screens. Employee Personal Data (Tier B) carries all
 22 FSD inputs over the 99 real staff records; Designation Master is **derived from the
 client's own Profession column** (9 job titles with headcount), since that column is

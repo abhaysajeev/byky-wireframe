@@ -84,6 +84,11 @@
 
     var markers = points.map(function (p) {
       var radius = p.fleet ? 6 + Math.round((p.fleet / maxFleet) * 14) : 5;
+      /* Both figures are indicative and dashboard-only, so each says so
+         rather than reading as a measured count. */
+      var onRent = p.on_rent
+        ? '<div style="opacity:.75;margin-top:2px"><strong>' + p.on_rent + '</strong> on rent now</div>'
+        : '';
       var revenue = p.revenue
         ? '<div style="opacity:.75;margin-top:4px">AED ' + Number(p.revenue).toLocaleString() + ' <span style="opacity:.7">indicative</span></div>'
         : '';
@@ -99,6 +104,7 @@
             '<div style="font-weight:600;margin-bottom:2px">' + p.name + '</div>' +
             '<div style="opacity:.7;margin-bottom:6px">' + p.emirate + '</div>' +
             '<div><strong>' + p.fleet + '</strong> vehicles</div>' +
+            onRent +
             revenue +
           '</div>'
         )

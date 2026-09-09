@@ -104,6 +104,8 @@ class BykyDashboardView(TemplateView):
                     "emirate": st["emirate"],
                     "fleet": st["fleet"],
                     "revenue": st["revenue"],
+                    # indicative, like revenue -- see sales.on_rent_share
+                    "on_rent": st["on_rent"],
                     "lat": c[0],
                     "lng": c[1],
                 }

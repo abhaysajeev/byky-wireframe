@@ -37,7 +37,7 @@ satellite), which a bubble plot on a blank grid cannot show.
 {{ block.super }}
 {{ chart_data|json_script:"byky-chart-data" }}
 <script src="{% static 'js/byky-dashboard.js' %}"></script>
-<script src="{% static 'js/byky-leaflet-map.js' %}"></script>
+<script src="{% static 'js/byky-station-network.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
@@ -329,42 +329,67 @@ satellite), which a bubble plot on a blank grid cannot show.
 
   <div class="bd-row">
 
+    {% comment %}
+    Full width since Revenue by Emirate came out from beside it: the map was
+    the reason to look at this row, and at half width the emirates ran
+    together. The chip row below replaces what that card was for -- the
+    per-emirate cut is now a filter on the map itself.
+    {% endcomment %}
+    {% comment %}
+    Station Network -- the "Byky Station Network.html" widget, ported. Full
+    width since Revenue by Emirate came out from beside it; the emirate chips
+    took over that card's job, as a filter on the map itself.
+
+    Markup and classes are the reference's, scoped under .bsn. Behaviour lives
+    in byky-station-network.js; the tiles are the site's own Esri set.
+    {% endcomment %}
     <!-- Station Network -->
-    <div class="bd-card bd-map-card">
-      <div class="bd-flexrow" style="flex-wrap:wrap">
-        <div>
-          <h3 class="bd-card-h3">Station Network</h3>
-          <p class="bd-card-sub">{{ stations }} stations across {{ emirates }} emirates — marker size reflects fleet</p>
-        </div>
-        <a href="{% url 'cms-station-address-mapping' %}" class="bd-link">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"></path></svg>
-          Station list
-        </a>
-      </div>
-      <div class="bd-map-frame">
+    <div class="bd-card bd-map-card bd-map-card-wide">
+      <div class="bsn" data-points="bd-map-points">
         {{ map_points|json_script:"bd-map-points" }}
-        <div id="bd-map" class="byky-map" data-map-points="bd-map-points"></div>
-        <div class="bd-map-legend">
-          <b>Fleet</b>
-          <span><i style="width:8px;height:8px"></i>10</span>
-          <span><i style="width:14px;height:14px"></i>30</span>
-          <span><i style="width:20px;height:20px"></i>56</span>
+
+        <div class="bd-flexrow" style="flex-wrap:wrap">
+          <div>
+            <h3 class="bd-card-h3">Station Network</h3>
+            <p class="bd-card-sub" data-sub></p>
+          </div>
+          <a href="{% url 'cms-station-address-mapping' %}" class="bd-link">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"></path></svg>
+            Station list
+          </a>
+        </div>
+
+        <div class="bsn-chips"></div>
+
+        <div class="bsn-split">
+          <div class="bsn-mapwrap">
+            <div class="bsn-map"></div>
+            <div class="bsn-scale" data-scale="fleet" hidden>
+              <span>Fleet</span>
+              <i><em style="width:7px;height:7px"></em>12</i>
+              <i><em style="width:12px;height:12px"></em>30</i>
+              <i><em style="width:17px;height:17px"></em>56</i>
+            </div>
+            <div class="bsn-scale" data-scale="cluster">
+              <span>Stations</span>
+              <i><em style="width:9px;height:9px"></em>1</i>
+              <i><em style="width:15px;height:15px"></em>5</i>
+              <i><em style="width:20px;height:20px"></em>10+</i>
+            </div>
+          </div>
+
+          <div class="bsn-list">
+            <div class="bsn-list-head">
+              <b data-list-title>All stations</b>
+              <span data-list-meta></span>
+            </div>
+            <div class="bsn-rows"></div>
+          </div>
         </div>
       </div>
     </div>
     <!--/ Station Network -->
 
-    <!-- Revenue by Emirate -->
-    <div class="bd-card bd-list-card">
-      <div class="bd-flexrow">
-        <div>
-          <h3 class="bd-card-h3">Revenue by Emirate</h3>
-          <p class="bd-card-sub">Indicative monthly, AED</p>
-        </div>
-      </div>
-      <div class="bd-ranked" id="bd-emirates"></div>
-    </div>
-    <!--/ Revenue by Emirate -->
   </div>
 
   <div class="bd-row">

@@ -47,6 +47,11 @@ _DEFAULT_RATE = 25
 RENTALS_PER_VEHICLE_DAY = 1.6
 HOURS_PER_RENTAL = 1.5
 DAYS_PER_MONTH = 30
+# Stations open ~12 hours. Needed for "on rent right now": a vehicle is busy
+# 1.6 x 1.5 = 2.4 hours a day, so at any moment about a fifth of a station's
+# fleet is out. Derived from the two assumptions above rather than being a
+# separate invented number -- change those and this follows.
+OPERATING_HOURS_PER_DAY = 12
 
 
 def _rng():
@@ -80,17 +85,27 @@ def _station_revenue():
     return out
 
 
+def on_rent_share():
+    """Fraction of a fleet out on rent at any given moment."""
+    return (RENTALS_PER_VEHICLE_DAY * HOURS_PER_RENTAL) / OPERATING_HOURS_PER_DAY
+
+
 def by_station():
     rev = _station_revenue()
+    share = on_rent_share()
     rows = []
     for s in seed.STATIONS:
+        fleet = s["vehicle_count"]
         rows.append(
             {
                 "name": s["name"],
                 "emirate": s["emirate"],
                 "code": s["code"],
-                "fleet": s["vehicle_count"],
+                "fleet": fleet,
                 "revenue": rev[s["name"]],
+                # Indicative, like every figure in this module, and dashboard-
+                # only: never show it on an operational screen (CLAUDE.md).
+                "on_rent": int(round(fleet * share)),
             }
         )
     return sorted(rows, key=lambda r: -r["revenue"])

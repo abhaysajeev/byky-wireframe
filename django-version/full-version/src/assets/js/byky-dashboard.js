@@ -115,26 +115,6 @@
     if (trough) trough.textContent = labels[ti] + ' trough · ' + fmt(min);
   })();
 
-  /* ── revenue by emirate ──────────────────────────────────────── */
-  (function () {
-    var host = root.querySelector('#bd-emirates');
-    var names = data.revenue_emirates || [], vals = data.revenue_emirate_values || [];
-    if (!host || !names.length) return;
-    var max = Math.max.apply(null, vals);
-    names.forEach(function (name, i) {
-      var row = document.createElement('div');
-      row.innerHTML =
-        '<div class="bd-ranked-head"><span class="bd-ranked-name"></span><span class="bd-ranked-val"></span></div>' +
-        '<div class="bd-ranked-track"><i></i></div>';
-      row.querySelector('.bd-ranked-name').textContent = name;
-      row.querySelector('.bd-ranked-val').textContent = fmt(vals[i]);
-      var bar = row.querySelector('.bd-ranked-track i');
-      bar.style.width = Math.max(2, Math.round((vals[i] / max) * 100)) + '%';
-      bar.style.background = i === 0 ? RED : (i < 4 ? MID : PALE);
-      host.appendChild(row);
-    });
-  })();
-
   /* ── revenue by category ─────────────────────────────────────── */
   (function () {
     var host = root.querySelector('#bd-categories');

@@ -159,17 +159,17 @@
 
 /* ── station network map ──────────────────────────────────────────── */
 .bd-map-card { flex: 1 1 560px; padding: 22px; }
-.bd-map-frame { margin-top: 18px; background: #fbfaff; border: 1px solid #f0eff7; border-radius: 12px; padding: 8px; position: relative; }
+/* Full width now that nothing sits beside it. The map is also taller here:
+   across the whole row a 340px frame reads as a letterbox, and the extra
+   height is what lets the emirates separate instead of overlapping. */
+.bd-map-card-wide { flex: 1 1 100%; }
+.bd-map-card-wide 
+
+}
 /* Leaflet needs a real height on its container -- it cannot size itself from
    content the way an svg does. */
-#bd-map { height: 340px; border-radius: 8px; overflow: hidden; }
-#bd-map.leaflet-container { background: #fbfaff; font: inherit; }
 /* The fleet legend sits over the map, so it must clear Leaflet's own panes
    (z-index 400) and controls (z-index 800). */
-.bd-map-legend { position: absolute; left: 20px; bottom: 18px; z-index: 900; display: flex; align-items: center; gap: 14px; background: rgba(255, 255, 255, 0.9); border: 1px solid #f0eff7; border-radius: 9px; padding: 8px 12px; }
-.bd-map-legend b { font-size: 10.5px; font-weight: 600; letter-spacing: 0.6px; text-transform: uppercase; color: #a9a6c4; }
-.bd-map-legend span { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #6b6790; }
-.bd-map-legend span i { display: block; border-radius: 50%; background: rgba(216, 31, 38, 0.25); border: 1px solid #d81f26; }
 .bd-link {
   display: flex; align-items: center; gap: 7px; flex: 0 0 auto; font-size: 12px; font-weight: 600;
   color: #4b4770; border: 1px solid #eeedf5; padding: 8px 13px; border-radius: 9px;
@@ -254,3 +254,112 @@
    in dark ink instead of white on the red gradient. .bd-hero-sub (a <p>) already
    sets its own color explicitly and was never affected. */
 .bd-hero-title { color: #fff; }
+
+/* ── Station Network widget ───────────────────────────────────────────
+   Ported from "Byky Station Network.html" -- every value below is the
+   reference's, only scoped under .bsn so its generic names (.row, .list,
+   .stn) cannot collide with the rest of the app. The tiles and the layer
+   switcher stay the site's own (byky-leaflet-map.js's Esri set); everything
+   drawn on top of them is this design.
+
+   Deliberate departures from the reference, both asked for:
+   revenue is off the right-hand list and lives on the station pin instead,
+   and hovering a row only highlights -- the map moves on click. */
+.bsn { display: flex; flex-direction: column; }
+.bsn-chips { display: flex; gap: 6px; flex-wrap: wrap; padding: 16px 0 0; }
+.bsn-chip {
+  border: 1px solid #eeedf5; background: #fff; color: #6b6790; font-family: inherit;
+  font-size: 11.5px; font-weight: 500; padding: 6px 12px; border-radius: 99px;
+  cursor: pointer; white-space: nowrap;
+  transition: border-color .16s, background .16s, color .16s;
+}
+.bsn-chip:hover { border-color: #d3d0e6; }
+.bsn-chip.on { border-color: #f3c3c5; background: #fdeced; color: #c2141a; font-weight: 600; }
+.bsn-chip b { font-weight: 600; font-variant-numeric: tabular-nums; color: #a9a6c4; margin-left: 5px; }
+.bsn-chip.on b { color: #c2141a; }
+
+.bsn-split { display: flex; flex-wrap: wrap; padding: 16px 0 0; align-items: stretch; }
+.bsn-mapwrap {
+  flex: 1 1 520px; min-width: 0; position: relative;
+  border: 1px solid #f0eff7; border-radius: 12px; overflow: hidden; background: #eef0f6;
+}
+.bsn-map { height: 452px; width: 100%; background: #eef0f6; z-index: 1; }
+.bsn-map.leaflet-container { font-family: 'Sora', sans-serif; background: #eef0f6; }
+.bsn-mapwrap .leaflet-control-attribution { font-size: 9.5px; background: rgba(255,255,255,.82); color: #9490bb; }
+.bsn-mapwrap .leaflet-control-attribution a { color: #8b87b0; }
+.bsn-mapwrap .leaflet-bar { border: none; box-shadow: 0 6px 18px -12px rgba(26,22,64,.4); border-radius: 9px; overflow: hidden; }
+.bsn-mapwrap .leaflet-bar a { width: 28px; height: 28px; line-height: 28px; color: #4b4770; border-bottom-color: #f0eff7; font-size: 15px; }
+.bsn-mapwrap .leaflet-bar a:hover { color: #d81f26; }
+
+/* station pin */
+.bsn .stn { position: relative; display: grid; place-items: center; }
+.bsn .stn i {
+  display: block; border-radius: 50%; background: #d81f26; border: 2px solid #fff;
+  box-shadow: 0 2px 6px -1px rgba(26,22,64,.45); transition: transform .16s, background .16s;
+}
+.bsn .stn:hover i, .bsn .stn.lit i { transform: scale(1.24); }
+.bsn .stn.lit i { background: #1a1640; }
+.bsn .stn.dim { opacity: .26; }
+
+/* cluster bubble */
+.bsn .cl-wrap { position: relative; display: grid; place-items: center; isolation: isolate; }
+.bsn .cl {
+  display: grid; place-items: center; border-radius: 50%; background: #d81f26; color: #fff;
+  border: 2.5px solid #fff; box-shadow: 0 4px 14px -4px rgba(194,20,26,.6);
+  font-size: 12px; font-weight: 700; font-variant-numeric: tabular-nums; transition: transform .16s;
+}
+.bsn .cl:hover { transform: scale(1.08); }
+.bsn .cl::after { content: ''; position: absolute; inset: -7px; border-radius: 50%; background: rgba(216,31,38,.14); z-index: -1; }
+
+/* tooltip -- rendered into leaflet's own pane, so it cannot be scoped under .bsn */
+.leaflet-tooltip.bsn-tip {
+  background: #fff; border: 1px solid #eeedf5; border-radius: 11px;
+  box-shadow: 0 18px 38px -20px rgba(26,22,64,.45); padding: 11px 13px;
+  font-family: 'Sora', sans-serif; white-space: nowrap; color: #1a1640;
+}
+.leaflet-tooltip.bsn-tip::before { display: none; }
+.bsn-tip .t { font-size: 12.5px; font-weight: 600; }
+.bsn-tip .l { font-size: 11px; color: #9490bb; margin-top: 3px; }
+.bsn-tip .stats { display: flex; gap: 18px; margin-top: 9px; padding-top: 9px; border-top: 1px solid #f4f3f9; }
+.bsn-tip .stat { display: flex; flex-direction: column; gap: 2px; }
+.bsn-tip .stat u { text-decoration: none; font-size: 9.5px; font-weight: 600; letter-spacing: .5px; text-transform: uppercase; color: #a9a6c4; }
+.bsn-tip .stat b { font-size: 14px; font-weight: 700; letter-spacing: -.3px; font-variant-numeric: tabular-nums; }
+.bsn-tip .stat b s { text-decoration: none; font-size: 10px; font-weight: 500; color: #a9a6c4; margin-left: 3px; }
+.bsn-tip .note { font-size: 10px; color: #c9c6dd; margin-top: 8px; }
+
+/* size legend */
+.bsn-scale {
+  position: absolute; left: 12px; bottom: 12px; z-index: 400; display: flex; align-items: center;
+  gap: 12px; background: rgba(255,255,255,.93); border: 1px solid #f0eff7; border-radius: 9px; padding: 7px 12px;
+}
+.bsn-scale[hidden] { display: none; }
+.bsn-scale span { font-size: 10px; font-weight: 600; letter-spacing: .7px; text-transform: uppercase; color: #a9a6c4; }
+.bsn-scale i { display: flex; align-items: center; gap: 6px; font-style: normal; font-size: 11px; color: #6b6790; font-variant-numeric: tabular-nums; }
+.bsn-scale i em { display: block; border-radius: 50%; background: #d81f26; border: 1.5px solid #fff; box-shadow: 0 0 0 1px rgba(26,22,64,.1); }
+
+/* station list */
+.bsn-list { flex: 0 0 328px; min-width: 0; display: flex; flex-direction: column; padding-left: 20px; }
+.bsn-list-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding-bottom: 10px; border-bottom: 1px solid #f0eff7; }
+.bsn-list-head b { font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; color: #a9a6c4; }
+.bsn-list-head span { font-size: 11px; color: #c9c6dd; font-weight: 500; font-variant-numeric: tabular-nums; }
+.bsn-rows { flex: 1; overflow-y: auto; max-height: 410px; scrollbar-width: thin; scrollbar-color: #e4e3ee transparent; }
+.bsn-rows::-webkit-scrollbar { width: 6px; }
+.bsn-rows::-webkit-scrollbar-thumb { background: #e4e3ee; border-radius: 99px; }
+.bsn-row {
+  display: flex; align-items: center; gap: 11px; padding: 10px 8px; border-radius: 10px;
+  cursor: pointer; border: none; background: none; width: 100%; text-align: left;
+  font-family: inherit; transition: background .14s;
+}
+.bsn-row:hover, .bsn-row.lit { background: #faf9fd; }
+.bsn-row .rank { width: 22px; flex: 0 0 auto; font-size: 10.5px; font-weight: 600; color: #c9c6dd; font-variant-numeric: tabular-nums; }
+.bsn-row .body { flex: 1; min-width: 0; }
+.bsn-row .n { display: block; font-size: 12.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bsn-row .p { display: block; font-size: 11px; color: #9490bb; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bsn-row .fig { flex: 0 0 auto; text-align: right; }
+.bsn-row .fig b { display: block; font-size: 12px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bsn-row .fig s { display: block; text-decoration: none; font-size: 10.5px; color: #a9a6c4; font-weight: 500; margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+@media (max-width: 900px) {
+  .bsn-list { flex: 1 1 100%; padding-left: 0; padding-top: 18px; }
+  .bsn-rows { max-height: 280px; }
+}

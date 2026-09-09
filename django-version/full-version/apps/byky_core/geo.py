@@ -69,10 +69,13 @@ def station_points(with_revenue=False):
     from apps.byky_core import seed
 
     revenue = {}
+    on_rent = {}
     if with_revenue:
         from apps.byky_core import sales
 
-        revenue = {r["name"]: r["revenue"] for r in sales.by_station()}
+        rows = sales.by_station()
+        revenue = {r["name"]: r["revenue"] for r in rows}
+        on_rent = {r["name"]: r["on_rent"] for r in rows}
 
     points = []
     for s in seed.STATIONS:
@@ -85,6 +88,7 @@ def station_points(with_revenue=False):
                 "emirate": s["emirate"],
                 "fleet": s["vehicle_count"],
                 "revenue": revenue.get(s["name"], 0),
+                "on_rent": on_rent.get(s["name"], 0),
                 "lat": c[0],
                 "lng": c[1],
             }

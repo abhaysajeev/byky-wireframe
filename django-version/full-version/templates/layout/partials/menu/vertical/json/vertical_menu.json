@@ -113,9 +113,29 @@
    "slug": "ims",
    "badge": [
     "label-secondary",
-    "10"
+    "9"
    ],
    "submenu": [
+    {
+     "url": "ims-inventory-brand-master",
+     "name": "Brand",
+     "slug": "ims-inventory-brand-master"
+    },
+    {
+     "url": "ims-inventory-category-master",
+     "name": "Category",
+     "slug": "ims-inventory-category-master"
+    },
+    {
+     "url": "ims-inventory-sub-category-master",
+     "name": "Vehicle Type",
+     "slug": "ims-inventory-sub-category-master"
+    },
+    {
+     "url": "ims-inventory-unit-of-measure",
+     "name": "UOM",
+     "slug": "ims-inventory-unit-of-measure"
+    },
     {
      "url": "ims-vehicle-management",
      "name": "Vehicle",
@@ -128,42 +148,17 @@
     },
     {
      "url": "ims-vehicle-station-mapping",
-     "name": "Vehicle Station Mapping",
+     "name": "Inventory Branch Mapping",
      "slug": "ims-vehicle-station-mapping"
     },
     {
-     "url": "ims-inventory-category-master",
-     "name": "Inventory Category Master",
-     "slug": "ims-inventory-category-master"
-    },
-    {
-     "url": "ims-inventory-sub-category-master",
-     "name": "Inventory Sub-Category Master",
-     "slug": "ims-inventory-sub-category-master"
-    },
-    {
-     "url": "ims-inventory-brand-master",
-     "name": "Inventory Brand Master",
-     "slug": "ims-inventory-brand-master"
-    },
-    {
-     "url": "ims-inventory-unit-of-measure",
-     "name": "Inventory Unit of Measure",
-     "slug": "ims-inventory-unit-of-measure"
-    },
-    {
      "url": "ims-vehicle-transfer-relocation",
-     "name": "Vehicle Transfer & Relocation",
+     "name": "Inventory Transfer & Return",
      "slug": "ims-vehicle-transfer-relocation"
     },
     {
-     "url": "ims-inventory-system-alerts-exception-monitoring",
-     "name": "Inventory System Alerts & Exception Monitoring",
-     "slug": "ims-inventory-system-alerts-exception-monitoring"
-    },
-    {
      "url": "ims-ims-security-privilege-management",
-     "name": "IMS Security Privilege",
+     "name": "Privileges",
      "slug": "ims-ims-security-privilege-management"
     }
    ]

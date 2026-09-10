@@ -169,6 +169,31 @@
     var addTitle = drawer.dataset.addTitle || (titleEl && titleEl.textContent) || '';
     var titleField = drawer.dataset.titleField || 'name';
 
+    /* Conditional fields: a field with data-show-if stays hidden until the
+       control it names holds one of the listed values. Re-run on every change
+       and whenever the drawer opens, so edit mode shows the right shape for
+       the record being edited rather than the shape the last one had. */
+    function syncShowIf() {
+      [].forEach.call(drawer.querySelectorAll('[data-show-if]'), function (field) {
+        var spec = field.dataset.showIf;
+        var sep = spec.indexOf(':');
+        var key = spec.slice(0, sep);
+        var wants = spec.slice(sep + 1).split('|');
+        var input = drawer.querySelector('[data-field="' + key + '"]');
+        var show = !!input && wants.indexOf(input.value) > -1;
+        field.hidden = !show;
+        /* a hidden field must not keep a value that no longer applies */
+        if (!show) {
+          [].forEach.call(field.querySelectorAll('input[type="checkbox"]'), function (b) {
+            b.checked = false;
+          });
+        }
+      });
+    }
+    drawer.addEventListener('change', function (e) {
+      if (e.target.matches('[data-field]')) syncShowIf();
+    });
+
     function syncEnabled() {
       [].forEach.call(drawer.querySelectorAll('[data-enables]'), function (box) {
         var target = drawer.querySelector('[data-field="' + box.dataset.enables + '"]');
@@ -210,6 +235,7 @@
         }
       });
       syncEnabled();
+      syncShowIf();
     }
 
     drawer.__bykyFill = fill;

@@ -37,6 +37,8 @@ spec.title_field     field id whose value titles the drawer in edit mode
 field.lock_on_edit   render read-only in edit mode (a code/PK field)
 field.enables        field id this checkbox enables/disables
 field.checked        default state of a checkbox in add mode
+field.show_if        "<field id>:<value>[|<value>]" -- hide until it matches
+kind "checkgroup"    f.options = [{id, label, enables, checked}, ...]
 field.readonly       always read-only -- a value this screen displays but
                      does not own (fetched from an external system)
 {% endcomment %}
@@ -81,7 +83,12 @@ field.readonly       always read-only -- a value this screen displays but
 
         <div class="byky-fields">
           {% for f in sec.fields %}
-          <div class="byky-field byky-span-{{ f.width|default:6 }}">
+          {% comment %}
+          data-show-if="<field id>:<value>[|<value>]" hides a field until the
+          named control holds one of those values -- Branch's flag group only
+          applies to a Branch Office. byky-drawer.js syncs it.
+          {% endcomment %}
+          <div class="byky-field byky-span-{{ f.width|default:6 }}"{% if f.show_if %} data-show-if="{{ f.show_if }}" hidden{% endif %}>
             <label class="byky-label" for="{{ f.id }}">
               <span>{{ f.label }}</span>{% if f.required %}<em class="byky-req">*</em>{% endif %}
             </label>
@@ -117,6 +124,23 @@ field.readonly       always read-only -- a value this screen displays but
                 <span class="byky-switch"></span>
                 <span class="byky-switch-label">{{ f.placeholder|default:"Enabled" }}</span>
               </label>
+
+            {% elif f.kind == "checkgroup" %}
+              {% comment %}
+              Several booleans that belong together read as one field, on a
+              two-column grid so the switches line up instead of stacking into
+              a ragged list -- Branch's Is Hotel / App Payment / Multiple
+              Devices / Test Vehicle.
+              {% endcomment %}
+              <div class="byky-checkgroup">
+                {% for o in f.options %}
+                <label class="byky-switch-row" for="{{ o.id }}">
+                  <input type="checkbox" id="{{ o.id }}" class="byky-switch-input" data-field="{{ o.id }}"{% if o.enables %} data-enables="{{ o.enables }}"{% endif %}{% if o.checked %} data-default-checked="true"{% endif %} />
+                  <span class="byky-switch"></span>
+                  <span class="byky-switch-label">{{ o.label }}</span>
+                </label>
+                {% endfor %}
+              </div>
 
             {% comment %}
             radio and multiselect exist because real screens carry them --

@@ -67,11 +67,26 @@ BRANCH = {
                     "options_from": "branch_types_list"
                 },
                 {
+                    "id": "flags",
+                    "label": "Branch Flags",
+                    "kind": "checkgroup",
+                    "required": False,
+                    "width": 12,
+                    "show_if": "branch_type:Branch Office",
+                    "help": "These apply to a Branch Office only.",
+                    "options": [
+                        {"id": "is_hotel", "label": "Is Hotel", "enables": "hotel_commission"},
+                        {"id": "app_payment", "label": "Is App Payment"},
+                        {"id": "multi_user", "label": "Allow Multiple Devices"},
+                        {"id": "test_vehicle", "label": "Is Test Vehicle"}
+                    ]
+                },
+                {
                     "id": "hotel_commission",
                     "label": "Hotel Commission %",
                     "kind": "number",
                     "required": False,
-                    "help": "Applies to hotel partner branches."
+                    "help": "Enabled once Is Hotel is switched on."
                 },
                 {
                     "id": "departments",

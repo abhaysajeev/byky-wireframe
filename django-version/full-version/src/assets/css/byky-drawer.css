@@ -265,18 +265,25 @@
 .byky-multi-placeholder { font-size: 12.5px; color: #a9a6c4; }
 .byky-multi-caret { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #a9a6c4; pointer-events: none; }
 
+/* Neutral, not brand red: a picked department is a value the user entered,
+   not a status or an alert, and a row of red chips reads as several warnings.
+   Tinted surface + hairline from the design system's own ramp, and a 6px
+   radius -- square-ish, the same corner the small badges use, rather than the
+   fully-rounded pill this was. */
 .byky-pill {
   display: inline-flex; align-items: center; gap: 6px; max-width: 100%;
-  background: #fdeced; border: 1px solid #f3c3c5; color: #c2141a;
-  font-size: 11.5px; font-weight: 600; padding: 4px 6px 4px 10px; border-radius: 99px;
+  background: #f4f3f9; border: 1px solid #e8e7f2; color: #4b4770;
+  font-size: 11.5px; font-weight: 500; padding: 4px 5px 4px 9px; border-radius: 6px;
 }
 .byky-pill > span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .byky-pill-x {
   display: grid; place-items: center; flex: 0 0 auto; width: 16px; height: 16px;
-  border: none; border-radius: 50%; background: rgba(194, 20, 26, 0.12); color: #c2141a;
-  cursor: pointer; padding: 0; transition: background 0.14s;
+  border: none; border-radius: 4px; background: transparent; color: #9490bb;
+  cursor: pointer; padding: 0; transition: background 0.14s, color 0.14s;
 }
-.byky-pill-x:hover { background: rgba(194, 20, 26, 0.26); }
+/* the remove control only colours up on hover, so a full field of chips
+   stays calm until you reach for one */
+.byky-pill-x:hover { background: #e8e7f2; color: #4b4770; }
 
 .byky-multi-menu {
   position: absolute; z-index: 5; inset-inline: 0; top: calc(100% + 4px);

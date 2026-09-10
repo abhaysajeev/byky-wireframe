@@ -71,14 +71,19 @@ BRANCH = {
                     "label": "Hotel Commission %",
                     "kind": "number",
                     "required": False,
-                    "help": "Enabled only when Is Hotel is checked."
+                    "help": "Applies to hotel partner branches."
                 },
                 {
-                    "id": "is_hotel",
-                    "label": "",
-                    "kind": "checkbox",
+                    "id": "departments",
+                    "label": "Departments",
+                    "kind": "multiselect",
                     "required": False,
-                    "enables": "hotel_commission"
+                    "width": 12,
+                    "placeholder": "Select departments",
+                    "options_from": "departments_list",
+                    "option_key": "name",
+                    "empty_text": "No departments have been added yet — add them in Department Master and they will appear here.",
+                    "help": "A branch can run several departments; each one you pick stays visible as a chip."
                 },
                 {
                     "id": "address",
@@ -106,18 +111,6 @@ BRANCH = {
                     "label": "Contact No",
                     "kind": "text",
                     "required": False
-                },
-                {
-                    "id": "departments",
-                    "label": "Departments",
-                    "kind": "multiselect",
-                    "required": False,
-                    "width": 12,
-                    "placeholder": "Select departments",
-                    "options_from": "departments_list",
-                    "option_key": "name",
-                    "empty_text": "No departments have been added yet — add them in Department Master and they will appear here.",
-                    "help": "A branch can run several departments; each one you pick stays visible as a chip."
                 },
                 {
                     "id": "image",

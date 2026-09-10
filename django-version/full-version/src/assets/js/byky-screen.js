@@ -436,18 +436,60 @@
      Generic open/close for a header "More actions" button, sibling to
      .scr-filter-wrap's own dropdown but not tied to filtering -- clicking
      an item just runs whatever that button does (e.g. data-scr-modal-open)
-     rather than re-applying a list filter. */
+     rather than re-applying a list filter.
+
+     A row-level "..." menu lives inside .scr-table-scroll, which sets
+     overflow-x: auto -- per the CSS spec that forces overflow-y to auto too,
+     so the menu's own position:absolute (relative to its .scr-menu-wrap)
+     gets clipped to the scroll container's box for every row but the very
+     top one, even with a high z-index -- overflow clipping is about DOM
+     containment, not the positioning scheme, so position:fixed alone
+     wouldn't escape it either. Fixed here by detaching the menu to a
+     body-level layer on open, with real position:fixed coordinates computed
+     from the toggle button's own bounding rect, then moving it back to its
+     original spot in the row when closed (openMenus tracks each menu's
+     original parent/next-sibling so several rows' menus don't collide). */
+  var openMenus = new WeakMap();
+  function closeMenu(menu) {
+    menu.hidden = true;
+    var orig = openMenus.get(menu);
+    if (orig) {
+      orig.parent.insertBefore(menu, orig.next);
+      openMenus.delete(menu);
+    }
+  }
+  function closeAllMenus() {
+    document.querySelectorAll('.scr-menu').forEach(closeMenu);
+  }
+  var scrMenuLayer = null;
+  function menuLayer() {
+    if (!scrMenuLayer) {
+      scrMenuLayer = document.createElement('div');
+      scrMenuLayer.className = 'scr-menu-layer';
+      document.body.appendChild(scrMenuLayer);
+    }
+    return scrMenuLayer;
+  }
   document.querySelectorAll('[data-scr-menu-toggle]').forEach(function (btn) {
     var menu = btn.parentElement.querySelector('.scr-menu');
     if (!menu) return;
+    if (btn.closest('.scr-row-actions')) menu.classList.add('scr-menu-compact');
     btn.addEventListener('click', function (e) {
       e.stopPropagation();
       var willOpen = menu.hidden;
-      document.querySelectorAll('.scr-menu').forEach(function (m) { m.hidden = true; });
-      menu.hidden = !willOpen;
+      closeAllMenus();
+      if (!willOpen) return;
+      openMenus.set(menu, { parent: menu.parentElement, next: menu.nextSibling });
+      var rect = btn.getBoundingClientRect();
+      menu.style.position = 'fixed';
+      menu.style.top = (rect.bottom + 6) + 'px';
+      menu.style.left = 'auto';
+      menu.style.right = (window.innerWidth - rect.right) + 'px';
+      menuLayer().appendChild(menu);
+      menu.hidden = false;
     });
     menu.querySelectorAll('.scr-menu-item').forEach(function (item) {
-      item.addEventListener('click', function () { menu.hidden = true; });
+      item.addEventListener('click', function () { closeMenu(menu); });
     });
   });
 
@@ -494,9 +536,7 @@
       });
     });
   });
-  document.addEventListener('click', function () {
-    document.querySelectorAll('.scr-menu').forEach(function (m) { m.hidden = true; });
-  });
+  document.addEventListener('click', closeAllMenus);
 
   /* ── top-level content tabs (screens with more than one grid) ───── */
   document.querySelectorAll('[data-scr-tabgroup]').forEach(function (group) {

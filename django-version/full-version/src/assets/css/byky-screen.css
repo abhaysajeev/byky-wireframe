@@ -549,9 +549,18 @@ textarea.scr-drawer-input { height: auto; min-height: 72px; padding: 10px 13px; 
 .scr-menu-item-danger:hover { background: #fbebec; color: #d81f26; }
 
 /* Row-level "..." action menu (Country & State etc.): the toggle is the
-   30px .scr-icon-btn, not the 38px labelled .scr-menu-btn above, so the
-   dropdown needs a shorter offset to sit flush under it. */
-.scr-row-actions .scr-menu { top: 36px; min-width: 150px; }
+   30px .scr-icon-btn, not the 38px labelled .scr-menu-btn above, so it needs
+   a narrower minimum width than the header "More" menu. byky-screen.js adds
+   this class (rather than relying on a nested .scr-row-actions .scr-menu
+   selector) because the menu is detached to a body-level layer on open --
+   see the data-scr-menu-toggle handler's comment for why. */
+.scr-menu-compact { min-width: 150px; }
+
+/* .scr-menu is moved here (out of .scr-table-scroll's clipping ancestry) the
+   moment it opens, with real position:fixed coordinates computed from its
+   toggle button. The layer itself is unstyled -- a position:fixed child
+   positions relative to the viewport regardless of its parent, so this is
+   just a plain anchor point at the end of <body>. */
 
 /* ── network map card (real coordinates, hand-drawn SVG -- no Leaflet) ──
    Generalised from byky-dashboard.css's .bd-map-* rules for any screen that

@@ -215,8 +215,7 @@ DEPARTMENT = {
                     "id": "code",
                     "label": "Department Code",
                     "kind": "text",
-                    "required": True,
-                    "placeholder": "e.g. OPS"
+                    "required": True
                 },
                 {
                     "id": "name",

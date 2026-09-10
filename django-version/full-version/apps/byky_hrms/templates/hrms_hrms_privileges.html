@@ -11,16 +11,6 @@ seven CMS uses -- the partial is parameterised by the module's own permission
 list.
 {% endcomment %}
 
-{% block vendor_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
-{% endblock vendor_js %}
-
 {% block page_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />

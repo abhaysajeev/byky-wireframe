@@ -10,16 +10,6 @@ screen in all 16 modules -- now migrated onto the shared byky-screen.css/js base
 All, per the FSD section 5 wireframe.
 {% endcomment %}
 
-{% block vendor_css %}
-{{ block.super }}
-<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
-{% endblock vendor_css %}
-
-{% block vendor_js %}
-{{ block.super }}
-<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
-{% endblock vendor_js %}
-
 {% block page_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />

@@ -20,15 +20,13 @@ ASSET = {
                     "label": "Asset Tag",
                     "kind": "text",
                     "required": True,
-                    "placeholder": "BYK-ANT-001",
                     "lock_on_edit": True
                 },
                 {
                     "id": "name",
                     "label": "Asset Name",
                     "kind": "text",
-                    "required": True,
-                    "placeholder": "Entry gate antenna, Marina 1"
+                    "required": True
                 },
                 {
                     "id": "asset_class",
@@ -44,6 +42,20 @@ ASSET = {
                     "required": True,
                     "options_from": "asset_types",
                     "option_key": "name"
+                },
+                {
+                    "id": "material_type",
+                    "label": "Material Type",
+                    "kind": "select",
+                    "required": False,
+                    "options": [
+                        "Electrical",
+                        "Electronics",
+                        "Wooden",
+                        "Metal",
+                        "Plastic",
+                        "Others"
+                    ]
                 },
                 {
                     "id": "model",
@@ -82,29 +94,25 @@ ASSET = {
                     "id": "ip",
                     "label": "IP Address",
                     "kind": "text",
-                    "required": False,
-                    "placeholder": "192.168.1.101"
+                    "required": False
                 },
                 {
                     "id": "mac",
                     "label": "MAC Address",
                     "kind": "text",
-                    "required": False,
-                    "placeholder": "00:1B:44:11:3A:B7"
+                    "required": False
                 },
                 {
                     "id": "imei",
                     "label": "IMEI",
                     "kind": "text",
-                    "required": False,
-                    "placeholder": "15 digits"
+                    "required": False
                 },
                 {
                     "id": "msisdn",
                     "label": "SIM MSISDN",
                     "kind": "text",
-                    "required": False,
-                    "placeholder": "+9715xxxxxxxx"
+                    "required": False
                 }
             ]
         },
@@ -121,8 +129,7 @@ ASSET = {
                     "id": "cost",
                     "label": "Purchase Cost (AED)",
                     "kind": "number",
-                    "required": False,
-                    "placeholder": "e.g. 1250.00"
+                    "required": False
                 },
                 {
                     "id": "supplier",
@@ -131,10 +138,18 @@ ASSET = {
                     "required": False
                 },
                 {
-                    "id": "warranty",
-                    "label": "Warranty Expiry",
+                    "id": "warranty_from",
+                    "label": "Warranty Period From",
                     "kind": "date",
-                    "required": False
+                    "required": False,
+                    "help": "Optional."
+                },
+                {
+                    "id": "warranty_to",
+                    "label": "Warranty Period To",
+                    "kind": "date",
+                    "required": False,
+                    "help": "Optional."
                 },
                 {
                     "id": "condition",
@@ -168,7 +183,6 @@ ASSETTYPE = {
                     "label": "Type Code",
                     "kind": "text",
                     "required": True,
-                    "placeholder": "URGA",
                     "lock_on_edit": True
                 },
                 {
@@ -189,15 +203,13 @@ ASSETTYPE = {
                     "label": "Tracked By",
                     "kind": "text",
                     "required": False,
-                    "placeholder": "Asset tag",
                     "help": "The identifier a unit of this type is looked up by — an asset tag, an IMEI, an IP address."
                 },
                 {
                     "id": "location",
                     "label": "Typically Deployed",
                     "kind": "text",
-                    "required": False,
-                    "placeholder": "Station counter"
+                    "required": False
                 }
             ]
         }

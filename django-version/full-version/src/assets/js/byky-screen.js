@@ -438,30 +438,11 @@
         var row = btn.closest('[data-priv-row]');
         if (!row) return;
         var role = row.dataset.privRow;
-
-        function finish() {
-          row.remove();
-          var addBtn = root.querySelector('[data-scr-priv-add="' + role + '"]');
-          if (addBtn) addBtn.hidden = false;
-          syncAddEmpty();
-          if (listCard) applyFilters(listCard, true);
-        }
-
-        if (typeof Swal === 'undefined') {
-          if (window.confirm('Remove ' + role + ' from this module\'s role list?')) finish();
-          return;
-        }
-        Swal.fire({
-          title: 'Remove ' + role + '?',
-          text: 'Its permissions stay set -- adding it back later restores this grid as it is now.',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, remove',
-          customClass: { confirmButton: 'btn btn-danger me-3', cancelButton: 'btn btn-label-secondary' },
-          buttonsStyling: false
-        }).then(function (result) {
-          if (result.isConfirmed) finish();
-        });
+        row.remove();
+        var addBtn = root.querySelector('[data-scr-priv-add="' + role + '"]');
+        if (addBtn) addBtn.hidden = false;
+        syncAddEmpty();
+        if (listCard) applyFilters(listCard, true);
       });
     }
 

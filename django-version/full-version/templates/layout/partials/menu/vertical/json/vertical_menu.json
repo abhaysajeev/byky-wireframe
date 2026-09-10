@@ -11,32 +11,20 @@
    "menu_header": "Operations"
   },
   {
-   "name": "Country & State",
-   "icon": "menu-icon icon-base ti tabler-world",
-   "svg": "M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0M3.6 9h16.8M3.6 15h16.8M11.5 3a17 17 0 0 0 0 18M12.5 3a17 17 0 0 1 0 18",
-   "slug": "cms-geo",
-   "badge": [
-    "label-secondary",
-    "1"
-   ],
-   "submenu": [
-    {
-     "url": "cms-country-state-management",
-     "name": "Country & State",
-     "slug": "cms-country-state-management"
-    }
-   ]
-  },
-  {
    "name": "Company",
    "icon": "menu-icon icon-base ti tabler-building",
    "svg": "M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3",
    "slug": "cms",
    "badge": [
     "label-secondary",
-    "6"
+    "7"
    ],
    "submenu": [
+    {
+     "url": "cms-country-state-management",
+     "name": "Country & State",
+     "slug": "cms-country-state-management"
+    },
     {
      "url": "cms-company-details",
      "name": "Company Details",

@@ -546,6 +546,12 @@ textarea.scr-drawer-input { height: auto; min-height: 72px; padding: 10px 13px; 
    menus disagree. Matches .scr a's specificity and sits later, so it wins. */
 .scr a.scr-menu-item { color: #4b4770; }
 .scr a.scr-menu-item:hover { color: #1a1640; }
+.scr-menu-item-danger:hover { background: #fbebec; color: #d81f26; }
+
+/* Row-level "..." action menu (Country & State etc.): the toggle is the
+   30px .scr-icon-btn, not the 38px labelled .scr-menu-btn above, so the
+   dropdown needs a shorter offset to sit flush under it. */
+.scr-row-actions .scr-menu { top: 36px; min-width: 150px; }
 
 /* ── network map card (real coordinates, hand-drawn SVG -- no Leaflet) ──
    Generalised from byky-dashboard.css's .bd-map-* rules for any screen that

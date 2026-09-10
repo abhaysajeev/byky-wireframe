@@ -450,6 +450,50 @@
       item.addEventListener('click', function () { menu.hidden = true; });
     });
   });
+
+  /* ── row delete (data-scr-delete) -- SweetAlert2 confirm (falls back to a
+     native confirm() on a screen that hasn't loaded sweetalert2), then
+     removes the row and re-runs applyFilters so the toolbar count, pager
+     and current page all stay correct. Nothing is persisted (CLAUDE.md
+     section 11) -- a real delete would call an API from here instead. */
+  document.querySelectorAll('[data-scr-delete]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var row = btn.closest('.scr-row');
+      if (!row) return;
+      var nameEl = row.querySelector('.scr-co-name');
+      var name = nameEl ? nameEl.textContent.trim() : 'this record';
+      var scope = scopeOf(row);
+
+      function remove() {
+        row.remove();
+        applyFilters(scope, true);
+      }
+
+      if (typeof Swal === 'undefined') {
+        if (window.confirm('Delete ' + name + '? This cannot be undone.')) remove();
+        return;
+      }
+      Swal.fire({
+        title: 'Delete ' + name + '?',
+        text: 'This cannot be undone.',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete',
+        customClass: { confirmButton: 'btn btn-danger me-3', cancelButton: 'btn btn-label-secondary' },
+        buttonsStyling: false
+      }).then(function (result) {
+        if (!result.isConfirmed) return;
+        remove();
+        Swal.fire({
+          text: name + ' has been deleted.',
+          icon: 'success',
+          customClass: { confirmButton: 'btn btn-primary' },
+          buttonsStyling: false
+        });
+      });
+    });
+  });
   document.addEventListener('click', function () {
     document.querySelectorAll('.scr-menu').forEach(function (m) { m.hidden = true; });
   });

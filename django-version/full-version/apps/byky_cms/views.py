@@ -63,8 +63,13 @@ class CountryStateView(CmsScreenView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        countries = [dict(c) for c in data.countries()]
-        states = [dict(s) for s in data.states()]
+        all_states = data.states()
+        # Kuwait is dropped from this screen's own grids -- FSD 1.2 is scoped
+        # to the UAE operation; the Kuwait station/category stay everywhere
+        # else (Branch Management, Vehicle Management) pending the client
+        # confirmation still open in CLAUDE.md section 17.
+        countries = [dict(c) for c in data.countries() if c["name"] != "Kuwait"]
+        states = [dict(s) for s in all_states if s["name"] != "Kuwait"]
 
         for i, c in enumerate(countries):
             c["json_id"] = f"scr-record-country-{i}"
@@ -79,8 +84,8 @@ class CountryStateView(CmsScreenView):
                 "active": s["active"],
             }
 
-        total_branches = sum(s["branches"] for s in states)
-        total_fleet = sum(s["fleet"] for s in states)
+        total_branches = sum(s["branches"] for s in all_states)
+        total_fleet = sum(s["fleet"] for s in all_states)
         context.update(
             {
                 "countries": countries,

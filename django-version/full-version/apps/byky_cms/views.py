@@ -107,13 +107,28 @@ class CountryStateView(CmsScreenView):
 
 
 class LocationView(CmsScreenView):
-    """FSD 1.3 -- Tier A. No source data (CLAUDE.md 12); the grid shows its
-    column headers with the awaiting-data state in the body, on the shared
-    byky-screen.css/js base."""
+    """FSD 1.3 -- Tier A, on the shared byky-screen.css/js base. Demo rows --
+    see data._DEMO_LOCATIONS for why they exist."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["awaiting"] = data.AWAITING["locations"]
+        rows = [dict(l) for l in data.locations()]
+        for i, l in enumerate(rows):
+            l["json_id"] = f"scr-record-location-{i}"
+            l["fields_json"] = {
+                "code": l["code"],
+                "name": l["name"],
+                "country": l["country"],
+                "state": l["state"],
+                "landmark": l["landmark"],
+                "active": l["active"],
+            }
+        context.update(
+            {
+                "locations": rows,
+                "awaiting": data.AWAITING["locations"],
+            }
+        )
         return context
 
 

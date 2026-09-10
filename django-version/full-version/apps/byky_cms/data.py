@@ -123,7 +123,7 @@ def company():
     st = seed.STATIONS
     return {
         "code": "Byky",
-        "name": "BY KY SPORT & LEISURE EQUIPMENT RENTAL & TRADING LLC",
+        "name": "BYKY SPORT & LEISURE EQUIPMENT RENTAL & TRADING LLC",
         "address": "AL WAHDH 1 FLOOR 109, PORT SAEED, DEIRA, DUBAI, POST BOX NO: 22514, UAE",
         "state": "Dubai",
         "city": "Dubai",
@@ -293,6 +293,47 @@ _DEMO_DEPARTMENTS = [
     ("SEC", "Security"),
     ("STR", "Warehouse & Stores"),
 ]
+
+
+# Demo locations. A narrow, explicit, user-requested exception to the
+# no-invented-data rule (CLAUDE.md 12): the client has supplied no location
+# list, and this master otherwise has nothing to show against. Asked for, and
+# scoped to this one master -- the same treatment _DEMO_DEPARTMENTS gets above.
+#
+# Replace this list with the client's own the moment it arrives; nothing else
+# needs to change, because every screen that offers locations reads
+# locations() rather than holding its own copy.
+_DEMO_LOCATIONS = [
+    ("DXC", "Dubai Creek", "Dubai", "Dubai Creek Harbour"),
+    ("BAR", "Al Barsha", "Dubai", "Al Barsha Pond Park"),
+    ("JAF", "Al Jafaliya", "Dubai", "Jafaliya Park"),
+    ("NHD", "Al Nahada Dubai", "Dubai", "Al Nahada Park"),
+    ("MAJ", "Al Majaz", "Sharjah", "Al Majaz Waterfront"),
+    ("AUC", "AUH Corniche", "Abu Dhabi", "Abu Dhabi Corniche"),
+    ("MBZ", "Mubazzara", "Al Ain", "Mubazzarah Park"),
+]
+
+
+def locations():
+    """The location master (FSD 1.3): sub-city zones and landmarks a branch
+    or station can sit under.
+
+    Demo rows -- see _DEMO_LOCATIONS above for why these exist and what to
+    do with them. Every screen that offers locations reads this one
+    function, so they all move together.
+    """
+    return [
+        {
+            "code": code,
+            "name": name,
+            "state": state,
+            "country": country_of_state(state),
+            "landmark": landmark,
+            "active": True,
+            "status": "Active",
+        }
+        for code, name, state, landmark in _DEMO_LOCATIONS
+    ]
 
 
 def departments():

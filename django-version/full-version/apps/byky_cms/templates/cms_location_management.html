@@ -6,9 +6,9 @@
 {% comment %}
 FSD 1.3 -- Tier A. Built on the shared byky-screen.css/js base (see
 apps/byky_cms/templates/cms_company_details.html for the styling reference).
-The client's source files contain no records for this entity, so the grid shows
-its column headers with the awaiting-data state in the body, per CLAUDE.md 12 --
-nothing here is invented.
+The client's source files contain no records for this entity -- rows shown
+here are demo data (apps/byky_cms/data._DEMO_LOCATIONS), a narrow requested
+exception to CLAUDE.md 12. Replace with the client's own the moment it arrives.
 {% endcomment %}
 
 {% block page_css %}
@@ -66,7 +66,7 @@ nothing here is invented.
         </div>
       </div>
 
-      <span class="scr-toolbar-count">0 locations</span>
+      <span class="scr-toolbar-count">{{ locations|length }} location{{ locations|length|pluralize }}</span>
     </div>
 
     <div class="scr-table-scroll scr-sb">
@@ -82,6 +82,23 @@ nothing here is invented.
           </tr>
         </thead>
         <tbody>
+          {% for l in locations %}
+          <tr class="scr-row" data-search="{{ l.name|lower }} {{ l.code|lower }} {{ l.landmark|lower }}" data-state="{{ l.state }}" data-record-id="{{ l.json_id }}">
+            <td style="font-weight:600">{{ l.name }}</td>
+            <td><span class="scr-code">{{ l.code }}</span></td>
+            <td class="scr-state">{{ l.state }}</td>
+            <td>{{ l.landmark }}</td>
+            <td>{% if l.active %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}</td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="location:edit">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          {{ l.fields_json|json_script:l.json_id }}
+          {% empty %}
           <tr>
             <td colspan="6" style="padding:0">
               <div class="scr-empty">
@@ -99,12 +116,13 @@ nothing here is invented.
               </div>
             </td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
 
     <div class="scr-pager">
-      <span class="scr-pager-info">Showing 0 of 0</span>
+      <span class="scr-pager-info">Showing {{ locations|length }} of {{ locations|length }}</span>
       <div class="scr-pager-nav">
         <button type="button" class="scr-pager-btn" disabled>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>

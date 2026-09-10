@@ -174,9 +174,6 @@ default false alongside Is HO, same as the data they were already rendering.
             <td>{% if b.active %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}</td>
             <td>
               <div class="scr-row-actions">
-                <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Approve">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
-                </button>
                 {% include "byky/partials/row_actions.html" with edit_open="branch:edit" %}
               </div>
             </td>

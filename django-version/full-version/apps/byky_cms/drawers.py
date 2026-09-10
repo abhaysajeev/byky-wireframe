@@ -32,7 +32,8 @@ BRANCH = {
                     "id": "company",
                     "label": "Company",
                     "kind": "select",
-                    "required": True
+                    "required": True,
+                    "options": ["BYKY"]
                 },
                 {
                     "id": "country",
@@ -133,6 +134,41 @@ BRANCH = {
                     "kind": "file",
                     "required": False,
                     "width": 12
+                }
+            ]
+        },
+        {
+            "title": "Approval Authority",
+            "fields": [
+                {
+                    "id": "leave_request_authority",
+                    "label": "Leave Request",
+                    "kind": "multiselect",
+                    "required": False,
+                    "width": 12,
+                    "placeholder": "Select approvers",
+                    "options": ["Mr. Don Bosco Cyril", "Mr. Victor Stephan"],
+                    "help": "Staff at this branch who can approve leave requests."
+                },
+                {
+                    "id": "maintenance_authority",
+                    "label": "Service & Maintenance",
+                    "kind": "multiselect",
+                    "required": False,
+                    "width": 12,
+                    "placeholder": "Select approvers",
+                    "options": ["Mr. Don Bosco Cyril", "Mr. Victor Stephan"],
+                    "help": "Staff at this branch who can approve service & maintenance requests."
+                },
+                {
+                    "id": "rms_app_authority",
+                    "label": "RMS App Request",
+                    "kind": "multiselect",
+                    "required": False,
+                    "width": 12,
+                    "placeholder": "Select approvers",
+                    "options": ["Mr. Don Bosco Cyril", "Mr. Victor Stephan"],
+                    "help": "Staff at this branch who can approve RMS app requests."
                 }
             ]
         }

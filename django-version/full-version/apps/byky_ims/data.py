@@ -91,6 +91,35 @@ def subcategories():
     return out
 
 
+# Demo brands. A narrow, explicit, user-requested exception to the
+# no-invented-data rule (CLAUDE.md 12): the client has supplied no brand
+# list, and this master otherwise has nothing to show against. Website is
+# left NOT_CAPTURED rather than invented -- only the two names and codes
+# were actually asked for.
+#
+# Replace this list with the client's own the moment it arrives; nothing else
+# needs to change, because every screen that offers brands reads brands()
+# rather than holding its own copy.
+_DEMO_BRANDS = [
+    ("BERG", "Berg"),
+    ("ESCO", "E Scooter"),
+]
+
+
+def brands():
+    """The brand master (FSD 3.4)."""
+    return [
+        {
+            "code": code,
+            "name": name,
+            "website": NOT_CAPTURED,
+            "active": True,
+            "status": "Active",
+        }
+        for code, name in _DEMO_BRANDS
+    ]
+
+
 def stock_items():
     """One row per vehicle. Rates, cost and reorder levels are not in the source."""
     out = []

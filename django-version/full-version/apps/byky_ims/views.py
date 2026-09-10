@@ -184,6 +184,20 @@ class TransferFormView(ImsScreenView):
         return context
 
 
+class BrandView(ImsScreenView):
+    """FSD 3.4. Rows are demo data -- see data._DEMO_BRANDS."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = [dict(b) for b in data.brands()]
+        for i, b in enumerate(rows):
+            b["json_id"] = f"scr-record-brand-{i}"
+            b["website_short"] = data.SHORT if b["website"] == data.NOT_CAPTURED else b["website"]
+            b["fields_json"] = {"code": b["code"], "name": b["name"], "website": ""}
+        context["brands"] = rows
+        return context
+
+
 class ImsAwaitingView(ImsScreenView):
     """Screens the FSD specifies but the client data has no source for."""
 

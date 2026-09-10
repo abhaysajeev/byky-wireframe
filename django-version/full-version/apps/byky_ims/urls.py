@@ -64,7 +64,7 @@ urlpatterns = [
     ),
     path(
         "ims/inventory-brand-master/",
-        views.ImsAwaitingView.as_view(
+        views.BrandView.as_view(
             template_name="ims_inventory_brand_master.html",
             screen_no="3.4",
             screen_title="Inventory Brand Master",
@@ -74,7 +74,6 @@ urlpatterns = [
             phase=3,
             purpose="To register manufacturer brands, equipment vendors, and brand logo images (e.g., Specialized, Giant, Yamaha, Segway, Ninebot).",
             layout="Form Panel (Brand Code, Brand Name, Manufacturer Name, Brand Logo Upload), DataGrid displaying brands.",
-            awaiting_key="brands",
         ),
         name="ims-inventory-brand-master",
     ),

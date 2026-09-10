@@ -18,6 +18,16 @@ as a code comment in apps/byky_ims/data.py:_ASSET_TYPES and deliberately not
 rendered -- spec references are build metadata, like the legacy .aspx names.
 {% endcomment %}
 
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
 {% block page_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
@@ -26,6 +36,7 @@ rendered -- spec references are build metadata, like the legacy .aspx names.
 {% block page_js %}
 {{ block.super }}
 <script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}

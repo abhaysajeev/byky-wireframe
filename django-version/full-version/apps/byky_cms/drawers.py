@@ -474,7 +474,7 @@ def company_spec(form_sections):
             fields.append({
                 "id": "country", "label": "Country", "kind": "select",
                 "required": False,
-                "options_from": "countries_list", "option_key": "name",
+                "options_from": "countries_list_uae", "option_key": "name",
                 "default": "United Arab Emirates",
                 "width": 6,
             })

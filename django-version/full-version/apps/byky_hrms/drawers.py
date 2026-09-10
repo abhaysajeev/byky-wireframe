@@ -165,7 +165,6 @@ EMPLOYEE = {
                     "label": "Employee Code",
                     "kind": "text",
                     "required": True,
-                    "placeholder": "BYKY001",
                     "lock_on_edit": True
                 },
                 {
@@ -219,14 +218,21 @@ EMPLOYEE = {
                     "required": False,
                     "options": [
                         "Male",
-                        "Female"
+                        "Female",
+                        "Other"
                     ]
                 },
                 {
                     "id": "marital_status",
                     "label": "Marital Status",
                     "kind": "select",
-                    "required": False
+                    "required": False,
+                    "options": [
+                        "Single",
+                        "Married",
+                        "Widowed",
+                        "Divorced"
+                    ]
                 },
                 {
                     "id": "nationality",

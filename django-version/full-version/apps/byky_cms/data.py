@@ -163,7 +163,7 @@ _COMPANY_SECTIONS = [
     ]),
     ("address", "Address", "Address", [
         ("Address", "address", False, "", 2),
-        ("Emirate / State", "state", True, "", 1),
+        ("State", "state", True, "", 1),
         ("City", "city", False, "", 1),
         ("ZIP Code", "zip", False, "", 1),
     ]),

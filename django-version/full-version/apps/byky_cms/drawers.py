@@ -40,7 +40,7 @@ BRANCH = {
                     "label": "Country",
                     "kind": "select",
                     "required": True,
-                    "options_from": "countries_list",
+                    "options_from": "countries_list_uae",
                     "option_key": "name"
                 },
                 {
@@ -57,7 +57,7 @@ BRANCH = {
                     "label": "Location",
                     "kind": "select",
                     "required": True,
-                    "options_from": "states_list",
+                    "options_from": "locations_list",
                     "option_key": "name"
                 },
                 {
@@ -452,9 +452,10 @@ def company_spec(form_sections):
 
     Company Details is the one CMS drawer whose fields are generated rather
     than written out, so its spec is built per request instead of sitting in
-    this file as a literal. Every field is a plain text input, and the section
-    titles are the same four the full-page form uses, so the drawer and the
-    page underneath it stay in step.
+    this file as a literal. Every field is a plain text input except State
+    (a select over states_list) and the drawer-only Country select added
+    ahead of it, and the section titles are the same four the full-page form
+    uses, so the drawer and the page underneath it stay in step.
     """
     sections = []
     for i, s in enumerate(form_sections):
@@ -465,7 +466,32 @@ def company_spec(form_sections):
                 "required": False,
                 "help": "PNG, JPG or SVG · square, at least 256×256px.",
             })
+        if s["key"] == "address":
+            # Drawer-only field: not part of the 20-field FSD 1.1 record
+            # (data.company() has no "country" key), so it stays out of
+            # _COMPANY_SECTIONS / company_completeness() and is injected
+            # here, same as Logo above.
+            fields.append({
+                "id": "country", "label": "Country", "kind": "select",
+                "required": False,
+                "options_from": "countries_list", "option_key": "name",
+                "default": "United Arab Emirates",
+                "width": 6,
+            })
         for f in s["fields"]:
+            if f["key"] == "state":
+                fields.append({
+                    "id": "state",
+                    "label": "State",
+                    "kind": "select",
+                    "required": f["required"],
+                    "options_from": "states_list",
+                    "option_key": "name",
+                    "default": "Dubai",
+                    "help": f.get("help") or "",
+                    "width": f.get("span") or 6,
+                })
+                continue
             fields.append({
                 "id": f["key"],
                 "label": f["label"],

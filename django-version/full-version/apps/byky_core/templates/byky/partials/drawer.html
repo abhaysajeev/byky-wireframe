@@ -16,6 +16,9 @@ module_label     overline text, e.g. "Inventory · Vehicles" (optional)
 
 field keys: id, label, kind, required, placeholder, options/resolved, width, help
 kind: text | select | date | textarea | number | file | checkbox
+field.default    a select's pre-chosen option in Add mode (must match one of
+                 its resolved options exactly); ignored in Edit mode, where
+                 the record's own value always wins
 
 Size is normally left OUT — byky-drawer.js measures the rendered field count and
 applies is-compact / is-standard / is-wide. Set spec.size only to override.
@@ -95,9 +98,9 @@ field.readonly       always read-only -- a value this screen displays but
 
             {% if f.kind == "select" %}
               <div class="byky-select-wrap">
-                <select id="{{ f.id }}" class="byky-input byky-select" data-field="{{ f.id }}"{% if f.readonly %} disabled{% endif %}>
+                <select id="{{ f.id }}" class="byky-input byky-select" data-field="{{ f.id }}"{% if f.default %} data-default="{{ f.default }}"{% endif %}{% if f.readonly %} disabled{% endif %}>
                   <option value="">Select</option>
-                  {% for o in f.resolved %}<option>{{ o }}</option>{% endfor %}
+                  {% for o in f.resolved %}<option{% if f.default and o == f.default %} selected{% endif %}>{{ o }}</option>{% endfor %}
                 </select>
                 <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
               </div>

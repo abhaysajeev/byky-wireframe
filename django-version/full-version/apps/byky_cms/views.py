@@ -24,8 +24,13 @@ class CmsScreenView(BykyScreenView):
             {
                 "states_list": data.states(),
                 "countries_list": data.countries(),
+                # Branch Management's own Country select (FSD 1.4): scoped to
+                # the UAE operation, same reasoning as Country & State
+                # Management dropping Kuwait from its grids (CLAUDE.md 17).
+                "countries_list_uae": [c for c in data.countries() if c["name"] != "Kuwait"],
                 "branches_list": data.branches(),
                 "departments_list": data.departments(),
+                "locations_list": data.locations(),
                 "permissions": data.PERMISSIONS,
             }
         )
@@ -55,7 +60,7 @@ class CompanyDetailsView(CmsScreenView):
                 "form_active_default": record["active"],
                 "company_logo": record["logo"],
                 # generated, not a literal spec -- see drawers.company_spec
-                "drawer_company": drawers.company_spec(sections),
+                "drawer_company": core_drawers.resolve(drawers.company_spec(sections), context),
             }
         )
         return context

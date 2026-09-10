@@ -226,7 +226,7 @@
             ? !!record[key] : el.dataset.defaultChecked === 'true';
           return;
         }
-        el.value = mode === 'edit' && record ? (record[key] || '') : '';
+        el.value = mode === 'edit' && record ? (record[key] || '') : (el.dataset.default || '');
         if (el.tagName === 'SELECT') el.classList.toggle('has-value', !!el.value);
         /* readOnly is meaningless on a select, so lock those with disabled */
         if (el.dataset.lockOnEdit === 'true') {

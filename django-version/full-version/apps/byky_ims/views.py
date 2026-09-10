@@ -5,7 +5,7 @@ station mappings). The rest have no source data and show the awaiting-data state
 Wireframe phase: no writes, no CRUD, no API.
 """
 
-from apps.byky_core import seed
+from apps.byky_core import privileges, seed
 from apps.byky_core.views import BykyScreenView
 from apps.byky_cms import data as cms_data
 
@@ -203,40 +203,22 @@ class ImsAwaitingView(ImsScreenView):
 
 
 class ImsPrivilegeView(ImsScreenView):
-    ROLES = ["SuperAdmin", "Inventory Manager", "Store Keeper", "Branch Manager"]
+    """Tier D -- roles list + per-role screen permission matrix. See
+    apps/byky_core/privileges.py for the shared role master and defaults."""
 
-    SCREENS = [
-        ("Inventory Stock Item Management", [1, 1, 1, 1, 1, 0]),
-        ("Asset Management", [1, 1, 1, 1, 1, 0]),
-        ("Inventory Category Master", [1, 1, 1, 1, 0, 0]),
-        ("Inventory Sub-Category Master", [1, 1, 1, 1, 0, 0]),
-        ("Inventory Brand Master", [1, 1, 1, 1, 0, 0]),
-        ("Inventory Unit of Measure", [1, 1, 1, 1, 0, 0]),
-        ("Vehicle Station Mapping", [1, 1, 1, 1, 0, 0]),
-        ("Vehicle Transfer & Relocation", [1, 1, 1, 1, 1, 0]),
-        ("E-Commerce Category Master", [1, 1, 1, 1, 0, 0]),
-        ("E-Commerce Stock Item Catalog", [1, 1, 1, 1, 0, 0]),
-        ("Vehicle & Item Features Master", [1, 1, 1, 1, 0, 0]),
-        ("Order Status Management", [1, 0, 1, 1, 0, 0]),
-        ("Promotional Coupon & Discount Code", [1, 1, 1, 1, 1, 0]),
-        ("Loyalty Rewards Profile", [1, 1, 1, 1, 0, 0]),
-        ("Loyalty Redemption Profile", [1, 1, 1, 1, 0, 0]),
-        ("Wallet Refund Request Management", [1, 0, 1, 0, 1, 0]),
-        ("Newsletter & Marketing Dispatch", [1, 1, 1, 0, 1, 0]),
-        ("Push Notification Dispatch", [1, 1, 1, 0, 1, 0]),
-        ("Live RFID & Antenna Fleet Monitoring", [1, 0, 1, 0, 0, 0]),
-        ("Inventory System Alerts", [1, 0, 1, 1, 0, 0]),
-        ("IMS Security Privilege Management", [1, 0, 1, 0, 0, 0]),
-    ]
+    SLUG = "ims"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        screens = privileges.module_screens(self.SLUG)
+        mapped = privileges.DEFAULT_MAPPED_ROLES
         context.update(
             {
-                "roles": self.ROLES,
-                "screens": [
-                    {"name": n, "perms": [bool(x) for x in p]} for n, p in self.SCREENS
-                ],
+                "roles": privileges.ROLES,
+                "mapped_roles": mapped,
+                "admin_roles": privileges.ADMIN_ROLES,
+                "screens": screens,
+                "role_matrices": privileges.role_matrices(privileges.ROLES, screens, context["permissions"]),
             }
         )
         return context

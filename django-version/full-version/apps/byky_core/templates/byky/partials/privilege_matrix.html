@@ -1,30 +1,40 @@
 {% comment %}
-Tier D -- role x screen x permission matrix. FSD specifies seven permissions per
-screen (Access, Create, Read, Update, Print, Approve, Delete) plus a Select All
-toggle per row -- some modules (HRMS, IMS, ...) parameterise their own shorter
-permission list instead.
+Tier D -- roles list + per-role screen permission matrix. FSD specifies a
+permission list per screen (module-specific -- e.g. Access/Create/Read/
+Update/Print/Approve/Delete for CMS, a shorter list for others).
 
-Migrated onto the shared byky-screen.css/js base (see byky-screen-design-system.md
-and cms_company_details.html for the styling reference). This partial owns the
-WHOLE page -- its own scr-head, KPI tiles, role-selection card and the matrix
-card -- so the calling template no longer includes byky/partials/page_header.html
-separately; pass title/parent/subtitle the same way page_header.html did.
+Redesigned from the original role-dropdown + single matrix: a role is now a
+genuine list-view record (Tier A shape), with its own row Edit action
+opening that role's screen x permission grid, and a "+ Add Role" menu lets
+an unmapped role from the shared 8-role master
+(apps/byky_core/privileges.py) join this module's list. Frontend only
+(CLAUDE.md 1) -- add/remove and every checkbox are visual only, nothing
+persists past a reload.
 
-This is the SAME screen in all 16 modules, so it is built once here and included
-with the module's own screen list:
+Migrated onto the shared byky-screen.css/js base (see
+byky-screen-design-system.md and cms_company_details.html for the styling
+reference). This partial owns the WHOLE page -- its own scr-head, roles
+list card and one hidden permission-matrix card per role -- so the calling
+template no longer includes byky/partials/page_header.html separately;
+pass title/parent/subtitle the same way page_header.html did.
 
-  {% include "byky/partials/privilege_matrix.html" with title=screen_title parent=module_label subtitle=purpose roles=roles screens=screens permissions=permissions module=module_label %}
+This is the SAME screen in every module, so it is built once here and
+included with the module's own screen list:
 
-`screens` is a list of {name, perms} where perms is a list of booleans matching
-`permissions` in order. Legacy .aspx filenames are deliberately not shown -- they
-are build metadata, not something a client-facing screen should display.
+  {% include "byky/partials/privilege_matrix.html" with title=screen_title parent=module_label subtitle=purpose roles=roles mapped_roles=mapped_roles admin_roles=admin_roles screens=screens permissions=permissions role_matrices=role_matrices module=module_label %}
 
-Requires byky-screen.css/js on the page (page_css/page_js blocks) -- the calling
-template's page_js block should no longer load byky-cms-list.js for this screen;
-the select-all and "Remove All Privileges" wiring now live in byky-screen.js.
+`screens` is a flat list of screen names, read live from the sidebar (see
+apps.byky_core.privileges.module_screens) so this list never drifts from
+what the sidebar actually shows -- editing vertical_menu.json is the only
+change needed to add, rename or remove a row here. `role_matrices` covers
+every role in `roles`, not just the mapped ones, so a role's matrix already
+exists, hidden, the moment it is added -- see byky-screen.js's
+[data-scr-privilege] handlers for the show/hide/add/remove wiring.
+
+Requires byky-screen.css/js on the page (page_css/page_js blocks).
 {% endcomment %}
 
-<div class="scr">
+<div class="scr" data-scr-privilege>
 
   <div class="scr-head">
     <div>
@@ -38,75 +48,143 @@ the select-all and "Remove All Privileges" wiring now live in byky-screen.js.
     </div>
   </div>
 
-  <div class="scr-tiles">
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-red">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 4-6 8-6s8 2 8 6"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ roles|length }}</div><div class="scr-tile-lab">Roles</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-blue">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1M14 3v5h5M9 14h6M9 17h4"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ screens|length }}</div><div class="scr-tile-lab">{{ module }} screens</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-amber">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ permissions|length }}</div><div class="scr-tile-lab">Permissions / screen</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-green">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ roles.0 }}</div><div class="scr-tile-lab">Default role loaded</div></div>
-    </div>
-  </div>
-
-  <div class="scr-card">
-    <div class="scr-form-head">
-      <div>
-        <div class="scr-form-title-row">
-          <h2 class="scr-form-title">Role Selection</h2>
-          <span class="scr-form-badge">Tier D</span>
+  <div data-priv-view="list">
+    <div class="scr-card" data-scr-noun-singular="role" data-scr-noun-plural="roles">
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search role" />
         </div>
-        <p class="scr-form-sub">Pick a role to load and edit its {{ module }} screen-level permissions.</p>
+        <span class="scr-toolbar-count" data-priv-count>{{ mapped_roles|length }} role{{ mapped_roles|length|pluralize }}</span>
+
+        <div class="scr-menu-wrap" style="margin-left:auto">
+          <button type="button" class="scr-btn-primary" data-scr-menu-toggle>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+            Add Role
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="scr-menu" hidden>
+            {% for r in roles %}
+            <button type="button" class="scr-menu-item" data-scr-priv-add="{{ r }}"{% if r in mapped_roles %} hidden{% endif %}>{{ r }}</button>
+            {% endfor %}
+            <div class="scr-menu-item" data-priv-add-empty style="cursor:default; color:#9490bb" hidden>All roles added</div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="scr-form-body">
-      <div class="scr-grid">
-        <div class="scr-field" style="grid-column:span 1">
-          <label class="scr-label" for="privilege-role">Select User Role</label>
-          <select id="privilege-role" class="scr-input">
-            {% for r in roles %}<option {% if forloop.first %}selected{% endif %}>{{ r }}</option>{% endfor %}
-          </select>
-        </div>
-        <div class="scr-field" style="grid-column:span 1">
-          <label class="scr-label" for="privilege-role-search">Search Role</label>
-          <input type="text" id="privilege-role-search" class="scr-input" placeholder="Role name" />
-        </div>
-        <div class="scr-field" style="grid-column:span 1; align-self:end">
-          <button type="button" class="scr-btn" style="width:100%; justify-content:center">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9 9 0 0 1 6.7 3M21 12a9 9 0 0 1-9 9 9 9 0 0 1-6.7-3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg>
-            Load Privileges
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Role</th>
+              <th>Access</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in mapped_roles %}
+            <tr class="scr-row" data-priv-row="{{ r }}" data-search="{{ r|lower }}">
+              <td style="font-weight:600">{{ r }}</td>
+              <td>
+                {% if r in admin_roles %}<span class="scr-badge scr-badge-active"><i></i>Full Access</span>
+                {% else %}<span class="scr-badge scr-badge-pending"><i></i>Custom</span>{% endif %}
+              </td>
+              <td>
+                <div class="scr-row-actions">
+                  <div class="scr-menu-wrap">
+                    <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                    </button>
+                    <div class="scr-menu" hidden>
+                      <button type="button" class="scr-menu-item" data-scr-priv-edit="{{ r }}">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                        Edit
+                      </button>
+                      <button type="button" class="scr-menu-item scr-menu-item-danger" data-scr-priv-remove>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+
+            {% comment %}
+            Templates for roles not yet mapped -- cloned into the tbody
+            above when "+ Add Role" picks them, so nothing is built from
+            scratch (CLAUDE.md 1): the cloned row is real, server-rendered
+            markup, just inert until then. A <template>'s content is never
+            part of the live DOM (the row never renders, participates in
+            search/pagination, or shows up in the toolbar count) until
+            byky-screen.js clones it.
+            {% endcomment %}
+            {% for r in roles %}
+            {% if r not in mapped_roles %}
+            <template data-priv-template="{{ r }}">
+              <tr class="scr-row" data-priv-row="{{ r }}" data-search="{{ r|lower }}">
+                <td style="font-weight:600">{{ r }}</td>
+                <td>
+                  {% if r in admin_roles %}<span class="scr-badge scr-badge-active"><i></i>Full Access</span>
+                  {% else %}<span class="scr-badge scr-badge-pending"><i></i>Custom</span>{% endif %}
+                </td>
+                <td>
+                  <div class="scr-row-actions">
+                    <div class="scr-menu-wrap">
+                      <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                      </button>
+                      <div class="scr-menu" hidden>
+                        <button type="button" class="scr-menu-item" data-scr-priv-edit="{{ r }}">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                          Edit
+                        </button>
+                        <button type="button" class="scr-menu-item scr-menu-item-danger" data-scr-priv-remove>
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </template>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing {{ mapped_roles|length }} of {{ mapped_roles|length }}</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
           </button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="scr-card">
+  {% for row in role_matrices %}
+  <div class="scr-card scr-priv-matrix" data-priv-role="{{ row.role }}" hidden>
     <div class="scr-form-head">
       <div>
         <div class="scr-form-title-row">
-          <h2 class="scr-form-title">Screen Permissions</h2>
+          <h2 class="scr-form-title">{{ row.role }}</h2>
           <span class="scr-form-badge">{{ screens|length }} screens</span>
         </div>
         <p class="scr-form-sub">{{ permissions|join:", " }}, per {{ module }} screen.</p>
       </div>
+      <button type="button" class="scr-btn-secondary" data-scr-priv-back>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 6-6 6 6 6"></path></svg>
+        Back to Roles
+      </button>
     </div>
 
     <div class="scr-form-body">
@@ -120,7 +198,7 @@ the select-all and "Remove All Privileges" wiring now live in byky-screen.js.
             </tr>
           </thead>
           <tbody>
-            {% for s in screens %}
+            {% for s in row.screens %}
             <tr class="scr-row">
               <td style="font-weight:600">{{ s.name }}</td>
               {% for granted in s.perms %}
@@ -147,11 +225,12 @@ the select-all and "Remove All Privileges" wiring now live in byky-screen.js.
           Remove All Privileges
         </button>
         <div class="scr-form-actions" style="margin-left:auto">
-          <button type="button" class="scr-btn-secondary">Reset Privileges</button>
-          <button type="button" class="scr-btn-primary">Save {{ module }} Privileges</button>
+          <button type="button" class="scr-btn-secondary" data-scr-priv-back>Cancel</button>
+          <button type="button" class="scr-btn-primary">Save {{ row.role }} Privileges</button>
         </div>
       </div>
     </div>
   </div>
+  {% endfor %}
 
 </div>

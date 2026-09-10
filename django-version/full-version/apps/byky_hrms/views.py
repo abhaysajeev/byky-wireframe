@@ -4,7 +4,7 @@ Wireframe phase: no writes, no CRUD, no API.
 """
 
 from apps.byky_core.views import BykyScreenView
-from apps.byky_core import refdata, seed
+from apps.byky_core import privileges, refdata, seed
 from apps.byky_cms import data as cms_data
 
 from . import data, drawers
@@ -92,26 +92,22 @@ class BlockUnblockView(HrmsScreenView):
 
 
 class HrmsPrivilegeView(HrmsScreenView):
-    ROLES = ["SuperAdmin", "HR Manager", "Branch Manager", "Administrative Supervisor"]
+    """Tier D -- roles list + per-role screen permission matrix. See
+    apps/byky_core/privileges.py for the shared role master and defaults."""
 
-    # Access, Create, Read, Update, Approve, Block Staff -- per the FSD 2.6 wireframe.
-    SCREENS = [
-        ("Employee", [1, 1, 1, 1, 1, 0]),
-        ("Employee Temporary Address", [1, 1, 1, 1, 0, 0]),
-        ("Designation", [1, 1, 1, 1, 0, 0]),
-        ("Employee Grade Master", [1, 0, 1, 0, 0, 0]),
-        ("Employee Block / Unblock", [1, 0, 1, 0, 1, 1]),
-        ("Privileges", [1, 0, 1, 0, 0, 0]),
-    ]
+    SLUG = "hrms"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        screens = privileges.module_screens(self.SLUG)
+        mapped = privileges.DEFAULT_MAPPED_ROLES
         context.update(
             {
-                "roles": self.ROLES,
-                "screens": [
-                    {"name": n, "perms": [bool(x) for x in p]} for n, p in self.SCREENS
-                ],
+                "roles": privileges.ROLES,
+                "mapped_roles": mapped,
+                "admin_roles": privileges.ADMIN_ROLES,
+                "screens": screens,
+                "role_matrices": privileges.role_matrices(privileges.ROLES, screens, context["permissions"]),
             }
         )
         return context

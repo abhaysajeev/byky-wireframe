@@ -386,6 +386,115 @@
     });
   });
 
+  /* ── Tier D privilege screens: roles list <-> per-role matrix, Add/Remove
+     role ────────────────────────────────────────────────────────────────
+     A role is a normal Tier A list row with the same "..." kebab (Edit /
+     Delete) every other list uses; Edit opens that role's screen x
+     permission matrix, a full .scr-card that swaps in for the roles list
+     rather than a drawer -- too many columns for a side panel. "+ Add
+     Role" and each row's Delete only ever show/hide/clone pre-rendered,
+     server-supplied markup -- a role not yet mapped exists as a <template>
+     next to the table body and as a hidden .scr-priv-matrix card alongside
+     the mapped ones' -- so nothing is fabricated at runtime (CLAUDE.md 11),
+     and nothing persists past a reload (CLAUDE.md 1).
+
+     Every actionable element here -- Edit, Delete, Add Role items -- lives
+     inside a .scr-menu, which data-scr-menu-toggle detaches to a
+     body-level layer while open (see wireMenuToggle's comment above), so
+     by the time one is clicked it is no longer a descendant of `root` --
+     delegating through `root` (or even `document`, since the menu can
+     detach before either handler runs) would miss it. Every one of these
+     is therefore bound directly to the element, the same reason
+     data-scr-delete does, and a freshly-cloned row's own Edit/Delete/kebab
+     get the identical direct wiring right after insertion. */
+  document.querySelectorAll('[data-scr-privilege]').forEach(function (root) {
+    var listView = root.querySelector('[data-priv-view="list"]');
+    var listCard = listView && listView.querySelector('.scr-card');
+    var tbody = listCard && listCard.querySelector('tbody');
+    var matrices = root.querySelectorAll('.scr-priv-matrix');
+    var addEmpty = root.querySelector('[data-priv-add-empty]');
+
+    function syncAddEmpty() {
+      if (!addEmpty) return;
+      addEmpty.hidden = !!root.querySelector('[data-scr-priv-add]:not([hidden])');
+    }
+    syncAddEmpty();
+
+    function showMatrix(role) {
+      listView.hidden = true;
+      matrices.forEach(function (m) { m.hidden = m.dataset.privRole !== role; });
+    }
+    function showList() {
+      matrices.forEach(function (m) { m.hidden = true; });
+      listView.hidden = false;
+    }
+
+    function wireEdit(btn) {
+      btn.addEventListener('click', function () { showMatrix(btn.dataset.scrPrivEdit); });
+    }
+
+    function wireRemove(btn) {
+      btn.addEventListener('click', function () {
+        var row = btn.closest('[data-priv-row]');
+        if (!row) return;
+        var role = row.dataset.privRow;
+
+        function finish() {
+          row.remove();
+          var addBtn = root.querySelector('[data-scr-priv-add="' + role + '"]');
+          if (addBtn) addBtn.hidden = false;
+          syncAddEmpty();
+          if (listCard) applyFilters(listCard, true);
+        }
+
+        if (typeof Swal === 'undefined') {
+          if (window.confirm('Remove ' + role + ' from this module\'s role list?')) finish();
+          return;
+        }
+        Swal.fire({
+          title: 'Remove ' + role + '?',
+          text: 'Its permissions stay set -- adding it back later restores this grid as it is now.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, remove',
+          customClass: { confirmButton: 'btn btn-danger me-3', cancelButton: 'btn btn-label-secondary' },
+          buttonsStyling: false
+        }).then(function (result) {
+          if (result.isConfirmed) finish();
+        });
+      });
+    }
+
+    root.querySelectorAll('[data-scr-priv-edit]').forEach(wireEdit);
+    root.querySelectorAll('[data-scr-priv-remove]').forEach(wireRemove);
+    root.querySelectorAll('[data-scr-priv-back]').forEach(function (btn) {
+      btn.addEventListener('click', showList);
+    });
+
+    root.querySelectorAll('[data-scr-priv-add]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        if (btn.hidden) return;
+        var role = btn.dataset.scrPrivAdd;
+        var tmpl = tbody && tbody.querySelector('template[data-priv-template="' + role + '"]');
+        if (tmpl) {
+          var clone = tmpl.content.cloneNode(true);
+          var row = clone.querySelector('[data-priv-row]');
+          tbody.insertBefore(clone, tmpl);
+          tmpl.remove();
+          if (row) {
+            var toggle = row.querySelector('[data-scr-menu-toggle]');
+            if (toggle) wireMenuToggle(toggle);
+            row.querySelectorAll('[data-scr-priv-edit]').forEach(wireEdit);
+            row.querySelectorAll('[data-scr-priv-remove]').forEach(wireRemove);
+          }
+        }
+        btn.hidden = true;
+        syncAddEmpty();
+        if (listCard) applyFilters(listCard, true);
+      });
+    });
+  });
+
   /* ── centered modals (data-scr-modal-open / data-scr-modal) ───────
      Distinct from the side drawers: a single-purpose action dialog (e.g.
      Device Approval / Upload APK) with no add/edit modes or record
@@ -470,7 +579,13 @@
     }
     return scrMenuLayer;
   }
-  document.querySelectorAll('[data-scr-menu-toggle]').forEach(function (btn) {
+  /* A named declaration (hoisted within this IIFE) rather than an inline
+     forEach callback, so code earlier in the file -- e.g. the privilege
+     screens' Add Role, which clones a whole row including its own "..."
+     kebab -- can wire a freshly-cloned toggle the same way after the page
+     has already finished its initial pass over every [data-scr-menu-toggle]
+     below. */
+  function wireMenuToggle(btn) {
     var menu = btn.parentElement.querySelector('.scr-menu');
     if (!menu) return;
     if (btn.closest('.scr-row-actions')) menu.classList.add('scr-menu-compact');
@@ -491,7 +606,8 @@
     menu.querySelectorAll('.scr-menu-item').forEach(function (item) {
       item.addEventListener('click', function () { closeMenu(menu); });
     });
-  });
+  }
+  document.querySelectorAll('[data-scr-menu-toggle]').forEach(wireMenuToggle);
 
   /* ── row delete (data-scr-delete) -- SweetAlert2 confirm (falls back to a
      native confirm() on a screen that hasn't loaded sweetalert2), then

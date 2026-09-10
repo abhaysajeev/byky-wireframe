@@ -9,6 +9,16 @@ FSD 3.20 -- Tier D. Reuses the shared privilege matrix with the IMS permission s
 byky-screen.css/js base (see byky-screen-design-system.md).
 {% endcomment %}
 
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
 {% block page_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
@@ -20,5 +30,5 @@ byky-screen.css/js base (see byky-screen-design-system.md).
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/privilege_matrix.html" with title="Privileges" parent="Inventory" subtitle=purpose roles=roles screens=screens permissions=permissions module="IMS" %}
+{% include "byky/partials/privilege_matrix.html" with title="Privileges" parent="Inventory" subtitle=purpose roles=roles mapped_roles=mapped_roles admin_roles=admin_roles screens=screens permissions=permissions role_matrices=role_matrices module="IMS" %}
 {% endblock %}

@@ -10,6 +10,16 @@ screen in all 16 modules -- now migrated onto the shared byky-screen.css/js base
 All, per the FSD section 5 wireframe.
 {% endcomment %}
 
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
 {% block page_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
@@ -21,5 +31,5 @@ All, per the FSD section 5 wireframe.
 {% endblock page_js %}
 
 {% block content %}
-{% include "byky/partials/privilege_matrix.html" with title="CMS Privilege Management" parent="Company Management" subtitle=purpose roles=roles screens=screens permissions=permissions module="CMS" %}
+{% include "byky/partials/privilege_matrix.html" with title="CMS Privilege Management" parent="Company Management" subtitle=purpose roles=roles mapped_roles=mapped_roles admin_roles=admin_roles screens=screens permissions=permissions role_matrices=role_matrices module="CMS" %}
 {% endblock %}

@@ -7,7 +7,7 @@ Wireframe phase: no writes, no CRUD, no API. Forms submit nowhere.
 """
 
 from apps.byky_core.views import BykyScreenView
-from apps.byky_core import drawers as core_drawers, geo, seed
+from apps.byky_core import drawers as core_drawers, geo, privileges, seed
 from apps.byky_ims import data as ims_data
 
 from . import data, drawers
@@ -258,33 +258,26 @@ class StationWorkingTimeView(CmsScreenView):
 
 
 class CmsPrivilegeView(CmsScreenView):
-    """Tier D. Screen list comes from this module's own FSD screens."""
+    """Tier D -- roles list + per-role screen permission matrix.
 
-    ROLES = ["SuperAdmin", "SystemAdmin", "BranchManager", "Cashier", "Store Keeper"]
+    Screen rows come live from the sidebar's Company group (see
+    privileges.module_screens); the role list and each role's default
+    grant are the shared privileges.py module every *PrivilegeView uses.
+    """
 
-    # Access, Create, Read, Update, Print, Approve, Delete -- as granted to the
-    # first role in the list. FSD 1.9 wireframe shows a partially-filled matrix.
-    SCREENS = [
-        ("Company Details", "CompanyManagement.aspx", [1, 1, 1, 1, 1, 1, 0]),
-        ("Country & State Management", "CountryManagement.aspx", [1, 1, 1, 1, 0, 1, 0]),
-        ("Location Management", "CoreLocationManagement.aspx", [1, 1, 1, 1, 0, 0, 0]),
-        ("Branch Management", "BranchManagement.aspx", [1, 1, 1, 1, 0, 0, 0]),
-        ("Department Management", "DepartmentManagement.aspx", [1, 1, 1, 1, 0, 0, 0]),
-        ("Branch Department Mapping", "BranchDepartmentManagement.aspx", [1, 1, 1, 0, 0, 0, 0]),
-        ("Station Address Mapping", "StationAddressMapping.aspx", [1, 0, 1, 0, 0, 0, 0]),
-        ("Branch Working Time", "StationWorkingTime.aspx", [1, 0, 1, 1, 0, 0, 0]),
-        ("CMS Privilege Management", "CMSPrivilegeManagement.aspx", [1, 0, 1, 0, 0, 0, 0]),
-    ]
+    SLUG = "cms"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        screens = privileges.module_screens(self.SLUG)
+        mapped = privileges.DEFAULT_MAPPED_ROLES
         context.update(
             {
-                "roles": self.ROLES,
-                "screens": [
-                    {"name": n, "legacy_page": p, "perms": [bool(x) for x in perms]}
-                    for n, p, perms in self.SCREENS
-                ],
+                "roles": privileges.ROLES,
+                "mapped_roles": mapped,
+                "admin_roles": privileges.ADMIN_ROLES,
+                "screens": screens,
+                "role_matrices": privileges.role_matrices(privileges.ROLES, screens, context["permissions"]),
             }
         )
         return context

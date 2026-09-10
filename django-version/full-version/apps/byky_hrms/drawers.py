@@ -126,15 +126,13 @@ DESIGNATION = {
                     "label": "Designation Code",
                     "kind": "text",
                     "required": True,
-                    "placeholder": "MECH",
                     "lock_on_edit": True
                 },
                 {
                     "id": "title",
                     "label": "Designation Title",
                     "kind": "text",
-                    "required": True,
-                    "placeholder": "Mechanic"
+                    "required": True
                 },
                 {
                     "id": "description",

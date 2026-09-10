@@ -177,9 +177,10 @@ DEPARTMENT = {
             "fields": [
                 {
                     "id": "code",
-                    "label": "Short Code",
+                    "label": "Department Code",
                     "kind": "text",
-                    "required": True
+                    "required": True,
+                    "placeholder": "e.g. OPS"
                 },
                 {
                     "id": "name",

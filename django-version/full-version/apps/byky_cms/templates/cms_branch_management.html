@@ -49,10 +49,40 @@ default false alongside Is HO, same as the data they were already rendering.
 
   <div class="scr-tiles">
     <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ ho_count }}</div><div class="scr-tile-lab">Head Office</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-purple">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ regional_office_count }}</div><div class="scr-tile-lab">Regional Office</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ regional_warehouse_count }}</div><div class="scr-tile-lab">Regional Warehouse</div></div>
+    </div>
+    <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-red">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ branches|length }}</div><div class="scr-tile-lab">Branches</div></div>
+      <div><div class="scr-tile-val">{{ branch_office_count }}</div><div class="scr-tile-lab">Branch Office</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ inactive_count }}</div><div class="scr-tile-lab">Inactive Branches</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ branch_warehouse_count }}</div><div class="scr-tile-lab">Branch Warehouses</div></div>
     </div>
     <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-green">
@@ -62,39 +92,9 @@ default false alongside Is HO, same as the data they were already rendering.
     </div>
     <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-blue">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"></path></svg>
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5M3.3 7 12 12l8.7-5M12 12v10"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ ho_count }}</div><div class="scr-tile-lab">Head offices</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-amber">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ inactive_count }}</div><div class="scr-tile-lab">Inactive branches</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-blue">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ regional_office_count }}</div><div class="scr-tile-lab">Regional Offices</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-amber">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ regional_warehouse_count }}</div><div class="scr-tile-lab">Regional Warehouses</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-red">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ branch_office_count }}</div><div class="scr-tile-lab">Branch Offices</div></div>
-    </div>
-    <div class="scr-tile">
-      <span class="scr-tile-ico scr-tile-ico-green">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ branch_warehouse_count }}</div><div class="scr-tile-lab">Branch Warehouses</div></div>
+      <div><div class="scr-tile-val">{{ total_fleet|intcomma }}</div><div class="scr-tile-lab">Vehicles Deployed</div></div>
     </div>
   </div>
 

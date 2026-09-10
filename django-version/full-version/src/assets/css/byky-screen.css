@@ -357,6 +357,7 @@ button.scr-tile.is-active { border-color: #cc0000; box-shadow: 0 0 0 3px rgba(20
 .scr-icon-btn:hover { border-color: #d3d0e6; color: #1a1640; }
 .scr-icon-btn-edit:hover { border-color: #f3c3c5; color: #d81f26; }
 .scr-icon-btn-approve:hover { border-color: #c4e9d5; color: #1f9d63; }
+.scr-icon-btn-danger:hover { border-color: #f3c3c5; color: #d81f26; }
 
 .scr-empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 64px 24px; }
 .scr-empty-ico { width: 52px; height: 52px; border-radius: 16px; background: #f6f5fc; display: grid; place-items: center; }

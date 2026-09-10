@@ -65,29 +65,29 @@ box with a calendar glyph beside it.
   </div>
 
   <div class="scr-tiles">
-    <button type="button" class="scr-tile" data-scr-kpi-filter="status:">
-      <span class="scr-tile-ico scr-tile-ico-red">
-        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2M21 20v-1.4a3 3 0 0 0-2.3-2.9M16.6 5a3 3 0 0 1 0 5.8"></path></svg>
-      </span>
-      <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Employees on record</div></div>
-    </button>
     <div class="scr-tile">
       <span class="scr-tile-ico scr-tile-ico-blue">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12 12 3.4 4.4 12 12 20.6zM12 8v.01M12 12v4"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ counts.designations }}</div><div class="scr-tile-lab">Distinct designations</div></div>
+      <div><div class="scr-tile-val">{{ counts.designations }}</div><div class="scr-tile-lab">Designations</div></div>
     </div>
+    <button type="button" class="scr-tile" data-scr-kpi-filter="status:">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2M21 20v-1.4a3 3 0 0 0-2.3-2.9M16.6 5a3 3 0 0 1 0 5.8"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Total Employees</div></div>
+    </button>
     <button type="button" class="scr-tile" data-scr-kpi-filter="status:Active">
       <span class="scr-tile-ico scr-tile-ico-green">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Active</div></div>
+      <div><div class="scr-tile-val">{{ counts.total }}</div><div class="scr-tile-lab">Active Employees</div></div>
     </button>
     <button type="button" class="scr-tile" data-scr-kpi-filter="status:Blocked">
       <span class="scr-tile-ico scr-tile-ico-amber">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6 5.6 18.4M5.6 5.6l12.8 12.8"></path></svg>
       </span>
-      <div><div class="scr-tile-val">{{ counts.blocked }}</div><div class="scr-tile-lab">Blocked &mdash; no history yet</div></div>
+      <div><div class="scr-tile-val">{{ counts.blocked }}</div><div class="scr-tile-lab">Blocked Employees</div></div>
     </button>
   </div>
 
@@ -211,15 +211,16 @@ box with a calendar glyph beside it.
               </div>
             </td>
             <td><span class="scr-badge scr-badge-pending"><i></i>{{ e.designation }}</span></td>
-            <td><span class="scr-badge scr-badge-approved"><i></i>{{ e.status }}</span></td>
+            <td><span class="scr-badge {% if e.status == 'Active' %}scr-badge-approved{% else %}scr-badge-pending{% endif %}" data-status-badge><i></i>{{ e.status }}</span></td>
             <td>
               <div class="scr-row-actions">
-                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="employee:edit">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                <button type="button" class="scr-icon-btn scr-icon-btn-danger" title="Block" data-scr-block>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
                 </button>
-                <a href="{% url 'hrms-employee-block-unblock' %}" class="scr-icon-btn" title="Block / Unblock">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6 5.6 18.4M5.6 5.6l12.8 12.8"></path></svg>
-                </a>
+                <button type="button" class="scr-icon-btn scr-icon-btn-approve" title="Unblock" data-scr-unblock>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 7.6-1.8"></path></svg>
+                </button>
+                {% include "byky/partials/row_actions.html" with edit_open="employee:edit" %}
               </div>
             </td>
           </tr>

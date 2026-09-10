@@ -536,6 +536,62 @@
       });
     });
   });
+  /* ── row block / unblock (data-scr-block / data-scr-unblock) -- Employee
+     Personal Data only. Same SweetAlert2-confirm-then-update pattern as row
+     delete above: flips the row's Status badge and data-status, nothing
+     persisted (CLAUDE.md section 11). The full Block/Unblock console (FSD
+     2.5) is still the place for a reasoned block with a logged history. */
+  function wireStatusToggle(attr, toStatus, isActive, confirmVerb, doneVerb) {
+    document.querySelectorAll('[' + attr + ']').forEach(function (btn) {
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        var row = btn.closest('.scr-row');
+        if (!row) return;
+        var nameEl = row.querySelector('.scr-co-name');
+        var name = nameEl ? nameEl.textContent.trim() : 'this employee';
+        var badge = row.querySelector('[data-status-badge]');
+        var scope = scopeOf(row);
+
+        function apply() {
+          row.dataset.status = toStatus;
+          if (badge) {
+            badge.classList.toggle('scr-badge-approved', isActive);
+            badge.classList.toggle('scr-badge-pending', !isActive);
+            badge.lastChild.textContent = toStatus;
+          }
+          applyFilters(scope, true);
+        }
+
+        if (typeof Swal === 'undefined') {
+          if (window.confirm(confirmVerb + ' ' + name + '?')) apply();
+          return;
+        }
+        Swal.fire({
+          title: confirmVerb + ' ' + name + '?',
+          icon: isActive ? 'question' : 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Yes, ' + confirmVerb.toLowerCase(),
+          customClass: {
+            confirmButton: 'btn ' + (isActive ? 'btn-success' : 'btn-danger') + ' me-3',
+            cancelButton: 'btn btn-label-secondary'
+          },
+          buttonsStyling: false
+        }).then(function (result) {
+          if (!result.isConfirmed) return;
+          apply();
+          Swal.fire({
+            text: name + ' has been ' + doneVerb + '.',
+            icon: 'success',
+            customClass: { confirmButton: 'btn btn-primary' },
+            buttonsStyling: false
+          });
+        });
+      });
+    });
+  }
+  wireStatusToggle('data-scr-block', 'Blocked', false, 'Block', 'blocked');
+  wireStatusToggle('data-scr-unblock', 'Active', true, 'Unblock', 'unblocked');
+
   document.addEventListener('click', closeAllMenus);
 
   /* ── top-level content tabs (screens with more than one grid) ───── */

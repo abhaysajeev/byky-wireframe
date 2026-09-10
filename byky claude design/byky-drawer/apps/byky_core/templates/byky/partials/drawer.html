@@ -1,0 +1,124 @@
+{% comment %}
+BYKY drawer — the single source of truth for every create/edit drawer.
+
+Include it from any screen; it never renders anything on its own:
+
+    {% include "byky/partials/drawer.html" with spec=spec module_label=module_label %}
+
+Contract
+--------
+spec.add_label   drawer title, e.g. "Add Vehicle"           (required)
+spec.drawer_id   DOM id the trigger targets                 (required)
+spec.sections    [{title, fields:[...]}, ...]               (required)
+spec.size        "compact" | "standard" | "wide" | omitted  (optional)
+module_label     overline text, e.g. "Inventory · Vehicles" (optional)
+
+field keys: id, label, kind, required, placeholder, options/resolved, width, help
+kind: text | select | date | textarea | number | file | checkbox
+
+Size is normally left OUT — byky-drawer.js measures the rendered field count and
+applies is-compact / is-standard / is-wide. Set spec.size only to override.
+
+Bootstrap's offcanvas JS still owns open/close: the trigger stays
+data-bs-toggle="offcanvas" data-bs-target="#<drawer_id>".
+{% endcomment %}
+
+{% if spec.add_label %}
+<div class="offcanvas offcanvas-end byky-drawer{% if spec.size %} is-{{ spec.size }}{% endif %}"
+     tabindex="-1" id="{{ spec.drawer_id }}" data-byky-drawer>
+
+  <div class="byky-drawer-accent"></div>
+
+  <div class="byky-drawer-head">
+    <div class="byky-drawer-heading">
+      {% if module_label %}<div class="byky-drawer-module">{{ module_label }}</div>{% endif %}
+      <h2 class="byky-drawer-title">{{ spec.add_label }}</h2>
+    </div>
+    <button type="button" class="byky-drawer-close" data-bs-dismiss="offcanvas" aria-label="Close">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+
+  {% comment %}Jump tabs render only when the drawer has 2+ named sections.{% endcomment %}
+  <div class="byky-drawer-jumps" data-byky-jumps hidden></div>
+
+  <form class="byky-drawer-form" onsubmit="return false">
+    <div class="byky-drawer-body" data-byky-body>
+      {% for sec in spec.sections %}
+      <section class="byky-section" data-byky-section data-section-label="{{ sec.title }}">
+        {% if sec.title %}
+        <header class="byky-section-head">
+          <span class="byky-section-bar"></span>
+          <span class="byky-section-title">{{ sec.title }}</span>
+          <span class="byky-section-rule"></span>
+          <span class="byky-section-count">{{ sec.fields|length }}</span>
+        </header>
+        {% endif %}
+
+        <div class="byky-fields">
+          {% for f in sec.fields %}
+          <div class="byky-field byky-span-{{ f.width|default:6 }}">
+            <label class="byky-label" for="{{ f.id }}">
+              <span>{{ f.label }}</span>{% if f.required %}<em class="byky-req">*</em>{% endif %}
+            </label>
+
+            {% if f.kind == "select" %}
+              <div class="byky-select-wrap">
+                <select id="{{ f.id }}" class="byky-input byky-select">
+                  <option value="">Select</option>
+                  {% for o in f.resolved %}<option>{{ o }}</option>{% endfor %}
+                </select>
+                <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+              </div>
+
+            {% elif f.kind == "date" %}
+              <div class="byky-select-wrap">
+                <input type="text" id="{{ f.id }}" class="byky-input byky-date has-affix" placeholder="Select date" />
+                <svg class="byky-date-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1M8 3v4M16 3v4M4 11h16"></path></svg>
+              </div>
+
+            {% elif f.kind == "textarea" %}
+              <textarea id="{{ f.id }}" class="byky-input byky-textarea" rows="3" placeholder="Enter {{ f.label|lower }}"></textarea>
+
+            {% elif f.kind == "file" %}
+              <label class="byky-file" for="{{ f.id }}">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M8 8l4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>
+                <span>Choose file</span>
+                <input type="file" id="{{ f.id }}" class="byky-file-input" />
+              </label>
+
+            {% elif f.kind == "checkbox" %}
+              <label class="byky-switch-row" for="{{ f.id }}">
+                <input type="checkbox" id="{{ f.id }}" class="byky-switch-input" />
+                <span class="byky-switch"></span>
+                <span class="byky-switch-label">{{ f.placeholder|default:"Enabled" }}</span>
+              </label>
+
+            {% elif f.kind == "number" %}
+              <input type="number" step="any" id="{{ f.id }}" class="byky-input" placeholder="Enter {{ f.label|lower }}" />
+
+            {% else %}
+              <input type="text" id="{{ f.id }}" class="byky-input" placeholder="Enter {{ f.label|lower }}" />
+            {% endif %}
+
+            {% if f.help %}<div class="byky-help">{{ f.help }}</div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </section>
+      {% endfor %}
+    </div>
+
+    <div class="byky-drawer-foot">
+      <label class="byky-switch-row byky-foot-active" for="{{ spec.drawer_id }}-active">
+        <input type="checkbox" id="{{ spec.drawer_id }}-active" class="byky-switch-input" checked />
+        <span class="byky-switch"></span>
+        <span class="byky-switch-label">Active</span>
+      </label>
+      <button type="button" class="byky-btn-text" data-bs-dismiss="offcanvas">Cancel</button>
+      <button type="submit" class="byky-btn-outline">Save &amp; New</button>
+      <button type="submit" class="byky-btn-primary">Save</button>
+    </div>
+  </form>
+</div>
+{% endif %}

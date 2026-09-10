@@ -1,0 +1,233 @@
+/* BYKY drawer — matches the "Byky Drawer" design exactly.
+   Self-contained: overrides Bootstrap's .offcanvas chrome, no Vuexy form classes.
+   Load AFTER sidebar.css (which imports Sora) and after Bootstrap's CSS. */
+
+/* ── shell ────────────────────────────────────────────────────────── */
+.byky-drawer.offcanvas {
+  font-family: 'Sora', sans-serif;
+  color: #1a1640;
+  background: #fff;
+  border: none;
+  box-shadow: -26px 0 64px -32px rgba(26, 22, 64, 0.55);
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  /* width comes from the size class; standard is the fallback */
+  width: 560px;
+  max-width: 100%;
+}
+.byky-drawer.is-compact  { width: 440px; }
+.byky-drawer.is-standard { width: 560px; }
+.byky-drawer.is-wide     { width: 720px; }
+
+.byky-drawer *,
+.byky-drawer *::before,
+.byky-drawer *::after { box-sizing: border-box; }
+.byky-drawer h2, .byky-drawer p { margin: 0; }
+
+/* Bootstrap's backdrop, softened to the design's veil */
+.offcanvas-backdrop.show { background: #1a1640; opacity: 0.36; }
+
+.byky-drawer-accent {
+  flex: 0 0 auto;
+  height: 3px;
+  background: linear-gradient(90deg, #a80f14, #d81f26 55%, #f04a50);
+}
+
+/* ── header ───────────────────────────────────────────────────────── */
+.byky-drawer-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 19px 24px 17px;
+  background: #fff;
+}
+.byky-drawer-heading { min-width: 0; }
+.byky-drawer-module {
+  font-size: 10.5px; font-weight: 600; letter-spacing: 1.2px; text-transform: uppercase;
+  color: #a9a6c4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.byky-drawer-title {
+  font-size: 17px; font-weight: 600; letter-spacing: -0.3px; margin-top: 5px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.byky-drawer-close {
+  width: 32px; height: 32px; border-radius: 10px; border: 1px solid #eeedf5;
+  background: #fff; color: #8b87b0; display: grid; place-items: center; cursor: pointer;
+  flex: 0 0 auto; padding: 0;
+  transition: border-color 0.16s, color 0.16s, transform 0.18s;
+}
+.byky-drawer-close:hover { border-color: #f3c3c5; color: #d81f26; transform: rotate(90deg); }
+
+/* ── section jump tabs (2+ named sections only) ───────────────────── */
+.byky-drawer-jumps {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 20px;
+  padding: 0 24px;
+  overflow-x: auto;
+  border-bottom: 1px solid #f0eff7;
+  scrollbar-width: none;
+}
+.byky-drawer-jumps::-webkit-scrollbar { display: none; }
+.byky-drawer-jumps[hidden] { display: none; }
+.byky-jump {
+  flex: 0 0 auto; border: none; background: none; padding: 0 0 12px;
+  font-family: inherit; font-size: 12.5px; font-weight: 500; color: #8b87b0;
+  cursor: pointer; white-space: nowrap; border-bottom: 2px solid transparent;
+  transition: color 0.16s, border-color 0.16s;
+}
+.byky-jump:hover { color: #1a1640; }
+.byky-jump.is-on { font-weight: 600; color: #1a1640; border-bottom-color: #d81f26; }
+
+/* drawers with no jump tabs still need the header rule */
+.byky-drawer-jumps[hidden] + .byky-drawer-form .byky-drawer-body { border-top: 1px solid #f0eff7; }
+
+/* ── body + sections ──────────────────────────────────────────────── */
+.byky-drawer-form { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+.byky-drawer-body {
+  flex: 1; overflow-y: auto; padding: 0 24px 28px;
+  scrollbar-width: thin; scrollbar-color: #e4e3ee transparent;
+}
+.byky-drawer-body::-webkit-scrollbar { width: 6px; }
+.byky-drawer-body::-webkit-scrollbar-thumb { background: #e4e3ee; border-radius: 99px; }
+
+.byky-section { margin-top: 22px; }
+.byky-section:first-child { margin-top: 0; }
+
+/* sticky section header — pins while its own fields scroll under it */
+.byky-section-head {
+  display: flex; align-items: center; gap: 10px;
+  position: sticky; top: 0; z-index: 3;
+  background: #fff; padding: 9px 0 8px; margin-bottom: 15px;
+}
+.byky-section-bar {
+  width: 3px; height: 0; border-radius: 99px; background: transparent; flex: 0 0 auto;
+  transition: height 0.2s, background 0.2s;
+}
+.byky-section-title {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase;
+  color: #a9a6c4; white-space: nowrap; transition: color 0.2s;
+}
+.byky-section-rule { flex: 1; height: 1px; background: #f4f3f9; transition: background 0.2s; }
+.byky-section-count {
+  font-size: 10.5px; font-weight: 600; color: #c9c6dd;
+  font-variant-numeric: tabular-nums; transition: color 0.2s;
+}
+.byky-section.is-current .byky-section-bar   { height: 13px; background: #d81f26; }
+.byky-section.is-current .byky-section-title { color: #1a1640; }
+.byky-section.is-current .byky-section-rule  { background: #f7dede; }
+.byky-section.is-current .byky-section-count { color: #c2141a; }
+
+/* ── field grid: 1 column compact, 2 columns standard/wide ────────── */
+.byky-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px 16px; }
+.byky-drawer.is-compact .byky-fields { grid-template-columns: minmax(0, 1fr); }
+.byky-field { min-width: 0; }
+/* Bootstrap col widths (screens.py `width`) map onto the 2-col grid */
+.byky-span-12, .byky-span-9, .byky-span-8 { grid-column: span 2; }
+.byky-drawer.is-compact .byky-span-12,
+.byky-drawer.is-compact .byky-span-9,
+.byky-drawer.is-compact .byky-span-8 { grid-column: span 1; }
+
+.byky-label {
+  display: flex; align-items: baseline; gap: 5px;
+  font-size: 11.5px; font-weight: 500; color: #6b6790; margin-bottom: 7px;
+}
+.byky-label > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.byky-req { color: #d81f26; font-style: normal; }
+.byky-help { font-size: 10.5px; color: #a9a6c4; margin-top: 6px; line-height: 1.5; }
+
+/* ── inputs ───────────────────────────────────────────────────────── */
+.byky-input {
+  width: 100%; height: 42px; border: 1px solid #e8e7f2; background: #fff;
+  border-radius: 11px; padding: 0 13px; font-family: inherit; font-size: 13px;
+  color: #1a1640; outline: none;
+  transition: border-color 0.16s, box-shadow 0.16s;
+}
+.byky-input::placeholder { color: #a9a6c4; }
+.byky-input:hover { border-color: #d3d0e6; }
+.byky-input:focus { border-color: #d81f26; box-shadow: 0 0 0 3px rgba(216, 31, 38, 0.1); }
+.byky-textarea { height: auto; padding: 11px 13px; line-height: 1.55; resize: vertical; }
+
+.byky-select-wrap { position: relative; }
+.byky-select { appearance: none; cursor: pointer; padding-right: 36px; color: #8b87b0; }
+.byky-select:valid, .byky-select.has-value { color: #1a1640; }
+.byky-select-caret,
+.byky-date-icon { position: absolute; right: 13px; pointer-events: none; color: #a9a6c4; }
+.byky-select-caret { top: 14px; }
+.byky-date-icon { top: 13px; }
+.byky-input.has-affix { padding-right: 40px; }
+
+.byky-file {
+  display: flex; align-items: center; gap: 11px; height: 42px;
+  border: 1.5px dashed #e0deee; background: #fbfaff; border-radius: 11px;
+  padding: 0 13px; cursor: pointer; color: #a9a6c4;
+  transition: border-color 0.16s, background 0.16s;
+}
+.byky-file:hover { border-color: #f3c3c5; background: #fdf9f9; }
+.byky-file span { font-size: 12.5px; color: #9490bb; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.byky-file-input { display: none; }
+
+/* switch (checkbox fields + the footer Active toggle) */
+.byky-switch-row {
+  display: flex; align-items: center; gap: 11px; height: 42px;
+  border: 1px solid #eeedf5; background: #fbfaff; border-radius: 11px;
+  padding: 0 13px; cursor: pointer; margin: 0;
+  transition: border-color 0.16s;
+}
+.byky-switch-row:hover { border-color: #d3d0e6; }
+.byky-switch-input { position: absolute; opacity: 0; width: 0; height: 0; }
+.byky-switch {
+  width: 36px; height: 21px; border-radius: 99px; background: #dcd9ea;
+  position: relative; flex: 0 0 auto; transition: background 0.18s;
+}
+.byky-switch::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 15px; height: 15px;
+  border-radius: 50%; background: #fff; box-shadow: 0 1px 3px rgba(26, 22, 64, 0.32);
+  transition: left 0.18s;
+}
+.byky-switch-input:checked + .byky-switch { background: #1f9d63; }
+.byky-switch-input:checked + .byky-switch::after { left: 18px; }
+.byky-switch-input:focus-visible + .byky-switch { box-shadow: 0 0 0 3px rgba(216, 31, 38, 0.14); }
+.byky-switch-label { font-size: 12.5px; font-weight: 500; color: #4b4770; }
+
+/* ── footer rail ──────────────────────────────────────────────────── */
+.byky-drawer-foot {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 14px 24px; border-top: 1px solid #f0eff7; background: #fbfaff;
+}
+.byky-foot-active {
+  flex: 1 1 100px; min-width: 0; height: auto;
+  border: none; background: none; padding: 0; gap: 9px;
+}
+.byky-foot-active:hover { border: none; }
+.byky-drawer-foot button { font-family: inherit; cursor: pointer; }
+.byky-btn-text {
+  border: none; background: none; font-size: 12.5px; font-weight: 500;
+  color: #8b87b0; padding: 10px 6px; transition: color 0.16s;
+}
+.byky-btn-text:hover { color: #1a1640; }
+.byky-btn-outline {
+  border: 1px solid #e8e7f2; background: #fff; font-size: 12.5px; font-weight: 500;
+  color: #4b4770; padding: 9px 15px; border-radius: 9px; transition: border-color 0.16s;
+}
+.byky-btn-outline:hover { border-color: #d3d0e6; }
+.byky-btn-primary {
+  border: none; background: #d81f26; font-size: 12.5px; font-weight: 600;
+  color: #fff; padding: 10px 20px; border-radius: 9px; transition: background 0.16s;
+}
+.byky-btn-primary:hover { background: #c2141a; }
+
+/* ── narrow viewports ─────────────────────────────────────────────── */
+@media (max-width: 767.98px) {
+  .byky-drawer.offcanvas,
+  .byky-drawer.is-compact,
+  .byky-drawer.is-standard,
+  .byky-drawer.is-wide { width: 100%; }
+  .byky-drawer .byky-fields { grid-template-columns: minmax(0, 1fr); }
+  .byky-drawer .byky-span-12,
+  .byky-drawer .byky-span-9,
+  .byky-drawer .byky-span-8 { grid-column: span 1; }
+}

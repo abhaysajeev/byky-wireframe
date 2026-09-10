@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Byky · Station Network</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha384-sHL9NAb7lN7rfvG5lfHpm643Xkcjzp4jFvuavGOndn6pjVqS6ny56CAt3nsEVT4H" crossorigin="anonymous">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha384-cxOPjt7s7Iz04uaHJceBmS+qpjv2JkIHNVcuOrM+YHwZOmJGBXI00mdUXEq65HTH" crossorigin="anonymous"></script>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Sora',sans-serif;background:#f4f5fa;color:#1a1640;-webkit-font-smoothing:antialiased;padding:26px}
+  a{color:#d81f26;text-decoration:none}
+  a:hover{color:#a8161c}
+
+  .card{max-width:1180px;margin:0 auto;background:#fff;border:1px solid #eeedf5;border-radius:16px;box-shadow:0 1px 2px rgba(26,22,64,.03)}
+  .head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;flex-wrap:wrap;padding:22px 22px 0}
+  .h3{font-size:15px;font-weight:600;letter-spacing:-.1px}
+  .sub{font-size:12px;color:#9490bb;margin-top:4px}
+  .ghost{display:flex;align-items:center;gap:7px;flex:0 0 auto;font-size:12px;font-weight:600;color:#4b4770;border:1px solid #eeedf5;padding:8px 13px;border-radius:9px;background:#fff;cursor:pointer;font-family:inherit;transition:border-color .16s,color .16s}
+  .ghost:hover{border-color:#d3d0e6;color:#1a1640}
+
+  .chips{display:flex;gap:6px;flex-wrap:wrap;padding:16px 22px 0}
+  .chip{border:1px solid #eeedf5;background:#fff;color:#6b6790;font-family:inherit;font-size:11.5px;font-weight:500;padding:6px 12px;border-radius:99px;cursor:pointer;white-space:nowrap;transition:border-color .16s,background .16s,color .16s}
+  .chip:hover{border-color:#d3d0e6}
+  .chip.on{border-color:#f3c3c5;background:#fdeced;color:#c2141a;font-weight:600}
+  .chip b{font-weight:600;font-variant-numeric:tabular-nums;color:#a9a6c4;margin-left:5px}
+  .chip.on b{color:#c2141a}
+
+  .split{display:flex;flex-wrap:wrap;padding:16px 22px 22px;align-items:stretch}
+  .mapwrap{flex:1 1 520px;min-width:0;position:relative;border:1px solid #f0eff7;border-radius:12px;overflow:hidden;background:#eef0f6}
+  #map{height:452px;width:100%;background:#eef0f6;z-index:1}
+  /* muted basemap: brand colour belongs to the data, not the tiles */
+  .leaflet-tile-pane{filter:grayscale(1) brightness(1.06) contrast(.88) opacity(.92)}
+  .leaflet-container{font-family:'Sora',sans-serif;background:#eef0f6}
+  .leaflet-control-attribution{font-size:9.5px;background:rgba(255,255,255,.82);color:#9490bb}
+  .leaflet-control-attribution a{color:#8b87b0}
+  .leaflet-bar{border:none;box-shadow:0 6px 18px -12px rgba(26,22,64,.4);border-radius:9px;overflow:hidden}
+  .leaflet-bar a{width:28px;height:28px;line-height:28px;color:#4b4770;border-bottom-color:#f0eff7;font-size:15px}
+  .leaflet-bar a:hover{color:#d81f26}
+
+  .stn{position:relative;display:grid;place-items:center}
+  .stn i{display:block;border-radius:50%;background:#d81f26;border:2px solid #fff;box-shadow:0 2px 6px -1px rgba(26,22,64,.45);transition:transform .16s,background .16s}
+  .stn:hover i,.stn.lit i{transform:scale(1.24)}
+  .stn.lit i{background:#1a1640}
+  .stn.dim{opacity:.26}
+
+  .cl-wrap{position:relative;display:grid;place-items:center;isolation:isolate}
+  .cl{display:grid;place-items:center;border-radius:50%;background:#d81f26;color:#fff;border:2.5px solid #fff;box-shadow:0 4px 14px -4px rgba(194,20,26,.6);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;transition:transform .16s}
+  .cl:hover{transform:scale(1.08)}
+  .cl::after{content:'';position:absolute;inset:-7px;border-radius:50%;background:rgba(216,31,38,.14);z-index:-1}
+
+  .leaflet-tooltip.tip{background:#fff;border:1px solid #eeedf5;border-radius:11px;box-shadow:0 18px 38px -20px rgba(26,22,64,.45);padding:11px 13px;font-family:'Sora',sans-serif;white-space:nowrap;color:#1a1640}
+  .leaflet-tooltip.tip::before{display:none}
+  .tip .t{font-size:12.5px;font-weight:600}
+  .tip .l{font-size:11px;color:#9490bb;margin-top:3px}
+  .tip .stats{display:flex;gap:18px;margin-top:9px;padding-top:9px;border-top:1px solid #f4f3f9}
+  .tip .stat{display:flex;flex-direction:column;gap:2px}
+  .tip .stat u{text-decoration:none;font-size:9.5px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;color:#a9a6c4}
+  .tip .stat b{font-size:14px;font-weight:700;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+  .tip .stat b s{text-decoration:none;font-size:10px;font-weight:500;color:#a9a6c4;margin-left:3px}
+  .tip .note{font-size:10px;color:#c9c6dd;margin-top:8px}
+
+  .scale{position:absolute;left:12px;bottom:12px;z-index:400;display:flex;align-items:center;gap:12px;background:rgba(255,255,255,.93);border:1px solid #f0eff7;border-radius:9px;padding:7px 12px}
+  .scale[hidden]{display:none}
+  .scale span{font-size:10px;font-weight:600;letter-spacing:.7px;text-transform:uppercase;color:#a9a6c4}
+  .scale i{display:flex;align-items:center;gap:6px;font-style:normal;font-size:11px;color:#6b6790;font-variant-numeric:tabular-nums}
+  .scale i em{display:block;border-radius:50%;background:#d81f26;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(26,22,64,.1)}
+
+  .list{flex:0 0 328px;min-width:0;display:flex;flex-direction:column;padding-left:20px}
+  .list-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid #f0eff7}
+  .list-head b{font-size:11px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:#a9a6c4}
+  .list-head span{font-size:11px;color:#c9c6dd;font-weight:500;font-variant-numeric:tabular-nums}
+  .rows{flex:1;overflow-y:auto;max-height:410px;scrollbar-width:thin;scrollbar-color:#e4e3ee transparent}
+  .rows::-webkit-scrollbar{width:6px}
+  .rows::-webkit-scrollbar-thumb{background:#e4e3ee;border-radius:99px}
+  .row{display:flex;align-items:center;gap:11px;padding:10px 8px;border-radius:10px;cursor:pointer;border:none;background:none;width:100%;text-align:left;font-family:inherit;transition:background .14s}
+  .row:hover,.row.lit{background:#faf9fd}
+  .row .rank{width:22px;flex:0 0 auto;font-size:10.5px;font-weight:600;color:#c9c6dd;font-variant-numeric:tabular-nums}
+  .row .body{flex:1;min-width:0}
+  .row .n{display:block;font-size:12.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .p{display:block;font-size:11px;color:#9490bb;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .row .fig{flex:0 0 auto;text-align:right}
+  .row .fig b{display:block;font-size:12px;font-weight:600;font-variant-numeric:tabular-nums}
+  .row .fig s{display:block;text-decoration:none;font-size:10.5px;color:#a9a6c4;font-weight:500;margin-top:2px;font-variant-numeric:tabular-nums}
+
+  @media (max-width:900px){
+    .list{flex:1 1 100%;padding-left:0;padding-top:18px}
+    .rows{max-height:280px}
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="head">
+    <div>
+      <div class="h3">Station Network</div>
+      <div class="sub" id="sub"></div>
+    </div>
+    <button class="ghost" type="button">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"></path></svg>
+      Station list
+    </button>
+  </div>
+
+  <div class="chips" id="chips"></div>
+
+  <div class="split">
+    <div class="mapwrap">
+      <div id="map"></div>
+      <div class="scale" id="scaleFleet" hidden>
+        <span>Fleet</span>
+        <i><em style="width:7px;height:7px"></em>12</i>
+        <i><em style="width:12px;height:12px"></em>30</i>
+        <i><em style="width:17px;height:17px"></em>56</i>
+      </div>
+      <div class="scale" id="scaleCluster">
+        <span>Stations</span>
+        <i><em style="width:9px;height:9px"></em>1</i>
+        <i><em style="width:15px;height:15px"></em>5</i>
+        <i><em style="width:20px;height:20px"></em>10+</i>
+      </div>
+    </div>
+
+    <div class="list">
+      <div class="list-head">
+        <b id="listTitle">All stations</b>
+        <span id="listMeta"></span>
+      </div>
+      <div class="rows" id="rows"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// name, lat, lng, fleet, emirate, locality — coordinates from geo.py
+var STATIONS = [
+  ['Creek Park Gate 1',25.2285,55.3273,48,'Dubai','Bur Dubai'],
+  ['Creek Park Gate 4',25.2320,55.3310,26,'Dubai','Bur Dubai'],
+  ['Al Zabeel Park Gate 1',25.2308,55.3050,44,'Dubai','Za\u2019abeel'],
+  ['Al Mamzar Park',25.3033,55.3506,38,'Dubai','Al Mamzar'],
+  ['Al Barsha Pond Park',25.1050,55.1990,31,'Dubai','Al Barsha South'],
+  ['Abu Dhabi Corniche 1',24.4750,54.3300,41,'Abu Dhabi','Corniche West'],
+  ['Abu Dhabi Corniche 2',24.4720,54.3390,56,'Abu Dhabi','Corniche Central'],
+  ['Abu Dhabi Corniche 3',24.4690,54.3480,22,'Abu Dhabi','Corniche East'],
+  ['Family Park',24.4600,54.3400,18,'Abu Dhabi','Al Khalidiyah'],
+  ['Khalifa Square',24.4900,54.3700,12,'Abu Dhabi','Al Danah'],
+  ['Majaz 1',25.3280,55.3830,24,'Sharjah','Al Majaz'],
+  ['Sharjah Corniche 1',25.3570,55.3900,33,'Sharjah','Al Khan'],
+  ['Sharjah Corniche 2',25.3600,55.3950,37,'Sharjah','Al Khan'],
+  ['Sharjah Corniche 3',25.3630,55.4000,16,'Sharjah','Al Layyah'],
+  ['Kshisha Park',25.3330,55.4200,29,'Sharjah','Al Qasimia'],
+  ['Ajman Marina',25.4110,55.4350,34,'Ajman','Al Rashidiya'],
+  ['Ajman Corniche',25.4050,55.4400,27,'Ajman','Al Nuaimiya'],
+  ['Alalam Park',25.4000,55.4450,14,'Ajman','Al Jurf'],
+  ['Safiya Park',25.3900,55.4500,11,'Ajman','Al Rawda'],
+  ['Fujairah Corniche',25.1220,56.3400,30,'Fujairah','Corniche Road'],
+  ['Kalba Corniche Park',25.0400,56.3500,45,'Fujairah','Kalba'],
+  ['Qidfa Beach',25.2800,56.3500,13,'Fujairah','Qidfa'],
+  ['RAK Corniche 1',25.7900,55.9500,35,'Ras Al Khaimah','Al Qawasim'],
+  ['Al Saqr Park',25.7800,55.9400,21,'Ras Al Khaimah','Al Nakheel'],
+  ['Mina Al Arab',25.7000,55.9000,15,'Ras Al Khaimah','Mina Al Arab'],
+  ['Hili Archaeological Park',24.2500,55.7600,26,'Al Ain','Hili'],
+  ['Al Wadi',24.2200,55.7500,32,'Al Ain','Al Wadi'],
+  ['Al Towayya Park',24.2400,55.7700,19,'Al Ain','Al Towayya'],
+  ['Al Zakher Park',24.1700,55.7300,12,'Al Ain','Al Zakher'],
+  ['Mubazzarah',24.1300,55.7800,35,'Al Ain','Green Mubazzarah'],
+  ['Asharij Walk Way',24.2100,55.7400,17,'Al Ain','Asharij'],
+  ['Al Salamat Park',24.1900,55.7200,14,'Al Ain','Al Salamat'],
+  ['Al Dhaher Park',24.2600,55.7000,20,'Al Ain','Al Dhaher'],
+  ['Mazyad Walkway',24.1500,55.7600,16,'Al Ain','Mazyad']
+];
+
+/* Today's revenue, indicative: fleet x avg ticket x a stable per-station
+   utilisation factor. Deterministic, so the figure never shifts on reload.
+   Swap for the real `today_revenue` field when the transaction export lands. */
+var AVG_TICKET = 37;
+function todayRevenue(i) {
+  var s = STATIONS[i];
+  var seed = 0;
+  for (var c = 0; c < s[0].length; c++) seed = (seed * 31 + s[0].charCodeAt(c)) % 997;
+  var util = 1.35 + (seed % 120) / 100;            // 1.35 – 2.54 rentals per vehicle
+  return Math.round((s[3] * AVG_TICKET * util) / 5) * 5;
+}
+var REV = STATIONS.map(function (s, i) { return todayRevenue(i); });
+var fmt = function (n) { return n.toLocaleString('en-US'); };
+
+var CLUSTER_CELL = 62;
+var filter = null, lit = null;
+
+var map = L.map('map', { zoomControl: true, scrollWheelZoom: false });
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '\u00a9 OpenStreetMap contributors',
+  maxZoom: 18
+}).addTo(map);
+
+var bounds = L.latLngBounds(STATIONS.map(function (s) { return [s[1], s[2]]; })).pad(0.16);
+map.fitBounds(bounds);
+
+var groups = {};
+STATIONS.forEach(function (s, i) {
+  (groups[s[4]] = groups[s[4]] || { list: [], fleet: 0, rev: 0 });
+  groups[s[4]].list.push(i);
+  groups[s[4]].fleet += s[3];
+  groups[s[4]].rev += REV[i];
+});
+var emirates = Object.keys(groups).sort(function (a, b) { return groups[b].fleet - groups[a].fleet; });
+var maxFleet = Math.max.apply(null, STATIONS.map(function (s) { return s[3]; }));
+
+var layer = L.layerGroup().addTo(map);
+var markers = {};        // station index -> marker (only when drawn individually)
+var clusterOf = {};      // station index -> the cluster marker holding it
+
+function radius(fleet) { return Math.round(7 + Math.sqrt(fleet) * 1.35); }
+function bubD(n) { return Math.round(30 + Math.min(n, 12) * 2); }
+
+function stationTip(i) {
+  var s = STATIONS[i];
+  return '<div class="t">' + s[0] + '</div>' +
+    '<div class="l">' + s[5] + ' \u00b7 ' + s[4] + '</div>' +
+    '<div class="stats">' +
+      '<span class="stat"><u>Fleet</u><b>' + s[3] + '<s>vehicles</s></b></span>' +
+      '<span class="stat"><u>Today\u2019s revenue</u><b>' + fmt(REV[i]) + '<s>AED</s></b></span>' +
+    '</div>' +
+    '<div class="note">' + Math.round((s[3] / groups[s[4]].fleet) * 100) + '% of ' + s[4] + ' fleet</div>';
+}
+
+function clusterTip(idx) {
+  var fleet = 0, rev = 0, ems = {};
+  idx.forEach(function (i) { fleet += STATIONS[i][3]; rev += REV[i]; ems[STATIONS[i][4]] = 1; });
+  var names = Object.keys(ems);
+  return '<div class="t">' + (names.length === 1 ? names[0] : names.length + ' emirates') + '</div>' +
+    '<div class="l">' + (names.length === 1 ? idx.length + ' stations' : names.join(' \u00b7 ')) + '</div>' +
+    '<div class="stats">' +
+      '<span class="stat"><u>Fleet</u><b>' + fleet + '<s>vehicles</s></b></span>' +
+      '<span class="stat"><u>Today\u2019s revenue</u><b>' + fmt(rev) + '<s>AED</s></b></span>' +
+    '</div>' +
+    '<div class="note">Click to expand</div>';
+}
+
+/* Bucket into grid cells, then MERGE any two groups whose drawn circles would
+   touch. Bucketing alone is not enough: each bubble sits at its members'
+   centroid, so neighbouring cells can yield centres closer than one cell. */
+function layout() {
+  var items = [];
+  var cells = {};
+  STATIONS.forEach(function (s, i) {
+    if (filter && s[4] !== filter) return;
+    var p = map.latLngToContainerPoint([s[1], s[2]]);
+    var key = Math.floor(p.x / CLUSTER_CELL) + ':' + Math.floor(p.y / CLUSTER_CELL);
+    (cells[key] = cells[key] || []).push(i);
+  });
+  Object.keys(cells).forEach(function (k) { items.push(makeItem(cells[k])); });
+
+  var moved = true, guard = 0;
+  while (moved && guard++ < 60) {
+    moved = false;
+    for (var a = 0; a < items.length && !moved; a++) {
+      for (var b = a + 1; b < items.length; b++) {
+        var dx = items[a].x - items[b].x, dy = items[a].y - items[b].y;
+        var need = items[a].r + items[b].r + 8;
+        if (dx * dx + dy * dy < need * need) {
+          items[a] = makeItem(items[a].idx.concat(items[b].idx));
+          items.splice(b, 1);
+          moved = true;
+          break;
+        }
+      }
+    }
+  }
+  return items;
+}
+
+function makeItem(idx) {
+  var x = 0, y = 0;
+  idx.forEach(function (i) {
+    var p = map.latLngToContainerPoint([STATIONS[i][1], STATIONS[i][2]]);
+    x += p.x; y += p.y;
+  });
+  x /= idx.length; y /= idx.length;
+  // radius includes the drawn halo, so the merge test matches what the eye sees
+  var r = idx.length === 1 ? radius(STATIONS[idx[0]][3]) / 2 + 4 : bubD(idx.length) / 2 + 7;
+  return { idx: idx, x: x, y: y, r: r };
+}
+
+function station(i) {
+  var s = STATIONS[i], d = radius(s[3]);
+  var m = L.marker([s[1], s[2]], {
+    icon: L.divIcon({
+      className: '',
+      html: '<div class="stn" data-i="' + i + '"><i style="width:' + d + 'px;height:' + d + 'px"></i></div>',
+      iconSize: [d + 6, d + 6], iconAnchor: [(d + 6) / 2, (d + 6) / 2]
+    }),
+    riseOnHover: true
+  });
+  m.bindTooltip(stationTip(i), { className: 'tip', direction: 'top', offset: [0, -d / 2 - 6], opacity: 1 });
+  m.on('mouseover', function () { setLit(i); });
+  m.on('mouseout', function () { setLit(null); });
+  m.on('click', function () { map.flyTo([s[1], s[2]], 14, { duration: 0.6 }); });
+  markers[i] = m;
+  return m;
+}
+
+function cluster(idx, centre) {
+  var d = bubD(idx.length);
+  var m = L.marker(centre, {
+    icon: L.divIcon({
+      className: '',
+      html: '<div class="cl-wrap"><div class="cl" style="width:' + d + 'px;height:' + d + 'px">' + idx.length + '</div></div>',
+      iconSize: [d + 14, d + 14], iconAnchor: [(d + 14) / 2, (d + 14) / 2]
+    })
+  });
+  m.bindTooltip(clusterTip(idx), { className: 'tip', direction: 'top', offset: [0, -d / 2 - 6], opacity: 1 });
+  m.on('click', function () {
+    map.flyToBounds(L.latLngBounds(idx.map(function (i) { return [STATIONS[i][1], STATIONS[i][2]]; })).pad(0.4), { duration: 0.6 });
+  });
+  idx.forEach(function (i) { clusterOf[i] = m; });
+  return m;
+}
+
+function draw() {
+  layer.clearLayers();
+  markers = {};
+  clusterOf = {};
+  // one path at every zoom: clusters dissolve as pixel distance grows
+  var items = layout();
+  items.forEach(function (it) {
+    if (it.idx.length === 1) station(it.idx[0]).addTo(layer);
+    else cluster(it.idx, map.containerPointToLatLng([it.x, it.y])).addTo(layer);
+  });
+  syncLegend(items.every(function (it) { return it.idx.length === 1; }));
+  if (lit != null) setLit(lit);
+}
+map.on('zoomend moveend', draw);
+
+function syncLegend(allSolo) {
+  var detail = allSolo;
+  document.getElementById('scaleFleet').hidden = !detail;
+  document.getElementById('scaleCluster').hidden = detail;
+  var n = STATIONS.filter(function (s) { return !filter || s[4] === filter; }).length;
+  document.getElementById('sub').textContent = filter
+    ? n + ' stations in ' + filter + ' \u2014 ' + (detail ? 'marker size reflects fleet' : 'bubbles group nearby stations')
+    : n + ' stations across ' + emirates.length + ' emirates \u2014 ' +
+      (detail ? 'marker size reflects fleet' : 'bubbles group nearby stations, sized by count');
+}
+
+function setLit(i) {
+  lit = i;
+  document.querySelectorAll('.stn').forEach(function (el) {
+    var idx = Number(el.dataset.i);
+    el.classList.toggle('lit', idx === i);
+    el.classList.toggle('dim', i != null && idx !== i);
+  });
+  document.querySelectorAll('.row').forEach(function (el) {
+    el.classList.toggle('lit', Number(el.dataset.i) === i);
+  });
+}
+
+/* ── synced list ────────────────────────────────────────────────── */
+function drawList() {
+  var shown = STATIONS.map(function (s, i) { return { s: s, i: i }; })
+    .filter(function (o) { return !filter || o.s[4] === filter; })
+    .sort(function (a, b) { return REV[b.i] - REV[a.i]; });
+
+  document.getElementById('listTitle').textContent = filter || 'All stations';
+  document.getElementById('listMeta').textContent = 'AED ' +
+    fmt(shown.reduce(function (a, o) { return a + REV[o.i]; }, 0)) + ' today';
+
+  var rows = document.getElementById('rows');
+  rows.innerHTML = '';
+  shown.forEach(function (o, k) {
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'row';
+    b.dataset.i = o.i;
+    b.innerHTML = '<span class="rank">' + (k + 1) + '</span>' +
+      '<span class="body"><span class="n">' + o.s[0] + '</span>' +
+      '<span class="p">' + o.s[5] + ' \u00b7 ' + o.s[4] + '</span></span>' +
+      '<span class="fig"><b>' + fmt(REV[o.i]) + '</b><s>' + o.s[3] + ' vehicles</s></span>';
+    b.addEventListener('mouseenter', function () {
+      setLit(o.i);
+      var m = markers[o.i] || clusterOf[o.i];
+      if (m) m.openTooltip();
+    });
+    b.addEventListener('mouseleave', function () {
+      setLit(null);
+      var m = markers[o.i] || clusterOf[o.i];
+      if (m) m.closeTooltip();
+    });
+    b.addEventListener('click', function () {
+      map.flyTo([o.s[1], o.s[2]], 14, { duration: 0.6 });
+    });
+    rows.appendChild(b);
+  });
+}
+
+/* ── emirate chips ──────────────────────────────────────────────── */
+function drawChips() {
+  var el = document.getElementById('chips');
+  el.innerHTML = '';
+  var all = document.createElement('button');
+  all.type = 'button';
+  all.className = 'chip' + (filter ? '' : ' on');
+  all.innerHTML = 'All emirates<b>' + STATIONS.length + '</b>';
+  all.onclick = function () { setFilter(null); };
+  el.appendChild(all);
+
+  emirates.forEach(function (name) {
+    var c = document.createElement('button');
+    c.type = 'button';
+    c.className = 'chip' + (filter === name ? ' on' : '');
+    c.innerHTML = name + '<b>' + groups[name].list.length + '</b>';
+    c.onclick = function () { setFilter(filter === name ? null : name); };
+    el.appendChild(c);
+  });
+}
+
+function setFilter(name) {
+  filter = name;
+  lit = null;
+  drawChips();
+  drawList();
+  draw();
+  if (name) {
+    map.flyToBounds(L.latLngBounds(groups[name].list.map(function (i) { return [STATIONS[i][1], STATIONS[i][2]]; })).pad(0.35), { duration: 0.6 });
+  } else {
+    map.flyToBounds(bounds, { duration: 0.6 });
+  }
+}
+
+drawChips();
+draw();
+drawList();
+</script>
+</body>
+</html>

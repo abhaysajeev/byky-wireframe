@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Sora',sans-serif;background:#f4f5fa;color:#1a1640;-webkit-font-smoothing:antialiased}
+  a{color:#d81f26;text-decoration:none}
+  a:hover{color:#a8161c}
+  input,select,textarea,button{font-family:inherit}
+  .sb{scrollbar-width:thin;scrollbar-color:#e4e3ee transparent}
+  .sb::-webkit-scrollbar{width:6px;height:6px}
+  .sb::-webkit-scrollbar-thumb{background:#e4e3ee;border-radius:99px}
+  .sb::-webkit-scrollbar-track{background:transparent}
+  @keyframes drawerIn{from{transform:translateX(28px);opacity:.4}to{transform:translateX(0);opacity:1}}
+  @keyframes veilIn{from{opacity:0}to{opacity:1}}
+</style>
+</helmet>
+
+<div style="min-height:100vh;background:#f4f5fa;position:relative;overflow:hidden">
+
+  <div class="sb" style="height:100vh;overflow-y:auto;padding:26px">
+    <div style="max-width:1320px;margin:0 auto">
+      <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px;flex-wrap:wrap">
+        <div>
+          <div style="display:flex;align-items:center;gap:7px;font-size:11.5px;font-weight:500;color:#a9a6c4;margin-bottom:8px">
+            <span>Inventory</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+            <span style="color:#6b6790;font-weight:600">{{ pageTitle }}</span>
+          </div>
+          <h1 style="font-size:24px;font-weight:700;letter-spacing:-.6px;line-height:1.15">{{ pageTitle }}</h1>
+        </div>
+        <button onClick="{{ openDefault }}" style="display:flex;align-items:center;gap:8px;border:none;cursor:pointer;font-size:12.5px;font-weight:600;color:#fff;padding:11px 16px;border-radius:10px;background:linear-gradient(100deg,#c2141a,#e8272e);box-shadow:0 6px 16px -8px rgba(216,31,38,.55);transition:transform .18s" style-hover="transform:translateY(-1px)">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+          Add Vehicle
+        </button>
+      </div>
+
+      <div style="background:#fff;border:1px solid #eeedf5;border-radius:16px;box-shadow:0 1px 2px rgba(26,22,64,.03);margin-top:20px;padding:18px 20px">
+        <div style="display:flex;flex-direction:column;gap:1px">
+          <sc-for list="{{ ghostRows }}" as="g" hint-placeholder-count="7">
+            <div style="display:flex;align-items:center;gap:16px;padding:13px 2px;border-bottom:1px solid #f6f5fb">
+              <span style="width:34px;height:34px;border-radius:10px;background:#f6f5fc;flex:0 0 auto"></span>
+              <span style="height:9px;border-radius:99px;background:#f2f1f8;width:{{ g.a }}"></span>
+              <span style="height:9px;border-radius:99px;background:#f6f5fc;width:{{ g.b }}"></span>
+              <div style="flex:1"></div>
+              <span style="height:9px;border-radius:99px;background:#f6f5fc;width:56px"></span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <sc-if value="{{ open }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ close }}" style="position:absolute;inset:0;background:rgba(26,22,64,.36);backdrop-filter:blur(2.5px);z-index:20;animation:veilIn .2s ease-out"></div>
+
+    <aside style="position:absolute;top:0;right:0;bottom:0;width:{{ drawerW }};max-width:100%;background:#fff;z-index:21;display:flex;flex-direction:column;box-shadow:-26px 0 64px -32px rgba(26,22,64,.55);animation:drawerIn .28s cubic-bezier(.2,.85,.2,1)">
+
+      <div style="flex:0 0 auto;background:#fff;border-bottom:1px solid #f0eff7">
+        <div style="height:3px;background:linear-gradient(90deg,#a80f14,#d81f26 55%,#f04a50)"></div>
+        <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:19px 24px 17px">
+          <div style="min-width:0">
+            <div style="font-size:10.5px;font-weight:600;letter-spacing:1.2px;text-transform:uppercase;color:#a9a6c4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ headModule }}</div>
+            <h2 style="font-size:17px;font-weight:600;letter-spacing:-.3px;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ headTitle }}</h2>
+          </div>
+          <button onClick="{{ close }}" title="Close" style="width:32px;height:32px;border-radius:10px;border:1px solid #eeedf5;background:#fff;color:#8b87b0;display:grid;place-items:center;cursor:pointer;flex:0 0 auto;transition:border-color .16s,color .16s,transform .18s" style-hover="border-color:#f3c3c5;color:#d81f26;transform:rotate(90deg)">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+          </button>
+        </div>
+
+        <sc-if value="{{ showJump }}" hint-placeholder-val="{{ false }}">
+          <div class="sb" style="display:flex;gap:20px;padding:0 24px;overflow-x:auto">
+            <sc-for list="{{ jumps }}" as="j" hint-placeholder-count="4">
+              <button onClick="{{ j.go }}" style="flex:0 0 auto;border:none;background:none;padding:0 0 12px;font-size:12.5px;font-weight:{{ j.weight }};color:{{ j.color }};cursor:pointer;border-bottom:2px solid {{ j.underline }};transition:color .16s,border-color .16s;white-space:nowrap" style-hover="color:#1a1640">{{ j.label }}</button>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+
+      <div style="flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:9px 24px;background:#fbfaff;border-bottom:1px solid #f0eff7">
+        <span style="font-size:10px;font-weight:600;letter-spacing:.9px;text-transform:uppercase;color:#c9c6dd;white-space:nowrap">Preview size</span>
+        <div style="display:flex;align-items:center;gap:4px">
+          <sc-for list="{{ cases }}" as="c" hint-placeholder-count="3">
+            <button onClick="{{ c.open }}" style="border:none;background:{{ c.bg }};color:{{ c.color }};cursor:pointer;font-size:11px;font-weight:600;padding:5px 10px;border-radius:7px;white-space:nowrap;transition:background .16s,color .16s" style-hover="background:#f2f1f8">{{ c.title }}</button>
+          </sc-for>
+        </div>
+      </div>
+
+      <div class="sb" onScroll="{{ onScroll }}" ref="{{ bodyRef }}" style="flex:1;overflow-y:auto;padding:0 24px 28px">
+        <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3">
+          <div ref="{{ s.ref }}" style="margin-top:{{ s.padTop }}">
+            <div style="display:{{ s.headShow }};align-items:center;gap:10px;margin-bottom:15px;position:sticky;top:0;z-index:3;background:#fff;padding:9px 0 8px">
+              <span style="width:3px;height:{{ s.barH }};border-radius:99px;background:{{ s.barBg }};flex:0 0 auto;transition:height .2s,background .2s"></span>
+              <span style="font-size:10.5px;font-weight:700;letter-spacing:1.1px;text-transform:uppercase;color:{{ s.titleColor }};white-space:nowrap;transition:color .2s">{{ s.title }}</span>
+              <div style="flex:1;height:1px;background:{{ s.ruleBg }};transition:background .2s"></div>
+              <span style="font-size:10.5px;font-weight:600;color:{{ s.countColor }};font-variant-numeric:tabular-nums;transition:color .2s">{{ s.count }}</span>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat({{ gridCols }},minmax(0,1fr));gap:15px 16px">
+              <sc-for list="{{ s.fields }}" as="f" hint-placeholder-count="4">
+                <div style="grid-column:{{ f.span }};min-width:0">
+                  <label style="display:flex;align-items:baseline;gap:5px;font-size:11.5px;font-weight:500;color:#6b6790;margin-bottom:7px">
+                    <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.label }}</span><span style="color:#d81f26;display:{{ f.reqShow }}">*</span>
+                  </label>
+
+                  <sc-if value="{{ f.isText }}" hint-placeholder-val="{{ true }}">
+                    <div style="position:relative">
+                      <input type="text" placeholder="{{ f.placeholder }}" style="width:100%;height:42px;border:1px solid #e8e7f2;background:#fff;border-radius:11px;padding:0 13px;padding-left:{{ f.padLeft }};font-size:13px;color:#1a1640;outline:none;transition:border-color .16s,box-shadow .16s" style-focus="border-color:#d81f26;box-shadow:0 0 0 3px rgba(216,31,38,.1)" style-hover="border-color:#d3d0e6" />
+                      <span style="position:absolute;left:13px;top:0;bottom:0;display:{{ f.prefixShow }};align-items:center;font-size:12px;font-weight:500;color:#a9a6c4;pointer-events:none">{{ f.prefix }}</span>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:relative">
+                      <select style="width:100%;height:42px;border:1px solid #e8e7f2;background:#fff;border-radius:11px;padding:0 36px 0 13px;font-size:13px;color:#8b87b0;outline:none;appearance:none;cursor:pointer;transition:border-color .16s,box-shadow .16s" style-focus="border-color:#d81f26;box-shadow:0 0 0 3px rgba(216,31,38,.1)" style-hover="border-color:#d3d0e6">
+                        <option>Select</option>
+                        <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="3">
+                          <option>{{ o }}</option>
+                        </sc-for>
+                      </select>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;right:13px;top:14px;pointer-events:none"><path d="m6 9 6 6 6-6"></path></svg>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ f.isDate }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:relative">
+                      <input type="text" placeholder="{{ f.placeholder }}" style="width:100%;height:42px;border:1px solid #e8e7f2;background:#fff;border-radius:11px;padding:0 40px 0 13px;font-size:13px;color:#1a1640;outline:none;transition:border-color .16s,box-shadow .16s" style-focus="border-color:#d81f26;box-shadow:0 0 0 3px rgba(216,31,38,.1)" style-hover="border-color:#d3d0e6" />
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;right:13px;top:13px;pointer-events:none"><path d="M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1M8 3v4M16 3v4M4 11h16"></path></svg>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ f.isArea }}" hint-placeholder-val="{{ false }}">
+                    <textarea rows="3" placeholder="{{ f.placeholder }}" style="width:100%;border:1px solid #e8e7f2;background:#fff;border-radius:11px;padding:11px 13px;font-size:13px;color:#1a1640;outline:none;resize:vertical;line-height:1.55;transition:border-color .16s,box-shadow .16s" style-focus="border-color:#d81f26;box-shadow:0 0 0 3px rgba(216,31,38,.1)" style-hover="border-color:#d3d0e6"></textarea>
+                  </sc-if>
+
+                  <sc-if value="{{ f.isFile }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:center;gap:11px;height:42px;border:1.5px dashed #e0deee;background:#fbfaff;border-radius:11px;padding:0 13px;cursor:pointer;transition:border-color .16s,background .16s" style-hover="border-color:#f3c3c5;background:#fdf9f9">
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" style="flex:0 0 auto"><path d="M12 16V4M8 8l4-4 4 4M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>
+                      <span style="font-size:12.5px;color:#9490bb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.placeholder }}</span>
+                    </div>
+                  </sc-if>
+
+                  <sc-if value="{{ f.isToggle }}" hint-placeholder-val="{{ false }}">
+                    <div onClick="{{ f.flip }}" style="display:flex;align-items:center;gap:11px;height:42px;border:1px solid #eeedf5;background:#fbfaff;border-radius:11px;padding:0 13px;cursor:pointer;transition:border-color .16s" style-hover="border-color:#d3d0e6">
+                      <span style="width:36px;height:21px;border-radius:99px;background:{{ f.knobBg }};position:relative;flex:0 0 auto;transition:background .18s">
+                        <span style="position:absolute;top:3px;left:{{ f.knobX }};width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(26,22,64,.32);transition:left .18s"></span>
+                      </span>
+                      <span style="font-size:12.5px;font-weight:500;color:#4b4770;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ f.placeholder }}</span>
+                    </div>
+                  </sc-if>
+
+                  <div style="font-size:10.5px;color:#a9a6c4;margin-top:6px;line-height:1.5;display:{{ f.helpShow }}">{{ f.help }}</div>
+                </div>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+
+        <div style="height:4px"></div>
+      </div>
+
+      <div style="flex:0 0 auto;border-top:1px solid #f0eff7;background:#fbfaff;padding:14px 24px">
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+          <button onClick="{{ toggleActive }}" style="display:flex;align-items:center;gap:9px;border:none;background:none;padding:0;cursor:pointer;flex:1 1 100px;min-width:0">
+            <span style="width:36px;height:21px;border-radius:99px;background:{{ activeBg }};position:relative;flex:0 0 auto;transition:background .18s">
+              <span style="position:absolute;top:3px;left:{{ activeX }};width:15px;height:15px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(26,22,64,.32);transition:left .18s"></span>
+            </span>
+            <span style="font-size:12.5px;font-weight:500;color:#4b4770">Active</span>
+          </button>
+          <button onClick="{{ close }}" style="border:none;background:none;cursor:pointer;font-size:12.5px;font-weight:500;color:#8b87b0;padding:10px 6px;transition:color .16s" style-hover="color:#1a1640">Cancel</button>
+          <button style="border:1px solid #e8e7f2;background:#fff;cursor:pointer;font-size:12.5px;font-weight:500;color:#4b4770;padding:9px 15px;border-radius:9px;transition:border-color .16s" style-hover="border-color:#d3d0e6">Save &amp; New</button>
+          <button style="border:none;cursor:pointer;font-size:12.5px;font-weight:600;color:#fff;padding:10px 20px;border-radius:9px;background:#d81f26;transition:background .16s" style-hover="background:#c2141a">Save</button>
+        </div>
+      </div>
+    </aside>
+  </sc-if>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1280,&quot;height&quot;:860}}">
+// field: [label, kind, required, placeholder|toggleLabel, span, help, options, prefix]
+const CASES = {
+  small: {
+    tag: 'Compact', tagBg: '#e9f8f0', tagFg: '#14764a',
+    module: 'Human Resources · Designations', title: 'Add Designation',
+    note: 'Three fields, one section. The drawer narrows and drops its section rail.',
+    icon: 'M20 7 9.5 17.5 4 12',
+    label: 'Add Designation',
+    width: 440, cols: 1,
+    sections: [['', [
+      ['Designation Code', 'text', true, 'DSG-001', 1, 'Unique across the company.'],
+      ['Designation Name', 'text', true, 'e.g. Station Supervisor', 1, ''],
+      ['Department', 'select', true, '', 1, '', ['Operations', 'Maintenance', 'Finance', 'Customer Care']]
+    ]]]
+  },
+  medium: {
+    tag: 'Standard', tagBg: '#eaf1fd', tagFg: '#2b52a0',
+    module: 'Company Management · Branches', title: 'Add Branch',
+    note: 'Eight fields across two sections — the common master shape.',
+    icon: 'M4 21V4.2A1.2 1.2 0 0 1 5.2 3h8.6A1.2 1.2 0 0 1 15 4.2V21M15 9h4.8A1.2 1.2 0 0 1 21 10.2V21M3 21h18M8 7h3M8 11h3',
+    label: 'Add Branch',
+    width: 560, cols: 2,
+    sections: [
+      ['Identification', [
+        ['Branch Code', 'text', true, 'BR-001', 1, ''],
+        ['Branch Name', 'text', true, 'e.g. Al Barsha Pond Park', 1, ''],
+        ['Company', 'select', true, '', 2, '', ['Byky Rentals LLC', 'Byky Abu Dhabi FZE', 'Byky Sharjah Trading']]
+      ]],
+      ['Location & Contact', [
+        ['Emirate', 'select', true, '', 1, '', ['Dubai', 'Abu Dhabi', 'Sharjah', 'Ajman', 'Al Ain', 'Fujairah', 'Ras Al Khaimah']],
+        ['City', 'text', false, 'e.g. Dubai', 1, ''],
+        ['Address', 'textarea', false, 'Street, building, landmark', 2, ''],
+        ['Phone Number', 'text', true, '4 553 0182', 1, '', null, '+971'],
+        ['Email Address', 'text', false, 'branch@byky.ae', 1, '']
+      ]]
+    ]
+  },
+  large: {
+    tag: 'Wide', tagBg: '#fdf3e3', tagFg: '#8a5300',
+    module: 'Inventory · Vehicles', title: 'Add Vehicle',
+    note: 'Twenty-two fields, five sections. Section jump-tabs appear and track scroll.',
+    icon: 'M5.6 19.4a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8M18.4 19.4a3.4 3.4 0 1 0 0-6.8 3.4 3.4 0 0 0 0 6.8M5.6 16h4.1l3.2-6.4 5.5 6.4M13.2 9.6h3.2M11.6 8.2h2.6',
+    label: 'Add Vehicle',
+    width: 720, cols: 2,
+    sections: [
+      ['Identification', [
+        ['Vehicle Code', 'text', true, 'CR12', 1, 'Printed on the frame decal.'],
+        ['RFID Tag', 'text', false, 'Scan or type', 1, ''],
+        ['Category', 'select', true, '', 1, '', ['Byky', 'Electric Bike iFun', 'Electric Scooter Vigrous', 'Kuwait Bike']],
+        ['Model', 'select', false, '', 1, '', ['iFun 200', 'Ghae R2', 'Vigrous S1']]
+      ]],
+      ['Assignment', [
+        ['Company', 'select', true, '', 1, '', ['Byky Rentals LLC', 'Byky Abu Dhabi FZE']],
+        ['Branch', 'select', true, '', 1, '', ['Al Barsha Pond Park', 'Creek Park Gate 1', 'Mubazzarah']],
+        ['Station', 'select', false, '', 1, '', ['Corniche 1', 'Corniche 2', 'Corniche 3']],
+        ['Fare Plan', 'select', false, '', 1, '', ['Standard hourly', 'Weekend leisure', 'Resort package']]
+      ]],
+      ['Specification', [
+        ['Frame Size', 'select', false, '', 1, '', ['S', 'M', 'L', 'Kids']],
+        ['Colour', 'text', false, 'e.g. Byky Red', 1, ''],
+        ['Battery Capacity', 'text', false, '36', 1, 'Volts. Leave empty for non-electric.'],
+        ['Gears', 'text', false, '7', 1, ''],
+        ['Notes', 'textarea', false, 'Anything the workshop should know', 2, '']
+      ]],
+      ['Commercial', [
+        ['Purchase Date', 'date', false, 'DD / MM / YYYY', 1, ''],
+        ['Purchase Cost', 'text', false, '1,850', 1, '', null, 'AED'],
+        ['Supplier', 'select', false, '', 1, '', ['Gulf Cycle Trading', 'iFun Mobility', 'Vigrous MENA']],
+        ['Warranty Until', 'date', false, 'DD / MM / YYYY', 1, ''],
+        ['Depreciation %', 'text', false, '12.5', 1, 'Annual, straight line.']
+      ]],
+      ['Compliance', [
+        ['Insurance Policy No', 'text', false, 'Policy reference', 1, ''],
+        ['Insurance Expiry', 'date', false, 'DD / MM / YYYY', 1, ''],
+        ['Registration Document', 'file', false, 'Attach PDF or image', 2, ''],
+        ['Roadworthy', 'toggle', false, 'Passed last inspection', 2, '']
+      ]]
+    ]
+  }
+};
+
+const GHOSTS = [['180px', '96px'], ['144px', '120px'], ['206px', '84px'], ['162px', '110px'], ['192px', '78px'], ['136px', '128px'], ['174px', '92px']];
+
+const PLACEHOLDER = (f) => {
+  switch (f[1]) {
+    case 'select': return 'Select';
+    case 'date': return 'Select date';
+    case 'file': return 'Choose file';
+    case 'toggle': return f[3];
+    default: return 'Enter ' + f[0].replace(/ No$/, ' number').replace(/ %$/, '');
+  }
+};
+
+class Component extends DCLogic {
+  _secs = [];
+  _body = null;
+  state = { open: 'large', active: true, toggles: {}, current: 0 };
+
+  componentDidMount() {
+    this._onKey = (e) => { if (e.key === 'Escape' && this.state.open) this.setState({ open: null }); };
+    window.addEventListener('keydown', this._onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this._onKey); }
+
+  renderVals() {
+    const { open, active, toggles, current } = this.state;
+    const spec = open ? CASES[open] : null;
+    const secs = spec ? spec.sections : [];
+    const total = secs.reduce((a, s) => a + s[1].length, 0);
+    const req = secs.reduce((a, s) => a + s[1].filter(f => f[2]).length, 0);
+    const named = secs.filter(s => s[0]).length;
+
+    return {
+      pageTitle: spec ? spec.label.replace('Add ', '') + 's' : 'Vehicles',
+      ghostRows: GHOSTS.map(g => ({ a: g[0], b: g[1] })),
+      openDefault: () => this.setState({ open: 'large', current: 0 }),
+      cases: Object.keys(CASES).map(k => ({
+        title: CASES[k].tag,
+        bg: open === k ? '#fdeced' : 'transparent',
+        color: open === k ? '#c2141a' : '#8b87b0',
+        open: () => this.setState({ open: k, current: 0 })
+      })),
+
+      open: !!open,
+      drawerW: spec ? spec.width + 'px' : '560px',
+      gridCols: spec ? spec.cols : 1,
+      headModule: spec ? spec.module : '',
+      headTitle: spec ? spec.label : '',
+      showJump: named > 1,
+      jumps: secs.map((s, i) => ({
+        label: s[0] || 'Details',
+        weight: current === i ? 600 : 500,
+        color: current === i ? '#1a1640' : '#8b87b0',
+        underline: current === i ? '#d81f26' : 'transparent',
+        go: () => {
+          const el = this._secs[i], body = this._body;
+          if (el && body) {
+            this._lock = Date.now() + 700;
+            body.scrollTo({
+              top: body.scrollTop + (el.getBoundingClientRect().top - body.getBoundingClientRect().top) - 6,
+              behavior: 'smooth'
+            });
+          }
+          this.setState({ current: i });
+        }
+      })),
+      bodyRef: (el) => { this._body = el; },
+      onScroll: () => {
+        const body = this._body;
+        if (!body || Date.now() < (this._lock || 0)) return;
+        const top = body.getBoundingClientRect().top;
+        let idx = 0;
+        this._secs.forEach((el, i) => {
+          if (el && el.getBoundingClientRect().top - top <= 12) idx = i;
+        });
+        if (idx !== this.state.current) this.setState({ current: idx });
+      },
+
+      sections: secs.map((s, si) => ({
+        title: s[0],
+        count: s[1].length,
+        headShow: s[0] ? 'flex' : 'none',
+        padTop: si === 0 ? '0px' : '22px',
+        barH: current === si ? '13px' : '0px',
+        barBg: current === si ? '#d81f26' : 'transparent',
+        titleColor: current === si ? '#1a1640' : '#a9a6c4',
+        ruleBg: current === si ? '#f7dede' : '#f4f3f9',
+        countColor: current === si ? '#c2141a' : '#c9c6dd',
+        ref: (el) => { this._secs[si] = el; },
+        fields: s[1].map((f, fi) => {
+          const key = si + '-' + fi;
+          const on = toggles[key] !== false;
+          return {
+            label: f[0],
+            placeholder: PLACEHOLDER(f),
+            reqShow: f[2] ? 'inline' : 'none',
+            span: 'span ' + Math.min(f[4] || 1, spec.cols),
+            help: f[5], helpShow: f[5] ? 'block' : 'none',
+            options: f[6] || [],
+            prefix: f[7] || '',
+            prefixShow: f[7] ? 'flex' : 'none',
+            padLeft: f[7] ? (f[7].length * 8 + 18) + 'px' : '13px',
+            isText: f[1] === 'text',
+            isSelect: f[1] === 'select',
+            isDate: f[1] === 'date',
+            isArea: f[1] === 'textarea',
+            isFile: f[1] === 'file',
+            isToggle: f[1] === 'toggle',
+            knobBg: on ? '#1f9d63' : '#dcd9ea',
+            knobX: on ? '18px' : '3px',
+            flip: () => this.setState(st => ({ toggles: { ...st.toggles, [key]: st.toggles[key] === false } }))
+          };
+        })
+      })),
+
+      close: () => this.setState({ open: null }),
+      activeBg: active ? '#1f9d63' : '#dcd9ea',
+      activeX: active ? '18px' : '3px',
+      toggleActive: () => this.setState(st => ({ active: !st.active }))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

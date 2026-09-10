@@ -35,16 +35,16 @@ pairs come from the client's Vehicle Type column.
     <div class="scr-head-actions">
       <button type="button" class="scr-btn-primary" data-scr-open="subcategory:add">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
-        Add Sub-Category
+        Add Vehicle Type
       </button>
     </div>
   </div>
 
-  <div class="scr-card" data-scr-noun-singular="sub-category" data-scr-noun-plural="sub-categories">
+  <div class="scr-card" data-scr-noun-singular="vehicle type" data-scr-noun-plural="vehicle types">
     <div class="scr-toolbar">
       <div class="scr-search">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
-        <input type="text" placeholder="Search sub-category code or name" />
+        <input type="text" placeholder="Search vehicle type code or name" />
       </div>
 
       <div class="scr-filter-wrap" data-filter-key="parent">
@@ -58,7 +58,7 @@ pairs come from the client's Vehicle Type column.
         </div>
       </div>
 
-      <span class="scr-toolbar-count">{{ subcategories|length }} sub-categories</span>
+      <span class="scr-toolbar-count">{{ subcategories|length }} vehicle types</span>
     </div>
 
     <div class="scr-table-scroll scr-sb">
@@ -67,7 +67,7 @@ pairs come from the client's Vehicle Type column.
           <tr>
             <th>Parent Category</th>
             <th>Code</th>
-            <th>Sub-Category Name</th>
+            <th>Vehicle Type</th>
             <th>Description</th>
             <th>Items</th>
             <th>Status</th>

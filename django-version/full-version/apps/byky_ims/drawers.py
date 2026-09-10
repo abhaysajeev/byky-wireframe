@@ -612,7 +612,7 @@ STATUS = {
 SUBCATEGORY = {
     "drawer_id": "drawerSubcategory",
     "scr_name": "subcategory",
-    "add_label": "Add Sub-Category",
+    "add_label": "Add Vehicle Type",
     "title_field": "name",
     "sections": [
         {
@@ -628,14 +628,14 @@ SUBCATEGORY = {
                 },
                 {
                     "id": "code",
-                    "label": "Sub-Category Code",
+                    "label": "Vehicle Type Code",
                     "kind": "text",
                     "required": True,
                     "lock_on_edit": True
                 },
                 {
                     "id": "name",
-                    "label": "Sub-Category Name",
+                    "label": "Vehicle Type Name",
                     "kind": "text",
                     "required": True
                 },

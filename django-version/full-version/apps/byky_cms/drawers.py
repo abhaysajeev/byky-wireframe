@@ -301,14 +301,6 @@ STATE = {
             "title": "",
             "fields": [
                 {
-                    "id": "country",
-                    "label": "Country",
-                    "kind": "select",
-                    "required": True,
-                    "options_from": "countries",
-                    "option_key": "name"
-                },
-                {
                     "id": "code",
                     "label": "State Code",
                     "kind": "text",

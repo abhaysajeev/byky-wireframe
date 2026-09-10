@@ -217,19 +217,6 @@ each filtering and searching on its own, each with its own Add drawer.
           <input type="text" placeholder="Search state or code" />
         </div>
 
-        <div class="scr-filter-wrap" data-filter-key="country">
-          <button type="button" class="scr-filter-btn">
-            <span class="scr-filter-label">All countries</span>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-          </button>
-          <div class="scr-filter-menu" hidden>
-            <button type="button" class="scr-filter-opt is-active" data-value="">All countries</button>
-            {% for c in countries %}
-            <button type="button" class="scr-filter-opt" data-value="{{ c.name }}">{{ c.name }}</button>
-            {% endfor %}
-          </div>
-        </div>
-
         <span class="scr-toolbar-count">{{ states|length }} states</span>
         <button type="button" class="scr-btn-primary" data-scr-open="state:add">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
@@ -252,7 +239,7 @@ each filtering and searching on its own, each with its own Add drawer.
           </thead>
           <tbody>
             {% for s in states %}
-            <tr class="scr-row" data-search="{{ s.name|lower }} {{ s.code|lower }}" data-country="{{ s.country }}" data-record-id="{{ s.json_id }}">
+            <tr class="scr-row" data-search="{{ s.name|lower }} {{ s.code|lower }}" data-record-id="{{ s.json_id }}">
               <td>
                 <div class="scr-co">
                   <span class="scr-avatar {% cycle 'scr-avatar-0' 'scr-avatar-1' 'scr-avatar-2' 'scr-avatar-3' 'scr-avatar-4' as state_avatar_cls %}">{{ s.code|slice:":2" }}</span>

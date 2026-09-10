@@ -80,7 +80,6 @@ class CountryStateView(CmsScreenView):
             s["fields_json"] = {
                 "name": s["name"],
                 "code": s["code"],
-                "country": s["country"],
                 "active": s["active"],
             }
 

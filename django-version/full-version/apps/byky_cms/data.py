@@ -117,29 +117,31 @@ def branches():
 
 
 def company():
-    """The single operating company. Registration details are not in the client
-    files, so they render as 'not captured' rather than being invented."""
+    """The single operating company, registered with the client's own trade
+    licence details. Fields the client hasn't supplied yet still render as
+    'not captured' rather than being invented."""
     st = seed.STATIONS
     return {
-        "code": "BYKY",
-        "name": "BYKY",
-        "address": NOT_CAPTURED,
+        "code": "Byky",
+        "name": "BY KY SPORT & LEISURE EQUIPMENT RENTAL & TRADING LLC",
+        "address": "AL WAHDH 1 FLOOR 109, PORT SAEED, DEIRA, DUBAI, POST BOX NO: 22514, UAE",
         "state": "Dubai",
-        "city": NOT_CAPTURED,
-        "zip": NOT_CAPTURED,
+        "city": "Dubai",
+        "zip": "22514",
+        "date_commissioned": "25/01/2017",
         "inc_cert_no": NOT_CAPTURED,
         "business_cert_no": NOT_CAPTURED,
         "income_tax_no": NOT_CAPTURED,
-        "tax_pct": "0.00",
-        "tin": NOT_CAPTURED,
+        "tax_pct": "5.00",
+        "tin": "100297867200003",
         "cst": NOT_CAPTURED,
         "service_tax_no": NOT_CAPTURED,
         "contact_person": NOT_CAPTURED,
         "phone": NOT_CAPTURED,
         "fax": NOT_CAPTURED,
         "email": NOT_CAPTURED,
-        "web_address": NOT_CAPTURED,
-        "ceo_name": NOT_CAPTURED,
+        "web_address": "www.q8byky.com",
+        "ceo_name": "Abdullah Ali",
         "dto_name": NOT_CAPTURED,
         "logo": "",  # not a client-data gap (NOT_CAPTURED) -- genuinely no logo uploaded yet
         "branches": len(st),
@@ -157,6 +159,7 @@ _COMPANY_SECTIONS = [
         ("Company Name", "name", True, "", 2),
         ("CEO Name", "ceo_name", False, "", 1),
         ("DTO Name", "dto_name", False, "", 1),
+        ("Date of Commissioning", "date_commissioned", False, "", 1),
     ]),
     ("address", "Address", "Address", [
         ("Address", "address", False, "", 2),

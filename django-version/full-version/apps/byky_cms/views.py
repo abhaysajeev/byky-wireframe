@@ -33,23 +33,27 @@ class CmsScreenView(BykyScreenView):
 
 
 class CompanyDetailsView(CmsScreenView):
-    """No company is registered yet on this screen -- the list shows the empty
-    state and the Company Record form below is blank, ready for first-time
-    entry. This is scoped to this page only: data.company() (and the fleet,
-    station and workforce data every other screen uses) is untouched."""
+    """The single operating company, BYKY, registered from the client's own
+    trade licence details -- see data.company()."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        sections = data.company_sections({})
+        record = data.company()
+        sections = data.company_sections(record)
         completeness = data.company_completeness(sections)
+        row = dict(record)
+        row["json_id"] = "scr-record-company-0"
+        row["fill_pct"] = completeness["pct"]
+        row["fill_level"] = data.company_fill_level(completeness["pct"])
+        row["fields_json"] = {f["key"]: f["value"] for s in sections for f in s["fields"]}
         context.update(
             {
-                "companies": [],
+                "companies": [row],
                 "form_sections": sections,
                 "completeness": completeness,
-                "active_count": 0,
-                "form_active_default": True,
-                "company_logo": "",
+                "active_count": 1 if record["active"] else 0,
+                "form_active_default": record["active"],
+                "company_logo": record["logo"],
                 # generated, not a literal spec -- see drawers.company_spec
                 "drawer_company": drawers.company_spec(sections),
             }

@@ -218,7 +218,11 @@ EMPLOYEE = {
                     "id": "gender",
                     "label": "Gender",
                     "kind": "select",
-                    "required": False
+                    "required": False,
+                    "options": [
+                        "Male",
+                        "Female"
+                    ]
                 },
                 {
                     "id": "marital_status",

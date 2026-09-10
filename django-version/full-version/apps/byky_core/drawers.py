@@ -34,12 +34,21 @@ def resolve(spec, context):
     "name"). A key the context does not carry resolves to an empty list rather
     than raising -- a drawer with an empty dropdown is a visible, honest gap,
     where a 500 on an unrelated screen is not.
+
+    A select whose choices are fixed by the domain rather than by data --
+    Gender, Marital Status -- carries a literal `options` list instead, and is
+    resolved straight from it. Without this a literal list rendered as an empty
+    dropdown, because the template only ever reads `resolved`. radio and
+    checkgroup read `options` directly and are left alone.
     """
+    fills_from_options = ("select", "multiselect")
     out = copy.deepcopy(spec)
     for section in out.get("sections", []):
         for field in section.get("fields", []):
             src = field.get("options_from")
             if not src:
+                if field.get("kind") in fills_from_options and field.get("options"):
+                    field["resolved"] = list(field["options"])
                 continue
             key = field.get("option_key", "name")
             values = context.get(src) or []

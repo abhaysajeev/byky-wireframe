@@ -137,7 +137,7 @@ def stock_items():
                 "unit": SHORT,
                 "rate": SHORT,
                 "qty": 1,
-                "status": "Approved",
+                "status": "Active",
             }
         )
     return out

@@ -118,7 +118,7 @@ metadata and stays unchanged.
             <th>RFID Tag EPC</th>
             <th>Branch</th>
             <th>Rate</th>
-            <th>Approval</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -132,7 +132,7 @@ metadata and stays unchanged.
             <td><span class="scr-code">{{ i.rfid }}</span></td>
             <td class="scr-contact">{{ i.station }}</td>
             <td class="scr-contact">{{ i.rate }}</td>
-            <td><span class="scr-badge scr-badge-approved"><i></i>{{ i.status }}</span></td>
+            <td>{% if i.status == 'Active' %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}</td>
             <td>
               <div class="scr-row-actions">
                 <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="item:edit">

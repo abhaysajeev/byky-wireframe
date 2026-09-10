@@ -159,12 +159,11 @@ class TransferFormView(ImsScreenView):
     """The full-page Transfer / Return flows behind Inventory Transfer &
     Return's Move Item menu.
 
-    doc_prefix picks the naming series: TRF for a transfer out of a branch,
-    RET for one coming back. The pool, the destination lists and the document
-    number all come from data.py so the two pages stay in step.
+    The document number is left blank: nothing persists in this phase, so a
+    number shown up front would be a made-up one that never becomes real. The
+    field stays read-only and says it is assigned on save.
     """
 
-    doc_prefix = "TRF"
     # a return picks from what is out at a warehouse or event, not from a branch
     returning = False
 
@@ -173,7 +172,6 @@ class TransferFormView(ImsScreenView):
         items = data.returnable_items() if self.returning else data.transferable_items()
         context.update(
             {
-                "doc_no": data.next_doc_no(self.doc_prefix),
                 "transfer_types": data.TRANSFER_TYPES,
                 "return_types": data.RETURN_TYPES,
                 "warehouses_list": data.warehouses(),

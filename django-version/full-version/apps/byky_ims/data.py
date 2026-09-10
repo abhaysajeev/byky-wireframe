@@ -14,7 +14,6 @@ refunds, campaigns, telemetry, alerts) has no source in the client files and sho
 the awaiting-data state rather than invented rows.
 """
 
-import datetime
 
 from apps.byky_core import seed
 
@@ -199,18 +198,6 @@ def returnable_items():
     """
     branch_names = {b["name"] for b in warehouses()}
     return [i for i in transferable_items() if i["branch"] in branch_names]
-
-
-def next_doc_no(prefix, year=None, existing=0):
-    """Next number in a naming series, ERPNext style: TRF-2026-00001.
-
-    Nothing persists in this phase, so the counter starts from whatever
-    `existing` says -- zero today. Real once a transfer table exists; the
-    format is the part that matters now, so the field can be shown read-only
-    and auto-filled rather than typed.
-    """
-    year = year or datetime.date.today().year
-    return "%s-%s-%05d" % (prefix, year, existing + 1)
 
 
 def warehouses():

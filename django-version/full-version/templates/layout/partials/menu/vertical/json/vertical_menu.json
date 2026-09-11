@@ -147,6 +147,28 @@
    ]
   },
   {
+   "name": "Device",
+   "icon": "menu-icon icon-base ti tabler-device-mobile",
+   "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2",
+   "slug": "device",
+   "badge": [
+    "label-secondary",
+    "2"
+   ],
+   "submenu": [
+    {
+     "url": "device-device-mapping",
+     "name": "Device Mapping",
+     "slug": "device-device-mapping"
+    },
+    {
+     "url": "device-device-settings",
+     "name": "Device Settings",
+     "slug": "device-device-settings"
+    }
+   ]
+  },
+  {
    "name": "Rental",
    "icon": "menu-icon icon-base ti tabler-receipt",
    "svg": "M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7",
@@ -218,46 +240,44 @@
    ]
   },
   {
-   "name": "Request",
-   "icon": "menu-icon icon-base ti tabler-clipboard-check",
-   "svg": "M9 5h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2M9 3h6v3H9zM9 13l2 2 4-4",
-   "slug": "request",
+   "name": "Antenna Tracking",
+   "icon": "menu-icon icon-base ti tabler-gps",
+   "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z",
+   "slug": "tracking",
    "badge": [
     "label-secondary",
-    "2"
+    "6"
    ],
    "submenu": [
     {
-     "url": "request-request-approval",
-     "name": "Request Approval",
-     "slug": "request-request-approval"
+     "url": "tracking-gps-iot-hardware-device-registration",
+     "name": "GPS & IoT Hardware Device Registration",
+     "slug": "tracking-gps-iot-hardware-device-registration"
     },
     {
-     "url": "request-card-discount-approval",
-     "name": "Card Discount Approval",
-     "slug": "request-card-discount-approval"
-    }
-   ]
-  },
-  {
-   "name": "Credit Note",
-   "icon": "menu-icon icon-base ti tabler-receipt-refund",
-   "svg": "M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17l-3-2-2 2-2-2-2 2-2-2M8 7h6M8 11h6",
-   "slug": "creditnote",
-   "badge": [
-    "label-secondary",
-    "2"
-   ],
-   "submenu": [
-    {
-     "url": "creditnote-credit-note-request",
-     "name": "Credit Note Request",
-     "slug": "creditnote-credit-note-request"
+     "url": "tracking-antenna-registration",
+     "name": "Antenna Registration",
+     "slug": "tracking-antenna-registration"
     },
     {
-     "url": "creditnote-credit-note",
-     "name": "Credit Note",
-     "slug": "creditnote-credit-note"
+     "url": "tracking-antenna-branch-mapping",
+     "name": "Antenna Branch Mapping",
+     "slug": "tracking-antenna-branch-mapping"
+    },
+    {
+     "url": "tracking-branch-vehicle-rfid-tag-mapping",
+     "name": "Branch - Vehicle - RFID Tag Mapping",
+     "slug": "tracking-branch-vehicle-rfid-tag-mapping"
+    },
+    {
+     "url": "tracking-antenna-tracking-monitor",
+     "name": "Antenna Tracking Monitor",
+     "slug": "tracking-antenna-tracking-monitor"
+    },
+    {
+     "url": "tracking-tracking-security-privilege-management",
+     "name": "TRACKING Security Privilege",
+     "slug": "tracking-tracking-security-privilege-management"
     }
    ]
   },
@@ -319,113 +339,6 @@
    ]
   },
   {
-   "name": "Vehicle Tracking",
-   "icon": "menu-icon icon-base ti tabler-gps",
-   "svg": "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M15.6 8.4l-2 5.2-5.2 2 2-5.2z",
-   "slug": "tracking",
-   "badge": [
-    "label-secondary",
-    "6"
-   ],
-   "submenu": [
-    {
-     "url": "tracking-gps-iot-hardware-device-registration",
-     "name": "GPS & IoT Hardware Device Registration",
-     "slug": "tracking-gps-iot-hardware-device-registration"
-    },
-    {
-     "url": "tracking-antenna-registration",
-     "name": "Antenna Registration",
-     "slug": "tracking-antenna-registration"
-    },
-    {
-     "url": "tracking-antenna-branch-mapping",
-     "name": "Antenna Branch Mapping",
-     "slug": "tracking-antenna-branch-mapping"
-    },
-    {
-     "url": "tracking-branch-vehicle-rfid-tag-mapping",
-     "name": "Branch - Vehicle - RFID Tag Mapping",
-     "slug": "tracking-branch-vehicle-rfid-tag-mapping"
-    },
-    {
-     "url": "tracking-antenna-tracking-monitor",
-     "name": "Antenna Tracking Monitor",
-     "slug": "tracking-antenna-tracking-monitor"
-    },
-    {
-     "url": "tracking-tracking-security-privilege-management",
-     "name": "TRACKING Security Privilege",
-     "slug": "tracking-tracking-security-privilege-management"
-    }
-   ]
-  },
-  {
-   "name": "Device",
-   "icon": "menu-icon icon-base ti tabler-device-mobile",
-   "svg": "M7 2h10a1 1 0 0 1 1 1v18a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1M11 18h2",
-   "slug": "device",
-   "badge": [
-    "label-secondary",
-    "2"
-   ],
-   "submenu": [
-    {
-     "url": "device-device-mapping",
-     "name": "Device Mapping",
-     "slug": "device-device-mapping"
-    },
-    {
-     "url": "device-device-settings",
-     "name": "Device Settings",
-     "slug": "device-device-settings"
-    }
-   ]
-  },
-  {
-   "name": "Live Monitoring",
-   "icon": "menu-icon icon-base ti tabler-activity",
-   "svg": "M22 12h-4l-3 9L9 3l-3 9H2",
-   "slug": "live",
-   "badge": [
-    "label-secondary",
-    "3"
-   ],
-   "submenu": [
-    {
-     "url": "live-live-monitor",
-     "name": "Live Monitor",
-     "slug": "live-live-monitor"
-    },
-    {
-     "url": "live-search-order",
-     "name": "Search Order",
-     "slug": "live-search-order"
-    },
-    {
-     "url": "live-image-sharing",
-     "name": "Image Sharing",
-     "slug": "live-image-sharing"
-    },
-    {
-     "name": "Test Vehicle Details",
-     "slug": "live-test-vehicle-details",
-     "disabled": true
-    }
-   ]
-  },
-  {
-   "url": "invoice-print-invoice",
-   "name": "Print Invoice",
-   "icon": "menu-icon icon-base ti tabler-printer",
-   "svg": "M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z",
-   "slug": "invoice-print-invoice",
-   "flat": true
-  },
-  {
-   "menu_header": "Business"
-  },
-  {
    "name": "Reports",
    "icon": "menu-icon icon-base ti tabler-report-analytics",
    "svg": "M4 4a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1zM8 16v-4M12 16V8M16 16v-6",
@@ -476,6 +389,110 @@
      "slug": "reports-reports-security-privilege-management"
     }
    ]
+  },
+  {
+   "name": "Roles",
+   "icon": "menu-icon icon-base ti tabler-shield-lock",
+   "svg": "M12 3 4 6v6c0 5 3.4 8.7 8 9 4.6-.3 8-4 8-9V6l-8-3M12 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4M12 11v4",
+   "slug": "roles",
+   "badge": [
+    "label-secondary",
+    "1"
+   ],
+   "submenu": [
+    {
+     "url": "roles-placeholder",
+     "name": "Roles",
+     "slug": "roles-placeholder"
+    }
+   ]
+  },
+  {
+   "name": "Request",
+   "icon": "menu-icon icon-base ti tabler-clipboard-check",
+   "svg": "M9 5h6a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2M9 3h6v3H9zM9 13l2 2 4-4",
+   "slug": "request",
+   "badge": [
+    "label-secondary",
+    "2"
+   ],
+   "submenu": [
+    {
+     "url": "request-request-approval",
+     "name": "Request Approval",
+     "slug": "request-request-approval"
+    },
+    {
+     "url": "request-card-discount-approval",
+     "name": "Card Discount Approval",
+     "slug": "request-card-discount-approval"
+    }
+   ]
+  },
+  {
+   "name": "Credit Note",
+   "icon": "menu-icon icon-base ti tabler-receipt-refund",
+   "svg": "M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17l-3-2-2 2-2-2-2 2-2-2M8 7h6M8 11h6",
+   "slug": "creditnote",
+   "badge": [
+    "label-secondary",
+    "2"
+   ],
+   "submenu": [
+    {
+     "url": "creditnote-credit-note-request",
+     "name": "Credit Note Request",
+     "slug": "creditnote-credit-note-request"
+    },
+    {
+     "url": "creditnote-credit-note",
+     "name": "Credit Note",
+     "slug": "creditnote-credit-note"
+    }
+   ]
+  },
+  {
+   "name": "Live Monitoring",
+   "icon": "menu-icon icon-base ti tabler-activity",
+   "svg": "M22 12h-4l-3 9L9 3l-3 9H2",
+   "slug": "live",
+   "badge": [
+    "label-secondary",
+    "3"
+   ],
+   "submenu": [
+    {
+     "url": "live-live-monitor",
+     "name": "Live Monitor",
+     "slug": "live-live-monitor"
+    },
+    {
+     "url": "live-search-order",
+     "name": "Search Order",
+     "slug": "live-search-order"
+    },
+    {
+     "url": "live-image-sharing",
+     "name": "Image Sharing",
+     "slug": "live-image-sharing"
+    },
+    {
+     "name": "Test Vehicle Details",
+     "slug": "live-test-vehicle-details",
+     "disabled": true
+    }
+   ]
+  },
+  {
+   "url": "invoice-print-invoice",
+   "name": "Print Invoice",
+   "icon": "menu-icon icon-base ti tabler-printer",
+   "svg": "M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h16a1 1 0 0 1 1 1v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z",
+   "slug": "invoice-print-invoice",
+   "flat": true
+  },
+  {
+   "menu_header": "Business"
   },
   {
    "name": "Notifications",

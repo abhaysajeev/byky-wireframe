@@ -597,7 +597,7 @@ class Screen5_3(TrackingScreen):
 
 class AntennaScreenView(BykyScreenView):
     """FSD Module 8 (RFID & Hardware Antenna System) screens, built here per
-    the follow-up instruction to implement them inside Vehicle Tracking
+    the follow-up instruction to implement them inside Antenna Tracking
     Management. See apps/byky_tracking/data.py's docstring for why the
     antenna dataset is populated rather than awaiting-data."""
 

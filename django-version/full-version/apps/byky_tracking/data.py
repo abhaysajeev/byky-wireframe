@@ -6,7 +6,7 @@ vehicle type master (18 models). GPS/IoT hardware is not in the client files.
 Antenna Registration, Antenna Branch Mapping, Branch-Vehicle-RFID Tag Mapping
 and Antenna Tracking Monitor are FSD Module 8 (RFID & Hardware Antenna
 System) screens, built here per the follow-up instruction to implement them
-inside Vehicle Tracking Management instead. Two antenna gates (Entry/Exit)
+inside Antenna Tracking Management instead. Two antenna gates (Entry/Exit)
 per real station is a reasonable 1:1 assumption for the demo, the same
 approach apps/byky_device/data.py uses for POS devices -- deterministic
 (seeded on station code) so the numbers never jump between page loads.

@@ -79,7 +79,7 @@ urlpatterns = [
     ),
     path(
         "ims/inventory-unit-of-measure/",
-        views.ImsAwaitingView.as_view(
+        views.UnitView.as_view(
             template_name="ims_inventory_unit_of_measure.html",
             screen_no="3.5",
             screen_title="Inventory Unit of Measure",
@@ -89,7 +89,6 @@ urlpatterns = [
             phase=3,
             purpose="To define units of measure (UOM) for inventory tracking (e.g., PCS = Pieces, SET = Sets, HR = Hours, KM = Kilometers, LTR = Liters).",
             layout="Form Panel (Unit Code, Unit Name, Description, Decimal Places Allowed), DataGrid showing units.",
-            awaiting_key="units",
         ),
         name="ims-inventory-unit-of-measure",
     ),

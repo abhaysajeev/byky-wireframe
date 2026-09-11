@@ -770,15 +770,13 @@ UNIT = {
                     "id": "code",
                     "label": "Unit Code",
                     "kind": "text",
-                    "required": True,
-                    "placeholder": "HR"
+                    "required": True
                 },
                 {
                     "id": "name",
                     "label": "Unit Name",
                     "kind": "text",
-                    "required": True,
-                    "placeholder": "Hour"
+                    "required": True
                 },
                 {
                     "id": "description",

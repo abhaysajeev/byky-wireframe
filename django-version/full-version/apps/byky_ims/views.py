@@ -130,7 +130,18 @@ class AssetManagementView(ImsScreenView):
         rows = data.assets()
         for i, a in enumerate(rows):
             a["json_id"] = f"scr-record-asset-{i}"
-            a["fields_json"] = {k: a[k] for k in ("code", "name", "asset_class")}
+            a["identifier"] = a["code"]
+            a["station_key"] = a["station"]
+            a["warranty"] = f"{a['warranty_from']} – {a['warranty_to']}"
+            a["fields_json"] = {
+                k: a[k]
+                for k in (
+                    "code", "name", "asset_class", "type", "material_type",
+                    "model", "serial", "station", "custodian", "ip", "mac",
+                    "imei", "msisdn", "acquired", "cost", "supplier",
+                    "warranty_from", "warranty_to", "condition", "notes",
+                )
+            }
         context.update(
             {
                 "assets": rows,
@@ -195,6 +206,19 @@ class BrandView(ImsScreenView):
             b["website_short"] = data.SHORT if b["website"] == data.NOT_CAPTURED else b["website"]
             b["fields_json"] = {"code": b["code"], "name": b["name"], "website": ""}
         context["brands"] = rows
+        return context
+
+
+class UnitView(ImsScreenView):
+    """FSD 3.5. Rows are demo data -- see data._DEMO_UNITS."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = [dict(u) for u in data.units()]
+        for i, u in enumerate(rows):
+            u["json_id"] = f"scr-record-unit-{i}"
+            u["fields_json"] = {"code": u["code"], "name": u["name"], "description": ""}
+        context["units"] = rows
         return context
 
 

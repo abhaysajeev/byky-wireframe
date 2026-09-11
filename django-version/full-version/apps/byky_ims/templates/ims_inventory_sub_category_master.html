@@ -85,9 +85,21 @@ pairs come from the client's Vehicle Type column.
             <td><span class="scr-badge scr-badge-approved"><i></i>{{ r.status }}</span></td>
             <td>
               <div class="scr-row-actions">
-                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="subcategory:edit">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
-                </button>
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <button type="button" class="scr-menu-item" data-scr-open="subcategory:edit">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
               </div>
             </td>
           </tr>

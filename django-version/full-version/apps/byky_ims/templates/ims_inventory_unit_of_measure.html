@@ -48,7 +48,7 @@ rows.
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
         <input type="text" placeholder="Search unit code or name" />
       </div>
-      <span class="scr-toolbar-count">0 units</span>
+      <span class="scr-toolbar-count">{{ units|length }} unit{{ units|length|pluralize }}</span>
     </div>
 
     <div class="scr-table-scroll scr-sb">
@@ -63,6 +63,34 @@ rows.
           </tr>
         </thead>
         <tbody>
+          {% for u in units %}
+          <tr class="scr-row" data-search="{{ u.name|lower }} {{ u.code|lower }}" data-record-id="{{ u.json_id }}">
+            <td><span class="scr-code">{{ u.code }}</span></td>
+            <td style="font-weight:600">{{ u.name }}</td>
+            <td>{% if u.allow_decimal %}Yes{% else %}No{% endif %}</td>
+            <td>{% if u.active %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}</td>
+            <td>
+              <div class="scr-row-actions">
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <button type="button" class="scr-menu-item" data-scr-open="unit:edit">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {{ u.fields_json|json_script:u.json_id }}
+          {% empty %}
           <tr>
             <td colspan="5" style="padding:0">
               <div class="scr-empty">
@@ -80,12 +108,13 @@ rows.
               </div>
             </td>
           </tr>
+          {% endfor %}
         </tbody>
       </table>
     </div>
 
     <div class="scr-pager">
-      <span class="scr-pager-info">Showing 0 of 0</span>
+      <span class="scr-pager-info">Showing {{ units|length }} of {{ units|length }}</span>
       <div class="scr-pager-nav">
         <button type="button" class="scr-pager-btn" disabled>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>

@@ -120,6 +120,33 @@ def brands():
     ]
 
 
+# Demo units of measure. A narrow, explicit, user-requested exception to the
+# no-invented-data rule (CLAUDE.md 12): the client has supplied no UOM list,
+# and this master otherwise has nothing to show against.
+#
+# Replace this list with the client's own the moment it arrives; nothing else
+# needs to change, because every screen that offers units reads units()
+# rather than holding its own copy.
+_DEMO_UNITS = [
+    ("NOS", "Nos"),
+]
+
+
+def units():
+    """The unit of measure master (FSD 3.5). Whole-count items -- no decimal
+    quantities -- so Allow Decimal defaults to No."""
+    return [
+        {
+            "code": code,
+            "name": name,
+            "allow_decimal": False,
+            "active": True,
+            "status": "Active",
+        }
+        for code, name in _DEMO_UNITS
+    ]
+
+
 def stock_items():
     """One row per vehicle. Rates, cost and reorder levels are not in the source."""
     out = []
@@ -404,16 +431,50 @@ def asset_types():
     return out
 
 
+# One demo unit, explicitly requested so the register isn't permanently
+# empty for a walkthrough (CLAUDE.md 12's narrow, explicit exception). Class,
+# type, station and custodian all resolve to real options this screen already
+# offers (Site Security / CCTV Surveillance Camera from _ASSET_TYPES, "Creek
+# Park Gate 1" and "Don Bosco Cyril Cyril" from the real station/staff
+# lists) -- only the unit-specific values (tag, serial, IP/MAC/IMEI, cost,
+# dates) are the requested sample.
+_DEMO_ASSETS = [
+    {
+        "code": "EC001",
+        "name": "CCTV 4G GPRS",
+        "asset_class": "Site Security",
+        "type": "CCTV Surveillance Camera",
+        "material_type": "Electronics",
+        "model": "Hikvision",
+        "serial": "C123456",
+        "station": "Creek Park Gate 1",
+        "custodian": "Don Bosco Cyril Cyril",
+        "ip": "192.168.0.1",
+        "mac": "aa:bb:cc:dd",
+        "imei": "0123456789",
+        "msisdn": "0123456789",
+        "acquired": "01 Jan 2026",
+        "cost": "1250.00",
+        "supplier": "DSTME",
+        "warranty_from": "01 Jan 2026",
+        "warranty_to": "31 Dec 2026",
+        "condition": "New",
+        "notes": "Installed on 03/05/2026",
+    },
+]
+
+
 def assets():
     """Individual equipment units on the register.
 
-    Honestly empty: the client's files cover vehicles and staff only, and no
-    antenna, tracker, terminal or camera inventory has been supplied. The
+    Otherwise honestly empty: the client's files cover vehicles and staff
+    only, and no antenna, tracker, terminal or camera inventory has been
+    supplied. See _DEMO_ASSETS above for the one requested exception. The
     grid still renders its real columns so the client can see the shape of
     what is being asked for, and the drawer is live so a unit can be walked
-    through end to end in a demo. Never seed this with invented serials.
+    through end to end in a demo.
     """
-    return []
+    return [dict(a) for a in _DEMO_ASSETS]
 
 
 def unmapped_assets():

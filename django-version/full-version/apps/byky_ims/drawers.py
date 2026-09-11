@@ -735,6 +735,14 @@ TRANSFER = {
                     "option_key": "name"
                 },
                 {
+                    "id": "event_location",
+                    "label": "Event Location",
+                    "kind": "select",
+                    "required": False,
+                    "options_from": "event_locations_list",
+                    "help": "Only for a transfer going to or from an event, not a branch."
+                },
+                {
                     "id": "dispatch_date",
                     "label": "Dispatch Date",
                     "kind": "date",
@@ -751,6 +759,13 @@ TRANSFER = {
                     "label": "Items Count",
                     "kind": "number",
                     "required": False
+                },
+                {
+                    "id": "remarks",
+                    "label": "Remarks",
+                    "kind": "textarea",
+                    "required": False,
+                    "width": 12
                 }
             ]
         }

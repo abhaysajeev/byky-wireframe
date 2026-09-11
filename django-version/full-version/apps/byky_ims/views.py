@@ -31,6 +31,7 @@ class ImsScreenView(BykyScreenView):
                 # Vehicle Station Mapping shows the mapped-asset figure too
                 "asset_counts": data.asset_counts(),
                 "item_types": data.ITEM_TYPES,
+                "event_locations_list": data.event_locations(),
             }
         )
         if self.awaiting_key:
@@ -163,6 +164,29 @@ class AssetBranchMapView(ImsScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["unmapped"] = data.unmapped_assets()
+        return context
+
+
+class TransferListView(ImsScreenView):
+    """FSD 3.7. Rows are demo data -- see data._DEMO_TRANSFERS."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = [dict(t) for t in data.transfers()]
+        for i, t in enumerate(rows):
+            t["json_id"] = f"scr-record-transfer-{i}"
+            t["items_display"] = ", ".join(t["items"])
+            t["fields_json"] = {
+                "doc_no": t["doc_no"],
+                "from_branch": t["from_branch"],
+                "to_branch": t["to_branch"],
+                "event_location": t["event_location"],
+                "dispatch_date": t["dispatch_date"],
+                "driver": t["driver"],
+                "remarks": t["remarks"],
+                "items_count": len(t["items"]),
+            }
+        context["transfers"] = rows
         return context
 
 

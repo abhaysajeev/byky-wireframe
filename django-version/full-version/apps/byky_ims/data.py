@@ -307,6 +307,32 @@ def transferable_items():
     return out
 
 
+# One demo transfer, explicitly requested so the register isn't permanently
+# empty for a walkthrough (CLAUDE.md 12's narrow, explicit exception).
+# From Branch matches where these three vehicles actually sit in the real
+# fleet data (Creek Park Gate 4) rather than inventing a location for them;
+# the requested "Creek Park Gate 1" becomes the destination.
+_DEMO_TRANSFERS = [
+    {
+        "doc_no": "TRN2026001",
+        "from_branch": "Creek Park Gate 4",
+        "to_branch": "Creek Park Gate 1",
+        "event_location": "",
+        "dispatch_date": "01 Sep 2026",
+        "driver": "Jaibu",
+        "remarks": "More customer visit in gate 4",
+        "items": ["KB259", "KB276", "BE118"],
+        "status": "Completed",
+    },
+]
+
+
+def transfers():
+    """Inter-branch transfer documents (FSD 3.7). Otherwise honestly empty --
+    see _DEMO_TRANSFERS above for the one requested exception."""
+    return [dict(t) for t in _DEMO_TRANSFERS]
+
+
 def unmapped_vehicles():
     """Vehicles with no branch/station assignment yet -- the pool FSD 3.6's
     "Map Vehicle" action assigns to a branch. Every vehicle in the source

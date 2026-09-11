@@ -138,7 +138,7 @@ urlpatterns = [
     ),
     path(
         "ims/vehicle-transfer-relocation/",
-        views.ImsAwaitingView.as_view(
+        views.TransferListView.as_view(
             template_name="ims_vehicle_transfer_relocation.html",
             screen_no="3.7",
             screen_title="Vehicle Transfer & Relocation",
@@ -148,7 +148,6 @@ urlpatterns = [
             phase=3,
             purpose="To request, authorize, dispatch, and acknowledge inter-station vehicle transfers, stock relocations, and fleet re-balancing between branches.",
             layout="Source & Destination Branch Selection Header, Multi-item Transfer Basket, Transfer Reason & Driver Notes, Historical Transfers DataGrid with Status Badges (Pending, In Transit, Received, Cancelled).",
-            awaiting_key="transfers",
         ),
         name="ims-vehicle-transfer-relocation",
     ),
@@ -157,7 +156,7 @@ urlpatterns = [
         views.TransferFormView.as_view(
             template_name="ims_vehicle_transfer_new.html",
             screen_no="3.7a",
-            screen_title="Transfer Vehicle",
+            screen_title="Transfer",
             module_label="Inventory",
             tier="A",
             phase=3,
@@ -172,7 +171,7 @@ urlpatterns = [
             template_name="ims_vehicle_transfer_return.html",
             returning=True,
             screen_no="3.7b",
-            screen_title="Return Vehicle",
+            screen_title="Return",
             module_label="Inventory",
             tier="A",
             phase=3,

@@ -16,12 +16,13 @@
  *    multi_user=true (apps/byky_cms/data.py), so this warning is dormant
  *    against current data -- it fires correctly the day a branch's flag is
  *    turned off.
- * 3. Each mapped device's Logout/Block/Unblock kebab actions require a
- *    remark before they apply (SweetAlert2 with a textarea input), unlike
- *    byky-screen.js's generic data-scr-block/unblock which confirms with a
- *    plain yes/no -- these act on the already-mapped fleet, a distinct
- *    concept from Device Approval's own Block/Unblock on its onboarding
- *    queue.
+ * 3. Each mapped device's Logout/Block/Unblock kebab actions are plain
+ *    instant buttons -- no confirm dialog, no remark prompt (frontend-only
+ *    actions like these stay a direct click, not a modal popup). Block and
+ *    Unblock are dynamic: a row starts showing only the action matching
+ *    its current state, and clicking one swaps to the other live. These
+ *    act on the already-mapped fleet, a distinct concept from Device
+ *    Approval's own Block/Unblock on its onboarding queue.
  */
 
 'use strict';
@@ -68,11 +69,6 @@
     });
   }
 
-  function rowLabel(row) {
-    var code = row.querySelector('.scr-code');
-    return code ? code.textContent.trim() : 'this device';
-  }
-
   function setStatus(row, label, cls) {
     var badge = row.querySelector('[data-status-badge]');
     if (badge) {
@@ -81,52 +77,32 @@
     }
   }
 
-  function wireRemarkAction(attr, verb, doneVerb, apply) {
+  function wireInstantAction(attr, apply) {
     document.querySelectorAll('[' + attr + ']').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         var row = btn.closest('.scr-row');
         if (!row) return;
-        var name = rowLabel(row);
-
-        if (typeof Swal === 'undefined') {
-          var remark = window.prompt(verb + ' ' + name + ' -- remark (required):');
-          if (remark && remark.trim()) apply(row);
-          return;
-        }
-        Swal.fire({
-          title: verb + ' ' + name + '?',
-          input: 'textarea',
-          inputLabel: 'Remark',
-          inputPlaceholder: 'Reason for this action',
-          inputValidator: function (value) {
-            if (!value || !value.trim()) return 'A remark is required.';
-          },
-          showCancelButton: true,
-          confirmButtonText: 'Confirm ' + verb,
-          customClass: { confirmButton: 'btn btn-primary me-3', cancelButton: 'btn btn-label-secondary' },
-          buttonsStyling: false
-        }).then(function (result) {
-          if (!result.isConfirmed) return;
-          apply(row);
-          Swal.fire({
-            text: name + ' has been ' + doneVerb + '.',
-            icon: 'success',
-            customClass: { confirmButton: 'btn btn-primary' },
-            buttonsStyling: false
-          });
-        });
+        apply(row);
       });
     });
   }
 
-  wireRemarkAction('[data-device-logout]', 'Logout', 'logged out', function (row) {
+  wireInstantAction('[data-device-logout]', function (row) {
     setStatus(row, 'Offline', 'scr-badge-rejected');
   });
-  wireRemarkAction('[data-device-block]', 'Block', 'blocked', function (row) {
+  wireInstantAction('[data-device-block]', function (row) {
     setStatus(row, 'Blocked', 'scr-badge-pending');
+    var blockBtn = row.querySelector('[data-device-block]');
+    var unblockBtn = row.querySelector('[data-device-unblock]');
+    if (blockBtn) blockBtn.hidden = true;
+    if (unblockBtn) unblockBtn.hidden = false;
   });
-  wireRemarkAction('[data-device-unblock]', 'Unblock', 'unblocked', function (row) {
+  wireInstantAction('[data-device-unblock]', function (row) {
     setStatus(row, 'Online', 'scr-badge-approved');
+    var blockBtn = row.querySelector('[data-device-block]');
+    var unblockBtn = row.querySelector('[data-device-unblock]');
+    if (blockBtn) blockBtn.hidden = false;
+    if (unblockBtn) unblockBtn.hidden = true;
   });
 })();

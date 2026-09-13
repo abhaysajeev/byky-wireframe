@@ -636,107 +636,64 @@
   /* ── row block / unblock (data-scr-block / data-scr-unblock) -- generic
      across any screen with a [data-status-badge] status pill: originally
      Employee Personal Data, now also Device Approval's Approved/Blocked
-     tabs and its detail page. Same SweetAlert2-confirm-then-update pattern
-     as row delete above: flips the status badge and data-status, nothing
-     persisted (CLAUDE.md section 11). Falls back to the whole .scr-card
-     when there's no .scr-row ancestor -- a detail page (Device Approval's
-     own, mirroring byky-request-approval.js's identical fallback) has no
-     row, only the one status pill its card owns. */
-  function wireStatusToggle(attr, toStatus, isActive, confirmVerb, doneVerb) {
+     tabs and its detail page. Plain instant buttons -- no confirm dialog,
+     no toast (per explicit instruction: frontend-only actions like this
+     stay a direct click, not a modal popup). Flips the status badge and
+     data-status; nothing persisted (CLAUDE.md section 11). Falls back to
+     the whole .scr-card when there's no .scr-row ancestor -- a detail page
+     (Device Approval's own) has no row, only the one status pill its card
+     owns. */
+  function wireStatusToggle(attr, toStatus, isActive) {
     document.querySelectorAll('[' + attr + ']').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
         var row = btn.closest('.scr-row, .scr-card');
         if (!row) return;
-        var nameEl = row.querySelector('.scr-co-name, .scr-code, .scr-form-title');
-        var name = nameEl ? nameEl.textContent.trim() : 'this record';
         var badge = row.querySelector('[data-status-badge]');
         var scope = scopeOf(row);
 
-        function apply() {
-          row.dataset.status = toStatus;
-          if (badge) {
-            badge.classList.toggle('scr-badge-approved', isActive);
-            badge.classList.toggle('scr-badge-pending', !isActive);
-            badge.lastChild.textContent = toStatus;
-          }
-          /* Dynamic Block/Unblock -- when a row's kebab carries both (Device
-             Approval's Approved/Blocked tabs), hide whichever action no
-             longer applies and reveal its opposite, so a blocked device
-             never offers "Block" again and vice versa. */
-          var blockBtn = row.querySelector('[data-scr-block]');
-          var unblockBtn = row.querySelector('[data-scr-unblock]');
-          if (blockBtn) blockBtn.hidden = !isActive;
-          if (unblockBtn) unblockBtn.hidden = isActive;
-          applyFilters(scope, true);
+        row.dataset.status = toStatus;
+        if (badge) {
+          badge.classList.toggle('scr-badge-approved', isActive);
+          badge.classList.toggle('scr-badge-pending', !isActive);
+          badge.lastChild.textContent = toStatus;
         }
-
-        if (typeof Swal === 'undefined') {
-          if (window.confirm(confirmVerb + ' ' + name + '?')) apply();
-          return;
-        }
-        Swal.fire({
-          title: confirmVerb + ' ' + name + '?',
-          icon: isActive ? 'question' : 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'Yes, ' + confirmVerb.toLowerCase(),
-          customClass: {
-            confirmButton: 'btn ' + (isActive ? 'btn-success' : 'btn-danger') + ' me-3',
-            cancelButton: 'btn btn-label-secondary'
-          },
-          buttonsStyling: false
-        }).then(function (result) {
-          if (!result.isConfirmed) return;
-          apply();
-          Swal.fire({
-            text: name + ' has been ' + doneVerb + '.',
-            icon: 'success',
-            customClass: { confirmButton: 'btn btn-primary' },
-            buttonsStyling: false
-          });
-        });
+        /* Dynamic Block/Unblock -- when a row's kebab carries both (Device
+           Approval's Approved/Blocked tabs), hide whichever action no
+           longer applies and reveal its opposite, so a blocked device
+           never offers "Block" again and vice versa. */
+        var blockBtn = row.querySelector('[data-scr-block]');
+        var unblockBtn = row.querySelector('[data-scr-unblock]');
+        if (blockBtn) blockBtn.hidden = !isActive;
+        if (unblockBtn) unblockBtn.hidden = isActive;
+        applyFilters(scope, true);
       });
     });
   }
-  wireStatusToggle('data-scr-block', 'Blocked', false, 'Block', 'blocked');
-  wireStatusToggle('data-scr-unblock', 'Active', true, 'Unblock', 'unblocked');
+  wireStatusToggle('data-scr-block', 'Blocked', false);
+  wireStatusToggle('data-scr-unblock', 'Active', true);
 
-  /* ── manual logout (data-scr-logout) -- plain confirm-then-toast, no
-     visible row state change. Device Approval's Approved/Blocked tabs use
-     this: those queue devices carry no online/offline field to flip
-     (unlike Device Mapping's mapped fleet, which has its own mandatory-
-     remark Logout in byky-device.js and does flip a status badge). */
+  /* ── manual logout (data-scr-logout) -- plain instant button, no confirm
+     dialog. Device Approval's Approved/Blocked tabs use this; those queue
+     devices carry no online/offline field to flip (unlike Device Mapping's
+     mapped fleet, which has its own instant Logout in byky-device.js and
+     does flip a status badge), so a brief non-blocking toast is the only
+     feedback -- not a popup requiring a click to dismiss. */
   document.querySelectorAll('[data-scr-logout]').forEach(function (btn) {
     btn.addEventListener('click', function (e) {
       e.preventDefault();
+      if (typeof Swal === 'undefined') return;
       var row = btn.closest('.scr-row, .scr-card');
       var nameEl = row && row.querySelector('.scr-co-name, .scr-code, .scr-form-title');
       var name = nameEl ? nameEl.textContent.trim() : 'this device';
-
-      function done() {
-        if (typeof Swal === 'undefined') return;
-        Swal.fire({
-          text: name + ' has been logged out.',
-          icon: 'success',
-          customClass: { confirmButton: 'btn btn-primary' },
-          buttonsStyling: false
-        });
-      }
-
-      if (typeof Swal === 'undefined') {
-        if (window.confirm('Log out ' + name + '?')) window.alert(name + ' has been logged out.');
-        return;
-      }
       Swal.fire({
-        title: 'Log out ' + name + '?',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'Yes, log out',
-        customClass: { confirmButton: 'btn btn-danger me-3', cancelButton: 'btn btn-label-secondary' },
-        buttonsStyling: false
-      }).then(function (result) {
-        if (!result.isConfirmed) return;
-        done();
+        text: name + ' has been logged out.',
+        icon: 'success',
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 2200,
+        timerProgressBar: true
       });
     });
   });

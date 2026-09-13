@@ -122,7 +122,18 @@
 .byky-section.is-current .byky-section-count { color: #c2141a; }
 
 /* ── field grid: 1 column compact, 2 columns standard/wide ────────── */
-.byky-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px 16px; }
+/* A section with no title (sec.title == "") skips .byky-section-head
+   entirely (drawer.html's own {% if sec.title %}), so .byky-fields would
+   otherwise sit flush against the divider above the first section with
+   zero gap -- margin-top here gives it one, cancelled back to 0 whenever a
+   header or note already provides that spacing itself. */
+.byky-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px 16px; margin-top: 20px; }
+.byky-section-head ~ .byky-fields,
+.byky-section-note ~ .byky-fields { margin-top: 0; }
+/* .byky-section-note's own -6px pull-up assumes a header sits above it;
+   without one (untitled section with a note) that would tuck it under the
+   divider instead of the header, so neutralize it in that case. */
+.byky-section-note:first-child { margin-top: 0; }
 .byky-drawer.is-compact .byky-fields { grid-template-columns: minmax(0, 1fr); }
 .byky-field { min-width: 0; }
 /* Bootstrap col widths (screens.py `width`) map onto the 2-col grid */
@@ -138,6 +149,9 @@
 .byky-label > span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .byky-req { color: #d81f26; font-style: normal; }
 .byky-help { font-size: 10.5px; color: #a9a6c4; margin-top: 6px; line-height: 1.5; }
+/* A .byky-help warning about something rather than describing the field --
+   e.g. Device Mapping's "this branch doesn't allow a second device" note. */
+.byky-help-danger { color: #d81f26; }
 
 /* ── inputs ───────────────────────────────────────────────────────── */
 .byky-input {

@@ -54,6 +54,16 @@ class DeviceApprovalDetailView(DeviceScreenView):
 
 
 class DeviceMappingView(DeviceScreenView):
+    """Row 50 of the client's feedback doc: the Add Device Mapping drawer
+    is converted off its old hand-rolled .scr-drawer markup onto the shared
+    byky/partials/drawer.html component -- spec.scr_name keeps the existing
+    data-scr-open="device:add|edit" triggers and edit-mode prefill working
+    exactly as before (see that partial's own docstring), only the drawer's
+    own markup/styling changed. The Device field is a convenience picker,
+    not itself a stored field -- see byky-device.js for how it fills the
+    read-only identity fields below it from approved_unmapped's own
+    json_script blob."""
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         rows = data.devices()
@@ -65,12 +75,54 @@ class DeviceMappingView(DeviceScreenView):
                 "mac": d["mac"],
                 "station": d["station"],
             }
+        approved_unmapped = data.approved_devices()
+        branches_list = cms_data.branches()
+        mapped_stations = {d["station"] for d in rows}
         context.update(
             {
                 "devices": rows,
                 "counts": data.counts(rows),
-                "approved_unmapped": data.approved_devices(),
-                "mapped_stations": {d["station"] for d in rows},
+                "approved_unmapped": approved_unmapped,
+                "branch_flags": [
+                    {
+                        "name": b["name"],
+                        "multi_user": b["multi_user"],
+                        "mapped": b["name"] in mapped_stations,
+                    }
+                    for b in branches_list
+                ],
+                "spec": {
+                    "scr_name": "device",
+                    "title_field": "name",
+                    "add_label": "Add Device Mapping",
+                    "drawer_id": "offcanvasAddDevice",
+                    "sections": [
+                        {
+                            "title": "",
+                            "fields": [
+                                {
+                                    "id": "device_pick",
+                                    "label": "Device",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": [f"{d['name']} — {d['mac']}" for d in approved_unmapped],
+                                    "help": "Only devices cleared through Device Approval and not yet mapped are listed.",
+                                },
+                                {"id": "device_id", "label": "Device ID", "kind": "text", "required": True, "readonly": True},
+                                {"id": "name", "label": "Device Name", "kind": "text", "required": True, "readonly": True},
+                                {"id": "mac", "label": "MAC Address", "kind": "text", "required": True, "readonly": True},
+                                {
+                                    "id": "station",
+                                    "label": "Station",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": [b["name"] for b in branches_list],
+                                },
+                                {"id": "apk_version", "label": "APK Version", "kind": "text", "readonly": True},
+                            ],
+                        }
+                    ],
+                },
             }
         )
         return context

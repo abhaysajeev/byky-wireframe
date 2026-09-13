@@ -416,10 +416,6 @@ button.scr-tile.is-active { border-color: #cc0000; box-shadow: 0 0 0 3px rgba(20
 .scr-input.is-awaiting { background: #fdfcff; }
 .scr-input[readonly] { background: #f8f7fb; color: #8b87b0; cursor: not-allowed; }
 .scr-help { font-size: 10.5px; color: #a9a6c4; margin-top: 6px; }
-/* A .scr-help that's warning the user about something, not just describing
-   the field -- e.g. Device Mapping's "this branch doesn't allow a second
-   device" note (row 50 of the client's feedback doc). */
-.scr-help-danger { color: #c2141a; }
 
 /* Integration rows -- a credential set behind a Configure button, rather than
    a dozen inline inputs per provider (the list + drawer rule). */

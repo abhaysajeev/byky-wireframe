@@ -182,7 +182,7 @@ urlpatterns = [
     ),
     path(
         "ims/e-commerce-category-master/",
-        views.ImsAwaitingView.as_view(
+        views.EcomCategoryView.as_view(
             template_name="ims_e_commerce_category_master.html",
             screen_no="3.8",
             screen_title="E-Commerce Category Master",
@@ -198,7 +198,7 @@ urlpatterns = [
     ),
     path(
         "ims/e-commerce-stock-item-catalog/",
-        views.ImsAwaitingView.as_view(
+        views.EcomStockItemView.as_view(
             template_name="ims_e_commerce_stock_item_catalog.html",
             screen_no="3.9",
             screen_title="E-Commerce Stock Item Catalog",
@@ -214,7 +214,7 @@ urlpatterns = [
     ),
     path(
         "ims/vehicle-item-features-master/",
-        views.ImsAwaitingView.as_view(
+        views.VehicleFeaturesView.as_view(
             template_name="ims_vehicle_item_features_master.html",
             screen_no="3.10",
             screen_title="Vehicle & Item Features Master",
@@ -310,7 +310,7 @@ urlpatterns = [
     ),
     path(
         "ims/newsletter-marketing-dispatch/",
-        views.ImsAwaitingView.as_view(
+        views.NewsletterDispatchView.as_view(
             template_name="ims_newsletter_marketing_dispatch.html",
             screen_no="3.16",
             screen_title="Newsletter & Marketing Dispatch",

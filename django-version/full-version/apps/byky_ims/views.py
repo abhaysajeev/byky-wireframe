@@ -250,6 +250,112 @@ class ImsAwaitingView(ImsScreenView):
     """Screens the FSD specifies but the client data has no source for."""
 
 
+class EcomCategoryView(ImsScreenView):
+    """FSD 3.8. No source data (grid still shows the awaiting-data state);
+    drawer converted off its old inline offcanvas per byky claude
+    design/byky-drawer/README.md section 7."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["spec"] = {
+            "add_label": "Add ECom Category",
+            "drawer_id": "offcanvasAddEcomCat",
+            "sections": [
+                {
+                    "title": "",
+                    "fields": [
+                        {"id": "title", "label": "ECom Category Title", "kind": "text", "required": True},
+                        {"id": "sort", "label": "Sort Order", "kind": "number", "required": False},
+                        {"id": "meta", "label": "Meta Tags", "kind": "textarea", "required": False},
+                        {"id": "banner", "label": "Banner Image", "kind": "file", "required": False},
+                    ],
+                }
+            ],
+        }
+        return context
+
+
+class EcomStockItemView(ImsScreenView):
+    """FSD 3.9. No source data; drawer converted per README section 7."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["spec"] = {
+            "add_label": "Add Catalog Entry",
+            "drawer_id": "offcanvasAddEcomItem",
+            "sections": [
+                {
+                    "title": "",
+                    "fields": [
+                        {"id": "title", "label": "Web Title", "kind": "text", "required": True},
+                        {
+                            "id": "category",
+                            "label": "E-Com Category",
+                            "kind": "select",
+                            "required": True,
+                            "resolved": [c["name"] for c in context["categories_list"]],
+                        },
+                        {"id": "rate", "label": "Online Rate", "kind": "number", "required": False},
+                        {"id": "featured", "label": "Featured", "kind": "checkbox", "required": False},
+                        {"id": "popular", "label": "Popular", "kind": "checkbox", "required": False},
+                    ],
+                }
+            ],
+        }
+        return context
+
+
+class VehicleFeaturesView(ImsScreenView):
+    """FSD 3.10. No source data; drawer converted per README section 7."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["spec"] = {
+            "add_label": "Add Feature",
+            "drawer_id": "offcanvasAddFeature",
+            "sections": [
+                {
+                    "title": "",
+                    "fields": [
+                        {"id": "code", "label": "Feature Code", "kind": "text", "required": True},
+                        {"id": "name", "label": "Feature Name", "kind": "text", "required": True},
+                        {"id": "description", "label": "Description", "kind": "textarea", "required": False},
+                        {"id": "icon", "label": "Icon", "kind": "file", "required": False},
+                    ],
+                }
+            ],
+        }
+        return context
+
+
+class NewsletterDispatchView(ImsScreenView):
+    """FSD 3.16. No source data; drawer converted per README section 7."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["spec"] = {
+            "add_label": "New Dispatch",
+            "drawer_id": "offcanvasAddNewsletter",
+            "sections": [
+                {
+                    "title": "",
+                    "fields": [
+                        {"id": "subject", "label": "Subject Line", "kind": "text", "required": True},
+                        {
+                            "id": "segment",
+                            "label": "Target Segment",
+                            "kind": "select",
+                            "required": True,
+                            "resolved": ["All App Users", "Active Renters", "VIP Customers"],
+                        },
+                        {"id": "body", "label": "Email Body (HTML)", "kind": "textarea", "required": False},
+                    ],
+                }
+            ],
+        }
+        return context
+
+
 class ImsPrivilegeView(ImsScreenView):
     """Tier D -- roles list + per-role screen permission matrix. See
     apps/byky_core/privileges.py for the shared role master and defaults."""

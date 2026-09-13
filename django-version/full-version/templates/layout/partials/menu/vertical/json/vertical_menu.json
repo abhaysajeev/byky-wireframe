@@ -336,7 +336,8 @@
      "name": "Customer",
      "slug": "customerapp-customer-management"
     }
-   ]
+   ],
+   "permission": "hidden.customer_app"
   },
   {
    "name": "Reports",
@@ -532,7 +533,8 @@
    ]
   },
   {
-   "menu_header": "System"
+   "menu_header": "System",
+   "permission": "hidden.system_section"
   },
   {
    "name": "Scheduler",
@@ -569,7 +571,8 @@
      "name": "Scheduler Security Privilege",
      "slug": "scheduler-scheduler-security-privilege-management"
     }
-   ]
+   ],
+   "permission": "hidden.system_section"
   },
   {
    "name": "System Administration",
@@ -607,7 +610,8 @@
      "name": "System Administration Privilege",
      "slug": "sysadmin-system-administration-privilege-management"
     }
-   ]
+   ],
+   "permission": "hidden.system_section"
   },
   {
    "name": "Mobile API",
@@ -644,7 +648,8 @@
      "name": "Mobile API Security Privilege",
      "slug": "api-mobile-api-security-privilege-management"
     }
-   ]
+   ],
+   "permission": "hidden.system_section"
   },
   {
    "name": "System Security",
@@ -681,7 +686,8 @@
      "name": "System Security Privilege",
      "slug": "security-system-security-privilege-management"
     }
-   ]
+   ],
+   "permission": "hidden.system_section"
   },
   {
    "name": "Integration",
@@ -718,7 +724,8 @@
      "name": "Final Integration Security Privilege",
      "slug": "integration-final-integration-security-privilege-management"
     }
-   ]
+   ],
+   "permission": "hidden.system_section"
   }
  ]
 }

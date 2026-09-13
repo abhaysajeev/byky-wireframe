@@ -348,3 +348,38 @@
 .byky-checkgroup .byky-switch-row { margin: 0; }
 .byky-drawer.is-compact .byky-checkgroup { grid-template-columns: 1fr; }
 @media (max-width: 767px) { .byky-checkgroup { grid-template-columns: 1fr; } }
+
+/* ── standalone drawer (no Bootstrap offcanvas) ──────────────────────
+   Fare Entry's Time Slab and Scheme Creation's Free Item Slab editors
+   build their rows in JS at runtime (byky-fare.js) rather than editing a
+   server record -- there's no data-bs-toggle trigger or Bootstrap JS
+   lifecycle involved, byky-fare.js only ever flips the plain `hidden`
+   attribute on the veil/drawer pair (the same way the old .scr-veil/
+   .scr-drawer markup always worked). .byky-drawer's own shell styling
+   only applies compounded with .offcanvas (Bootstrap's own show/hide
+   mechanics, which nothing here drives), so this duplicates that shell's
+   declarations under a class with no such dependency. Every *inner*
+   class (.byky-drawer-head, .byky-section, .byky-field, .byky-input,
+   .byky-drawer-foot, .byky-btn-*, ...) is unscoped and works here as-is --
+   only the outer shell needed its own rule. Keep this in sync if
+   .byky-drawer.offcanvas's shell declarations change. */
+.byky-standalone-veil {
+  position: fixed; inset: 0; background: rgba(26, 22, 64, 0.36); z-index: 1085;
+}
+.byky-standalone-veil[hidden] { display: none; }
+.byky-standalone-drawer {
+  font-family: 'Sora', sans-serif;
+  color: #1a1640;
+  background: #fff;
+  box-shadow: -26px 0 64px -32px rgba(26, 22, 64, 0.55);
+  display: flex;
+  flex-direction: column;
+  position: fixed; top: 0; right: 0; bottom: 0; z-index: 1086;
+  width: 560px; max-width: 100%;
+}
+.byky-standalone-drawer[hidden] { display: none; }
+.byky-standalone-drawer *,
+.byky-standalone-drawer *::before,
+.byky-standalone-drawer *::after { box-sizing: border-box; }
+.byky-standalone-drawer h2, .byky-standalone-drawer p { margin: 0; }
+@media (max-width: 767.98px) { .byky-standalone-drawer { width: 100%; } }

@@ -279,93 +279,131 @@ scr-veil/scr-drawer pattern.
   Time-slab editor. Ten fields per slab is too many to keep legible as bare
   inputs in a table row, so the grid stays a readable summary and every
   field keeps a visible label in this drawer -- the list + drawer pattern
-  used throughout the app. Uses the scr-veil/scr-drawer markup, but its
-  show/hide and prefill logic is bespoke (byky-fare.js), not
-  byky-screen.js's generic wireDrawer, because rows here are built by JS
-  rather than rendered server-side per record.
+  used throughout the app. Restyled onto the shared byky-drawer visual
+  language (byky-drawer.css's .byky-standalone-drawer -- see that class's
+  own comment for why this can't use the plain .byky-drawer.offcanvas
+  shell); show/hide and prefill logic stays bespoke (byky-fare.js), not
+  byky-screen.js's generic wireDrawer or byky-drawer.js's scr_name
+  mechanism, because rows here are built by JS rather than rendered
+  server-side per record -- every element id below is unchanged so
+  byky-fare.js needed no changes.
 {% endcomment %}
-<div class="scr-veil" id="timeSlabVeil" hidden></div>
-<aside class="scr-drawer" id="offcanvasTimeSlab" hidden>
-  <div class="scr-drawer-head">
-    <div class="scr-drawer-head-top">
-      <div class="scr-drawer-id">
-        <span class="scr-drawer-ico">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2"></path></svg>
-        </span>
-        <h2 class="scr-drawer-title" id="offcanvasTimeSlabLabel">Add Time Slab</h2>
-      </div>
-      <button type="button" class="scr-drawer-close" id="timeSlabClose">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
-      </button>
+<div class="byky-standalone-veil" id="timeSlabVeil" hidden></div>
+<aside class="byky-standalone-drawer" id="offcanvasTimeSlab" hidden>
+  <div class="byky-drawer-accent"></div>
+  <div class="byky-drawer-head">
+    <div class="byky-drawer-heading">
+      <div class="byky-drawer-module">Fare &amp; Schemes &middot; Fare Entry</div>
+      <h2 class="byky-drawer-title" id="offcanvasTimeSlabLabel">Add Time Slab</h2>
     </div>
+    <button type="button" class="byky-drawer-close" id="timeSlabClose">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
   </div>
-  <div class="scr-drawer-body scr-sb">
-    <form id="timeSlabForm" onsubmit="return false">
-      <div class="scr-section-title" style="margin-bottom:14px">When it applies</div>
-      <div class="scr-drawer-field">
-        <label class="scr-label">Applies On<span class="scr-required">*</span></label>
-        <select class="scr-drawer-input" id="slab-applies">
-          <option value="all">Every day</option>
-          <option value="day">A day of the week</option>
-          <option value="date">A specific date</option>
-        </select>
-      </div>
-      <div class="scr-drawer-field" id="slab-day-wrap" hidden>
-        <label class="scr-label">Day</label>
-        <select class="scr-drawer-input" id="slab-day">
-          {% for day in days %}{% if day != 'All Days' %}<option>{{ day }}</option>{% endif %}{% endfor %}
-        </select>
-      </div>
-      <div class="scr-drawer-field" id="slab-date-wrap" hidden>
-        <label class="scr-label">Date</label>
-        <input type="text" class="scr-drawer-input byky-date" id="slab-date" placeholder="Pick a date" />
-      </div>
+  <div class="byky-drawer-jumps" hidden></div>
+  <form class="byky-drawer-form" id="timeSlabForm" onsubmit="return false">
+    <div class="byky-drawer-body">
+      <section class="byky-section">
+        <header class="byky-section-head">
+          <span class="byky-section-bar"></span>
+          <span class="byky-section-title">When it applies</span>
+          <span class="byky-section-rule"></span>
+        </header>
+        <div class="byky-fields">
+          <div class="byky-field byky-span-12">
+            <label class="byky-label" for="slab-applies"><span>Applies On</span><em class="byky-req">*</em></label>
+            <div class="byky-select-wrap">
+              <select id="slab-applies" class="byky-input byky-select">
+                <option value="all">Every day</option>
+                <option value="day">A day of the week</option>
+                <option value="date">A specific date</option>
+              </select>
+              <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </div>
+          </div>
+          <div class="byky-field byky-span-12" id="slab-day-wrap" hidden>
+            <label class="byky-label" for="slab-day"><span>Day</span></label>
+            <div class="byky-select-wrap">
+              <select id="slab-day" class="byky-input byky-select">
+                {% for day in days %}{% if day != 'All Days' %}<option>{{ day }}</option>{% endif %}{% endfor %}
+              </select>
+              <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </div>
+          </div>
+          <div class="byky-field byky-span-12" id="slab-date-wrap" hidden>
+            <label class="byky-label" for="slab-date"><span>Date</span></label>
+            <div class="byky-select-wrap">
+              <input type="text" id="slab-date" class="byky-input byky-date has-affix" placeholder="Select date" />
+              <svg class="byky-date-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1M8 3v4M16 3v4M4 11h16"></path></svg>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <div class="scr-section-title" style="margin:20px 0 14px">Pricing window</div>
-      <div class="scr-drawer-row" style="margin-bottom:16px">
-        <div class="scr-drawer-field" style="margin-bottom:0">
-          <label class="scr-label">From<span class="scr-required">*</span></label>
-          <input type="time" class="scr-drawer-input" id="slab-from" value="10:00" />
+      <section class="byky-section">
+        <header class="byky-section-head">
+          <span class="byky-section-bar"></span>
+          <span class="byky-section-title">Pricing window</span>
+          <span class="byky-section-rule"></span>
+        </header>
+        <div class="byky-fields">
+          <div class="byky-field">
+            <label class="byky-label" for="slab-from"><span>From</span><em class="byky-req">*</em></label>
+            <input type="time" id="slab-from" class="byky-input" value="10:00" />
+          </div>
+          <div class="byky-field">
+            <label class="byky-label" for="slab-to"><span>To</span><em class="byky-req">*</em></label>
+            <input type="time" id="slab-to" class="byky-input" value="11:00" />
+          </div>
         </div>
-        <div class="scr-drawer-field" style="margin-bottom:0">
-          <label class="scr-label">To<span class="scr-required">*</span></label>
-          <input type="time" class="scr-drawer-input" id="slab-to" value="11:00" />
-        </div>
-      </div>
+      </section>
 
-      <div class="scr-section-title" style="margin:20px 0 14px">Fare for this window</div>
-      <div class="scr-drawer-row" style="margin-bottom:16px">
-        <div class="scr-drawer-field" style="margin-bottom:0">
-          <label class="scr-label">Basic Fare AED<span class="scr-required">*</span></label>
-          <input type="number" class="scr-drawer-input" id="slab-basic" min="0" step="0.01" value="90" />
+      <section class="byky-section">
+        <header class="byky-section-head">
+          <span class="byky-section-bar"></span>
+          <span class="byky-section-title">Fare for this window</span>
+          <span class="byky-section-rule"></span>
+        </header>
+        <div class="byky-fields">
+          <div class="byky-field">
+            <label class="byky-label" for="slab-basic"><span>Basic Fare AED</span><em class="byky-req">*</em></label>
+            <input type="number" id="slab-basic" class="byky-input" min="0" step="0.01" value="90" />
+          </div>
+          <div class="byky-field">
+            <label class="byky-label" for="slab-grace"><span>Grace Period</span></label>
+            <input type="number" id="slab-grace" class="byky-input" min="0" value="5" />
+          </div>
         </div>
-        <div class="scr-drawer-field" style="margin-bottom:0">
-          <label class="scr-label">Grace Period</label>
-          <input type="number" class="scr-drawer-input" id="slab-grace" min="0" value="5" />
-        </div>
-      </div>
+      </section>
 
-      <div class="scr-section-title" style="margin:20px 0 14px">Concurrent charge</div>
-      <div class="scr-drawer-field">
-        <label class="scr-label">Concurrent Interval<span class="scr-required">*</span></label>
-        <input type="number" class="scr-drawer-input" id="slab-interval" min="1" value="10" />
-      </div>
-      <div class="scr-drawer-row">
-        <div class="scr-drawer-field" style="margin-bottom:0">
-          <label class="scr-label">Concurrent Price AED<span class="scr-required">*</span></label>
-          <input type="number" class="scr-drawer-input" id="slab-conc-price" min="0" step="0.01" value="10" />
+      <section class="byky-section">
+        <header class="byky-section-head">
+          <span class="byky-section-bar"></span>
+          <span class="byky-section-title">Concurrent charge</span>
+          <span class="byky-section-rule"></span>
+        </header>
+        <div class="byky-fields">
+          <div class="byky-field byky-span-12">
+            <label class="byky-label" for="slab-interval"><span>Concurrent Interval</span><em class="byky-req">*</em></label>
+            <input type="number" id="slab-interval" class="byky-input" min="1" value="10" />
+          </div>
+          <div class="byky-field">
+            <label class="byky-label" for="slab-conc-price"><span>Concurrent Price AED</span><em class="byky-req">*</em></label>
+            <input type="number" id="slab-conc-price" class="byky-input" min="0" step="0.01" value="10" />
+          </div>
+          <div class="byky-field">
+            <label class="byky-label" for="slab-conc-grace"><span>Concurrent Grace</span></label>
+            <input type="number" id="slab-conc-grace" class="byky-input" min="0" value="0" />
+          </div>
         </div>
-        <div class="scr-drawer-field" style="margin-bottom:0">
-          <label class="scr-label">Concurrent Grace</label>
-          <input type="number" class="scr-drawer-input" id="slab-conc-grace" min="0" value="0" />
-        </div>
-      </div>
-    </form>
-  </div>
-  <div class="scr-drawer-foot">
-    <button type="button" class="scr-btn-secondary" id="timeSlabCancel">Cancel</button>
-    <button type="button" class="scr-btn-primary" id="slabSave" style="margin-left:auto">Save Slab</button>
-  </div>
+      </section>
+    </div>
+
+    <div class="byky-drawer-foot">
+      <button type="button" class="byky-btn-text" id="timeSlabCancel">Cancel</button>
+      <button type="submit" class="byky-btn-primary" id="slabSave" style="margin-left:auto">Save Slab</button>
+    </div>
+  </form>
 </aside>
 
 {% endblock %}

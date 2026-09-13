@@ -298,79 +298,109 @@ in JS.
 {% comment %}
   Free-item slab editor. Eight fields per rule stay labelled in a drawer
   while the grid below reads as a summary, matching the Fare Entry
-  time-slab pattern -- same bespoke show/hide JS, same scr-veil/scr-drawer
-  markup.
+  time-slab pattern -- restyled onto the shared byky-drawer visual language
+  the same way (see fare_entry.html and byky-drawer.css's
+  .byky-standalone-drawer comment); show/hide JS stays bespoke
+  (byky-fare.js), every element id unchanged.
 {% endcomment %}
-<div class="scr-veil" id="freeSlabVeil" hidden></div>
-<aside class="scr-drawer" id="offcanvasFreeSlab" hidden>
-  <div class="scr-drawer-head">
-    <div class="scr-drawer-head-top">
-      <div class="scr-drawer-id">
-        <span class="scr-drawer-ico">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18M12 7v5l3.5 2"></path></svg>
-        </span>
-        <h2 class="scr-drawer-title" id="offcanvasFreeSlabLabel">Add Time Slab</h2>
-      </div>
-      <button type="button" class="scr-drawer-close" id="freeSlabClose">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
-      </button>
+<div class="byky-standalone-veil" id="freeSlabVeil" hidden></div>
+<aside class="byky-standalone-drawer" id="offcanvasFreeSlab" hidden>
+  <div class="byky-drawer-accent"></div>
+  <div class="byky-drawer-head">
+    <div class="byky-drawer-heading">
+      <div class="byky-drawer-module">Fare &amp; Schemes &middot; Scheme Creation</div>
+      <h2 class="byky-drawer-title" id="offcanvasFreeSlabLabel">Add Time Slab</h2>
     </div>
+    <button type="button" class="byky-drawer-close" id="freeSlabClose">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
   </div>
-  <div class="scr-drawer-body scr-sb">
-    <form id="freeSlabForm" onsubmit="return false">
-      <div class="scr-section-title" style="margin-bottom:14px">When it applies</div>
-      <div class="scr-drawer-field">
-        <label class="scr-label">Applies On<span class="scr-required">*</span></label>
-        <select class="scr-drawer-input" id="fs-applies">
-          <option value="all">Every day</option>
-          <option value="day">A day of the week</option>
-          <option value="date">A specific date</option>
-        </select>
-      </div>
-      <div class="scr-drawer-field" id="fs-day-wrap" hidden>
-        <label class="scr-label">Day</label>
-        <select class="scr-drawer-input" id="fs-day">
-          {% for day in days %}{% if day != 'All Days' %}<option>{{ day }}</option>{% endif %}{% endfor %}
-        </select>
-      </div>
-      <div class="scr-drawer-field" id="fs-date-wrap" hidden>
-        <label class="scr-label">Date</label>
-        <input type="text" class="scr-drawer-input byky-date" id="fs-date" placeholder="Pick a date" />
-      </div>
-      <div class="scr-drawer-row" style="margin-bottom:16px">
-        <div class="scr-drawer-field" style="margin-bottom:0">
-          <label class="scr-label">From<span class="scr-required">*</span></label>
-          <input type="time" class="scr-drawer-input" id="fs-from" value="10:00" />
+  <div class="byky-drawer-jumps" hidden></div>
+  <form class="byky-drawer-form" id="freeSlabForm" onsubmit="return false">
+    <div class="byky-drawer-body">
+      <section class="byky-section">
+        <header class="byky-section-head">
+          <span class="byky-section-bar"></span>
+          <span class="byky-section-title">When it applies</span>
+          <span class="byky-section-rule"></span>
+        </header>
+        <div class="byky-fields">
+          <div class="byky-field byky-span-12">
+            <label class="byky-label" for="fs-applies"><span>Applies On</span><em class="byky-req">*</em></label>
+            <div class="byky-select-wrap">
+              <select id="fs-applies" class="byky-input byky-select">
+                <option value="all">Every day</option>
+                <option value="day">A day of the week</option>
+                <option value="date">A specific date</option>
+              </select>
+              <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </div>
+          </div>
+          <div class="byky-field byky-span-12" id="fs-day-wrap" hidden>
+            <label class="byky-label" for="fs-day"><span>Day</span></label>
+            <div class="byky-select-wrap">
+              <select id="fs-day" class="byky-input byky-select">
+                {% for day in days %}{% if day != 'All Days' %}<option>{{ day }}</option>{% endif %}{% endfor %}
+              </select>
+              <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </div>
+          </div>
+          <div class="byky-field byky-span-12" id="fs-date-wrap" hidden>
+            <label class="byky-label" for="fs-date"><span>Date</span></label>
+            <div class="byky-select-wrap">
+              <input type="text" id="fs-date" class="byky-input byky-date has-affix" placeholder="Select date" />
+              <svg class="byky-date-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1M8 3v4M16 3v4M4 11h16"></path></svg>
+            </div>
+          </div>
+          <div class="byky-field">
+            <label class="byky-label" for="fs-from"><span>From</span><em class="byky-req">*</em></label>
+            <input type="time" id="fs-from" class="byky-input" value="10:00" />
+          </div>
+          <div class="byky-field">
+            <label class="byky-label" for="fs-to"><span>To</span><em class="byky-req">*</em></label>
+            <input type="time" id="fs-to" class="byky-input" value="11:00" />
+          </div>
         </div>
-        <div class="scr-drawer-field" style="margin-bottom:0">
-          <label class="scr-label">To<span class="scr-required">*</span></label>
-          <input type="time" class="scr-drawer-input" id="fs-to" value="11:00" />
-        </div>
-      </div>
+      </section>
 
-      <div class="scr-section-title" style="margin:20px 0 14px">What is given free</div>
-      <div class="scr-drawer-field">
-        <label class="scr-label">Vehicle Type<span class="scr-required">*</span></label>
-        <select class="scr-drawer-input" id="fs-vehicle">
-          {% for vt in vehicle_types_list %}<option>{{ vt }}</option>{% endfor %}
-        </select>
-      </div>
-      <div class="scr-drawer-field">
-        <label class="scr-label">Package<span class="scr-required">*</span></label>
-        <select class="scr-drawer-input" id="fs-package">
-          {% for pkg in package_times %}<option>{{ pkg }} Minutes</option>{% endfor %}
-        </select>
-      </div>
-      <div class="scr-drawer-field">
-        <label class="scr-label">Free Quantity<span class="scr-required">*</span></label>
-        <input type="number" class="scr-drawer-input" id="fs-qty" min="1" value="1" />
-      </div>
-    </form>
-  </div>
-  <div class="scr-drawer-foot">
-    <button type="button" class="scr-btn-secondary" id="freeSlabCancel">Cancel</button>
-    <button type="button" class="scr-btn-primary" id="freeSlabSave" style="margin-left:auto">Save Slab</button>
-  </div>
+      <section class="byky-section">
+        <header class="byky-section-head">
+          <span class="byky-section-bar"></span>
+          <span class="byky-section-title">What is given free</span>
+          <span class="byky-section-rule"></span>
+        </header>
+        <div class="byky-fields">
+          <div class="byky-field byky-span-12">
+            <label class="byky-label" for="fs-vehicle"><span>Vehicle Type</span><em class="byky-req">*</em></label>
+            <div class="byky-select-wrap">
+              <select id="fs-vehicle" class="byky-input byky-select">
+                {% for vt in vehicle_types_list %}<option>{{ vt }}</option>{% endfor %}
+              </select>
+              <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </div>
+          </div>
+          <div class="byky-field byky-span-12">
+            <label class="byky-label" for="fs-package"><span>Package</span><em class="byky-req">*</em></label>
+            <div class="byky-select-wrap">
+              <select id="fs-package" class="byky-input byky-select">
+                {% for pkg in package_times %}<option>{{ pkg }} Minutes</option>{% endfor %}
+              </select>
+              <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </div>
+          </div>
+          <div class="byky-field byky-span-12">
+            <label class="byky-label" for="fs-qty"><span>Free Quantity</span><em class="byky-req">*</em></label>
+            <input type="number" id="fs-qty" class="byky-input" min="1" value="1" />
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <div class="byky-drawer-foot">
+      <button type="button" class="byky-btn-text" id="freeSlabCancel">Cancel</button>
+      <button type="submit" class="byky-btn-primary" id="freeSlabSave" style="margin-left:auto">Save Slab</button>
+    </div>
+  </form>
 </aside>
 
 {% endblock %}

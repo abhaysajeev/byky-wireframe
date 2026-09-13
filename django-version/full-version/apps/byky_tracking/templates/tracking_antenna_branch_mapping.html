@@ -71,7 +71,7 @@ byky-screen.css/js base (see byky-screen-design-system.md).
         </thead>
         <tbody>
           {% for a in antennas %}
-          <tr class="scr-row" data-search="{{ a.code|lower }} {{ a.branch|lower }}" data-branch="{{ a.branch }}">
+          <tr class="scr-row" data-search="{{ a.code|lower }} {{ a.branch|lower }}" data-branch="{{ a.branch }}" data-record-id="{{ a.json_id }}">
             <td><span class="scr-code">{{ a.code }}</span></td>
             <td style="font-weight:600">{{ a.branch }}</td>
             <td><span class="scr-badge {% if a.direction == 'Entry' %}scr-badge-approved{% else %}scr-badge-pending{% endif %}"><i></i>{{ a.direction }}</span></td>
@@ -87,6 +87,7 @@ byky-screen.css/js base (see byky-screen-design-system.md).
               </div>
             </td>
           </tr>
+          {{ a.fields_json|json_script:a.json_id }}
           {% endfor %}
         </tbody>
       </table>
@@ -107,45 +108,12 @@ byky-screen.css/js base (see byky-screen-design-system.md).
   </div>
 </div>
 
-{% comment %} Reassign a mapping's branch/direction -- lighter than the full Antenna Registration drawer, since IP/MAC/RF power aren't this screen's concern. {% endcomment %}
-<div class="scr-veil" data-scr-drawer="antmap" hidden data-scr-close></div>
-<aside class="scr-drawer" data-scr-drawer="antmap" data-add-title="Map Antenna to Branch" hidden>
-  <div class="scr-drawer-head">
-    <div class="scr-drawer-head-top">
-      <div class="scr-drawer-id">
-        <span class="scr-drawer-ico">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
-        </span>
-        <h2 class="scr-drawer-title">Reassign Branch</h2>
-      </div>
-      <button type="button" class="scr-drawer-close" data-scr-close>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
-      </button>
-    </div>
-  </div>
-  <div class="scr-drawer-body scr-sb">
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">Station Branch<span class="scr-required">*</span></label>
-      <select class="scr-drawer-input" data-field="branch">
-        <option value="">Select</option>
-        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
-      </select>
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">Gate Direction<span class="scr-required">*</span></label>
-      <div style="display:flex; gap:16px; height:40px; align-items:center">
-        <label class="scr-check-label" style="display:flex; align-items:center; gap:6px">
-          <input type="radio" class="scr-check" name="mapDirection" checked /> Entry
-        </label>
-        <label class="scr-check-label" style="display:flex; align-items:center; gap:6px">
-          <input type="radio" class="scr-check" name="mapDirection" /> Exit
-        </label>
-      </div>
-    </div>
-  </div>
-  <div class="scr-drawer-foot">
-    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
-    <button type="button" class="scr-btn-primary" style="margin-left:auto">Save</button>
-  </div>
-</aside>
+{% comment %}
+Reassign a mapping's branch/direction -- lighter than the full Antenna
+Registration drawer, since IP/MAC/RF power aren't this screen's concern.
+Converted from the old hand-rolled .scr-drawer markup onto the shared
+byky/partials/drawer.html; spec.scr_name keeps the existing
+data-scr-open="antmap:edit" trigger working unchanged.
+{% endcomment %}
+{% include "byky/partials/drawer.html" with spec=spec module_label="Antenna Tracking Management · Branch Mapping" %}
 {% endblock %}

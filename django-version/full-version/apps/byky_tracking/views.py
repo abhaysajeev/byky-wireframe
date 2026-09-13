@@ -564,7 +564,11 @@ class AntennaScreenView(BykyScreenView):
 
 
 class AntennaRegistrationView(AntennaScreenView):
-    """FSD 8.1 -- Station Antenna Gate Setup & IP Configuration."""
+    """FSD 8.1 -- Station Antenna Gate Setup & IP Configuration. Drawer
+    converted off its old hand-rolled .scr-drawer markup onto the shared
+    byky/partials/drawer.html; spec.scr_name keeps the existing
+    data-scr-open="antenna:add|edit" triggers and json_script edit-mode
+    prefill working unchanged."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -581,26 +585,106 @@ class AntennaRegistrationView(AntennaScreenView):
                 "direction": a["direction"],
                 "rf_power": a["rf_power"],
             }
-        context.update({"antennas": rows, "counts": data.antenna_counts(rows)})
+        context.update(
+            {
+                "antennas": rows,
+                "counts": data.antenna_counts(rows),
+                "spec": {
+                    "scr_name": "antenna",
+                    "title_field": "name",
+                    "add_label": "Add Antenna",
+                    "drawer_id": "offcanvasAddAntenna",
+                    "sections": [
+                        {
+                            "title": "",
+                            "fields": [
+                                {"id": "code", "label": "Antenna Code", "kind": "text", "required": True, "lock_on_edit": True},
+                                {"id": "name", "label": "Antenna Name", "kind": "text", "required": True},
+                                {
+                                    "id": "branch",
+                                    "label": "Station Branch",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": [b["name"] for b in context["branches_list"]],
+                                },
+                                {"id": "ip", "label": "Reader IP Address", "kind": "text", "required": True},
+                                {"id": "port", "label": "TCP Port", "kind": "number", "required": True},
+                                {"id": "mac", "label": "MAC Address", "kind": "text", "required": True},
+                                {
+                                    "id": "direction",
+                                    "label": "Gate Direction",
+                                    "kind": "radio",
+                                    "required": True,
+                                    "options": ["Entry", "Exit"],
+                                    "checked_option": "Entry",
+                                },
+                                {"id": "rf_power", "label": "RF Power Gain", "kind": "number", "help": "10 to 30 dBm."},
+                            ],
+                        }
+                    ],
+                },
+            }
+        )
         return context
 
 
 class AntennaBranchMappingView(AntennaScreenView):
     """FSD 8.1's Station Branch binding, surfaced as its own lighter mapping
     view -- same pattern as IMS's Vehicle Station Mapping being a simpler
-    subset view of Vehicle Management."""
+    subset view of Vehicle Management. Drawer converted onto the shared
+    byky/partials/drawer.html; added fields_json (missing before) so
+    Reassign Branch's edit mode actually prefills the antenna's current
+    branch/direction instead of always opening blank."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         rows = data.antennas()
-        context.update({"antennas": rows, "counts": data.antenna_counts(rows)})
+        for i, a in enumerate(rows):
+            a["json_id"] = f"scr-record-antmap-{i}"
+            a["fields_json"] = {"branch": a["branch"], "direction": a["direction"]}
+        context.update(
+            {
+                "antennas": rows,
+                "counts": data.antenna_counts(rows),
+                "spec": {
+                    "scr_name": "antmap",
+                    "add_label": "Map Antenna to Branch",
+                    "drawer_id": "offcanvasAntennaMapping",
+                    "sections": [
+                        {
+                            "title": "",
+                            "fields": [
+                                {
+                                    "id": "branch",
+                                    "label": "Station Branch",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": [b["name"] for b in context["branches_list"]],
+                                },
+                                {
+                                    "id": "direction",
+                                    "label": "Gate Direction",
+                                    "kind": "radio",
+                                    "required": True,
+                                    "options": ["Entry", "Exit"],
+                                    "checked_option": "Entry",
+                                },
+                            ],
+                        }
+                    ],
+                },
+            }
+        )
         return context
 
 
 class RfidTagMappingView(AntennaScreenView):
     """FSD 8.2 -- RFID Tag EPC Encoding & Vehicle Tagging, reframed as
     Branch - Vehicle - RFID Tag Mapping with view and edit, per the
-    follow-up instruction."""
+    follow-up instruction. Drawer converted onto the shared
+    byky/partials/drawer.html; spec.scr_name keeps the existing
+    data-scr-open="rfidmap:edit" trigger and json_script prefill working
+    unchanged."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -617,6 +701,28 @@ class RfidTagMappingView(AntennaScreenView):
                 "mappings": rows,
                 "tag_positions": data.TAG_POSITIONS,
                 "counts": {"total": len(rows), "branches": len(cms_data.branches())},
+                "spec": {
+                    "scr_name": "rfidmap",
+                    "title_field": "vehicle_code",
+                    "add_label": "Edit RFID Tag Mapping",
+                    "drawer_id": "offcanvasRfidTagMapping",
+                    "sections": [
+                        {
+                            "title": "",
+                            "fields": [
+                                {"id": "vehicle_code", "label": "Vehicle Code", "kind": "text", "lock_on_edit": True, "readonly": True},
+                                {"id": "epc", "label": "RFID Tag EPC", "kind": "text", "required": True},
+                                {
+                                    "id": "position",
+                                    "label": "Tag Position",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": data.TAG_POSITIONS,
+                                },
+                            ],
+                        }
+                    ],
+                },
             }
         )
         return context

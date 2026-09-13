@@ -164,74 +164,11 @@ than awaiting-data (same treatment as apps/byky_device's device rows).
   </div>
 </div>
 
-<div class="scr-veil" data-scr-drawer="antenna" hidden data-scr-close></div>
-<aside class="scr-drawer" data-scr-drawer="antenna" data-add-title="Add Antenna" data-title-field="name" hidden>
-  <div class="scr-drawer-head">
-    <div class="scr-drawer-head-top">
-      <div class="scr-drawer-id">
-        <span class="scr-drawer-ico">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19a1 1 0 1 0 0-2 1 1 0 0 0 0 2M9 20a5 5 0 0 0-5-5M13.5 20.5A9.5 9.5 0 0 0 4 11M18 21A14 14 0 0 0 4 7M22 21A18 18 0 0 0 4 3"></path></svg>
-        </span>
-        <h2 class="scr-drawer-title">Add Antenna</h2>
-      </div>
-      <button type="button" class="scr-drawer-close" data-scr-close>
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
-      </button>
-    </div>
-  </div>
-  <div class="scr-drawer-body scr-sb">
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">Antenna Code<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="code" data-lock-on-edit="true" value="" placeholder="ANT-MAR-01" />
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">Antenna Name<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="name" value="" placeholder="Gate 1 North In" />
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">Station Branch<span class="scr-required">*</span></label>
-      <select class="scr-drawer-input" data-field="branch">
-        <option value="">Select</option>
-        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
-      </select>
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">Reader IP Address<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="ip" value="192.168.1.101" />
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">TCP Port<span class="scr-required">*</span></label>
-      <input type="number" class="scr-drawer-input" data-field="port" value="10001" />
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">MAC Address<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="mac" value="" placeholder="AA:BB:CC:DD:EE:FF" />
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">Gate Direction<span class="scr-required">*</span></label>
-      <div style="display:flex; gap:16px; height:40px; align-items:center">
-        <label class="scr-check-label" style="display:flex; align-items:center; gap:6px">
-          <input type="radio" class="scr-check" name="antDirection" checked /> Entry
-        </label>
-        <label class="scr-check-label" style="display:flex; align-items:center; gap:6px">
-          <input type="radio" class="scr-check" name="antDirection" /> Exit
-        </label>
-      </div>
-    </div>
-    <div class="scr-drawer-field" data-tab="_">
-      <label class="scr-label">RF Power Gain</label>
-      <input type="number" class="scr-drawer-input" data-field="rf_power" value="22" min="10" max="30" />
-      <div class="scr-help">10 to 30 dBm.</div>
-    </div>
-  </div>
-  <div class="scr-drawer-foot">
-    <div class="scr-drawer-active">
-      <button type="button" class="scr-toggle is-on"><i></i></button>
-      <span class="scr-drawer-active-label">Active</span>
-    </div>
-    <button type="button" class="scr-btn-secondary" data-scr-close>Cancel</button>
-    <button type="button" class="scr-btn-save-new">Save &amp; New</button>
-    <button type="button" class="scr-btn-primary">Save</button>
-  </div>
-</aside>
+{% comment %}
+Add/Edit drawer -- converted from the old hand-rolled .scr-drawer markup
+onto the shared byky/partials/drawer.html. spec.scr_name keeps the
+existing data-scr-open="antenna:add|edit" triggers and json_script
+edit-mode prefill working unchanged.
+{% endcomment %}
+{% include "byky/partials/drawer.html" with spec=spec module_label="Antenna Tracking Management · Antenna" %}
 {% endblock %}

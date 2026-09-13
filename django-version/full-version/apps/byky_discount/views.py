@@ -22,6 +22,19 @@ class CardManagementView(DiscountScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["cards"] = data.cards()
+        context["spec"] = {
+            "add_label": "Add Card",
+            "drawer_id": "offcanvasAddCard",
+            "sections": [
+                {
+                    "title": "",
+                    "fields": [
+                        {"id": "type", "label": "Card Type", "kind": "select", "required": True, "resolved": context["card_types_list"]},
+                        {"id": "name", "label": "Card Name", "kind": "text", "required": True},
+                    ],
+                }
+            ],
+        }
         return context
 
 
@@ -29,6 +42,20 @@ class CardGradeManagementView(DiscountScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["grades"] = data.card_grades()
+        context["spec"] = {
+            "add_label": "Add Card Grade",
+            "drawer_id": "offcanvasAddCardGrade",
+            "sections": [
+                {
+                    "title": "",
+                    "fields": [
+                        {"id": "type", "label": "Card Type", "kind": "select", "required": True, "resolved": context["card_types_list"]},
+                        {"id": "code", "label": "Card Grade Code", "kind": "text", "required": True},
+                        {"id": "name", "label": "Card Grade Name", "kind": "text", "required": True},
+                    ],
+                }
+            ],
+        }
         return context
 
 

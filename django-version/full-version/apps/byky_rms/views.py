@@ -9,6 +9,56 @@ from apps.byky_core import privileges, refdata, screens
 from apps.byky_core.views import GenericScreenView, BykyScreenView
 
 
+# Row 57 of the client's feedback doc: Customer's Nationality field becomes a
+# full country dropdown -- real country names, not client data, so a
+# standard reference list is fine to hardcode rather than invented.
+COUNTRIES = [
+    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
+    "Argentina", "Armenia", "Australia", "Austria", "Azerbaijan",
+    "Bahamas", "Bahrain", "Bangladesh", "Barbados", "Belarus",
+    "Belgium", "Belize", "Benin", "Bhutan", "Bolivia",
+    "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei", "Bulgaria",
+    "Burkina Faso", "Burundi", "Cambodia", "Cameroon", "Canada",
+    "Chad", "Chile", "China", "Colombia", "Comoros",
+    "Congo", "Costa Rica", "Croatia", "Cuba", "Cyprus",
+    "Czech Republic", "Denmark", "Djibouti", "Dominican Republic", "Ecuador",
+    "Egypt", "El Salvador", "Eritrea", "Estonia", "Eswatini",
+    "Ethiopia", "Fiji", "Finland", "France", "Gabon",
+    "Gambia", "Georgia", "Germany", "Ghana", "Greece",
+    "Guatemala", "Guinea", "Guyana", "Haiti", "Honduras",
+    "Hungary", "Iceland", "India", "Indonesia", "Iran",
+    "Iraq", "Ireland", "Israel", "Italy", "Ivory Coast",
+    "Jamaica", "Japan", "Jordan", "Kazakhstan", "Kenya",
+    "Kuwait", "Kyrgyzstan", "Laos", "Latvia", "Lebanon",
+    "Lesotho", "Liberia", "Libya", "Liechtenstein", "Lithuania",
+    "Luxembourg", "Madagascar", "Malawi", "Malaysia", "Maldives",
+    "Mali", "Malta", "Mauritania", "Mauritius", "Mexico",
+    "Moldova", "Monaco", "Mongolia", "Montenegro", "Morocco",
+    "Mozambique", "Myanmar", "Namibia", "Nepal", "Netherlands",
+    "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea",
+    "North Macedonia", "Norway", "Oman", "Pakistan", "Panama",
+    "Papua New Guinea", "Paraguay", "Peru", "Philippines", "Poland",
+    "Portugal", "Qatar", "Romania", "Russia", "Rwanda",
+    "Saudi Arabia", "Senegal", "Serbia", "Seychelles", "Sierra Leone",
+    "Singapore", "Slovakia", "Slovenia", "Somalia", "South Africa",
+    "South Korea", "South Sudan", "Spain", "Sri Lanka", "Sudan",
+    "Suriname", "Sweden", "Switzerland", "Syria", "Taiwan",
+    "Tajikistan", "Tanzania", "Thailand", "Togo", "Trinidad and Tobago",
+    "Tunisia", "Turkey", "Turkmenistan", "Uganda", "Ukraine",
+    "United Arab Emirates", "United Kingdom", "United States", "Uruguay", "Uzbekistan",
+    "Venezuela", "Vietnam", "Yemen", "Zambia", "Zimbabwe",
+]
+
+# Row 57: Contact No splits into [Country Code] + [Phone No] -- a shortlist
+# of GCC/common codes rather than every dialling code, since the ask is the
+# two-part split, not an exhaustive registry.
+COUNTRY_CODES = [
+    "+971 (UAE)", "+966 (Saudi Arabia)", "+974 (Qatar)", "+973 (Bahrain)",
+    "+968 (Oman)", "+965 (Kuwait)", "+91 (India)", "+92 (Pakistan)",
+    "+20 (Egypt)", "+44 (UK)", "+1 (USA)",
+]
+
+
 PERMISSIONS = [
     "Access",
     "Create",
@@ -141,7 +191,8 @@ class Screen4_1(RmsScreen):
                     "placeholder": "",
                     "options": [
                         "Male",
-                        "Female"
+                        "Female",
+                        "Others"
                     ],
                     "source": None,
                     "width": 6,
@@ -161,10 +212,10 @@ class Screen4_1(RmsScreen):
                 {
                     "id": "cu-nat",
                     "label": "Nationality",
-                    "kind": "text",
+                    "kind": "select",
                     "required": False,
                     "placeholder": "",
-                    "options": [],
+                    "options": COUNTRIES,
                     "source": None,
                     "width": 6,
                     "help": ""
@@ -182,7 +233,9 @@ class Screen4_1(RmsScreen):
                     "placeholder": "",
                     "options": [
                         "Emirates ID",
-                        "Passport"
+                        "Passport",
+                        "Driving License",
+                        "Others"
                     ],
                     "source": None,
                     "width": 6,
@@ -190,20 +243,9 @@ class Screen4_1(RmsScreen):
                 },
                 {
                     "id": "cu-idno",
-                    "label": "Emirates ID / Passport No",
+                    "label": "Document No",
                     "kind": "text",
                     "required": True,
-                    "placeholder": "",
-                    "options": [],
-                    "source": None,
-                    "width": 6,
-                    "help": ""
-                },
-                {
-                    "id": "cu-lic",
-                    "label": "Driving License No",
-                    "kind": "text",
-                    "required": False,
                     "placeholder": "",
                     "options": [],
                     "source": None,
@@ -227,8 +269,19 @@ class Screen4_1(RmsScreen):
             "title": "Contact",
             "fields": [
                 {
+                    "id": "cu-mobile-code",
+                    "label": "Country Code",
+                    "kind": "select",
+                    "required": True,
+                    "placeholder": "",
+                    "options": COUNTRY_CODES,
+                    "source": None,
+                    "width": 6,
+                    "help": ""
+                },
+                {
                     "id": "cu-mobile",
-                    "label": "Mobile No",
+                    "label": "Phone No",
                     "kind": "text",
                     "required": True,
                     "placeholder": "",
@@ -241,6 +294,17 @@ class Screen4_1(RmsScreen):
                     "id": "cu-email",
                     "label": "Email",
                     "kind": "text",
+                    "required": False,
+                    "placeholder": "",
+                    "options": [],
+                    "source": None,
+                    "width": 6,
+                    "help": ""
+                },
+                {
+                    "id": "cu-remarks",
+                    "label": "Remarks",
+                    "kind": "textarea",
                     "required": False,
                     "placeholder": "",
                     "options": [],
@@ -274,6 +338,78 @@ class Screen4_1(RmsScreen):
     "kpis": []
 }
     awaiting = "customer records"
+
+    # Row 57: 5 demo customer records reflecting the redesigned field set --
+    # illustrative, added at the user's own explicit request for this
+    # screen (not the app's usual "leave empty, no source data" default),
+    # using example.com email addresses and non-sequential-looking ID
+    # numbers so nothing reads as a real person's document.
+    def get_rows(self):
+        customers = [
+            {
+                "code": "CU001", "first": "Ahmed", "last": "Al Mansoori", "gender": "Male",
+                "dob": "14 May 1990", "nat": "United Arab Emirates",
+                "idtype": "Emirates ID", "idno": "784-1990-1234567-1",
+                "mobile_code": "+971 (UAE)", "mobile": "501234567",
+                "email": "ahmed.almansoori@example.com", "addr": "Dubai, UAE",
+                "remarks": "", "status": "Active",
+            },
+            {
+                "code": "CU002", "first": "Priya", "last": "Nair", "gender": "Female",
+                "dob": "02 Nov 1988", "nat": "India",
+                "idtype": "Passport", "idno": "P1234567",
+                "mobile_code": "+91 (India)", "mobile": "9876543210",
+                "email": "priya.nair@example.com", "addr": "Sharjah, UAE",
+                "remarks": "", "status": "Active",
+            },
+            {
+                "code": "CU003", "first": "Robert", "last": "Chen", "gender": "Male",
+                "dob": "21 Jul 1995", "nat": "United States",
+                "idtype": "Driving License", "idno": "DL-84213",
+                "mobile_code": "+1 (USA)", "mobile": "2025550123",
+                "email": "robert.chen@example.com", "addr": "Abu Dhabi, UAE",
+                "remarks": "", "status": "Active",
+            },
+            {
+                "code": "CU004", "first": "Fatima", "last": "Hassan", "gender": "Female",
+                "dob": "09 Mar 1992", "nat": "Egypt",
+                "idtype": "Emirates ID", "idno": "784-1992-7654321-2",
+                "mobile_code": "+20 (Egypt)", "mobile": "1001234567",
+                "email": "fatima.hassan@example.com", "addr": "Dubai, UAE",
+                "remarks": "Repeated late returns", "status": "Blacklisted",
+            },
+            {
+                "code": "CU005", "first": "Alex", "last": "Rivera", "gender": "Others",
+                "dob": "30 Dec 1997", "nat": "United Kingdom",
+                "idtype": "Others", "idno": "ID-99201",
+                "mobile_code": "+44 (UK)", "mobile": "7700900123",
+                "email": "alex.rivera@example.com", "addr": "Ras Al Khaimah, UAE",
+                "remarks": "", "status": "Active",
+            },
+        ]
+        rows = []
+        for i, c in enumerate(customers):
+            row = dict(c)
+            row["name"] = f"{c['first']} {c['last']}"
+            row["id_no"] = c["idno"]
+            row["mobile_display"] = f"{c['mobile_code'].split(' ')[0]} {c['mobile']}"
+            row["json_id"] = f"scr-record-customer-{i}"
+            row["fields_json"] = {
+                "cu-first": c["first"],
+                "cu-last": c["last"],
+                "cu-gender": c["gender"],
+                "cu-dob": c["dob"],
+                "cu-nat": c["nat"],
+                "cu-idtype": c["idtype"],
+                "cu-idno": c["idno"],
+                "cu-mobile-code": c["mobile_code"],
+                "cu-mobile": c["mobile"],
+                "cu-email": c["email"],
+                "cu-remarks": c["remarks"],
+                "cu-addr": c["addr"],
+            }
+            rows.append(row)
+        return rows
 
 
 class Screen4_2(RmsScreen):

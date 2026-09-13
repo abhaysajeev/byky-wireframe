@@ -1,7 +1,7 @@
 {% extends layout_path %}
 {% load static %}
 
-{% block title %}Customer Details & Registration - Rental Management{% endblock title %}
+{% block title %}Customer - Rental Management{% endblock title %}
 
 {% comment %}
 FSD 4.1 -- Tier B. Migrated off the declarative byky/generic_screen.html system
@@ -12,10 +12,26 @@ The view (Screen4_1 in apps/byky_rms/views.py) still supplies the same
 `rows`/`awaiting` context via GenericScreenView; only the template changed
 (see apps/byky_rms/urls.py's template_name override).
 
-The client's files contain no customer records, so the grid shows its real
-column headers with the awaiting-data state in the body -- nothing here is
-invented.
+Row 57 of the client's feedback doc redesigned the Add/Edit fields (Gender
++Others, DOB as a real calendar via flatpickr, Nationality as a full
+country dropdown, ID Type +Driving License/Others, "Emirates ID / Passport
+No" renamed to "Document No", Driving License No hidden, Contact No split
+into Country Code + Phone No, Remarks added) and asked for 5 demo customer
+rows to show it off (Screen4_1.get_rows() -- illustrative, added at the
+user's own request, not the usual empty-until-real-data default). Sidebar
+and header renamed from "Customer Details & Registration" to "Customer" at
+the user's follow-up request.
 {% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
 
 {% block page_css %}
 {{ block.super }}
@@ -25,6 +41,7 @@ invented.
 {% block page_js %}
 {{ block.super }}
 <script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
@@ -35,9 +52,9 @@ invented.
       <div class="scr-crumb">
         <span>Rental Management</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
-        <b>Customer Details &amp; Registration</b>
+        <b>Customer</b>
       </div>
-      <h1 class="scr-title">Customer Details &amp; Registration</h1>
+      <h1 class="scr-title">Customer</h1>
       <p class="scr-sub">{{ purpose }}</p>
     </div>
     <div class="scr-head-actions">
@@ -89,7 +106,7 @@ invented.
             <td><span class="scr-code">{{ c.code }}</span></td>
             <td style="font-weight:600">{{ c.name }}</td>
             <td class="scr-contact">{{ c.id_no }}</td>
-            <td class="scr-contact">{{ c.mobile }}</td>
+            <td class="scr-contact">{{ c.mobile_display|default:c.mobile }}</td>
             <td class="scr-contact">{{ c.email }}</td>
             <td><span class="scr-badge {% if c.status == 'Blacklisted' %}scr-badge-rejected{% else %}scr-badge-approved{% endif %}"><i></i>{{ c.status }}</span></td>
             <td>

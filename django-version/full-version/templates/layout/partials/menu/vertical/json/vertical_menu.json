@@ -190,7 +190,7 @@
    "submenu": [
     {
      "url": "rms-customer-details-registration",
-     "name": "Customer Details & Registration",
+     "name": "Customer",
      "slug": "rms-customer-details-registration"
     },
     {

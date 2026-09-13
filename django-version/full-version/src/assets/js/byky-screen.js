@@ -660,6 +660,14 @@
             badge.classList.toggle('scr-badge-pending', !isActive);
             badge.lastChild.textContent = toStatus;
           }
+          /* Dynamic Block/Unblock -- when a row's kebab carries both (Device
+             Approval's Approved/Blocked tabs), hide whichever action no
+             longer applies and reveal its opposite, so a blocked device
+             never offers "Block" again and vice versa. */
+          var blockBtn = row.querySelector('[data-scr-block]');
+          var unblockBtn = row.querySelector('[data-scr-unblock]');
+          if (blockBtn) blockBtn.hidden = !isActive;
+          if (unblockBtn) unblockBtn.hidden = isActive;
           applyFilters(scope, true);
         }
 
@@ -692,6 +700,46 @@
   }
   wireStatusToggle('data-scr-block', 'Blocked', false, 'Block', 'blocked');
   wireStatusToggle('data-scr-unblock', 'Active', true, 'Unblock', 'unblocked');
+
+  /* ── manual logout (data-scr-logout) -- plain confirm-then-toast, no
+     visible row state change. Device Approval's Approved/Blocked tabs use
+     this: those queue devices carry no online/offline field to flip
+     (unlike Device Mapping's mapped fleet, which has its own mandatory-
+     remark Logout in byky-device.js and does flip a status badge). */
+  document.querySelectorAll('[data-scr-logout]').forEach(function (btn) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault();
+      var row = btn.closest('.scr-row, .scr-card');
+      var nameEl = row && row.querySelector('.scr-co-name, .scr-code, .scr-form-title');
+      var name = nameEl ? nameEl.textContent.trim() : 'this device';
+
+      function done() {
+        if (typeof Swal === 'undefined') return;
+        Swal.fire({
+          text: name + ' has been logged out.',
+          icon: 'success',
+          customClass: { confirmButton: 'btn btn-primary' },
+          buttonsStyling: false
+        });
+      }
+
+      if (typeof Swal === 'undefined') {
+        if (window.confirm('Log out ' + name + '?')) window.alert(name + ' has been logged out.');
+        return;
+      }
+      Swal.fire({
+        title: 'Log out ' + name + '?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, log out',
+        customClass: { confirmButton: 'btn btn-danger me-3', cancelButton: 'btn btn-label-secondary' },
+        buttonsStyling: false
+      }).then(function (result) {
+        if (!result.isConfirmed) return;
+        done();
+      });
+    });
+  });
 
   document.addEventListener('click', closeAllMenus);
 

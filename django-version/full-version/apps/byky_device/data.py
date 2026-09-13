@@ -97,7 +97,6 @@ def counts(rows):
 
 
 def _queue_entry(i, status):
-    emp = seed.EMPLOYEES[(i * 13) % len(seed.EMPLOYEES)]
     today = datetime.date.today()
     registered = today - datetime.timedelta(days=(i * 5) % 45 + 1)
     return {
@@ -115,7 +114,11 @@ def _queue_entry(i, status):
             + ("AM" if i % 2 == 0 else "PM")
         ),
         "status": status,
-        "attempted_username": emp["name"] + f" ({emp['emp_no']})",
+        # A generic login handle, not a real staff identity -- unlike
+        # devices()' own `employee` field, this is whoever typed a username
+        # into an unapproved device, so it stays anonymised rather than
+        # naming real employees.
+        "attempted_username": f"user{i + 1}",
         "apk_version": APK_VERSION if i % 2 == 0 else APK_VERSION_PREV,
     }
 

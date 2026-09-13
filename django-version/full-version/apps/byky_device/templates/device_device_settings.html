@@ -9,16 +9,17 @@ RMS Web feedback doc (RMS WEB 07.09.2026-1.pdf, "Device Management" page).
 Row 52: rebuilt from a single always-open search-then-edit-one-form screen
 into a real Tier A list -- KPI tiles, a grid of every station's settings,
 and a side drawer (byky/partials/drawer.html, per the client's own choice
-between drawer vs full page for this many fields) for editing one station
-at a time. spec.scr_name keeps the familiar data-scr-open="settings:edit"
-trigger and json_script prefill working the same way every other list+
-drawer screen in the app does.
+between drawer vs full page for this many fields) for adding or editing
+one station's settings. spec.scr_name keeps the familiar
+data-scr-open="settings:add|edit" triggers and json_script prefill
+working the same way every other list+drawer screen in the app does; the
+Station field is a select (not fixed text) so Add mode can pick which
+station to configure, then locks once you're editing an existing row.
 
-Every station gets a settings row -- this is 1:1 with a station the same
-way apps/byky_device/data.py's devices() is, not something you create new
-instances of, so there's no Add trigger anywhere, only per-row Edit.
-Operational defaults (paper feed, print type, round-off rule, test slot
-minutes) are pre-filled; client-specific business copy (header/footer
+Every real station is seeded with a settings row up front so the grid
+never reads as empty -- operational defaults (paper feed, print type,
+round-off rule, test slot minutes) are pre-filled the same way
+APK_VERSION is elsewhere; client-specific business copy (header/footer
 text, order-number prefix, logo) has no source anywhere and stays blank,
 exactly like the single-form screen this replaces always left it.
 {% endcomment %}
@@ -45,6 +46,12 @@ exactly like the single-form screen this replaces always left it.
       </div>
       <h1 class="scr-title">Device Settings</h1>
       <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="settings:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Settings
+      </button>
     </div>
   </div>
 

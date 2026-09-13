@@ -132,12 +132,14 @@ class DeviceSettingsView(DeviceScreenView):
     """Row 52 of the client's feedback doc: rebuilt from a single always-open
     edit form into a real Tier A list -- KPI tiles, a grid of every
     station's settings, and a side drawer (byky/partials/drawer.html) for
-    editing one station at a time, matching the list+drawer pattern used
-    everywhere else in the app instead of the search-then-edit-one-form
-    shape it replaces. No spec.scr_name/data-scr-open trigger here since
-    there's no Add mode -- every station already has a settings record
-    (one-to-one, the same way devices() is), so the only entry point is
-    each row's own Edit action."""
+    adding or editing one station's settings, matching the list+drawer
+    pattern used everywhere else in the app instead of the search-then-
+    edit-one-form shape it replaces. spec.scr_name keeps both the header's
+    Add Settings trigger (data-scr-open="settings:add") and each row's Edit
+    trigger (data-scr-open="settings:edit") working the usual way; the
+    Station field is a select rather than fixed text so Add mode can pick
+    which station to configure, then locks (disabled, per lock_on_edit on a
+    select) once you're editing an existing row so it can't be retargeted."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -172,13 +174,20 @@ class DeviceSettingsView(DeviceScreenView):
                 "spec": {
                     "scr_name": "settings",
                     "title_field": "station",
-                    "add_label": "Station Settings",
+                    "add_label": "Add Settings",
                     "drawer_id": "offcanvasStationSettings",
                     "sections": [
                         {
                             "title": "Scope",
                             "fields": [
-                                {"id": "station", "label": "Station", "kind": "text", "lock_on_edit": True, "readonly": True},
+                                {
+                                    "id": "station",
+                                    "label": "Station",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": [b["name"] for b in context["branches_list"]],
+                                    "lock_on_edit": True,
+                                },
                                 {
                                     "id": "company",
                                     "label": "Company",

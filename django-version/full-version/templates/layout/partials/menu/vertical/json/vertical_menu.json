@@ -153,9 +153,14 @@
    "slug": "device",
    "badge": [
     "label-secondary",
-    "2"
+    "4"
    ],
    "submenu": [
+    {
+     "url": "device-device-approval",
+     "name": "Device Approval",
+     "slug": "device-device-approval"
+    },
     {
      "url": "device-device-mapping",
      "name": "Device Mapping",
@@ -165,6 +170,11 @@
      "url": "device-device-settings",
      "name": "Device Settings",
      "slug": "device-device-settings"
+    },
+    {
+     "url": "device-upload-apk",
+     "name": "Upload APK",
+     "slug": "device-upload-apk"
     }
    ]
   },

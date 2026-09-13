@@ -16,7 +16,29 @@ One device per real station is a deterministic demo dataset (see
 apps/byky_device/data.py's docstring) -- station names are real, MAC
 addresses / APK versions / login state are illustrative, matching the
 legacy mockup's own example rows.
+
+Row 50 of the client's feedback doc: the Add Device Mapping drawer's Device
+field is now a dropdown restricted to approved-but-unmapped devices (from
+Device Approval's queue, apps/byky_device/data.py's approved_devices())
+instead of free-text ID/Name/MAC entry -- picking one auto-fills the
+identity fields below it (byky-device.js). Branch selection warns if that
+branch doesn't allow a second device (Branch Management's own multi_user
+flag, reused rather than inventing a new one -- see byky-device.js for why
+the warning is dormant against today's demo data). Logout/Block/Unblock
+were added to each row's kebab, each requiring a remark before it applies
+(also byky-device.js) -- distinct from Device Approval's own Block/Unblock,
+which acts on the separate onboarding queue, not this already-mapped fleet.
 {% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
 
 {% block page_css %}
 {{ block.super }}
@@ -26,6 +48,7 @@ legacy mockup's own example rows.
 {% block page_js %}
 {{ block.super }}
 <script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-device.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
@@ -73,6 +96,12 @@ legacy mockup's own example rows.
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v17M15 9h4a1 1 0 0 1 1 1v11M3 21h18M8 7h3M8 11h3M8 15h3"></path></svg>
       </span>
       <div><div class="scr-tile-val">{{ counts.stations }}</div><div class="scr-tile-lab">Stations covered</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ counts.blocked }}</div><div class="scr-tile-lab">Blocked devices</div></div>
     </div>
   </div>
 
@@ -137,7 +166,9 @@ legacy mockup's own example rows.
             <td class="scr-contact">{{ d.login_time|default:"—" }}</td>
             <td class="scr-contact">{{ d.employee|default:"—" }}</td>
             <td style="text-align:center">
-              <span style="display:inline-block; width:9px; height:9px; border-radius:50%; background:{% if d.online %}#1f9d63{% else %}#dcd9ea{% endif %}" title="{% if d.online %}Online{% else %}Offline{% endif %}"></span>
+              {% if d.blocked %}<span class="scr-badge scr-badge-pending" data-status-badge><i></i>Blocked</span>
+              {% elif d.online %}<span class="scr-badge scr-badge-approved" data-status-badge><i></i>Online</span>
+              {% else %}<span class="scr-badge scr-badge-rejected" data-status-badge><i></i>Offline</span>{% endif %}
             </td>
             <td>
               <div class="scr-row-actions">
@@ -147,6 +178,25 @@ legacy mockup's own example rows.
                 <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="device:edit">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
                 </button>
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <button type="button" class="scr-menu-item" data-device-logout>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
+                      Logout
+                    </button>
+                    <button type="button" class="scr-menu-item" data-device-block>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+                      Block
+                    </button>
+                    <button type="button" class="scr-menu-item" data-device-unblock>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 7.6-1.8"></path></svg>
+                      Unblock
+                    </button>
+                  </div>
+                </div>
               </div>
             </td>
           </tr>
@@ -188,27 +238,38 @@ legacy mockup's own example rows.
   </div>
   <div class="scr-drawer-body scr-sb">
     <div class="scr-drawer-field" data-tab="_">
+      <label class="scr-label">Device<span class="scr-required">*</span></label>
+      <select class="scr-drawer-input" id="device-mapping-pick">
+        <option value="">Select an approved, unmapped device</option>
+        {% for d in approved_unmapped %}
+        <option value="{{ d.mac }}" data-device-id="{{ d.device_id }}" data-name="{{ d.name }}" data-mac="{{ d.mac }}" data-apk="{{ d.apk_version }}">{{ d.name }} &mdash; {{ d.mac }}</option>
+        {% endfor %}
+      </select>
+      <div class="scr-help">Only devices cleared through Device Approval and not yet mapped are listed.</div>
+    </div>
+    <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">Device ID<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="device_id" data-lock-on-edit="true" value="" placeholder="10200" />
+      <input type="text" class="scr-drawer-input" data-field="device_id" data-lock-on-edit="true" value="" readonly />
     </div>
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">Device Name<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="name" value="" />
+      <input type="text" class="scr-drawer-input" data-field="name" value="" readonly />
     </div>
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">MAC Address<span class="scr-required">*</span></label>
-      <input type="text" class="scr-drawer-input" data-field="mac" value="" placeholder="AA:BB:CC:DD:EE:FF" />
+      <input type="text" class="scr-drawer-input" data-field="mac" value="" readonly />
     </div>
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">Station<span class="scr-required">*</span></label>
       <select class="scr-drawer-input" data-field="station">
         <option value="">Select</option>
-        {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
+        {% for b in branches_list %}<option data-multi-user="{% if b.multi_user %}true{% else %}false{% endif %}" data-mapped="{% if b.name in mapped_stations %}true{% else %}false{% endif %}">{{ b.name }}</option>{% endfor %}
       </select>
+      <div class="scr-help scr-help-danger" data-branch-multi-warning hidden>This branch does not allow more than one device. Enable "Allow Multiple Devices" on Branch Management first.</div>
     </div>
     <div class="scr-drawer-field" data-tab="_">
       <label class="scr-label">APK Version</label>
-      <input type="text" class="scr-drawer-input" data-field="apk_version" value="1.12.79" />
+      <input type="text" class="scr-drawer-input" data-field="apk_version" value="" readonly />
     </div>
   </div>
   <div class="scr-drawer-foot">

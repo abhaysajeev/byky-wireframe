@@ -1,0 +1,97 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Upload APK - Device Management{% endblock title %}
+
+{% comment %}
+New module, not one of the 16 FSD modules -- requested against the client's
+RMS Web feedback doc (RMS WEB 07.09.2026-1.pdf, "Device Management" page).
+Was a modal hanging off Device Settings' "More Actions" menu; promoted to
+its own top-level sidebar entry (row 53) now that menu is gone (row 51).
+Same fields and copy as the old modal, just as a first-class page: the
+fleet's Android devices poll this build and self-update from it, which is
+why Version Code and the currently-active build are both shown here rather
+than only the upload form.
+
+Frontend-only, per CLAUDE.md 1: the file is accepted client-side, nothing
+uploads anywhere in this wireframe.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Device Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Upload APK</b>
+      </div>
+      <h1 class="scr-title">Upload APK</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">Current Build</h2>
+          <span class="scr-form-badge">Active</span>
+        </div>
+        <p class="scr-form-sub">The build every device on the fleet is currently running or updating to.</p>
+      </div>
+    </div>
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Version Code</label>
+          <input type="text" class="scr-input" value="{{ current_apk_version }}" readonly />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row"><h2 class="scr-form-title">Publish New Build</h2></div>
+        <p class="scr-form-sub">Devices poll this build and self-update once it's marked active.</p>
+      </div>
+    </div>
+    <div class="scr-form-body">
+      <div class="scr-grid">
+        <div class="scr-field" style="grid-column:1 / -1">
+          <label class="scr-label">APK File<span class="scr-required">*</span></label>
+          <input type="file" class="scr-input" accept=".apk" style="padding:8px 12px; height:auto" />
+          <div class="scr-help">.apk file from local disk. Devices fetch and install it from here on their next update check.</div>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Version Code<span class="scr-required">*</span></label>
+          <input type="text" class="scr-input" />
+        </div>
+        <div class="scr-field" style="grid-column:1 / -1">
+          <label class="scr-label">Release Notes</label>
+          <textarea class="scr-input" rows="3" style="height:auto; padding:10px 12px"></textarea>
+        </div>
+      </div>
+      <div class="scr-form-foot">
+        <div class="scr-form-actions" style="margin-left:auto">
+          <button type="button" class="scr-btn-secondary">Cancel</button>
+          <button type="button" class="scr-btn-primary">Upload &amp; Publish</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

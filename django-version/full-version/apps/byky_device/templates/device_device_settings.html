@@ -11,11 +11,10 @@ and sysadmin_global_application_configuration_settings.html for the
 section-card settings-form reference): per-station receipt print
 configuration, matching the legacy Edit/Results screen's fields exactly.
 
-Device Approval and Upload APK are folded into a "More Actions" header
-dropdown rather than kept as separate top-level screens (per the follow-up
-instruction) -- each opens its own centered scr-modal (new in
-byky-screen.css/js: data-scr-modal-open / data-scr-modal), distinct from the
-side scr-drawer since neither is a record list.
+Device Approval and Upload APK, previously folded into a "More Actions"
+header dropdown here, are now their own top-level Device Management screens
+(rows 51/53 of the client's feedback doc) -- nothing is lost, they're just
+reachable from the sidebar instead of hiding behind a menu.
 {% endcomment %}
 
 {% block page_css %}
@@ -40,25 +39,6 @@ side scr-drawer since neither is a record list.
       </div>
       <h1 class="scr-title">Device Settings</h1>
       <p class="scr-sub">{{ purpose }}</p>
-    </div>
-    <div class="scr-head-actions">
-      <div class="scr-menu-wrap">
-        <button type="button" class="scr-menu-btn" data-scr-menu-toggle>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg>
-          More Actions
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-        </button>
-        <div class="scr-menu" hidden>
-          <button type="button" class="scr-menu-item" data-scr-modal-open="device-approval">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
-            Device Approval
-          </button>
-          <button type="button" class="scr-menu-item" data-scr-modal-open="upload-apk">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5"></path><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"></path></svg>
-            Upload APK
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 
@@ -134,7 +114,7 @@ side scr-drawer since neither is a record list.
           </div>
           <div class="scr-field">
             <label class="scr-label">Settings Code</label>
-            <input type="text" class="scr-input" value="" placeholder="creek1" readonly />
+            <input type="text" class="scr-input" value="" placeholder="Auto-generated" readonly />
           </div>
         </div>
       </div>
@@ -147,7 +127,7 @@ side scr-drawer since neither is a record list.
         <div class="scr-grid">
           <div class="scr-field">
             <label class="scr-label">Header 1</label>
-            <input type="text" class="scr-input" value="" placeholder="e.g. BYKY SPORT &amp; LEISURE EQUIPMENT RENTAL LLC" />
+            <input type="text" class="scr-input" value="" placeholder="Enter header line" />
           </div>
           <div class="scr-field">
             <label class="scr-label">Header 2 (Arabic)</label>
@@ -159,7 +139,7 @@ side scr-drawer since neither is a record list.
           </div>
           <div class="scr-field">
             <label class="scr-label">Footer 1</label>
-            <input type="text" class="scr-input" value="" placeholder="e.g. Company is not responsible for any belongings" />
+            <input type="text" class="scr-input" value="" placeholder="Enter footer line" />
           </div>
           <div class="scr-field">
             <label class="scr-label">Footer 2 (Arabic)</label>
@@ -203,7 +183,7 @@ side scr-drawer since neither is a record list.
           </div>
           <div class="scr-field">
             <label class="scr-label">Order No Starting Characters</label>
-            <input type="text" class="scr-input" value="" placeholder="CF001" />
+            <input type="text" class="scr-input" value="" placeholder="Enter starting characters" />
           </div>
         </div>
       </div>
@@ -273,84 +253,6 @@ side scr-drawer since neither is a record list.
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-{% comment %}
-Device Approval -- pick one device by name or MAC, then set its approval
-status. A centered scr-modal (not a side drawer): a single quick action, not
-a record list or a multi-field create form.
-{% endcomment %}
-<div class="scr-modal-veil" data-scr-modal-veil="device-approval" hidden></div>
-<div class="scr-modal" data-scr-modal="device-approval" hidden>
-  <div class="scr-modal-head">
-    <div>
-      <h2 class="scr-modal-title">Device Approval</h2>
-      <p class="scr-modal-sub">Select a device, then set its approval status.</p>
-    </div>
-    <button type="button" class="scr-drawer-close" data-scr-modal-close>
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
-    </button>
-  </div>
-  <div class="scr-modal-body">
-    <div class="scr-field" style="margin-bottom:16px">
-      <label class="scr-label">Device (by name or MAC address)<span class="scr-required">*</span></label>
-      <select class="scr-input">
-        <option value="">Select a device</option>
-        {% for d in devices %}<option>{{ d.name }} &mdash; {{ d.mac }}</option>{% endfor %}
-      </select>
-    </div>
-    <div class="scr-field" style="margin-bottom:16px">
-      <label class="scr-label">Approval Status<span class="scr-required">*</span></label>
-      <select class="scr-input">
-        {% for s in approval_statuses %}<option>{{ s }}</option>{% endfor %}
-      </select>
-    </div>
-    <div class="scr-field">
-      <label class="scr-label">Remarks</label>
-      <textarea class="scr-input" rows="2" style="height:auto; padding:10px 12px"></textarea>
-    </div>
-  </div>
-  <div class="scr-modal-foot">
-    <button type="button" class="scr-btn-secondary" data-scr-modal-close>Cancel</button>
-    <button type="button" class="scr-btn-primary" style="margin-left:auto">Save Approval</button>
-  </div>
-</div>
-
-{% comment %}
-Upload APK -- a new APK build for the fleet to self-update from, replacing
-whichever build is currently marked active. Frontend-only: the file is
-accepted client-side, nothing uploads anywhere in this wireframe.
-{% endcomment %}
-<div class="scr-modal-veil" data-scr-modal-veil="upload-apk" hidden></div>
-<div class="scr-modal" data-scr-modal="upload-apk" hidden>
-  <div class="scr-modal-head">
-    <div>
-      <h2 class="scr-modal-title">Upload APK</h2>
-      <p class="scr-modal-sub">Devices poll this build and self-update once it's marked active.</p>
-    </div>
-    <button type="button" class="scr-drawer-close" data-scr-modal-close>
-      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
-    </button>
-  </div>
-  <div class="scr-modal-body">
-    <div class="scr-field" style="margin-bottom:16px">
-      <label class="scr-label">APK File<span class="scr-required">*</span></label>
-      <input type="file" class="scr-input" accept=".apk" style="padding:8px 12px; height:auto" />
-      <div class="scr-help">.apk file from local disk. Devices fetch and install it from here on their next update check.</div>
-    </div>
-    <div class="scr-field" style="margin-bottom:16px">
-      <label class="scr-label">Version Code<span class="scr-required">*</span></label>
-      <input type="text" class="scr-input" placeholder="1.12.80" />
-    </div>
-    <div class="scr-field">
-      <label class="scr-label">Release Notes</label>
-      <textarea class="scr-input" rows="2" style="height:auto; padding:10px 12px" placeholder="What changed in this build"></textarea>
-    </div>
-  </div>
-  <div class="scr-modal-foot">
-    <button type="button" class="scr-btn-secondary" data-scr-modal-close>Cancel</button>
-    <button type="button" class="scr-btn-primary" style="margin-left:auto">Upload &amp; Publish</button>
   </div>
 </div>
 {% endblock %}

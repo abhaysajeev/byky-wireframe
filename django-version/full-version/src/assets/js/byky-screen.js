@@ -633,19 +633,23 @@
       });
     });
   });
-  /* ── row block / unblock (data-scr-block / data-scr-unblock) -- Employee
-     Personal Data only. Same SweetAlert2-confirm-then-update pattern as row
-     delete above: flips the row's Status badge and data-status, nothing
-     persisted (CLAUDE.md section 11). The full Block/Unblock console (FSD
-     2.5) is still the place for a reasoned block with a logged history. */
+  /* ── row block / unblock (data-scr-block / data-scr-unblock) -- generic
+     across any screen with a [data-status-badge] status pill: originally
+     Employee Personal Data, now also Device Approval's Approved/Blocked
+     tabs and its detail page. Same SweetAlert2-confirm-then-update pattern
+     as row delete above: flips the status badge and data-status, nothing
+     persisted (CLAUDE.md section 11). Falls back to the whole .scr-card
+     when there's no .scr-row ancestor -- a detail page (Device Approval's
+     own, mirroring byky-request-approval.js's identical fallback) has no
+     row, only the one status pill its card owns. */
   function wireStatusToggle(attr, toStatus, isActive, confirmVerb, doneVerb) {
     document.querySelectorAll('[' + attr + ']').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
         e.preventDefault();
-        var row = btn.closest('.scr-row');
+        var row = btn.closest('.scr-row, .scr-card');
         if (!row) return;
-        var nameEl = row.querySelector('.scr-co-name');
-        var name = nameEl ? nameEl.textContent.trim() : 'this employee';
+        var nameEl = row.querySelector('.scr-co-name, .scr-code, .scr-form-title');
+        var name = nameEl ? nameEl.textContent.trim() : 'this record';
         var badge = row.querySelector('[data-status-badge]');
         var scope = scopeOf(row);
 

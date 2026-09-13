@@ -9,6 +9,19 @@ demo -- every station in the real network gets a device row, deterministic
 same approach apps/byky_core/sales.py uses for indicative revenue. MAC
 addresses, APK versions and login timestamps are demo values in the same
 spirit; they are not claimed to be real client hardware.
+
+Two separate device populations exist here, deliberately not cross-linked:
+
+- devices() -- the already-approved, already-mapped fleet Device Mapping
+  manages day to day. Its own "blocked" flag models an in-service device
+  being suspended by an operator (Device Mapping's own Block/Unblock/Logout
+  actions), not an approval decision.
+- pending_devices() / approved_devices() / blocked_devices() -- a small
+  onboarding queue for brand-new devices that have registered but aren't
+  mapped to a station yet, which Device Approval's three tabs walk through
+  (Pending -> Approved -> rarely Blocked). approved_devices() is also the
+  pool Device Mapping's "Add Device Mapping" drawer offers, since only an
+  approved-but-unmapped device is eligible to be mapped (row 50).
 """
 
 import hashlib
@@ -20,6 +33,7 @@ NOT_CAPTURED = seed.NOT_CAPTURED
 SHORT = seed.NOT_CAPTURED_SHORT
 
 APK_VERSION = "1.12.79"
+APK_VERSION_PREV = "1.12.78"
 
 PRINT_FEED_OPTIONS = ["1", "2", "3"]
 PRINT_TYPE_OPTIONS = ["Portrait", "Landscape"]
@@ -64,7 +78,9 @@ def devices():
                 ) if online else "",
                 "employee": emp["name"] + f" ({emp['emp_no']})" if emp else "",
                 "online": online,
-                "approval_status": APPROVAL_STATUSES[i % 3] if i % 5 else "Approved",
+                # An in-service device an operator has suspended -- separate
+                # from the approval queue below (see module docstring).
+                "blocked": i % 11 == 3,
             }
         )
     return out
@@ -75,5 +91,66 @@ def counts(rows):
         "total": len(rows),
         "online": sum(1 for r in rows if r["online"]),
         "offline": sum(1 for r in rows if not r["online"]),
+        "blocked": sum(1 for r in rows if r["blocked"]),
         "stations": len(seed.STATIONS),
+    }
+
+
+def _queue_entry(i, status):
+    emp = seed.EMPLOYEES[(i * 13) % len(seed.EMPLOYEES)]
+    today = datetime.date.today()
+    registered = today - datetime.timedelta(days=(i * 5) % 45 + 1)
+    return {
+        # device_id/name give a queue device the same identity shape as an
+        # already-mapped one (devices()), starting well past the mapped
+        # fleet's own 1010x range (36 stations) so the two never collide --
+        # needed once a device leaves the queue through Add Device Mapping
+        # (row 50), which fills these straight from here.
+        "device_id": 10200 + i,
+        "name": f"Handheld Unit {i + 1}",
+        "mac": _mac(f"queue-device-{i}"),
+        "registered_at": (
+            registered.strftime("%d/%m/%Y")
+            + " " + f"{(8 + i) % 12 + 1:02d}:{(i * 17) % 60:02d} "
+            + ("AM" if i % 2 == 0 else "PM")
+        ),
+        "status": status,
+        "attempted_username": emp["name"] + f" ({emp['emp_no']})",
+        "apk_version": APK_VERSION if i % 2 == 0 else APK_VERSION_PREV,
+    }
+
+
+def pending_devices():
+    """New handheld/POS units that have registered but not yet been
+    reviewed -- an onboarding queue kept separate from the already-mapped
+    devices() fleet (see module docstring)."""
+    return [_queue_entry(i, "Pending") for i in range(0, 4)]
+
+
+def approved_devices():
+    """Queue devices cleared for use but not yet mapped to a station --
+    the pool Device Mapping's Add Device Mapping drawer offers (row 50)."""
+    return [_queue_entry(i, "Approved") for i in range(4, 7)]
+
+
+def blocked_devices():
+    """Queue devices that were approved and then blocked before ever being
+    mapped."""
+    return [_queue_entry(i, "Blocked") for i in range(7, 9)]
+
+
+def queue_device_detail(mac):
+    """A single queue device's full detail, across all three states, for
+    Device Approval's detail page."""
+    for d in pending_devices() + approved_devices() + blocked_devices():
+        if d["mac"] == mac:
+            return d
+    return None
+
+
+def queue_counts():
+    return {
+        "pending": len(pending_devices()),
+        "approved": len(approved_devices()),
+        "blocked": len(blocked_devices()),
     }

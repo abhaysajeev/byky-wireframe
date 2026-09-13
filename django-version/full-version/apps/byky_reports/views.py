@@ -5,7 +5,7 @@ byky/generic_screen.html so markup and spacing stay identical across modules.
 Wireframe phase: no writes, no CRUD, no API.
 """
 
-from apps.byky_core import refdata, screens
+from apps.byky_core import privileges, refdata, screens
 from apps.byky_core.views import GenericScreenView, BykyScreenView
 
 
@@ -16,12 +16,6 @@ PERMISSIONS = [
     "Export",
     "Approve"
 ]
-ROLES = [
-    "SuperAdmin",
-    "Finance Manager",
-    "Branch Manager",
-    "Auditor"
-]
 
 
 class ReportsScreen(GenericScreenView):
@@ -30,98 +24,23 @@ class ReportsScreen(GenericScreenView):
 
 
 class ReportsPrivileges(BykyScreenView):
-    """Tier D -- shared privilege matrix, parameterised by this module."""
+    """Tier D -- roles list + per-role screen permission matrix. See
+    apps/byky_core/privileges.py for the shared role master and defaults;
+    screens come live from the sidebar's Reports group."""
 
-    SCREENS = [
-    [
-        "Daily Rental Transaction & Revenue Report",
-        [
-            True,
-            True,
-            True,
-            True,
-            True
-        ]
-    ],
-    [
-        "Station Stock & Inventory Valuation Report",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "Customer Rental History & Ledger Report",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "Vehicle Fleet Utilization & Performance Report",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "Vehicle Maintenance & Overhaul Audit Report",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "Wallet Settlement & Refund Audit Report",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "RFID Antenna Gate Read Telemetry Report",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "REPORTS Security Privilege Management",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ]
-]
+    SLUG = "reports"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        screens = privileges.module_screens(self.SLUG)
         context.update(
             {
                 "permissions": PERMISSIONS,
-                "roles": ROLES,
-                "screens": [{"name": n, "perms": p} for n, p in self.SCREENS],
+                "roles": privileges.ROLES,
+                "mapped_roles": privileges.DEFAULT_MAPPED_ROLES,
+                "admin_roles": privileges.ADMIN_ROLES,
+                "screens": screens,
+                "role_matrices": privileges.role_matrices(privileges.ROLES, screens, PERMISSIONS),
             }
         )
         return context

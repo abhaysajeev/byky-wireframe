@@ -5,7 +5,7 @@ byky/generic_screen.html so markup and spacing stay identical across modules.
 Wireframe phase: no writes, no CRUD, no API.
 """
 
-from apps.byky_core import geo, refdata, screens
+from apps.byky_core import geo, privileges, refdata, screens
 from apps.byky_core.views import GenericScreenView, BykyScreenView
 from apps.byky_cms import data as cms_data
 from . import data
@@ -17,11 +17,6 @@ PERMISSIONS = [
     "Update",
     "Approve",
     "Delete"
-]
-ROLES = [
-    "SuperAdmin",
-    "Fleet Controller",
-    "Technician"
 ]
 
 
@@ -49,62 +44,23 @@ class TrackingScreen(GenericScreenView):
 
 
 class TrackingPrivileges(BykyScreenView):
-    """Tier D -- shared privilege matrix, parameterised by this module."""
+    """Tier D -- roles list + per-role screen permission matrix. See
+    apps/byky_core/privileges.py for the shared role master and defaults;
+    screens come live from the sidebar's Antenna Tracking group."""
 
-    SCREENS = [
-    [
-        "GPS & IoT Hardware Device Registration",
-        [
-            True,
-            True,
-            True,
-            True,
-            True,
-            True
-        ]
-    ],
-    [
-        "Vehicle Fleet Telematics Registry",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "Vehicle Type & Specification Master",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "TRACKING Security Privilege Management",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ]
-]
+    SLUG = "tracking"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        screens = privileges.module_screens(self.SLUG)
         context.update(
             {
                 "permissions": PERMISSIONS,
-                "roles": ROLES,
-                "screens": [{"name": n, "perms": p} for n, p in self.SCREENS],
+                "roles": privileges.ROLES,
+                "mapped_roles": privileges.DEFAULT_MAPPED_ROLES,
+                "admin_roles": privileges.ADMIN_ROLES,
+                "screens": screens,
+                "role_matrices": privileges.role_matrices(privileges.ROLES, screens, PERMISSIONS),
             }
         )
         return context

@@ -5,7 +5,7 @@ byky/generic_screen.html so markup and spacing stay identical across modules.
 Wireframe phase: no writes, no CRUD, no API.
 """
 
-from apps.byky_core import refdata, screens
+from apps.byky_core import privileges, refdata, screens
 from apps.byky_core.views import GenericScreenView, BykyScreenView
 
 
@@ -17,12 +17,6 @@ PERMISSIONS = [
     "Approve",
     "Delete"
 ]
-ROLES = [
-    "SuperAdmin",
-    "Rental Manager",
-    "Cashier",
-    "Branch Manager"
-]
 
 
 class RmsScreen(GenericScreenView):
@@ -31,117 +25,23 @@ class RmsScreen(GenericScreenView):
 
 
 class RmsPrivileges(BykyScreenView):
-    """Tier D -- shared privilege matrix, parameterised by this module."""
+    """Tier D -- roles list + per-role screen permission matrix. See
+    apps/byky_core/privileges.py for the shared role master and defaults;
+    screens come live from the sidebar's Rental group."""
 
-    SCREENS = [
-    [
-        "Customer Details & Registration",
-        [
-            True,
-            True,
-            True,
-            True,
-            True,
-            True
-        ]
-    ],
-    [
-        "Customer Card & RFID Mapping",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "Customer Sanction & Blacklist Management",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "Vehicle Delivery & Pickup Location",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "Rental Tariff & Fare Setup",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "Sale Rates & Accessory Pricing",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "Vehicle Fleet Order Allocation",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "Rental Price Updates & Tariff Adjustments",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ],
-    [
-        "RMS Security Privilege Management",
-        [
-            True,
-            False,
-            True,
-            False,
-            False,
-            False
-        ]
-    ]
-]
+    SLUG = "rms"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        screens = privileges.module_screens(self.SLUG)
         context.update(
             {
                 "permissions": PERMISSIONS,
-                "roles": ROLES,
-                "screens": [{"name": n, "perms": p} for n, p in self.SCREENS],
+                "roles": privileges.ROLES,
+                "mapped_roles": privileges.DEFAULT_MAPPED_ROLES,
+                "admin_roles": privileges.ADMIN_ROLES,
+                "screens": screens,
+                "role_matrices": privileges.role_matrices(privileges.ROLES, screens, PERMISSIONS),
             }
         )
         return context

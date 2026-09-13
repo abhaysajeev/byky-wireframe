@@ -5,7 +5,7 @@ byky/generic_screen.html so markup and spacing stay identical across modules.
 Wireframe phase: no writes, no CRUD, no API.
 """
 
-from apps.byky_core import refdata, screens
+from apps.byky_core import privileges, refdata, screens
 from apps.byky_core.views import GenericScreenView, BykyScreenView
 
 
@@ -16,10 +16,6 @@ PERMISSIONS = [
     "Update",
     "Approve"
 ]
-ROLES = [
-    "SuperAdmin",
-    "Communications Manager"
-]
 
 
 class NotificationScreen(GenericScreenView):
@@ -28,68 +24,23 @@ class NotificationScreen(GenericScreenView):
 
 
 class NotificationPrivileges(BykyScreenView):
-    """Tier D -- shared privilege matrix, parameterised by this module."""
+    """Tier D -- roles list + per-role screen permission matrix. See
+    apps/byky_core/privileges.py for the shared role master and defaults;
+    screens come live from the sidebar's Notifications group."""
 
-    SCREENS = [
-    [
-        "Notification Broadcasting & Template Master",
-        [
-            True,
-            True,
-            True,
-            True,
-            True
-        ]
-    ],
-    [
-        "System Security Alert Dispatch & Monitoring",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "SMS Gateway Provider & Gateway Configuration",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "Email SMTP Server & HTML Template Setup",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ],
-    [
-        "Notification Security Privilege Management",
-        [
-            True,
-            False,
-            True,
-            False,
-            False
-        ]
-    ]
-]
+    SLUG = "notification"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        screens = privileges.module_screens(self.SLUG)
         context.update(
             {
                 "permissions": PERMISSIONS,
-                "roles": ROLES,
-                "screens": [{"name": n, "perms": p} for n, p in self.SCREENS],
+                "roles": privileges.ROLES,
+                "mapped_roles": privileges.DEFAULT_MAPPED_ROLES,
+                "admin_roles": privileges.ADMIN_ROLES,
+                "screens": screens,
+                "role_matrices": privileges.role_matrices(privileges.ROLES, screens, PERMISSIONS),
             }
         )
         return context

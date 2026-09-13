@@ -129,16 +129,134 @@ class DeviceMappingView(DeviceScreenView):
 
 
 class DeviceSettingsView(DeviceScreenView):
+    """Row 52 of the client's feedback doc: rebuilt from a single always-open
+    edit form into a real Tier A list -- KPI tiles, a grid of every
+    station's settings, and a side drawer (byky/partials/drawer.html) for
+    editing one station at a time, matching the list+drawer pattern used
+    everywhere else in the app instead of the search-then-edit-one-form
+    shape it replaces. No spec.scr_name/data-scr-open trigger here since
+    there's no Add mode -- every station already has a settings record
+    (one-to-one, the same way devices() is), so the only entry point is
+    each row's own Edit action."""
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        rows = data.device_settings()
+        for i, s in enumerate(rows):
+            s["json_id"] = f"scr-record-settings-{i}"
+            s["fields_json"] = {
+                "station": s["station"],
+                "company": s["company"],
+                "settings_code": s["settings_code"],
+                "header1": s["header1"],
+                "header2": s["header2"],
+                "additional_header2": s["additional_header2"],
+                "footer1": s["footer1"],
+                "footer2": s["footer2"],
+                "print_logo": s["print_logo"],
+                "paper_feed": s["paper_feed"],
+                "receipt_copies": s["receipt_copies"],
+                "print_type": s["print_type"],
+                "order_no_prefix": s["order_no_prefix"],
+                "customer_test_slot": s["customer_test_slot"],
+                "cashier_test_slot": s["cashier_test_slot"],
+                "tax_type": s["tax_type"],
+                "round_off_type": s["round_off_type"],
+                "round_off_limit": s["round_off_limit"],
+            }
         context.update(
             {
-                "print_feed_options": data.PRINT_FEED_OPTIONS,
-                "print_type_options": data.PRINT_TYPE_OPTIONS,
-                "tax_type_options": data.TAX_TYPE_OPTIONS,
-                "round_off_options": data.ROUND_OFF_OPTIONS,
-                "round_off_limits": data.ROUND_OFF_LIMITS,
+                "settings_rows": rows,
+                "settings_counts": data.device_settings_counts(rows),
                 "approval_statuses": data.APPROVAL_STATUSES,
+                "spec": {
+                    "scr_name": "settings",
+                    "title_field": "station",
+                    "add_label": "Station Settings",
+                    "drawer_id": "offcanvasStationSettings",
+                    "sections": [
+                        {
+                            "title": "Scope",
+                            "fields": [
+                                {"id": "station", "label": "Station", "kind": "text", "lock_on_edit": True, "readonly": True},
+                                {
+                                    "id": "company",
+                                    "label": "Company",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": context["companies_list"],
+                                },
+                                {"id": "settings_code", "label": "Settings Code", "kind": "text", "readonly": True},
+                            ],
+                        },
+                        {
+                            "title": "Receipt Header & Footer",
+                            "fields": [
+                                {"id": "header1", "label": "Header 1", "kind": "text"},
+                                {"id": "header2", "label": "Header 2 (Arabic)", "kind": "text"},
+                                {"id": "additional_header2", "label": "Additional Header 2", "kind": "text"},
+                                {"id": "footer1", "label": "Footer 1", "kind": "text"},
+                                {"id": "footer2", "label": "Footer 2 (Arabic)", "kind": "text"},
+                            ],
+                        },
+                        {
+                            "title": "Print & Copies",
+                            "fields": [
+                                {"id": "print_logo", "label": "Print Logo", "kind": "checkbox"},
+                                {
+                                    "id": "paper_feed",
+                                    "label": "Paper Feed",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": data.PRINT_FEED_OPTIONS,
+                                },
+                                {"id": "receipt_copies", "label": "No of Receipt Copy", "kind": "number", "required": True},
+                                {
+                                    "id": "print_type",
+                                    "label": "Print Type",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": data.PRINT_TYPE_OPTIONS,
+                                },
+                                {"id": "order_no_prefix", "label": "Order No Starting Characters", "kind": "text"},
+                            ],
+                        },
+                        {
+                            "title": "Test Slots, Tax & Rounding",
+                            "fields": [
+                                {"id": "customer_test_slot", "label": "Customer Test Time Slot (Min)", "kind": "number"},
+                                {"id": "cashier_test_slot", "label": "Cashier Test Time Slot (Min)", "kind": "number"},
+                                {
+                                    "id": "tax_type",
+                                    "label": "Before Tax / Discount Type",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": data.TAX_TYPE_OPTIONS,
+                                },
+                                {
+                                    "id": "round_off_type",
+                                    "label": "Round Off Type",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": data.ROUND_OFF_OPTIONS,
+                                },
+                                {
+                                    "id": "round_off_limit",
+                                    "label": "Round Off Limit",
+                                    "kind": "select",
+                                    "required": True,
+                                    "resolved": data.ROUND_OFF_LIMITS,
+                                },
+                            ],
+                        },
+                        {
+                            "title": "Logo",
+                            "fields": [
+                                {"id": "logo", "label": "Logo", "kind": "file", "help": "PNG or JPG, printed on every receipt this station's devices issue."},
+                            ],
+                        },
+                    ],
+                },
             }
         )
         return context

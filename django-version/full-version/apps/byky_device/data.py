@@ -157,3 +157,54 @@ def queue_counts():
         "approved": len(approved_devices()),
         "blocked": len(blocked_devices()),
     }
+
+
+def device_settings():
+    """One receipt/print settings record per real station (row 52 of the
+    client's feedback doc) -- every station gets a row since the config
+    screen is 1:1 with a station the same way devices() is, not something
+    you create new instances of.
+
+    Only operational defaults are pre-filled (paper feed, print type,
+    round-off rule, test slot minutes) -- the same kind of constant every
+    other device gets (APK_VERSION above). The client-specific business
+    copy (header/footer text, order-number prefix, logo) has no source
+    anywhere, so it renders not-captured rather than invented, exactly
+    like the single-form screen this replaces always left it blank.
+    """
+    out = []
+    for i, st in enumerate(seed.STATIONS):
+        out.append(
+            {
+                "station": st["name"],
+                "station_code": st["code"],
+                "company": "BYKY",
+                "settings_code": f"stn-{st['code'].lower()}",
+                "header1": "",
+                "header2": "",
+                "additional_header2": "",
+                "footer1": "",
+                "footer2": "",
+                "print_logo": False,
+                "paper_feed": PRINT_FEED_OPTIONS[0],
+                "receipt_copies": 1,
+                "print_type": PRINT_TYPE_OPTIONS[0],
+                "order_no_prefix": "",
+                "customer_test_slot": 5,
+                "cashier_test_slot": 5,
+                "tax_type": TAX_TYPE_OPTIONS[0],
+                "round_off_type": "Nearest",
+                "round_off_limit": "25 Fils",
+                "approval_status": APPROVAL_STATUSES[i % 3] if i % 5 else "Approved",
+            }
+        )
+    return out
+
+
+def device_settings_counts(rows):
+    return {
+        "total": len(rows),
+        "approved": sum(1 for r in rows if r["approval_status"] == "Approved"),
+        "pending": sum(1 for r in rows if r["approval_status"] == "Pending"),
+        "rejected": sum(1 for r in rows if r["approval_status"] == "Rejected"),
+    }

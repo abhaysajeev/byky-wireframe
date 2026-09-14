@@ -186,6 +186,11 @@ def device_settings():
                 "footer1": "",
                 "footer2": "",
                 "print_logo": False,
+                # Row 60: enable/disable sharing this station's receipts on
+                # WhatsApp -- an operational default like paper_feed etc.
+                # above, not client-captured data, so "disabled by default"
+                # is a real starting value, not a placeholder for one.
+                "share_whatsapp": False,
                 "paper_feed": PRINT_FEED_OPTIONS[0],
                 "receipt_copies": 1,
                 "print_type": PRINT_TYPE_OPTIONS[0],

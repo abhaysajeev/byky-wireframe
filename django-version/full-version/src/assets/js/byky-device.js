@@ -16,13 +16,18 @@
  *    multi_user=true (apps/byky_cms/data.py), so this warning is dormant
  *    against current data -- it fires correctly the day a branch's flag is
  *    turned off.
- * 3. Each mapped device's Logout/Block/Unblock kebab actions are plain
- *    instant buttons -- no confirm dialog, no remark prompt (frontend-only
- *    actions like these stay a direct click, not a modal popup). Block and
- *    Unblock are dynamic: a row starts showing only the action matching
- *    its current state, and clicking one swaps to the other live. These
- *    act on the already-mapped fleet, a distinct concept from Device
- *    Approval's own Block/Unblock on its onboarding queue.
+ * 3. Each mapped device's kebab (View/Edit/Logout/Block/Unblock/Delete) is
+ *    all one menu now, no separate icon buttons. Logout/Block/Unblock are
+ *    plain instant buttons -- no confirm dialog, no remark prompt
+ *    (frontend-only actions like these stay a direct click, not a modal
+ *    popup). Edit and Logout are dynamic on the device's Online/Offline
+ *    state (row 55 of the client's feedback doc: Edit hides while Online,
+ *    Logout hides while not Online), and Block/Unblock are dynamic on
+ *    blocked state the same way they already were -- a row starts showing
+ *    only what applies to its current status, and every action that
+ *    changes status re-evaluates all four live. These act on the
+ *    already-mapped fleet, a distinct concept from Device Approval's own
+ *    Block/Unblock on its onboarding queue.
  */
 
 'use strict';
@@ -77,6 +82,18 @@
     }
   }
 
+  /* Row 55: Edit hides while Online, Logout hides while anything but
+     Online (Offline or Blocked) -- re-run after every status change so
+     the kebab always matches the badge, not just the initial render. */
+  function syncActionVisibility(row) {
+    var badge = row.querySelector('[data-status-badge]');
+    var status = badge ? badge.textContent.trim() : '';
+    var editItem = row.querySelector('[data-device-edit-item]');
+    var logoutItem = row.querySelector('[data-device-logout]');
+    if (editItem) editItem.hidden = status === 'Online';
+    if (logoutItem) logoutItem.hidden = status !== 'Online';
+  }
+
   function wireInstantAction(attr, apply) {
     document.querySelectorAll('[' + attr + ']').forEach(function (btn) {
       btn.addEventListener('click', function (e) {
@@ -84,6 +101,7 @@
         var row = btn.closest('.scr-row');
         if (!row) return;
         apply(row);
+        syncActionVisibility(row);
       });
     });
   }

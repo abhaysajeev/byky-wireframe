@@ -156,6 +156,7 @@ class DeviceSettingsView(DeviceScreenView):
                 "footer1": s["footer1"],
                 "footer2": s["footer2"],
                 "print_logo": s["print_logo"],
+                "share_whatsapp": s["share_whatsapp"],
                 "paper_feed": s["paper_feed"],
                 "receipt_copies": s["receipt_copies"],
                 "print_type": s["print_type"],
@@ -212,6 +213,7 @@ class DeviceSettingsView(DeviceScreenView):
                             "title": "Print & Copies",
                             "fields": [
                                 {"id": "print_logo", "label": "Print Logo", "kind": "checkbox"},
+                                {"id": "share_whatsapp", "label": "Share On WhatsApp", "kind": "checkbox"},
                                 {
                                     "id": "paper_feed",
                                     "label": "Paper Feed",

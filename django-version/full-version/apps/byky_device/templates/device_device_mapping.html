@@ -24,10 +24,16 @@ instead of free-text ID/Name/MAC entry -- picking one auto-fills the
 identity fields below it (byky-device.js). Branch selection warns if that
 branch doesn't allow a second device (Branch Management's own multi_user
 flag, reused rather than inventing a new one -- see byky-device.js for why
-the warning is dormant against today's demo data). Logout/Block/Unblock
-were added to each row's kebab, each requiring a remark before it applies
-(also byky-device.js) -- distinct from Device Approval's own Block/Unblock,
-which acts on the separate onboarding queue, not this already-mapped fleet.
+the warning is dormant against today's demo data).
+
+Row 55: every row action lives in one kebab now (View/Edit/Logout/Block/
+Unblock/Delete), no separate icon buttons. Edit and Logout are dynamic on
+the device's Online/Offline state -- Edit hides while Online, Logout
+hides while not Online -- re-evaluated live by byky-device.js whenever
+Logout/Block/Unblock changes that status, not just on page load.
+Block/Unblock stay their own separate concept from Device Approval's
+Block/Unblock, which acts on the onboarding queue, not this already-
+mapped fleet.
 {% endcomment %}
 
 {% block vendor_css %}
@@ -172,18 +178,20 @@ which acts on the separate onboarding queue, not this already-mapped fleet.
             </td>
             <td>
               <div class="scr-row-actions">
-                <button type="button" class="scr-icon-btn" title="View">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
-                </button>
-                <button type="button" class="scr-icon-btn scr-icon-btn-edit" title="Edit" data-scr-open="device:edit">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
-                </button>
                 <div class="scr-menu-wrap">
                   <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
                   </button>
                   <div class="scr-menu" hidden>
-                    <button type="button" class="scr-menu-item" data-device-logout>
+                    <button type="button" class="scr-menu-item" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                      View
+                    </button>
+                    <button type="button" class="scr-menu-item" data-scr-open="device:edit" data-device-edit-item{% if d.online %} hidden{% endif %}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" class="scr-menu-item" data-device-logout{% if not d.online %} hidden{% endif %}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><path d="M16 17l5-5-5-5"></path><path d="M21 12H9"></path></svg>
                       Logout
                     </button>
@@ -194,6 +202,10 @@ which acts on the separate onboarding queue, not this already-mapped fleet.
                     <button type="button" class="scr-menu-item" data-device-unblock{% if not d.blocked %} hidden{% endif %}>
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 7.6-1.8"></path></svg>
                       Unblock
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
                     </button>
                   </div>
                 </div>

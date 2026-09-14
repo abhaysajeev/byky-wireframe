@@ -168,7 +168,11 @@ class AssetBranchMapView(ImsScreenView):
 
 
 class TransferListView(ImsScreenView):
-    """FSD 3.7. Rows are demo data -- see data._DEMO_TRANSFERS."""
+    """FSD 3.7. Rows are demo data -- see data._DEMO_TRANSFERS.
+
+    Row 50: a second tab lists Return documents the same way -- see
+    data._DEMO_RETURNS, added because Return previously had no document
+    register of its own to apply Approve/Reject to (row 49/50)."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -187,6 +191,23 @@ class TransferListView(ImsScreenView):
                 "items_count": len(t["items"]),
             }
         context["transfers"] = rows
+
+        return_rows = [dict(r) for r in data.returns()]
+        for i, r in enumerate(return_rows):
+            r["json_id"] = f"scr-record-return-{i}"
+            r["items_display"] = ", ".join(r["items"])
+            r["fields_json"] = {
+                "doc_no": r["doc_no"],
+                "return_type": r["return_type"],
+                "from_warehouse": r["from_warehouse"],
+                "from_event_location": r["from_event_location"],
+                "to_branch": r["to_branch"],
+                "return_date": r["return_date"],
+                "driver": r["driver"],
+                "remarks": r["remarks"],
+                "items_count": len(r["items"]),
+            }
+        context["returns"] = return_rows
         return context
 
 
@@ -233,6 +254,30 @@ class TransferEditView(TransferFormView):
             {
                 "doc_no": doc_no,
                 "transfer_detail": data.transfer_detail(doc_no),
+            }
+        )
+        return context
+
+
+class ReturnEditView(TransferFormView):
+    """Row 50: Return gets the exact same Edit treatment as Transfer (row
+    48/TransferEditView) -- a removable cart, an Add action, and a history
+    log. `returning = True` reuses TransferFormView's returnable_items()
+    pool for Add Items, which stays honestly empty (nothing is currently
+    out at a warehouse or event in the source data) -- existing cart items
+    still display and can be removed, there's just nothing new to add
+    today, a true reflection of the data rather than a limitation of this
+    page."""
+
+    returning = True
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        doc_no = self.kwargs.get("doc_no")
+        context.update(
+            {
+                "doc_no": doc_no,
+                "return_detail": data.return_detail(doc_no),
             }
         )
         return context

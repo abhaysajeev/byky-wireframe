@@ -21,6 +21,15 @@ a one-time decision (byky-ims-transfer-list.js) that locks the row
 afterwards, so a decided transfer never offers Edit/Delete/Approve/Reject
 again. TRN2026002 in the demo data is left Pending specifically so this
 is visible; TRN2026001 is already Completed and shows the locked state.
+
+Row 50: Return gets the exact same document-register treatment as
+Transfer, since it previously had none (its own page was an action, not
+a listed record type) -- a second tab here (Country & State Management's
+tabbed-dual-grid pattern, each panel filtering/paginating independently),
+its own Edit page (ims_vehicle_return_edit.html, mirroring Transfer
+Edit's cart/add-items/history), and the identical Approve/Reject-then-
+lock kebab. byky-ims-transfer-list.js's data-transfer-approve/reject
+handlers are generic enough to drive both tabs unchanged.
 {% endcomment %}
 
 {% block vendor_css %}
@@ -84,123 +93,253 @@ is visible; TRN2026001 is already Completed and shows the locked state.
     </div>
   </div>
 
-  <div class="scr-card" data-scr-noun-singular="transfer" data-scr-noun-plural="transfers">
-    <div class="scr-toolbar">
-      <div class="scr-search">
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
-        <input type="text" placeholder="Search transfer doc no" />
-      </div>
+  <div class="scr-card">
 
-      <div class="scr-filter-wrap" data-filter-key="status">
-        <button type="button" class="scr-filter-btn">
-          <span class="scr-filter-label">All status</span>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-        </button>
-        <div class="scr-filter-menu" hidden>
-          <button type="button" class="scr-filter-opt is-active" data-value="">All status</button>
-          <button type="button" class="scr-filter-opt" data-value="Pending">Pending</button>
-          <button type="button" class="scr-filter-opt" data-value="In-Transit">In-Transit</button>
-          <button type="button" class="scr-filter-opt" data-value="Completed">Completed</button>
-          <button type="button" class="scr-filter-opt" data-value="Rejected">Rejected</button>
-        </div>
-      </div>
-
-      <span class="scr-toolbar-count">{{ transfers|length }} transfer{{ transfers|length|pluralize }}</span>
+    <div class="scr-content-tabs" data-scr-tabgroup="movement">
+      <button type="button" class="scr-content-tab is-on" data-tab="transfers">
+        Transfers <span class="scr-content-tab-count">{{ transfers|length }}</span>
+      </button>
+      <button type="button" class="scr-content-tab" data-tab="returns">
+        Returns <span class="scr-content-tab-count">{{ returns|length }}</span>
+      </button>
     </div>
 
-    <div class="scr-table-scroll scr-sb">
-      <table>
-        <thead>
-          <tr>
-            <th>Transfer Doc No</th>
-            <th>From Branch</th>
-            <th>To Branch</th>
-            <th>Event Location</th>
-            <th>Dispatch Date</th>
-            <th>Items</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {% for t in transfers %}
-          <tr class="scr-row" data-search="{{ t.doc_no|lower }}" data-status="{{ t.status }}" data-record-id="{{ t.json_id }}">
-            <td><span class="scr-code">{{ t.doc_no }}</span></td>
-            <td class="scr-contact">{{ t.from_branch }}</td>
-            <td class="scr-contact">{{ t.to_branch }}</td>
-            <td class="scr-contact">{{ t.event_location|default:"—" }}</td>
-            <td class="scr-contact">{{ t.dispatch_date }}</td>
-            <td class="scr-contact">{{ t.items_display }}</td>
-            <td data-status-cell>
-              {% if t.status == 'Completed' %}<span class="scr-badge scr-badge-active"><i></i>Completed</span>
-              {% elif t.status == 'In-Transit' %}<span class="scr-badge scr-badge-pending"><i></i>In-Transit</span>
-              {% elif t.status == 'Rejected' %}<span class="scr-badge scr-badge-inactive"><i></i>Rejected</span>
-              {% else %}<span class="scr-badge scr-badge-pending"><i></i>Pending</span>{% endif %}
-            </td>
-            <td>
-              <div class="scr-row-actions" data-transfer-actions>
-                {% if t.status == 'Pending' %}
-                <div class="scr-menu-wrap">
-                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
-                  </button>
-                  <div class="scr-menu" hidden>
-                    <a href="{% url 'ims-vehicle-transfer-edit' doc_no=t.doc_no %}" class="scr-menu-item">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
-                      Edit
-                    </a>
-                    <button type="button" class="scr-menu-item" data-transfer-approve>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
-                      Approve
+    <div class="scr-panel" data-tabgroup="movement" data-tab="transfers" data-scr-noun-singular="transfer" data-scr-noun-plural="transfers">
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search transfer doc no" />
+        </div>
+
+        <div class="scr-filter-wrap" data-filter-key="status">
+          <button type="button" class="scr-filter-btn">
+            <span class="scr-filter-label">All status</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="scr-filter-menu" hidden>
+            <button type="button" class="scr-filter-opt is-active" data-value="">All status</button>
+            <button type="button" class="scr-filter-opt" data-value="Pending">Pending</button>
+            <button type="button" class="scr-filter-opt" data-value="In-Transit">In-Transit</button>
+            <button type="button" class="scr-filter-opt" data-value="Completed">Completed</button>
+            <button type="button" class="scr-filter-opt" data-value="Rejected">Rejected</button>
+          </div>
+        </div>
+
+        <span class="scr-toolbar-count">{{ transfers|length }} transfer{{ transfers|length|pluralize }}</span>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Transfer Doc No</th>
+              <th>From Branch</th>
+              <th>To Branch</th>
+              <th>Event Location</th>
+              <th>Dispatch Date</th>
+              <th>Items</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for t in transfers %}
+            <tr class="scr-row" data-search="{{ t.doc_no|lower }}" data-status="{{ t.status }}" data-record-id="{{ t.json_id }}">
+              <td><span class="scr-code">{{ t.doc_no }}</span></td>
+              <td class="scr-contact">{{ t.from_branch }}</td>
+              <td class="scr-contact">{{ t.to_branch }}</td>
+              <td class="scr-contact">{{ t.event_location|default:"—" }}</td>
+              <td class="scr-contact">{{ t.dispatch_date }}</td>
+              <td class="scr-contact">{{ t.items_display }}</td>
+              <td data-status-cell>
+                {% if t.status == 'Completed' %}<span class="scr-badge scr-badge-active"><i></i>Completed</span>
+                {% elif t.status == 'In-Transit' %}<span class="scr-badge scr-badge-pending"><i></i>In-Transit</span>
+                {% elif t.status == 'Rejected' %}<span class="scr-badge scr-badge-inactive"><i></i>Rejected</span>
+                {% else %}<span class="scr-badge scr-badge-pending"><i></i>Pending</span>{% endif %}
+              </td>
+              <td>
+                <div class="scr-row-actions" data-transfer-actions>
+                  {% if t.status == 'Pending' %}
+                  <div class="scr-menu-wrap">
+                    <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
                     </button>
-                    <button type="button" class="scr-menu-item scr-menu-item-danger" data-transfer-reject>
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
-                      Reject
-                    </button>
-                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
-                      Delete
-                    </button>
+                    <div class="scr-menu" hidden>
+                      <a href="{% url 'ims-vehicle-transfer-edit' doc_no=t.doc_no %}" class="scr-menu-item">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                        Edit
+                      </a>
+                      <button type="button" class="scr-menu-item" data-transfer-approve>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                        Approve
+                      </button>
+                      <button type="button" class="scr-menu-item scr-menu-item-danger" data-transfer-reject>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+                        Reject
+                      </button>
+                      <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                  {% else %}
+                  <span class="scr-help" style="margin:0" title="Approve/Reject is one-time -- Edit and Delete lock once a decision is made">Locked</span>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {{ t.fields_json|json_script:t.json_id }}
+            {% empty %}
+            <tr>
+              <td colspan="8" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3 21 7l-4 4M21 7H9M7 21l-4-4 4-4M3 17h12"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No transfers yet</div>
+                    <p class="scr-empty-sub">Vehicle transfers will appear here once the client supplies {{ awaiting }}.</p>
                   </div>
                 </div>
-                {% else %}
-                <span class="scr-help" style="margin:0" title="Approve/Reject is one-time -- Edit and Delete lock once a decision is made">Locked</span>
-                {% endif %}
-              </div>
-            </td>
-          </tr>
-          {{ t.fields_json|json_script:t.json_id }}
-          {% empty %}
-          <tr>
-            <td colspan="8" style="padding:0">
-              <div class="scr-empty">
-                <span class="scr-empty-ico">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3 21 7l-4 4M21 7H9M7 21l-4-4 4-4M3 17h12"></path></svg>
-                </span>
-                <div>
-                  <div class="scr-empty-title">No transfers yet</div>
-                  <p class="scr-empty-sub">Vehicle transfers will appear here once the client supplies {{ awaiting }}.</p>
-                </div>
-              </div>
-            </td>
-          </tr>
-          {% endfor %}
-        </tbody>
-      </table>
-    </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
 
-    <div class="scr-pager">
-      <span class="scr-pager-info">Showing {{ transfers|length }} of {{ transfers|length }}</span>
-      <div class="scr-pager-nav">
-        <button type="button" class="scr-pager-btn" disabled>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
-        </button>
-        <span class="scr-pager-current">1</span>
-        <button type="button" class="scr-pager-btn" disabled>
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
-        </button>
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing {{ transfers|length }} of {{ transfers|length }}</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
+        </div>
       </div>
     </div>
+
+    <div class="scr-panel" data-tabgroup="movement" data-tab="returns" data-scr-noun-singular="return" data-scr-noun-plural="returns" hidden>
+      <div class="scr-toolbar">
+        <div class="scr-search">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+          <input type="text" placeholder="Search return doc no" />
+        </div>
+
+        <div class="scr-filter-wrap" data-filter-key="status">
+          <button type="button" class="scr-filter-btn">
+            <span class="scr-filter-label">All status</span>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+          </button>
+          <div class="scr-filter-menu" hidden>
+            <button type="button" class="scr-filter-opt is-active" data-value="">All status</button>
+            <button type="button" class="scr-filter-opt" data-value="Pending">Pending</button>
+            <button type="button" class="scr-filter-opt" data-value="In-Transit">In-Transit</button>
+            <button type="button" class="scr-filter-opt" data-value="Completed">Completed</button>
+            <button type="button" class="scr-filter-opt" data-value="Rejected">Rejected</button>
+          </div>
+        </div>
+
+        <span class="scr-toolbar-count">{{ returns|length }} return{{ returns|length|pluralize }}</span>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Return Doc No</th>
+              <th>From Warehouse / Event</th>
+              <th>To Branch</th>
+              <th>Return Date</th>
+              <th>Items</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in returns %}
+            <tr class="scr-row" data-search="{{ r.doc_no|lower }}" data-status="{{ r.status }}" data-record-id="{{ r.json_id }}">
+              <td><span class="scr-code">{{ r.doc_no }}</span></td>
+              <td class="scr-contact">{{ r.from_warehouse|default:r.from_event_location|default:"—" }}</td>
+              <td class="scr-contact">{{ r.to_branch }}</td>
+              <td class="scr-contact">{{ r.return_date }}</td>
+              <td class="scr-contact">{{ r.items_display }}</td>
+              <td data-status-cell>
+                {% if r.status == 'Completed' %}<span class="scr-badge scr-badge-active"><i></i>Completed</span>
+                {% elif r.status == 'In-Transit' %}<span class="scr-badge scr-badge-pending"><i></i>In-Transit</span>
+                {% elif r.status == 'Rejected' %}<span class="scr-badge scr-badge-inactive"><i></i>Rejected</span>
+                {% else %}<span class="scr-badge scr-badge-pending"><i></i>Pending</span>{% endif %}
+              </td>
+              <td>
+                <div class="scr-row-actions" data-transfer-actions>
+                  {% if r.status == 'Pending' %}
+                  <div class="scr-menu-wrap">
+                    <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                    </button>
+                    <div class="scr-menu" hidden>
+                      <a href="{% url 'ims-vehicle-return-edit' doc_no=r.doc_no %}" class="scr-menu-item">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                        Edit
+                      </a>
+                      <button type="button" class="scr-menu-item" data-transfer-approve>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                        Approve
+                      </button>
+                      <button type="button" class="scr-menu-item scr-menu-item-danger" data-transfer-reject>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+                        Reject
+                      </button>
+                      <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                  {% else %}
+                  <span class="scr-help" style="margin:0" title="Approve/Reject is one-time -- Edit and Delete lock once a decision is made">Locked</span>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {{ r.fields_json|json_script:r.json_id }}
+            {% empty %}
+            <tr>
+              <td colspan="7" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"></path><path d="M4 9h11a5 5 0 0 1 5 5v6"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No returns yet</div>
+                    <p class="scr-empty-sub">Items coming back from a warehouse or an event will appear here.</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <div class="scr-pager">
+        <span class="scr-pager-info">Showing {{ returns|length }} of {{ returns|length }}</span>
+        <div class="scr-pager-nav">
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+          </button>
+          <span class="scr-pager-current">1</span>
+          <button type="button" class="scr-pager-btn" disabled>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 {% endblock %}

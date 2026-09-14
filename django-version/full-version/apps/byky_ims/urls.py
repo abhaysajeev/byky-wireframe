@@ -195,6 +195,20 @@ urlpatterns = [
         name="ims-vehicle-transfer-return",
     ),
     path(
+        "ims/vehicle-transfer-relocation/return/<str:doc_no>/edit/",
+        views.ReturnEditView.as_view(
+            template_name="ims_vehicle_return_edit.html",
+            screen_no="3.7b",
+            screen_title="Edit Return",
+            module_label="Inventory",
+            tier="A",
+            phase=3,
+            purpose="Edit an existing return's cart of vehicles and assets, and review its edit history.",
+            layout="Full page: return header, a removable cart of selected items with an Add action back into the source pool, receipt details, and a history log.",
+        ),
+        name="ims-vehicle-return-edit",
+    ),
+    path(
         "ims/e-commerce-category-master/",
         views.EcomCategoryView.as_view(
             template_name="ims_e_commerce_category_master.html",

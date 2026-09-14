@@ -388,6 +388,55 @@ def transfer_detail(doc_no):
     return detail
 
 
+# One demo return, mirroring _DEMO_TRANSFERS above -- rows 49/50 of the
+# client's feedback doc ask for the same Approve/Reject workflow on Return
+# ("Note: ERP > RMS") as Transfer already has, which needs a document
+# register to act on; Return had none before (its own page is an action,
+# not a listed record type). Left Pending so the workflow is visible.
+# From Event Location is a real venue (Company · Event Location); the two
+# items are real vehicles, looked up the same way Transfer's demo does --
+# not through returnable_items(), which stays honestly empty (nothing is
+# actually out at a warehouse or event in the source data), since this
+# demo record represents one that has already been logged as coming back.
+_DEMO_RETURNS = [
+    {
+        "doc_no": "RTN2026001",
+        "return_type": "From Events",
+        "from_warehouse": "",
+        "from_event_location": "Global Village",
+        "to_branch": "Creek Park Gate 1",
+        "return_date": "12 Sep 2026",
+        "driver": "Suresh",
+        "remarks": "Back from Global Village promo activation",
+        "items": ["TR1", "TR3"],
+        "status": "Pending",
+        "history": [
+            {"when": "12 Sep 2026, 04:20 PM", "who": "Suresh", "change": "Return logged with 2 items (TR1, TR3)."},
+        ],
+    },
+]
+
+
+def returns():
+    """Return documents -- items coming back into a branch from a
+    warehouse or an event. Otherwise honestly empty -- see _DEMO_RETURNS
+    above for the one requested exception."""
+    return [dict(r) for r in _DEMO_RETURNS]
+
+
+def return_detail(doc_no):
+    """A single return's full detail, items resolved against
+    transferable_items(), for the Return Edit page -- mirrors
+    transfer_detail() above."""
+    record = next((r for r in _DEMO_RETURNS if r["doc_no"] == doc_no), None)
+    if not record:
+        return None
+    detail = dict(record)
+    pool = {i["code"]: i for i in transferable_items()}
+    detail["cart"] = [pool[code] for code in record["items"] if code in pool]
+    return detail
+
+
 def unmapped_vehicles():
     """Vehicles with no branch/station assignment yet -- the pool FSD 3.6's
     "Map Vehicle" action assigns to a branch. Every vehicle in the source

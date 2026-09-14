@@ -1,0 +1,372 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Edit Return {{ doc_no }} - Inventory{% endblock title %}
+
+{% comment %}
+Row 50 of the client's feedback doc: Return gets the exact same treatment
+as Transfer Edit (row 48/ims_vehicle_transfer_edit.html) -- a removable
+cart, an Add action back into the source pool, a history log, and
+Approve/Reject (row 49/50's "ERP > RMS" sync gate) both here and in the
+list view's kebab. Shares byky-ims-transfer-edit.js wholesale -- the two
+pages use identical element ids, and that file already branches its
+wording on the doc no.'s prefix.
+
+The Add Items pool is data.returnable_items(), which stays honestly
+empty (nothing is currently out at a warehouse or event in the source
+data) -- the cart's existing items still display and can be removed,
+there's just nothing new to add today.
+
+No return has ever actually been edited (nothing persists in this
+wireframe phase), so the history log below is illustrative demo data tied
+to the one seeded return (apps/byky_ims/data.py's _DEMO_RETURNS), not a
+live audit trail.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-ims-transfer-edit.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <a href="{% url 'ims-vehicle-transfer-relocation' %}">Inventory Transfer &amp; Return</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>{{ doc_no }}</b>
+      </div>
+      <div style="display:flex; align-items:center; gap:10px">
+        <h1 class="scr-title">Edit Return {{ doc_no }}</h1>
+        {% if return_detail %}
+        <span data-status-cell>
+          {% if return_detail.status == 'Completed' %}<span class="scr-badge scr-badge-active"><i></i>Completed</span>
+          {% elif return_detail.status == 'In-Transit' %}<span class="scr-badge scr-badge-pending"><i></i>In-Transit</span>
+          {% elif return_detail.status == 'Rejected' %}<span class="scr-badge scr-badge-inactive"><i></i>Rejected</span>
+          {% else %}<span class="scr-badge scr-badge-pending"><i></i>Pending</span>{% endif %}
+        </span>
+        {% endif %}
+      </div>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        Back to list
+      </a>
+    </div>
+  </div>
+
+  {% if return_detail %}
+  <div class="scr-banner scr-banner-success" id="map-success-banner" hidden>
+    <span class="scr-banner-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>
+    </span>
+    <span class="scr-banner-text" id="map-success-text">Return updated successfully.</span>
+    <button type="button" class="scr-banner-close" aria-label="Dismiss">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-section">
+      <div class="scr-section-head">
+        <h3 class="scr-section-title">1. Return details</h3>
+        <div class="scr-section-rule"></div>
+      </div>
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Return Doc. No</label>
+          <input type="text" class="scr-input" value="{{ return_detail.doc_no }}" readonly />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Return Type</label>
+          <input type="text" class="scr-input" value="{{ return_detail.return_type }}" readonly />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">
+            {% if return_detail.from_event_location %}From Event Location{% else %}From Warehouse{% endif %}
+          </label>
+          <input type="text" class="scr-input" value="{{ return_detail.from_warehouse|default:return_detail.from_event_location }}" readonly />
+          <div class="scr-help">The source can't change once a return is logged &mdash; its items come from here.</div>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">To Branch<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="to_branch">
+            <option value="">Select</option>
+            {% for b in branches_list %}<option {% if b.name == return_detail.to_branch %}selected{% endif %}>{{ b.name }}</option>{% endfor %}
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card" id="cart-card" data-scr-noun-singular="item" data-scr-noun-plural="items">
+    <div class="scr-toolbar">
+      <div>
+        <h3 class="scr-form-title" style="margin-bottom:2px">2. Selected vehicles &amp; assets</h3>
+        <p class="scr-form-sub" style="margin:0">The cart for this return &mdash; remove an item, or add more from the same source.</p>
+      </div>
+      <div style="flex:1"></div>
+      <span class="scr-toolbar-count" id="cart-count">{{ return_detail.cart|length }} item{{ return_detail.cart|length|pluralize }}</span>
+      <button type="button" class="scr-btn-primary" id="cart-add-toggle">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Items
+      </button>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Vehicle Type</th>
+            <th>Tag / EPC</th>
+            <th style="width:50px"></th>
+          </tr>
+        </thead>
+        <tbody id="cart-rows">
+          {% for i in return_detail.cart %}
+          <tr class="scr-row" data-code="{{ i.code }}">
+            <td><span class="scr-code">{{ i.code }}</span></td>
+            <td style="font-weight:600">{{ i.name }}</td>
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ i.item_type }}</span></td>
+            <td class="scr-contact">{{ i.category }}</td>
+            <td class="scr-contact">{{ i.vtype }}</td>
+            <td><span class="scr-code">{{ i.rfid }}</span></td>
+            <td style="text-align:right">
+              <button type="button" class="scr-icon-btn" title="Remove from cart" data-cart-remove>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+              </button>
+            </td>
+          </tr>
+          {% empty %}
+          <tr id="cart-empty-row">
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4zM4 7l2-3h12l2 3"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">Cart is empty</div>
+                  <p class="scr-empty-sub">Use Add Items above to pick from what's currently out.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% comment %}
+  Add-items panel -- hidden until "Add Items" is clicked. items here is
+  data.returnable_items() (ReturnEditView's returning=True), honestly
+  empty since nothing is currently out at a warehouse or event -- this
+  panel will only ever show its own empty state today, a true reflection
+  of the data rather than a limitation of the page.
+  {% endcomment %}
+  <div class="scr-card" id="add-items-card" hidden data-scr-noun-singular="item" data-scr-noun-plural="items" data-from-branch="{{ return_detail.from_warehouse|default:return_detail.from_event_location }}">
+    <div class="scr-toolbar">
+      <div>
+        <h3 class="scr-form-title" style="margin-bottom:2px">Add from what's currently out</h3>
+        <p class="scr-form-sub" style="margin:0" id="add-items-hint">Choose an Inventory Type to see what's available.</p>
+      </div>
+      <div style="flex:1"></div>
+      <div class="scr-field" style="margin:0; min-width:180px">
+        <select class="scr-input" id="add-items-type">
+          <option value="">Inventory Type</option>
+          {% for t in item_types %}<option>{{ t }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search code, name or tag" />
+      </div>
+      <span class="scr-toolbar-count" id="add-items-count">0 items</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px"></th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Vehicle Type</th>
+            <th>Tag / EPC</th>
+          </tr>
+        </thead>
+        <tbody id="add-items-rows">
+          <tr>
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">Pick an Inventory Type</div>
+                  <p class="scr-empty-sub">Vehicles or assets still out will appear here.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    {{ items|json_script:"add-items-pool-data" }}
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="scr-form-foot">
+      <div style="flex:1"></div>
+      <button type="button" class="scr-btn-secondary" id="add-items-cancel">Cancel</button>
+      <button type="button" class="scr-btn-primary" id="add-items-confirm" disabled>Add Selected</button>
+    </div>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-section">
+      <div class="scr-section-head">
+        <h3 class="scr-section-title">3. Receipt</h3>
+        <div class="scr-section-rule"></div>
+      </div>
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Return Date</label>
+          <input type="text" class="scr-input byky-date" data-field="return_date" value="{{ return_detail.return_date }}" placeholder="Select date" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Driver Name</label>
+          <input type="text" class="scr-input" data-field="driver_name" value="{{ return_detail.driver }}" placeholder="Enter driver name" />
+        </div>
+        <div class="scr-field" style="grid-column:span 2">
+          <label class="scr-label">Remarks</label>
+          <textarea class="scr-input" rows="3" data-field="remarks" placeholder="Anything about the condition it came back in">{{ return_detail.remarks }}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-section" style="margin-bottom:0">
+      <div class="scr-section-head">
+        <h3 class="scr-section-title">4. History log</h3>
+        <div class="scr-section-rule"></div>
+      </div>
+      {% if return_detail.history %}
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:200px">When</th>
+              <th style="width:200px">Who</th>
+              <th>Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for h in return_detail.history %}
+            <tr>
+              <td class="scr-contact">{{ h.when }}</td>
+              <td class="scr-contact">{{ h.who }}</td>
+              <td class="scr-contact">{{ h.change }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="scr-empty" style="padding:32px 16px">
+        <span class="scr-empty-ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+        </span>
+        <div>
+          <div class="scr-empty-title">No edits logged yet</div>
+          <p class="scr-empty-sub">Every save will add an entry here.</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-form-foot" id="decision-actions">
+      {% if return_detail.status == "Pending" %}
+      <span class="scr-help" style="margin:0">Approve/Reject is one-time &mdash; the return locks against further edits once decided.</span>
+      <div style="flex:1"></div>
+      <button type="button" class="scr-btn-danger" data-transfer-reject>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+        Reject
+      </button>
+      <button type="button" class="scr-btn-success" data-transfer-approve>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+        Approve
+      </button>
+      {% else %}
+      <span class="scr-help" style="margin:0">This return has been decided and is locked against further edits.</span>
+      <div style="flex:1"></div>
+      {% endif %}
+      <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn-secondary">Cancel</a>
+      <button type="button" class="scr-btn-primary" id="save-changes-btn" {% if return_detail.status != "Pending" %}disabled{% endif %}>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="scr-card">
+    <div class="scr-empty" style="padding:40px 20px">
+      <span class="scr-empty-ico">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+      </span>
+      <div>
+        <div class="scr-empty-title">Return not found</div>
+        <p class="scr-empty-sub">"{{ doc_no }}" doesn't match any return on record.</p>
+      </div>
+      <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn-primary">Back to Inventory Transfer &amp; Return</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

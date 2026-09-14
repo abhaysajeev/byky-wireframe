@@ -1,23 +1,30 @@
 /**
- * Edit Transfer -- row 48's UAT remarks (client's feedback doc).
+ * Edit Transfer / Edit Return -- row 48's UAT remarks (client's feedback
+ * doc), and row 50's Return equivalent. Shared by both
+ * ims_vehicle_transfer_edit.html and ims_vehicle_return_edit.html -- the
+ * two pages use identical element ids (cart-rows, add-items-*,
+ * decision-actions, ...), so one generic file drives both; only the
+ * Approve toast's wording branches on the doc no.'s prefix.
  *
  * Three independent pieces, all frontend-only (CLAUDE.md 1 -- nothing here
  * persists past the page session):
  *
- * 1. Cart -- the transfer's currently selected items, server-rendered as
- *    real rows (there's only ever one demo transfer, so this list is
- *    small); each carries a Remove button.
- * 2. Add Items -- a toggled panel offering the same From Branch's pool
- *    (parsed once from add-items-pool-data, the same lazy json_script
- *    approach ims_vehicle_transfer_new.html's byky-ims-transfer.js uses),
- *    filtered by the chosen Inventory Type and with anything already in
- *    the cart excluded. Checking rows there and confirming moves them
- *    into the cart above.
- * 3. Approve / Reject (row 49) -- also available on this page, not only
- *    the list view's kebab (byky-ims-transfer-list.js has the list-row
- *    version). Instant, no confirm dialog; locks the page afterwards --
- *    Save Changes, cart Remove and Add Items all disable, matching "once
- *    its done, then dont allow to edit/delete."
+ * 1. Cart -- the record's currently selected items, server-rendered as
+ *    real rows (there's only ever one demo record per page, so this list
+ *    is small); each carries a Remove button.
+ * 2. Add Items -- a toggled panel offering the source's pool (parsed once
+ *    from add-items-pool-data, the same lazy json_script approach
+ *    ims_vehicle_transfer_new.html's byky-ims-transfer.js uses), filtered
+ *    by the chosen Inventory Type and with anything already in the cart
+ *    excluded. Checking rows there and confirming moves them into the
+ *    cart above. On a return this pool is honestly empty (nothing is
+ *    currently out at a warehouse or event in the source data), so it
+ *    only ever shows the empty state -- a true reflection of the data.
+ * 3. Approve / Reject (rows 49/50) -- also available on this page, not
+ *    only the list view's kebab (byky-ims-transfer-list.js has the
+ *    list-row version). Instant, no confirm dialog; locks the page
+ *    afterwards -- Save Changes, cart Remove and Add Items all disable,
+ *    matching "once its done, then dont allow to edit/delete."
  */
 
 'use strict';
@@ -223,13 +230,20 @@
   }
 
   if (decisionActions) {
+    var crumbEl = document.querySelector('.scr-crumb b');
+    var docNo = crumbEl ? crumbEl.textContent.trim() : '';
+    var isReturn = docNo.indexOf('RTN') === 0;
+    var lockedMsg = 'This ' + (isReturn ? 'return' : 'transfer') + ' has been decided and is locked against further edits.';
+
     decisionActions.addEventListener('click', function (e) {
       if (e.target.closest('[data-transfer-approve]')) {
-        lockPage('Completed', 'scr-badge-active', 'This transfer has been decided and is locked against further edits.');
-        toast('Transfer ' + (document.querySelector('.scr-crumb b') ? document.querySelector('.scr-crumb b').textContent.trim() : '') + ' approved and synced with ERP.');
+        lockPage('Completed', 'scr-badge-active', lockedMsg);
+        toast(docNo + (isReturn
+          ? ' approved -- items added back to their branch.'
+          : ' approved and synced with ERP.'));
       } else if (e.target.closest('[data-transfer-reject]')) {
-        lockPage('Rejected', 'scr-badge-inactive', 'This transfer has been decided and is locked against further edits.');
-        toast('Transfer rejected.');
+        lockPage('Rejected', 'scr-badge-inactive', lockedMsg);
+        toast(docNo + ' rejected.');
       }
     });
   }

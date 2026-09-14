@@ -1,13 +1,16 @@
 /**
- * Inventory Transfer & Return -- Transfer Approve/Reject (row 49 of the
- * client's feedback doc: "Transfer: Approve/Reject, Note: RMS > ERP").
+ * Inventory Transfer & Return -- Transfer/Return Approve/Reject (rows
+ * 49/50 of the client's feedback doc: "Transfer: Approve/Reject, Note:
+ * RMS > ERP" and "Return: Approve/Reject, Note: ERP > RMS"). Generic
+ * across both of the list page's tabs -- same data-transfer-approve/
+ * reject attributes on both, told apart only by the doc no.'s prefix for
+ * the toast wording.
  *
  * A one-time, instant decision (no confirm dialog -- frontend-only actions
  * stay a direct click) that locks the row: Edit/Approve/Reject/Delete all
  * disappear from the kebab afterwards, replaced by a plain "Locked" note,
- * since the client's ask is explicit that a decided transfer can't be
- * edited or deleted again. Approving simulates the sync to ERP with a
- * brief toast; nothing here actually integrates with anything.
+ * since the client's ask is explicit that a decided record can't be
+ * edited or deleted again. Nothing here actually integrates with anything.
  */
 
 'use strict';
@@ -50,11 +53,14 @@
     var row = (approveBtn || rejectBtn).closest('.scr-row');
     if (!row) return;
     var docNo = row.querySelector('.scr-code');
-    var name = docNo ? docNo.textContent.trim() : 'This transfer';
+    var name = docNo ? docNo.textContent.trim() : 'This record';
+    var isReturn = name.indexOf('RTN') === 0;
 
     if (approveBtn) {
       setStatus(row, 'Completed', 'scr-badge-active');
-      toast(name + ' approved and synced with ERP.');
+      toast(name + (isReturn
+        ? ' approved -- items added back to their branch.'
+        : ' approved and synced with ERP.'));
     } else {
       setStatus(row, 'Rejected', 'scr-badge-inactive');
       toast(name + ' rejected.');

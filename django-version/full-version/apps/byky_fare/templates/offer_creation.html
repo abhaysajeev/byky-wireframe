@@ -1,20 +1,31 @@
 {% extends layout_path %}
 {% load static %}
 
-{% block title %}Scheme Creation - Fare &amp; Offers{% endblock title %}
+{% block title %}Offer Creation - Fare &amp; Offers{% endblock title %}
 
 {% comment %}
-Adapted from the client mockup byky Docs/Scheme_Creation.html. Migrated onto
-the shared byky-screen.css/js base (see byky-screen-design-system.md) --
-four numbered scr-card stages instead of Vuexy cards, same fields and order.
+Adapted from the client mockup byky Docs/Scheme_Creation.html (the screen
+itself was renamed Offer Creation, formerly "Scheme Creation" -- see
+apps/byky_fare/data.py's module note above offers()). Migrated onto the
+shared byky-screen.css/js base (see byky-screen-design-system.md) -- four
+numbered scr-card stages instead of Vuexy cards, same fields and order.
 The two hidden <select> templates at the foot still supply option lists to
 rows byky-fare.js creates at runtime, so the option data stays in Django
 rather than being duplicated in JavaScript.
+
+Now the same list+drawer-free create/edit page Fare Entry uses: reachable
+at its own /add/ and /<code>/edit/ URLs from the list at
+fare/offer-creation/ (offer_creation_list.html), not a drawer -- this form
+has its own nested Time Slab drawer and wouldn't fit inside another one.
+Promotion Level drops Location (Company/Branch only) and reveals a
+Branches multiselect when Branch is chosen, the same .byky-multi widget
+and toggle JS as Fare Entry's Price Level (byky-fare.js).
 {% endcomment %}
 
 {% block page_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+<link rel="stylesheet" href="{% static 'css/byky-drawer.css' %}" />
 <link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
 {% endblock page_css %}
 
@@ -26,6 +37,7 @@ rather than being duplicated in JavaScript.
 {% block page_js %}
 {{ block.super }}
 <script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-drawer.js' %}"></script>
 <script src="{% static 'js/byky-fare.js' %}"></script>
 {% endblock page_js %}
 
@@ -37,10 +49,21 @@ rather than being duplicated in JavaScript.
       <div class="scr-crumb">
         <span>Fare &amp; Offers</span>
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
-        <b>Scheme Creation</b>
+        <a href="{% url 'fare-offer-creation' %}">Offer Creation</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>{% if is_edit %}Edit{% else %}New{% endif %}</b>
       </div>
-      <h1 class="scr-title">Scheme Creation</h1>
+      <div style="display:flex; align-items:center; gap:10px">
+        <h1 class="scr-title">{% if is_edit %}Edit Offer — {{ offer.code }}{% else %}Add Offer{% endif %}</h1>
+        <span class="scr-form-badge">{% if is_edit %}{{ offer.status }}{% else %}New Configuration{% endif %}</span>
+      </div>
       <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'fare-offer-creation' %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        Back to list
+      </a>
     </div>
   </div>
 
@@ -59,10 +82,12 @@ rather than being duplicated in JavaScript.
           <label class="scr-label">Promotion Level<span class="scr-required">*</span></label>
           <div style="display:flex; gap:16px; height:40px; align-items:center">
             {% for lvl in price_levels %}
+            {% if lvl != "Location" %}
             <label class="scr-radio-label" style="display:flex; align-items:center; gap:6px">
-              <input type="radio" class="scr-radio" name="promoLevel" value="{{ lvl }}" {% if forloop.first %}checked{% endif %} />
+              <input type="radio" class="scr-radio" name="promoLevel" value="{{ lvl }}" {% if offer %}{% if lvl == offer.promo_level %}checked{% endif %}{% elif forloop.first %}checked{% endif %} />
               {{ lvl }}
             </label>
+            {% endif %}
             {% endfor %}
           </div>
         </div>
@@ -70,16 +95,31 @@ rather than being duplicated in JavaScript.
           <label class="scr-label" for="promo-company">Company<span class="scr-required">*</span></label>
           <select id="promo-company" class="scr-input">
             <option value="">Select Company</option>
-            {% for c in companies_list %}<option>{{ c }}</option>{% endfor %}
+            {% for c in companies_list %}<option {% if offer and offer.scope == c %}selected{% endif %}>{{ c }}</option>{% endfor %}
           </select>
         </div>
         <div class="scr-field">
           <label class="scr-label" for="promo-code">Promotion Code<span class="scr-required">*</span></label>
-          <input type="text" class="scr-input" id="promo-code" placeholder="SUMMER25" />
+          <input type="text" class="scr-input" id="promo-code" placeholder="SUMMER25" value="{% if offer %}{{ offer.code }}{% endif %}" />
         </div>
         <div class="scr-field">
           <label class="scr-label" for="promo-name">Promotion Name<span class="scr-required">*</span></label>
-          <input type="text" class="scr-input" id="promo-name" placeholder="Summer campaign" />
+          <input type="text" class="scr-input" id="promo-name" placeholder="Summer campaign" value="{% if offer %}{{ offer.name }}{% endif %}" />
+        </div>
+        <div class="scr-field" id="promo-branches-wrap" style="grid-column:1 / -1" hidden>
+          <label class="scr-label" for="promo-branches">Branches<span class="scr-required">*</span></label>
+          <div class="byky-multi" data-field="promo-branches" data-placeholder="Select one or more branches" id="promo-branches">
+            <div class="byky-multi-control" tabindex="0" role="button" aria-haspopup="listbox">
+              <span class="byky-multi-pills"></span>
+              <span class="byky-multi-placeholder">Select one or more branches</span>
+              <svg class="byky-multi-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            </div>
+            <div class="byky-multi-menu" hidden role="listbox">
+              {% for b in branches_list %}
+              <label class="byky-multi-opt"><input type="checkbox" value="{{ b.name }}" {% if offer and b.name in offer.branches %}checked{% endif %} /><span>{{ b.name }}</span></label>
+              {% endfor %}
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -270,10 +310,14 @@ rather than being duplicated in JavaScript.
       </div>
 
       <div class="scr-form-foot">
+        <button type="button" class="scr-btn" title="Not wired in this demo">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+          Export
+        </button>
         <div class="scr-form-actions" style="margin-left:auto">
-          <button type="button" class="scr-btn-danger">Cancel</button>
+          <a href="{% url 'fare-offer-creation' %}" class="scr-btn-danger">Cancel</a>
           <button type="button" class="scr-btn-secondary">Clear</button>
-          <button type="button" class="scr-btn-primary">Save Scheme</button>
+          <a href="{% url 'fare-offer-creation' %}" class="scr-btn-primary">Save Offer</a>
         </div>
       </div>
     </div>
@@ -308,7 +352,7 @@ in JS.
   <div class="byky-drawer-accent"></div>
   <div class="byky-drawer-head">
     <div class="byky-drawer-heading">
-      <div class="byky-drawer-module">Fare &amp; Offers &middot; Scheme Creation</div>
+      <div class="byky-drawer-module">Fare &amp; Offers &middot; Offer Creation</div>
       <h2 class="byky-drawer-title" id="offcanvasFreeSlabLabel">Add Time Slab</h2>
     </div>
     <button type="button" class="byky-drawer-close" id="freeSlabClose">
@@ -330,19 +374,23 @@ in JS.
             <div class="byky-select-wrap">
               <select id="fs-applies" class="byky-input byky-select">
                 <option value="all">Every day</option>
-                <option value="day">A day of the week</option>
+                <option value="day">Select Days</option>
                 <option value="date">A specific date</option>
               </select>
               <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
             </div>
           </div>
           <div class="byky-field byky-span-12" id="fs-day-wrap" hidden>
-            <label class="byky-label" for="fs-day"><span>Day</span></label>
-            <div class="byky-select-wrap">
-              <select id="fs-day" class="byky-input byky-select">
-                {% for day in days %}{% if day != 'All Days' %}<option>{{ day }}</option>{% endif %}{% endfor %}
-              </select>
-              <svg class="byky-select-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+            <label class="byky-label" for="fs-day"><span>Select Days</span></label>
+            <div class="byky-multi" data-field="fs-day" data-placeholder="Select one or more days" id="fs-day">
+              <div class="byky-multi-control" tabindex="0" role="button" aria-haspopup="listbox">
+                <span class="byky-multi-pills"></span>
+                <span class="byky-multi-placeholder">Select one or more days</span>
+                <svg class="byky-multi-caret" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+              </div>
+              <div class="byky-multi-menu" hidden role="listbox">
+                {% for day in days %}{% if day != 'All Days' %}<label class="byky-multi-opt"><input type="checkbox" value="{{ day }}" /><span>{{ day }}</span></label>{% endif %}{% endfor %}
+              </div>
             </div>
           </div>
           <div class="byky-field byky-span-12" id="fs-date-wrap" hidden>

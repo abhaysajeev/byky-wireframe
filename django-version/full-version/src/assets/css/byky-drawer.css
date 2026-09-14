@@ -350,7 +350,7 @@
 @media (max-width: 767px) { .byky-checkgroup { grid-template-columns: 1fr; } }
 
 /* ── standalone drawer (no Bootstrap offcanvas) ──────────────────────
-   Fare Entry's Time Slab and Scheme Creation's Free Item Slab editors
+   Fare Entry's Time Slab and Offer Creation's Free Item Slab editors
    build their rows in JS at runtime (byky-fare.js) rather than editing a
    server record -- there's no data-bs-toggle trigger or Bootstrap JS
    lifecycle involved, byky-fare.js only ever flips the plain `hidden`

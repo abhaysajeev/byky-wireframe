@@ -301,9 +301,9 @@
      "slug": "fare-entry"
     },
     {
-     "url": "fare-scheme-creation",
-     "name": "Scheme Creation",
-     "slug": "fare-scheme-creation"
+     "url": "fare-offer-creation",
+     "name": "Offer Creation",
+     "slug": "fare-offer-creation"
     }
    ]
   },

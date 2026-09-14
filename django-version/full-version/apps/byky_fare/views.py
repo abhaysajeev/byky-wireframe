@@ -88,9 +88,7 @@ class FareEntryDetailView(FareScreenView):
         return context
 
 
-class SchemeCreationView(FareScreenView):
-    """Create Promotion — scope, validity/value band, items, free items."""
-
+class OfferScreenView(FareScreenView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(
@@ -100,4 +98,51 @@ class SchemeCreationView(FareScreenView):
                 "promotion_types": data.PROMOTION_TYPES,
             }
         )
+        return context
+
+
+class OfferCreationListView(OfferScreenView):
+    """Client feedback: same treatment as Fare Entry -- Offer Creation
+    (formerly "Scheme Creation") opened straight on the create form with no
+    way to see previously configured offers. Now a real Tier A list --
+    "New Offer" opens the same form this screen replaces, at its own /add/
+    URL; each row's kebab offers View / Edit / Export / Delete."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = data.offers()
+        for i, o in enumerate(rows):
+            o["json_id"] = f"scr-record-offer-{i}"
+        context.update(
+            {
+                "offers": rows,
+                "offer_counts": data.offer_counts(rows),
+            }
+        )
+        return context
+
+
+class OfferCreationFormView(OfferScreenView):
+    """Add/Edit Offer — scope, validity/value band, items, free items. One
+    template for both: `offer` is None in Add mode, or the record being
+    edited (resolved from the <code> URL kwarg) in Edit mode."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        code = self.kwargs.get("code")
+        offer = data.offer_by_code(code) if code else None
+        context["offer"] = offer
+        context["is_edit"] = offer is not None
+        return context
+
+
+class OfferCreationDetailView(OfferScreenView):
+    """Full read-only detail of one configured offer, reachable from the
+    list's own View action."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        code = self.kwargs.get("code")
+        context["offer"] = data.offer_by_code(code)
+        context["code"] = code
         return context

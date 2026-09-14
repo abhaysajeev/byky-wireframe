@@ -1,9 +1,10 @@
 /**
- * BYKY Fare & Schemes
+ * BYKY Fare & Offers
  *
  * Interactivity for the two create forms adapted from the client mockups:
  * the time-slab table on Fare Entry, and the promotion/free-item tables on
- * Scheme Creation. Wireframe phase -- nothing is submitted anywhere.
+ * Offer Creation (formerly "Scheme Creation"). Wireframe phase -- nothing
+ * is submitted anywhere.
  *
  * Migrated onto the .scr-* design system: the time-slab / free-slab editors
  * use the scr-veil/scr-drawer markup, but their show/hide + prefill logic
@@ -69,22 +70,26 @@
     return api;
   }
 
-  // Fare Entry -- Price Level -> Branches picker
+  // Fare Entry / Offer Creation -- Price/Promotion Level -> Branches picker
   // --------------------------------------------------------------------
-  // Client feedback: Location is no longer a choosable Price Level; when
-  // Branch is chosen, a Branches multiselect (the same .byky-multi widget
-  // used throughout the app) appears so the fare can be scoped to specific
-  // branches instead of the whole company.
-  const priceLevelRadios = [...document.querySelectorAll('input[name="priceLevel"]')];
-  const branchesWrap = document.getElementById('fare-branches-wrap');
-  if (priceLevelRadios.length && branchesWrap) {
-    const syncBranchesVisibility = () => {
-      const checked = priceLevelRadios.find(r => r.checked);
-      branchesWrap.hidden = !checked || checked.value !== 'Branch';
+  // Client feedback: Location is no longer a choosable level on either
+  // screen; when Branch is chosen, a Branches multiselect (the same
+  // .byky-multi widget used throughout the app) appears so the record can
+  // be scoped to specific branches instead of the whole company. One
+  // helper, called once per screen's own radio group + wrap pair.
+  function wireLevelBranches(radioName, wrapId) {
+    const radios = [...document.querySelectorAll(`input[name="${radioName}"]`)];
+    const wrap = document.getElementById(wrapId);
+    if (!radios.length || !wrap) return;
+    const sync = () => {
+      const checked = radios.find(r => r.checked);
+      wrap.hidden = !checked || checked.value !== 'Branch';
     };
-    priceLevelRadios.forEach(r => r.addEventListener('change', syncBranchesVisibility));
-    syncBranchesVisibility();
+    radios.forEach(r => r.addEventListener('change', sync));
+    sync();
   }
+  wireLevelBranches('priceLevel', 'fare-branches-wrap');
+  wireLevelBranches('promoLevel', 'promo-branches-wrap');
 
   // Fare Entry -- time slab rows
   // --------------------------------------------------------------------
@@ -275,7 +280,7 @@
   }
   syncSlabEmptyState();
 
-  // Scheme Creation -- promotion items, free items, free-item slabs
+  // Offer Creation -- promotion items, free items, free-item slabs
   // --------------------------------------------------------------------
   function itemRowHtml(count) {
     return `
@@ -315,7 +320,7 @@
     applies: document.getElementById('fs-applies'),
     dayWrap: document.getElementById('fs-day-wrap'),
     dateWrap: document.getElementById('fs-date-wrap'),
-    day: document.getElementById('fs-day'),
+    dayMulti: document.getElementById('fs-day'),
     date: document.getElementById('fs-date'),
     from: document.getElementById('fs-from'),
     to: document.getElementById('fs-to'),
@@ -333,9 +338,22 @@
   if (fs.applies) fs.applies.addEventListener('change', fsSyncApplies);
 
   function fsAppliesLabel(r) {
-    if (r.applies === 'day') return r.day;
+    if (r.applies === 'day') return (r.days || []).join(', ') || 'No days selected';
     if (r.applies === 'date') return r.date || 'Date not set';
     return 'Every day';
+  }
+
+  /** Same contract as Fare Entry's slab days multiselect -- see
+      readSlabDays/writeSlabDays above. */
+  function fsReadDays() {
+    if (!fs.dayMulti) return [];
+    return [...fs.dayMulti.querySelectorAll('input[type="checkbox"]:checked')].map(b => b.value);
+  }
+  function fsWriteDays(dayValues) {
+    if (!fs.dayMulti) return;
+    const chosen = dayValues || [];
+    fs.dayMulti.querySelectorAll('input[type="checkbox"]').forEach(b => { b.checked = chosen.includes(b.value); });
+    if (fs.dayMulti.__bykyRenderPills) fs.dayMulti.__bykyRenderPills();
   }
 
   function renderFreeSlabRow(tr, r) {
@@ -358,7 +376,7 @@
     tr.querySelector('.row-edit').addEventListener('click', () => {
       editingFree = tr;
       const v = JSON.parse(tr.dataset.slab);
-      fs.applies.value = v.applies; fs.day.value = v.day; fs.date.value = v.date;
+      fs.applies.value = v.applies; fsWriteDays(v.days); fs.date.value = v.date;
       fs.from.value = v.from; fs.to.value = v.to;
       fs.vehicle.value = v.vehicle; fs.pkg.value = v.pkg; fs.qty.value = v.qty;
       fsSyncApplies();
@@ -396,7 +414,7 @@
     addFreeSlabBtn.addEventListener('click', () => {
       editingFree = null;
       document.getElementById('offcanvasFreeSlabLabel').textContent = 'Add Time Slab';
-      fs.applies.value = 'all'; fs.day.value = ''; fs.date.value = '';
+      fs.applies.value = 'all'; fsWriteDays([]); fs.date.value = '';
       fs.from.value = '10:00'; fs.to.value = '11:00'; fs.qty.value = 1;
       fsSyncApplies();
       freeSlabDrawer.open();
@@ -407,7 +425,7 @@
   if (freeSlabSaveBtn) {
     freeSlabSaveBtn.addEventListener('click', () => {
       const r = {
-        applies: fs.applies.value, day: fs.day.value, date: fs.date.value,
+        applies: fs.applies.value, days: fsReadDays(), date: fs.date.value,
         from: fs.from.value, to: fs.to.value,
         vehicle: fs.vehicle.value, pkg: fs.pkg.value, qty: fs.qty.value
       };

@@ -1,4 +1,4 @@
-"""Reference data for Fare & Schemes.
+"""Reference data for Fare & Offers.
 
 Both screens come from client-supplied HTML mockups (byky Docs/
 Fare_Entry_Advanced_UI_v3.html and Scheme_Creation.html) rather than from the
@@ -105,6 +105,75 @@ def fare_by_code(code):
 
 
 def fare_counts(rows):
+    return {
+        "total": len(rows),
+        "active": sum(1 for r in rows if r["status"] == "Active"),
+        "inactive": sum(1 for r in rows if r["status"] == "Inactive"),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Offer list (client feedback: Offer Creation -- formerly "Scheme
+# Creation" -- needed a list view the same way Fare Entry did). Deterministic
+# demo rows, same footing as fares() above: real categories/vehicle types/
+# branches, openly-fabricated promotion codes and values.
+# ---------------------------------------------------------------------------
+
+def offers():
+    types = vehicle_types()
+    branches = [b["name"] for b in cms_data.branches()]
+    rows = [
+        {
+            "code": "OFR-2026-001",
+            "name": "Summer Campaign",
+            "promo_level": "Company",
+            "scope": "BYKY",
+            "branches": [],
+            "promotion_for": PROMOTION_FOR[0],
+            "promotion_type": PROMOTION_TYPES[0],
+            "vehicle_type": types[0] if types else "",
+            "from_date": "01 Jun 2026",
+            "to_date": "31 Aug 2026",
+            "status": "Active",
+        },
+        {
+            "code": "OFR-2026-002",
+            "name": "National Day Weekend",
+            "promo_level": "Branch",
+            "scope": "BYKY",
+            "branches": branches[:3],
+            "promotion_for": PROMOTION_FOR[-1] if len(PROMOTION_FOR) > 1 else PROMOTION_FOR[0],
+            "promotion_type": PROMOTION_TYPES[1] if len(PROMOTION_TYPES) > 1 else PROMOTION_TYPES[0],
+            "vehicle_type": types[1] if len(types) > 1 else (types[0] if types else ""),
+            "from_date": "28 Nov 2026",
+            "to_date": "02 Dec 2026",
+            "status": "Active",
+        },
+        {
+            "code": "OFR-2025-014",
+            "name": "New Year Clearance",
+            "promo_level": "Branch",
+            "scope": "BYKY",
+            "branches": branches[3:6],
+            "promotion_for": PROMOTION_FOR[0],
+            "promotion_type": PROMOTION_TYPES[2] if len(PROMOTION_TYPES) > 2 else PROMOTION_TYPES[0],
+            "vehicle_type": types[2] if len(types) > 2 else (types[0] if types else ""),
+            "from_date": "26 Dec 2025",
+            "to_date": "05 Jan 2026",
+            "status": "Inactive",
+        },
+    ]
+    return rows
+
+
+def offer_by_code(code):
+    for o in offers():
+        if o["code"] == code:
+            return o
+    return None
+
+
+def offer_counts(rows):
     return {
         "total": len(rows),
         "active": sum(1 for r in rows if r["status"] == "Active"),

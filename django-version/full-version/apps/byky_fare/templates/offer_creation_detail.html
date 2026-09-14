@@ -1,0 +1,136 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}{{ code }} - Fare &amp; Offers{% endblock title %}
+
+{% comment %}
+Full read-only detail of one configured offer, reachable from Offer
+Creation's own list via its View action -- the same list-detail split
+fare_entry_detail.html uses.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Fare &amp; Offers</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <a href="{% url 'fare-offer-creation' %}">Offer Creation</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>{{ code }}</b>
+      </div>
+      <h1 class="scr-title">{{ code }}</h1>
+      <p class="scr-sub">Full detail of this configured offer.</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'fare-offer-creation' %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        Back to list
+      </a>
+      {% if offer %}
+      <a href="{% url 'fare-offer-creation-edit' code=offer.code %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+        Edit
+      </a>
+      <button type="button" class="scr-btn" title="Not wired in this demo">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+        Export
+      </button>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if offer %}
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">{{ offer.name }}</h2>
+          <span class="scr-badge {% if offer.status == 'Active' %}scr-badge-approved{% else %}scr-badge-rejected{% endif %}"><i></i>{{ offer.status }}</span>
+        </div>
+        <p class="scr-form-sub">Valid {{ offer.from_date }} – {{ offer.to_date }}.</p>
+      </div>
+    </div>
+
+    <div class="scr-form-body">
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Promotion Level &amp; Scope</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Promotion Level</label>
+            <input type="text" class="scr-input" value="{{ offer.promo_level }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Company</label>
+            <input type="text" class="scr-input" value="{{ offer.scope }}" readonly />
+          </div>
+          {% if offer.promo_level == "Branch" %}
+          <div class="scr-field" style="grid-column:1 / -1">
+            <label class="scr-label">Branches</label>
+            <input type="text" class="scr-input" value="{{ offer.branches|join:', ' }}" readonly />
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="scr-section" style="margin-bottom:0">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Validity &amp; Value Band</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">From Date</label>
+            <input type="text" class="scr-input" value="{{ offer.from_date }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">To Date</label>
+            <input type="text" class="scr-input" value="{{ offer.to_date }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Promotion For</label>
+            <input type="text" class="scr-input" value="{{ offer.promotion_for }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Promotion Type</label>
+            <input type="text" class="scr-input" value="{{ offer.promotion_type }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Vehicle Type</label>
+            <input type="text" class="scr-input" value="{{ offer.vehicle_type }}" readonly />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="scr-card">
+    <div class="scr-empty" style="padding:40px 20px">
+      <span class="scr-empty-ico">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+      </span>
+      <div>
+        <div class="scr-empty-title">Offer not found</div>
+        <p class="scr-empty-sub">"{{ code }}" doesn't match any configured offer.</p>
+      </div>
+      <a href="{% url 'fare-offer-creation' %}" class="scr-btn-primary">Back to Offer Creation</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

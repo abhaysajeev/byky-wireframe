@@ -581,6 +581,109 @@ TARGET_PROFILE = {
 }
 
 
+# Duty Roster (RMS WEB APK UI feedback -- duty-roster.html). Add Employee
+# Roster and Add Weekly Branch Roster are the mockup's own full-page
+# builders, now wide drawers; their day-by-day body is a "custom" field
+# byky-hrms-duty-roster.js fills, since a static field list can't express
+# a variable 1-7 row builder. Edit Day and Add-to-day were the mockup's own
+# modals -- both are genuine add/edit forms, so both become compact
+# drawers instead (Day Details/Branch-Day, the mockup's two read-only
+# modals, are NOT drawers -- see byky/partials/detail_modal.html and
+# records_modal.html).
+DUTY_ROSTER_EMPLOYEE = {
+    "drawer_id": "drawerDutyRosterEmployee",
+    "scr_name": "duty-roster-employee",
+    "add_label": "Add Employee Roster",
+    "title_field": "employee_label",
+    "size": "wide",
+    "sections": [
+        {
+            "title": "Selection",
+            "fields": [
+                {"id": "state", "label": "State", "kind": "select", "required": True, "options_from": "states_list", "option_key": "name"},
+                {"id": "category", "label": "Category", "kind": "select", "required": True, "options": ["Cashier", "Labour"]},
+                {"id": "employee_key", "label": "Employee", "kind": "combo", "required": True, "combo_source": "roster-employees-data", "combo_key": "name", "combo_sub": "emp_no", "placeholder": "Search employee by name or code..."},
+                {"id": "week", "label": "Week", "kind": "select", "required": True, "options_from": "roster_week_labels", "help": "Select a week to enter or edit that week's 7 days below."},
+            ],
+        },
+        {
+            "title": "Data entry — selected week",
+            "fields": [
+                {"id": "days", "label": "", "kind": "custom"},
+            ],
+        },
+    ],
+}
+
+DUTY_ROSTER_WEEKLY = {
+    "drawer_id": "drawerDutyRosterWeekly",
+    "scr_name": "duty-roster-weekly",
+    "add_label": "Add Weekly Branch Roster",
+    "title_field": "branch",
+    "size": "wide",
+    "sections": [
+        {
+            "title": "Selection",
+            "fields": [
+                {"id": "state", "label": "State", "kind": "select", "required": True, "options_from": "states_list", "option_key": "name"},
+                {"id": "branch", "label": "Branch", "kind": "select", "required": True, "options_from": "branches_list", "option_key": "name"},
+                {"id": "week", "label": "Week", "kind": "select", "required": True, "options_from": "roster_week_labels"},
+            ],
+        },
+        {
+            "title": "Day columns",
+            "note": "Core slots (Cashier 1, Labour 1-2) are staffed daily; Cashier 2 and Labour 3-5 are weekend backup slots.",
+            "fields": [
+                {"id": "columns", "label": "", "kind": "custom"},
+            ],
+        },
+    ],
+}
+
+DUTY_ROSTER_EDIT_DAY = {
+    "drawer_id": "drawerDutyRosterDay",
+    "scr_name": "duty-roster-day",
+    "add_label": "Edit Day",
+    "title_field": "employee_label",
+    "size": "compact",
+    "sections": [
+        {
+            "title": "",
+            "fields": [
+                {"id": "day_type", "label": "Day Type", "kind": "select", "required": True, "options": ["Working", "Week Off", "Sick Leave", "Casual Leave"]},
+                {"id": "branch", "label": "Branch", "kind": "select", "options_from": "branches_list", "option_key": "name", "show_if": "day_type:Working"},
+                {"id": "shift1_start", "label": "Shift 1 Start", "kind": "datetime", "show_if": "day_type:Working"},
+                {"id": "shift1_end", "label": "Shift 1 End", "kind": "datetime", "show_if": "day_type:Working"},
+                {"id": "add_shift2", "label": "", "kind": "checkbox", "placeholder": "Add Shift 2 (split shift)", "show_if": "day_type:Working"},
+                {"id": "shift2_start", "label": "Shift 2 Start", "kind": "datetime", "show_if": "add_shift2:yes"},
+                {"id": "shift2_end", "label": "Shift 2 End", "kind": "datetime", "show_if": "add_shift2:yes"},
+            ],
+        },
+    ],
+}
+
+DUTY_ROSTER_ADD_TO_DAY = {
+    "drawer_id": "drawerDutyRosterAddToDay",
+    "scr_name": "duty-roster-add-to-day",
+    "add_label": "Add to Day",
+    "title_field": "employee_label",
+    "size": "compact",
+    "sections": [
+        {
+            "title": "",
+            "fields": [
+                {"id": "employee_key", "label": "Employee", "kind": "combo", "required": True, "combo_source": "roster-employees-data", "combo_key": "name", "combo_sub": "emp_no", "placeholder": "Search employee by name or code..."},
+                {"id": "shift1_start", "label": "Shift 1 Start", "kind": "datetime", "required": True},
+                {"id": "shift1_end", "label": "Shift 1 End", "kind": "datetime", "required": True},
+                {"id": "add_shift2", "label": "", "kind": "checkbox", "placeholder": "Add Shift 2 (split shift)"},
+                {"id": "shift2_start", "label": "Shift 2 Start", "kind": "datetime", "show_if": "add_shift2:yes"},
+                {"id": "shift2_end", "label": "Shift 2 End", "kind": "datetime", "show_if": "add_shift2:yes"},
+            ],
+        },
+    ],
+}
+
+
 # template variable -> spec, for the view to resolve in one call
 SPECS = {
 
@@ -599,5 +702,13 @@ SPECS = {
     "drawer_target_branch_mapping": TARGET_BRANCH_MAPPING,
 
     "drawer_target_profile": TARGET_PROFILE,
+
+    "drawer_duty_roster_employee": DUTY_ROSTER_EMPLOYEE,
+
+    "drawer_duty_roster_weekly": DUTY_ROSTER_WEEKLY,
+
+    "drawer_duty_roster_day": DUTY_ROSTER_EDIT_DAY,
+
+    "drawer_duty_roster_add_to_day": DUTY_ROSTER_ADD_TO_DAY,
 
 }

@@ -6,6 +6,7 @@ identity, document and bank field renders seed.NOT_CAPTURED. No passport numbers
 Emirates IDs, dates of birth or bank details are invented (CLAUDE.md section 12).
 """
 
+import calendar
 import datetime
 import hashlib
 
@@ -475,6 +476,128 @@ def target_mapping_counts(mappings, all_branch_names):
         "profiles_in_use": len(profiles_used),
         "expiring_soon": expiring,
     }
+
+
+# ---------------------------------------------------------------------------
+# Duty Roster (RMS WEB APK UI feedback -- duty-roster.html). Staff shift
+# scheduling across branches: who's on duty where, week-off/sick/casual
+# leave, deterministic across page loads. The mockup invents 34 fictional
+# employees across 9 fictional branches; this cycles through the real 99
+# seed.EMPLOYEES and real cms_data.branches() instead -- see module note
+# above roster_employees().
+# ---------------------------------------------------------------------------
+
+ROSTER_MONTH = (2026, 9)
+DAY_TYPES = ["Working", "Week Off", "Sick Leave", "Casual Leave"]
+_ORDERED_DAY_TYPES = ["Working", "Working", "Working", "Working", "Week Off", "Sick Leave", "Casual Leave", "Working"]
+
+
+def _cashier_bucket(designation_title):
+    return "Cashier" if designation_title == "Cashier" else "Labour"
+
+
+def roster_states(branches_list):
+    """[(emirate, [branch dicts])] grouped from real cms_data.branches(),
+    replacing the mockup's invented 3-state/9-branch set."""
+    out = {}
+    order = []
+    for b in branches_list:
+        em = b["location"]
+        if em not in out:
+            out[em] = []
+            order.append(em)
+        out[em].append(b)
+    return [(em, out[em]) for em in order]
+
+
+def roster_employees(branches_list):
+    """One roster entry per real employee -- cycles seed.EMPLOYEES onto real
+    branches (one branch per ~3 employees), each carrying a Cashier/Labour
+    duty bucket derived from their real designation (see module docstring
+    reconciliation notes elsewhere in this file for why "Cashier" is the
+    one real designation that maps to the mockup's own Cashier/Labour
+    split). Deterministic -- same order every request."""
+    out = []
+    n = len(branches_list)
+    for i, e in enumerate(seed.EMPLOYEES):
+        branch = branches_list[i % n]
+        out.append(
+            {
+                "emp_no": e["emp_no"],
+                "name": e["name"],
+                "role": _cashier_bucket(e["profession"]),
+                "designation": e["profession"],
+                "branch": branch["name"],
+                "emirate": branch["location"],
+            }
+        )
+    return out
+
+
+def _emp_key(emp):
+    return emp["emp_no"]
+
+
+def duty_status_for(emp_key, day):
+    digest = hashlib.md5(f"{emp_key}:{day}".encode()).hexdigest()
+    return _ORDERED_DAY_TYPES[int(digest, 16) % len(_ORDERED_DAY_TYPES)]
+
+
+def duty_shift_for(emp_key, day, status):
+    if status != "Working":
+        return None, None
+    digest = hashlib.md5(f"{emp_key}:{day}:shift".encode()).hexdigest()
+    start_hour = 7 + (int(digest[:2], 16) % 4)  # 7-10am start
+    return f"{start_hour:02d}:00", f"{(start_hour + 9) % 24:02d}:00"
+
+
+def roster_weeks(year, month):
+    """ISO-ish week chunks of the month -- [{index, start, end, label}]."""
+    cal = calendar.Calendar(firstweekday=6)  # Sunday-start, matches UAE week
+    weeks = cal.monthdayscalendar(year, month)
+    out = []
+    for i, wk in enumerate(weeks):
+        days = [d for d in wk if d != 0]
+        if not days:
+            continue
+        start = datetime.date(year, month, days[0])
+        end = datetime.date(year, month, days[-1])
+        out.append({"index": i, "start": start, "end": end, "label": f"Week {i + 1} ({start.strftime('%d %b')} – {end.strftime('%d %b')})"})
+    return out
+
+
+def roster_counts(employees, day_key):
+    running = {"Working": 0, "Week Off": 0, "Sick Leave": 0, "Casual Leave": 0}
+    for e in employees:
+        running[duty_status_for(_emp_key(e), day_key)] += 1
+    return {
+        "total": len(employees),
+        "on_duty": running["Working"],
+        "week_off": running["Week Off"],
+        "sick_leave": running["Sick Leave"],
+    }
+
+
+def roster_matrix_json(employees, weeks):
+    """One consolidated payload the page JS reads instead of re-deriving
+    the deterministic hash client-side -- Python computes it once."""
+    out = {}
+    for e in employees:
+        key = _emp_key(e)
+        by_day = {}
+        for wk in weeks:
+            d = wk["start"]
+            while d <= wk["end"]:
+                status = duty_status_for(key, d.isoformat())
+                start, end = duty_shift_for(key, d.isoformat(), status)
+                by_day[d.isoformat()] = {"status": status, "shift1_start": start, "shift1_end": end}
+                d += datetime.timedelta(days=1)
+        out[key] = by_day
+    return out
+
+
+def import_columns():
+    return ["Employee Code", "Employee Name", "Date", "Day Type", "Branch", "Shift1 Start", "Shift1 End", "Shift2 Start", "Shift2 End", "Remarks"]
 
 
 def document_expiry_summary(employee_rows):

@@ -3,6 +3,8 @@
 Wireframe phase: no writes, no CRUD, no API.
 """
 
+import datetime
+
 from apps.byky_core.views import BykyScreenView
 from apps.byky_core import privileges, refdata, seed
 from apps.byky_cms import data as cms_data
@@ -261,7 +263,67 @@ class TargetBranchMappingView(HrmsScreenView):
 
 
 class DutyRosterView(HrmsScreenView):
-    pass
+    """RMS WEB APK UI.xlsx feedback -- built from the client's
+    duty-roster.html mockup, not an FSD screen. See data.py's module note
+    for how the mockup's invented 34-employee/9-branch set was replaced
+    with the real 99 seed.EMPLOYEES over real cms_data.branches().
+
+    All the heavy lifting (State Wise grid, Branch Roster week-grid,
+    Employee View calendar, Excel import/export) reads one consolidated
+    JSON payload (roster_json) computed here once, rather than each tab
+    re-deriving the same deterministic per-day status/shift hash -- see
+    byky-hrms-duty-roster.js."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        branches_list = context["branches_list"]
+        employees = data.roster_employees(branches_list)
+        year, month = data.ROSTER_MONTH
+        weeks = data.roster_weeks(year, month)
+        today = data.TODAY
+        counts = data.roster_counts(employees, today.isoformat())
+
+        matrix = data.roster_matrix_json(employees, weeks)
+
+        current_week = None
+        for wk in weeks:
+            if wk["start"] <= today <= wk["end"]:
+                current_week = wk
+                break
+        current_week = current_week or weeks[0]
+
+        roster_json = {
+            "employees": employees,
+            "matrix": matrix,
+            "weeks": [
+                {"index": w["index"], "label": w["label"], "days": [
+                    (w["start"] + datetime.timedelta(days=d)).isoformat()
+                    for d in range((w["end"] - w["start"]).days + 1)
+                ]}
+                for w in weeks
+            ],
+            "currentWeekIndex": current_week["index"],
+            "today": today.isoformat(),
+            "states": [em for em, _ in data.roster_states(branches_list)],
+            "branches": [{"name": b["name"], "emirate": b["location"]} for b in branches_list],
+        }
+
+        for i, e in enumerate(employees):
+            e["json_id"] = f"scr-record-roster-emp-{i}"
+
+        context.update(
+            {
+                "roster_counts": counts,
+                "roster_employees": employees,
+                "roster_states": data.roster_states(branches_list),
+                "roster_weeks": weeks,
+                "roster_json": roster_json,
+                "roster_week_labels": [w["label"] for w in weeks],
+                "import_columns": data.import_columns(),
+                "day_types": data.DAY_TYPES,
+            }
+        )
+        return context
 
 
 class HrmsPrivilegeView(HrmsScreenView):

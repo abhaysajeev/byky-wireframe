@@ -69,6 +69,23 @@
     return api;
   }
 
+  // Fare Entry -- Price Level -> Branches picker
+  // --------------------------------------------------------------------
+  // Client feedback: Location is no longer a choosable Price Level; when
+  // Branch is chosen, a Branches multiselect (the same .byky-multi widget
+  // used throughout the app) appears so the fare can be scoped to specific
+  // branches instead of the whole company.
+  const priceLevelRadios = [...document.querySelectorAll('input[name="priceLevel"]')];
+  const branchesWrap = document.getElementById('fare-branches-wrap');
+  if (priceLevelRadios.length && branchesWrap) {
+    const syncBranchesVisibility = () => {
+      const checked = priceLevelRadios.find(r => r.checked);
+      branchesWrap.hidden = !checked || checked.value !== 'Branch';
+    };
+    priceLevelRadios.forEach(r => r.addEventListener('change', syncBranchesVisibility));
+    syncBranchesVisibility();
+  }
+
   // Fare Entry -- time slab rows
   // --------------------------------------------------------------------
   const slabToggle = document.getElementById('timeSlabToggle');
@@ -85,7 +102,7 @@
     applies: document.getElementById('slab-applies'),
     dayWrap: document.getElementById('slab-day-wrap'),
     dateWrap: document.getElementById('slab-date-wrap'),
-    day: document.getElementById('slab-day'),
+    dayMulti: document.getElementById('slab-day'),
     date: document.getElementById('slab-date'),
     from: document.getElementById('slab-from'),
     to: document.getElementById('slab-to'),
@@ -101,7 +118,7 @@
   const mins = v => (Number(v || 0)) + ' min';
 
   function appliesLabel(slab) {
-    if (slab.applies === 'day') return slab.day;
+    if (slab.applies === 'day') return (slab.days || []).join(', ') || 'No days selected';
     if (slab.applies === 'date') return slab.date || 'Date not set';
     return 'Every day';
   }
@@ -113,10 +130,25 @@
   }
   if (slabForm.applies) slabForm.applies.addEventListener('change', syncAppliesFields);
 
+  /** Selected days live in the "Select Days" multiselect's own checkboxes
+      (byky-drawer.js's initMultiselect owns opening/pills/closing) -- this
+      just reads/writes the checked set, the same contract every other
+      field in this form already follows. */
+  function readSlabDays() {
+    if (!slabForm.dayMulti) return [];
+    return [...slabForm.dayMulti.querySelectorAll('input[type="checkbox"]:checked')].map(b => b.value);
+  }
+  function writeSlabDays(dayValues) {
+    if (!slabForm.dayMulti) return;
+    const chosen = dayValues || [];
+    slabForm.dayMulti.querySelectorAll('input[type="checkbox"]').forEach(b => { b.checked = chosen.includes(b.value); });
+    if (slabForm.dayMulti.__bykyRenderPills) slabForm.dayMulti.__bykyRenderPills();
+  }
+
   function readSlabForm() {
     return {
       applies: slabForm.applies.value,
-      day: slabForm.day.value,
+      days: readSlabDays(),
       date: slabForm.date.value,
       from: slabForm.from.value,
       to: slabForm.to.value,
@@ -130,7 +162,7 @@
 
   function writeSlabForm(slab) {
     slabForm.applies.value = slab.applies;
-    slabForm.day.value = slab.day;
+    writeSlabDays(slab.days);
     slabForm.date.value = slab.date;
     slabForm.from.value = slab.from;
     slabForm.to.value = slab.to;
@@ -201,7 +233,7 @@
     addTimeSlabBtn.addEventListener('click', () => {
       editing = null;
       document.getElementById('offcanvasTimeSlabLabel').textContent = 'Add Time Slab';
-      writeSlabForm({ applies: 'all', day: '', date: '', from: '10:00', to: '11:00', basic: 90, grace: 5, interval: 10, concPrice: 10, concGrace: 0 });
+      writeSlabForm({ applies: 'all', days: [], date: '', from: '10:00', to: '11:00', basic: 90, grace: 5, interval: 10, concPrice: 10, concGrace: 0 });
       slabDrawer.open();
     });
   }

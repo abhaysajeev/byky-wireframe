@@ -16,6 +16,72 @@
     return 'is-standard';
   }
 
+  /* Multi-select: pills inside the control, menu below. The checkboxes stay
+     the value; the pills are a view of them, rebuilt on every change, so
+     prefill and reset need to know nothing about this. Works on a
+     .byky-multi anywhere in the document, not just inside a drawer -- see
+     the standalone init pass at the bottom of this file. */
+  function initMultiselect(multi) {
+    if (multi.__bykyMultiReady) return;
+    multi.__bykyMultiReady = true;
+
+    var control = multi.querySelector('.byky-multi-control');
+    var menu = multi.querySelector('.byky-multi-menu');
+    var pills = multi.querySelector('.byky-multi-pills');
+    var placeholder = multi.querySelector('.byky-multi-placeholder');
+    if (!control || !menu || !pills) return;
+
+    function boxes() { return [].slice.call(menu.querySelectorAll('input[type="checkbox"]')); }
+
+    function render() {
+      var chosen = boxes().filter(function (b) { return b.checked; });
+      pills.innerHTML = '';
+      chosen.forEach(function (b) {
+        var pill = document.createElement('span');
+        pill.className = 'byky-pill';
+        var label = document.createElement('span');
+        label.textContent = b.value;
+        var x = document.createElement('button');
+        x.type = 'button';
+        x.className = 'byky-pill-x';
+        x.setAttribute('aria-label', 'Remove ' + b.value);
+        x.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>';
+        /* stopPropagation, or removing a pill would also open the menu */
+        x.addEventListener('click', function (e) {
+          e.stopPropagation();
+          b.checked = false;
+          render();
+        });
+        pill.appendChild(label);
+        pill.appendChild(x);
+        pills.appendChild(pill);
+      });
+      if (placeholder) placeholder.hidden = chosen.length > 0;
+      multi.classList.toggle('has-value', chosen.length > 0);
+    }
+
+    control.addEventListener('click', function (e) {
+      e.stopPropagation();
+      var open = menu.hidden;
+      /* one menu at a time, including the filter dropdowns' */
+      [].forEach.call(document.querySelectorAll('.byky-multi-menu'), function (m) { m.hidden = true; });
+      menu.hidden = !open;
+      multi.classList.toggle('is-open', !menu.hidden);
+    });
+    control.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); control.click(); }
+    });
+    menu.addEventListener('click', function (e) { e.stopPropagation(); });
+    menu.addEventListener('change', render);
+    document.addEventListener('click', function () {
+      menu.hidden = true;
+      multi.classList.remove('is-open');
+    });
+
+    multi.__bykyRenderPills = render;
+    render();
+  }
+
   function setup(drawer) {
     if (drawer.__bykyReady) return;
     drawer.__bykyReady = true;
@@ -38,66 +104,11 @@
       sync();
     });
 
-    /* multi-selects: pills inside the control, menu below. The checkboxes
-       stay the value; the pills are a view of them, rebuilt on every change,
-       so prefill and reset need to know nothing about this. */
-    [].forEach.call(drawer.querySelectorAll('.byky-multi'), function (multi) {
-      var control = multi.querySelector('.byky-multi-control');
-      var menu = multi.querySelector('.byky-multi-menu');
-      var pills = multi.querySelector('.byky-multi-pills');
-      var placeholder = multi.querySelector('.byky-multi-placeholder');
-      if (!control || !menu || !pills) return;
-
-      function boxes() { return [].slice.call(menu.querySelectorAll('input[type="checkbox"]')); }
-
-      function render() {
-        var chosen = boxes().filter(function (b) { return b.checked; });
-        pills.innerHTML = '';
-        chosen.forEach(function (b) {
-          var pill = document.createElement('span');
-          pill.className = 'byky-pill';
-          var label = document.createElement('span');
-          label.textContent = b.value;
-          var x = document.createElement('button');
-          x.type = 'button';
-          x.className = 'byky-pill-x';
-          x.setAttribute('aria-label', 'Remove ' + b.value);
-          x.innerHTML = '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>';
-          /* stopPropagation, or removing a pill would also open the menu */
-          x.addEventListener('click', function (e) {
-            e.stopPropagation();
-            b.checked = false;
-            render();
-          });
-          pill.appendChild(label);
-          pill.appendChild(x);
-          pills.appendChild(pill);
-        });
-        if (placeholder) placeholder.hidden = chosen.length > 0;
-        multi.classList.toggle('has-value', chosen.length > 0);
-      }
-
-      control.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var open = menu.hidden;
-        /* one menu at a time, including the filter dropdowns' */
-        [].forEach.call(document.querySelectorAll('.byky-multi-menu'), function (m) { m.hidden = true; });
-        menu.hidden = !open;
-        multi.classList.toggle('is-open', !menu.hidden);
-      });
-      control.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); control.click(); }
-      });
-      menu.addEventListener('click', function (e) { e.stopPropagation(); });
-      menu.addEventListener('change', render);
-      document.addEventListener('click', function () {
-        menu.hidden = true;
-        multi.classList.remove('is-open');
-      });
-
-      multi.__bykyRenderPills = render;
-      render();
-    });
+    /* multi-selects: pills inside the control, menu below -- see
+       initMultiselect() below (extracted so a standalone .byky-multi
+       outside any drawer, e.g. Fare Entry's Branch picker, can init the
+       same way without needing a [data-byky-drawer] wrapper). */
+    [].forEach.call(drawer.querySelectorAll('.byky-multi'), initMultiselect);
 
     /* file inputs: show the chosen filename */
     [].forEach.call(drawer.querySelectorAll('.byky-file-input'), function (inp) {
@@ -266,6 +277,10 @@
       setup(d);
       bridge(d);
     });
+    /* a .byky-multi that isn't inside any drawer -- e.g. Fare Entry's
+       Branch picker, a plain .scr-field on a full-page Tier B form --
+       still gets the same pills/menu behaviour. */
+    [].forEach.call(document.querySelectorAll('.byky-multi'), initMultiselect);
   }
 
   if (document.readyState === 'loading') {

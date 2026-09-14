@@ -1,0 +1,166 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Fare Entry - Fare &amp; Offers{% endblock title %}
+
+{% comment %}
+Client feedback: Fare Entry opened straight on the create form with no way
+to see previously configured fares. Rebuilt as a real Tier A list, matching
+every other module's list+"Add" convention -- "New Fare" navigates to the
+existing create form (now at fare/fare-entry/add/) instead of a drawer,
+since that form has its own nested Time Slab drawer and doesn't fit inside
+another drawer. Each row's kebab offers View (fare-entry-detail), Edit
+(fare-entry-edit, the same form pre-filled), Export (frontend-only, per
+request -- no functionality) and Delete (unwired, per house convention).
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Fare &amp; Offers</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Fare Entry</b>
+      </div>
+      <h1 class="scr-title">Fare Entry</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'fare-entry-add' %}" class="scr-btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        New Fare
+      </a>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M17 7.5c0-1.9-2.2-3.5-5-3.5s-5 1.6-5 3.5 2.2 3 5 3.5 5 1.6 5 3.5-2.2 3.5-5 3.5-5-1.6-5-3.5"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ fare_counts.total }}</div><div class="scr-tile-lab">Total fares</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ fare_counts.active }}</div><div class="scr-tile-lab">Active</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18.4 5.6 5.6 18.4M5.6 5.6l12.8 12.8"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ fare_counts.inactive }}</div><div class="scr-tile-lab">Inactive</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="fare" data-scr-noun-plural="fares">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search fare code, category or vehicle type" />
+      </div>
+
+      <div class="scr-filter-wrap" data-filter-key="status">
+        <button type="button" class="scr-filter-btn">
+          <span class="scr-filter-label">All status</span>
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+        </button>
+        <div class="scr-filter-menu" hidden>
+          <button type="button" class="scr-filter-opt is-active" data-value="">All status</button>
+          {% for s in fare_status %}<button type="button" class="scr-filter-opt" data-value="{{ s }}">{{ s }}</button>{% endfor %}
+        </div>
+      </div>
+
+      <span class="scr-toolbar-count">{{ fares|length }} fares</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Price Level</th>
+            <th>Scope</th>
+            <th>Category</th>
+            <th>Vehicle Type</th>
+            <th>Validity</th>
+            <th>Basic Fare</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for f in fares %}
+          <tr class="scr-row" data-search="{{ f.code|lower }} {{ f.category|lower }} {{ f.vehicle_type|lower }}" data-status="{{ f.status }}">
+            <td><span class="scr-code">{{ f.code }}</span></td>
+            <td class="scr-contact">{{ f.price_level }}</td>
+            <td class="scr-contact">
+              {{ f.scope }}
+              {% if f.price_level == "Branch" %}<div class="scr-contact-sub">{{ f.branches|length }} branch{{ f.branches|length|pluralize }}</div>{% endif %}
+            </td>
+            <td class="scr-contact">{{ f.category }}</td>
+            <td class="scr-contact">{{ f.vehicle_type }}</td>
+            <td class="scr-contact">{{ f.from_date }} – {{ f.to_date }}</td>
+            <td class="scr-contact">AED {{ f.basic_fare }}</td>
+            <td><span class="scr-badge {% if f.status == 'Active' %}scr-badge-approved{% else %}scr-badge-rejected{% endif %}"><i></i>{{ f.status }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <a class="scr-menu-item" href="{% url 'fare-entry-detail' code=f.code %}">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                      View
+                    </a>
+                    <a class="scr-menu-item" href="{% url 'fare-entry-edit' code=f.code %}">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </a>
+                    <button type="button" class="scr-menu-item" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 11 5 5 5-5"></path><path d="M4 20h16"></path></svg>
+                      Export
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ fares|length }} of {{ fares|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

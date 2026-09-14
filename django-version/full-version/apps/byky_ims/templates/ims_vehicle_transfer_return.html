@@ -110,7 +110,7 @@ byky-ims-transfer.js only adds what a transfer needs on top.
           <label class="scr-label">From Event Location<span class="scr-required">*</span></label>
           <select class="scr-input" data-field="from_event_location" data-scr-pool-source>
             <option value="">Select</option>
-            {% for e in event_locations %}<option>{{ e }}</option>{% endfor %}
+            {% for e in event_locations %}<option>{{ e.name }}</option>{% endfor %}
           </select>
           {% if not event_locations %}<div class="scr-help">Event venues will appear here once they are added.</div>{% endif %}
         </div>

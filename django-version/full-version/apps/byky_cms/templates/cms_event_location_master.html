@@ -1,0 +1,140 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Event Location - Company Management{% endblock title %}
+
+{% comment %}
+New Company sub-module, not one of the 16 FSD modules -- added so
+Inventory Transfer & Return's "To Events" transfer type has a real
+dropdown to draw from (apps/byky_ims/data.py's event_locations() reads
+apps/byky_cms/data.py's event_locations() directly, the same
+one-master-many-screens pattern as Location Management). Built on the
+shared byky-screen.css/js base (see byky-screen-design-system.md and
+cms_location_management.html for the styling reference). Demo rows --
+see apps/byky_cms/data.py's _DEMO_EVENT_LOCATIONS docstring.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Company Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Event Location</b>
+      </div>
+      <h1 class="scr-title">Event Location</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="eventloc:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Event Location
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="event location" data-scr-noun-plural="event locations">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search event location or code" />
+      </div>
+
+      <span class="scr-toolbar-count">{{ event_locations|length }} event location{{ event_locations|length|pluralize }}</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Event Location</th>
+            <th>Code</th>
+            <th>Contact Person</th>
+            <th>Contact Phone</th>
+            <th>Address</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e in event_locations %}
+          <tr class="scr-row" data-search="{{ e.name|lower }} {{ e.code|lower }}" data-record-id="{{ e.json_id }}">
+            <td style="font-weight:600"><span class="scr-co-name">{{ e.name }}</span></td>
+            <td><span class="scr-code">{{ e.code }}</span></td>
+            <td class="scr-contact">{{ e.contact_person }}</td>
+            <td class="scr-contact">{{ e.contact_phone }}</td>
+            <td class="scr-contact">{{ e.address }}</td>
+            <td>{% if e.active %}<span class="scr-badge scr-badge-active"><i></i>Active</span>{% else %}<span class="scr-badge scr-badge-inactive"><i></i>Inactive</span>{% endif %}</td>
+            <td>
+              <div class="scr-row-actions">
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <button type="button" class="scr-menu-item" data-scr-open="eventloc:edit">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {{ e.fields_json|json_script:e.json_id }}
+          {% empty %}
+          <tr>
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 0 0-14 0c0 5.5 7 12 7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">No event locations yet</div>
+                  <p class="scr-empty-sub">Venues will appear here once one is added.</p>
+                </div>
+                <button type="button" class="scr-btn-primary" data-scr-open="eventloc:add">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+                  Add Event Location
+                </button>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ event_locations|length }} of {{ event_locations|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include "byky/partials/drawer.html" with spec=drawer_event_location module_label="Company · Event Location" %}
+{% endblock %}

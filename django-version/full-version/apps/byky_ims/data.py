@@ -270,8 +270,12 @@ def warehouses():
 
 
 def event_locations():
-    """Venues a vehicle can be sent to for an event. No source data yet."""
-    return []
+    """Venues a vehicle can be sent to for an event -- reads the Event
+    Location master (Company module) directly, so every screen offering
+    event locations moves together with it."""
+    from apps.byky_cms import data as cms_data
+
+    return cms_data.event_locations()
 
 
 def transferable_items():

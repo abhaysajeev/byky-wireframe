@@ -17,7 +17,7 @@
    "slug": "cms",
    "badge": [
     "label-secondary",
-    "7"
+    "8"
    ],
    "submenu": [
     {
@@ -34,6 +34,11 @@
      "url": "cms-location-management",
      "name": "Location",
      "slug": "cms-location-management"
+    },
+    {
+     "url": "cms-event-location-master",
+     "name": "Event Location",
+     "slug": "cms-event-location-master"
     },
     {
      "url": "cms-department-management",

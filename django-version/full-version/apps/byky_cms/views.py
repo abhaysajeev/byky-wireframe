@@ -137,6 +137,29 @@ class LocationView(CmsScreenView):
         return context
 
 
+class EventLocationView(CmsScreenView):
+    """New Company sub-module, not one of the 16 FSD modules -- requested so
+    Inventory Transfer & Return's "To Events" transfer type has a real
+    dropdown to draw from (apps/byky_ims/data.py's event_locations() reads
+    data.event_locations() here directly). Demo rows -- see
+    data._DEMO_EVENT_LOCATIONS for why they exist."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        rows = [dict(e) for e in data.event_locations()]
+        for i, e in enumerate(rows):
+            e["json_id"] = f"scr-record-eventloc-{i}"
+            e["fields_json"] = {
+                "code": e["code"],
+                "name": e["name"],
+                "contact_person": e["contact_person"],
+                "contact_phone": e["contact_phone"],
+                "address": e["address"],
+            }
+        context.update({"event_locations": rows})
+        return context
+
+
 class BranchView(CmsScreenView):
     """FSD 1.4 -- Tier B rental station branch hubs, on the shared
     byky-screen.css/js base. All 36 rows are real stations from seed data."""

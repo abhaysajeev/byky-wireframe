@@ -336,6 +336,39 @@ def locations():
     ]
 
 
+# Event Location master -- new, not one of the 16 FSD modules. Requested so
+# Inventory Transfer & Return's "To Events" transfer type has a real Event
+# Location dropdown instead of an empty one (apps/byky_ims/data.py's
+# event_locations() reads this list directly, same one-master-many-screens
+# pattern as _DEMO_LOCATIONS above). Real, recognisable UAE public event
+# venues; contact names/phone numbers are illustrative, not real people.
+_DEMO_EVENT_LOCATIONS = [
+    ("EVT001", "Union Square – National Day Grounds", "Salim Al Farsi", "+971 50 123 4567", "Union Square, Deira, Dubai"),
+    ("EVT002", "Zabeel Park – National Day Fireworks", "Mariam Al Suwaidi", "+971 55 234 5678", "Zabeel Park, Dubai"),
+    ("EVT003", "Global Village", "Hassan Youssef", "+971 52 345 6789", "Sheikh Mohammed Bin Zayed Rd, Dubai"),
+    ("EVT004", "Expo City Dubai", "Noura Al Ketbi", "+971 56 456 7890", "Expo City, Dubai South"),
+    ("EVT005", "Dubai Festival City – DSF Grounds", "Omar Al Zaabi", "+971 54 567 8901", "Dubai Festival City, Dubai"),
+]
+
+
+def event_locations():
+    """The Event Location master: venues a vehicle can be sent to for an
+    event (e.g. UAE National Day celebrations). Demo rows -- see
+    _DEMO_EVENT_LOCATIONS above."""
+    return [
+        {
+            "code": code,
+            "name": name,
+            "contact_person": contact_person,
+            "contact_phone": contact_phone,
+            "address": address,
+            "active": True,
+            "status": "Active",
+        }
+        for code, name, contact_person, contact_phone, address in _DEMO_EVENT_LOCATIONS
+    ]
+
+
 def departments():
     """The department master (FSD 1.5).
 

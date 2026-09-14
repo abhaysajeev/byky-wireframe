@@ -49,6 +49,17 @@ urlpatterns = [
         name="cms-location-management",
     ),
     path(
+        "cms/event-location-master/",
+        views.EventLocationView.as_view(
+            template_name="cms_event_location_master.html",
+            screen_title="Event Location",
+            module_label="Company Management",
+            tier="A",
+            purpose="Venues a vehicle can be sent to for an event (e.g. UAE National Day celebrations), feeding Inventory Transfer & Return's \"To Events\" transfer type.",
+        ),
+        name="cms-event-location-master",
+    ),
+    path(
         "cms/branch-management/",
         views.BranchView.as_view(
             template_name="cms_branch_management.html",

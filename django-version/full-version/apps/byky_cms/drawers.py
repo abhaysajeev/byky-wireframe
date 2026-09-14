@@ -277,6 +277,50 @@ LOCATION = {
     ]
 }
 
+EVENT_LOCATION = {
+    "drawer_id": "drawerEventLocation",
+    "scr_name": "eventloc",
+    "add_label": "Add Event Location",
+    "title_field": "name",
+    "sections": [
+        {
+            "title": "",
+            "fields": [
+                {
+                    "id": "code",
+                    "label": "Event Location Code",
+                    "kind": "text",
+                    "required": True
+                },
+                {
+                    "id": "name",
+                    "label": "Event Location Name",
+                    "kind": "text",
+                    "required": True
+                },
+                {
+                    "id": "contact_person",
+                    "label": "Contact Person Name",
+                    "kind": "text",
+                    "required": True
+                },
+                {
+                    "id": "contact_phone",
+                    "label": "Contact Person Phone No",
+                    "kind": "text",
+                    "required": True
+                },
+                {
+                    "id": "address",
+                    "label": "Address",
+                    "kind": "textarea",
+                    "required": False
+                }
+            ]
+        }
+    ]
+}
+
 MAPPING = {
     "drawer_id": "drawerMapping",
     "scr_name": "mapping",
@@ -435,6 +479,8 @@ SPECS = {
     "drawer_country": COUNTRY,
 
     "drawer_department": DEPARTMENT,
+
+    "drawer_event_location": EVENT_LOCATION,
 
     "drawer_location": LOCATION,
 

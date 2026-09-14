@@ -13,18 +13,25 @@ pattern, which mirrors that screen's Countries/States tabs exactly).
 This is a live rental-transaction feed -- order numbers, customer names,
 fare/deposit/tax amounts. Nothing in the client's source files supplies real
 transactions (Customer Details & Registration is itself still awaiting
-client data), so inventing sample orders here would mean inventing money
-figures (CLAUDE.md 12). Real filters, tabs and column headers render; the
-body shows the awaiting-data state, the same treatment IMS's Live RFID
-Monitoring and Inventory System Alerts screens already use.
+client data), so this module doesn't invent figures on its own initiative
+(CLAUDE.md 12).
 
 RMS WEB APK UI.xlsx feedback: Location -> Branch and Order Status -> Type
 are label-only renames; Type and Search In both gain a Credit Note option;
 a From/To Date pair (flatpickr, defaulting to today) sits ahead of Search;
 and the tab row above the grid gains All (default) and Credit Note
-alongside Rent Bill/Direct Bill. Credit Note's own tiles/columns are a
-credit-note shape (Credit Note Number, Amount, Reason), not the
-vehicle/order shape the bill tabs use -- see views.py for why.
+alongside Rent Bill/Direct Bill.
+
+All/Rent Bill/Direct Bill now show 5 explicitly requested, clearly
+fabricated demo rows apiece (apps/byky_live/data.py's rent_bill_orders/
+direct_bill_orders) instead of the awaiting-data state -- see that
+module's docstring for why this is a deliberate exception, not a
+reversal, of the no-invented-money rule. Credit Note keeps the
+awaiting-data state (its own tiles/columns are a credit-note shape --
+Credit Note Number, Amount, Issued By -- not the vehicle/order shape the
+bill tabs use). Every populated row's kebab holds only View (unwired, no
+detail page built for these demo orders), per the actions-column
+convention everywhere else in the app.
 {% endcomment %}
 
 {% block vendor_css %}
@@ -141,13 +148,13 @@ vehicle/order shape the bill tabs use -- see views.py for why.
 
     <div class="scr-panel" data-tabgroup="bill" data-tab="all">
       <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:14px; padding:18px 20px; border-bottom:1px solid #f0eff7">
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Vehicles</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Total Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Cancelled Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Bill Amount Collected</small><span style="font-size:18px; font-weight:700">AED 0.00</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">No Of Credit Note</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Credit Note Amount</small><span style="font-size:18px; font-weight:700">AED 0.00</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Vehicles</small><span style="font-size:18px; font-weight:700">{{ all_kpis.running_vehicles }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Orders</small><span style="font-size:18px; font-weight:700">{{ all_kpis.running_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Total Orders</small><span style="font-size:18px; font-weight:700">{{ all_kpis.total_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Cancelled Orders</small><span style="font-size:18px; font-weight:700">{{ all_kpis.cancelled_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Bill Amount Collected</small><span style="font-size:18px; font-weight:700">AED {{ all_kpis.bill_amount|floatformat:2 }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">No Of Credit Note</small><span style="font-size:18px; font-weight:700">{{ all_kpis.credit_note_count }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Credit Note Amount</small><span style="font-size:18px; font-weight:700">AED {{ all_kpis.credit_note_amount|floatformat:2 }}</span></div>
       </div>
 
       <div class="scr-table-scroll scr-sb">
@@ -167,19 +174,34 @@ vehicle/order shape the bill tabs use -- see views.py for why.
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td colspan="10" style="padding:0">
-                <div class="scr-empty">
-                  <span class="scr-empty-ico">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7"></path></svg>
-                  </span>
-                  <div>
-                    <div class="scr-empty-title">No orders yet</div>
-                    <p class="scr-empty-sub">This screen is ready &mdash; running orders across every type will appear here once the rental engine goes live.</p>
+            {% for o in all_rows %}
+            <tr class="scr-row">
+              <td><span class="scr-code">{{ o.order_number }}</span></td>
+              <td class="scr-contact">{{ o.order_datetime }}</td>
+              <td class="scr-contact">{{ o.station }}</td>
+              <td class="scr-contact">{{ o.open_by }}</td>
+              <td class="scr-contact">{{ o.customer }}</td>
+              <td class="scr-contact">AED {{ o.collected|floatformat:2 }}</td>
+              <td class="scr-contact">AED {{ o.fare|floatformat:2 }}</td>
+              <td class="scr-contact">AED {{ o.bill|floatformat:2 }}</td>
+              <td><span class="scr-badge {% if o.status == 'Running' %}scr-badge-approved{% elif o.status == 'Cancelled' %}scr-badge-rejected{% else %}scr-badge-pending{% endif %}"><i></i>{{ o.status }}</span></td>
+              <td>
+                <div class="scr-row-actions">
+                  <div class="scr-menu-wrap">
+                    <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                    </button>
+                    <div class="scr-menu" hidden>
+                      <button type="button" class="scr-menu-item" title="Not wired in this demo">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        View
+                      </button>
+                    </div>
                   </div>
                 </div>
               </td>
             </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -187,11 +209,11 @@ vehicle/order shape the bill tabs use -- see views.py for why.
 
     <div class="scr-panel" data-tabgroup="bill" data-tab="rent" hidden>
       <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:14px; padding:18px 20px; border-bottom:1px solid #f0eff7">
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Vehicles</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Total Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Cancelled Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Bill Amount Collected</small><span style="font-size:18px; font-weight:700">AED 0.00</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Vehicles</small><span style="font-size:18px; font-weight:700">{{ rent_kpis.running_vehicles }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Orders</small><span style="font-size:18px; font-weight:700">{{ rent_kpis.running_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Total Orders</small><span style="font-size:18px; font-weight:700">{{ rent_kpis.total_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Cancelled Orders</small><span style="font-size:18px; font-weight:700">{{ rent_kpis.cancelled_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Bill Amount Collected</small><span style="font-size:18px; font-weight:700">AED {{ rent_kpis.bill_amount|floatformat:2 }}</span></div>
       </div>
 
       <div class="scr-table-scroll scr-sb">
@@ -211,19 +233,34 @@ vehicle/order shape the bill tabs use -- see views.py for why.
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td colspan="10" style="padding:0">
-                <div class="scr-empty">
-                  <span class="scr-empty-ico">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7"></path></svg>
-                  </span>
-                  <div>
-                    <div class="scr-empty-title">No rent-bill orders yet</div>
-                    <p class="scr-empty-sub">This screen is ready &mdash; running rent-bill orders will appear here once the rental engine goes live.</p>
+            {% for o in rent_rows %}
+            <tr class="scr-row">
+              <td><span class="scr-code">{{ o.order_number }}</span></td>
+              <td class="scr-contact">{{ o.order_datetime }}</td>
+              <td class="scr-contact">{{ o.station }}</td>
+              <td class="scr-contact">{{ o.open_by }}</td>
+              <td class="scr-contact">{{ o.customer }}</td>
+              <td class="scr-contact">AED {{ o.collected|floatformat:2 }}</td>
+              <td class="scr-contact">AED {{ o.fare|floatformat:2 }}</td>
+              <td class="scr-contact">AED {{ o.bill|floatformat:2 }}</td>
+              <td><span class="scr-badge {% if o.status == 'Running' %}scr-badge-approved{% elif o.status == 'Cancelled' %}scr-badge-rejected{% else %}scr-badge-pending{% endif %}"><i></i>{{ o.status }}</span></td>
+              <td>
+                <div class="scr-row-actions">
+                  <div class="scr-menu-wrap">
+                    <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                    </button>
+                    <div class="scr-menu" hidden>
+                      <button type="button" class="scr-menu-item" title="Not wired in this demo">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        View
+                      </button>
+                    </div>
                   </div>
                 </div>
               </td>
             </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>
@@ -231,11 +268,11 @@ vehicle/order shape the bill tabs use -- see views.py for why.
 
     <div class="scr-panel" data-tabgroup="bill" data-tab="direct" hidden>
       <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(160px, 1fr)); gap:14px; padding:18px 20px; border-bottom:1px solid #f0eff7">
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Vehicles</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Total Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Cancelled Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
-        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Bill Amount Collected</small><span style="font-size:18px; font-weight:700">AED 0.00</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Vehicles</small><span style="font-size:18px; font-weight:700">{{ direct_kpis.running_vehicles }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Orders</small><span style="font-size:18px; font-weight:700">{{ direct_kpis.running_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Total Orders</small><span style="font-size:18px; font-weight:700">{{ direct_kpis.total_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Cancelled Orders</small><span style="font-size:18px; font-weight:700">{{ direct_kpis.cancelled_orders }}</span></div>
+        <div><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Bill Amount Collected</small><span style="font-size:18px; font-weight:700">AED {{ direct_kpis.bill_amount|floatformat:2 }}</span></div>
       </div>
 
       <div class="scr-table-scroll scr-sb">
@@ -255,19 +292,34 @@ vehicle/order shape the bill tabs use -- see views.py for why.
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td colspan="10" style="padding:0">
-                <div class="scr-empty">
-                  <span class="scr-empty-ico">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7"></path></svg>
-                  </span>
-                  <div>
-                    <div class="scr-empty-title">No direct-bill orders yet</div>
-                    <p class="scr-empty-sub">This screen is ready &mdash; running direct-bill orders will appear here once the rental engine goes live.</p>
+            {% for o in direct_rows %}
+            <tr class="scr-row">
+              <td><span class="scr-code">{{ o.order_number }}</span></td>
+              <td class="scr-contact">{{ o.order_datetime }}</td>
+              <td class="scr-contact">{{ o.station }}</td>
+              <td class="scr-contact">{{ o.open_by }}</td>
+              <td class="scr-contact">{{ o.customer }}</td>
+              <td class="scr-contact">AED {{ o.collected|floatformat:2 }}</td>
+              <td class="scr-contact">AED {{ o.fare|floatformat:2 }}</td>
+              <td class="scr-contact">AED {{ o.bill|floatformat:2 }}</td>
+              <td><span class="scr-badge {% if o.status == 'Running' %}scr-badge-approved{% elif o.status == 'Cancelled' %}scr-badge-rejected{% else %}scr-badge-pending{% endif %}"><i></i>{{ o.status }}</span></td>
+              <td>
+                <div class="scr-row-actions">
+                  <div class="scr-menu-wrap">
+                    <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                    </button>
+                    <div class="scr-menu" hidden>
+                      <button type="button" class="scr-menu-item" title="Not wired in this demo">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        View
+                      </button>
+                    </div>
                   </div>
                 </div>
               </td>
             </tr>
+            {% endfor %}
           </tbody>
         </table>
       </div>

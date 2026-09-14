@@ -35,15 +35,32 @@ class LiveMonitorView(LiveScreenView):
     is added ahead of Search, defaulting to today (today_display) the same
     way a real search bar opens scoped to "today" until the user widens it;
     and the Rent Bill/Direct Bill tabs gain an All (default) and a Credit
-    Note tab, each with its own KPI tiles and table, mirroring the
-    Rent/Direct Bill pair with real data still awaiting client transactions
-    (module docstring)."""
+    Note tab, each with its own KPI tiles and table.
+
+    Rent Bill/Direct Bill/All now carry 5 deterministic demo rows apiece
+    (data.rent_bill_orders/direct_bill_orders), a deliberate, explicitly
+    requested exception to this module's usual awaiting-data treatment --
+    see data.py's module docstring. Credit Note stays untouched (awaiting
+    data), and each row's kebab holds only View, since there's no detail
+    page or edit flow built for these demo orders yet."""
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        rent_rows = data.rent_bill_orders()
+        direct_rows = data.direct_bill_orders()
+        all_rows = rent_rows + direct_rows
+        all_kpis = data.order_kpis(all_rows)
+        all_kpis["credit_note_count"] = 0
+        all_kpis["credit_note_amount"] = 0.0
         context.update(
             {
                 "today_display": datetime.date.today().strftime("%d %b %Y"),
+                "rent_rows": rent_rows,
+                "direct_rows": direct_rows,
+                "all_rows": all_rows,
+                "rent_kpis": data.order_kpis(rent_rows),
+                "direct_kpis": data.order_kpis(direct_rows),
+                "all_kpis": all_kpis,
             }
         )
         return context

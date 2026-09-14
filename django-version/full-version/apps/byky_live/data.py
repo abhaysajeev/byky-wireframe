@@ -23,7 +23,7 @@ import hashlib
 
 from apps.byky_core import seed
 
-ORDER_STATUSES = ["Running", "Received", "Cancelled"]
+ORDER_STATUSES = ["Running", "Received", "Cancelled", "Credit Note"]
 
 IMAGE_APPROVAL_STATUSES = ["Approved", "Not Approved", "Rejected"]
 

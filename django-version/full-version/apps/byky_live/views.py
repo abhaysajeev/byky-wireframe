@@ -5,6 +5,8 @@ Monitor" / "Search Order" / "Image Sharing" pages).
 Wireframe phase: no writes, no CRUD, no API -- frontend only.
 """
 
+import datetime
+
 from apps.byky_core.views import BykyScreenView
 from apps.byky_cms import data as cms_data
 
@@ -26,7 +28,25 @@ class LiveScreenView(BykyScreenView):
 
 
 class LiveMonitorView(LiveScreenView):
-    pass
+    """RMS WEB APK UI.xlsx feedback on this screen: Location -> Branch and
+    Order Status -> Type are label-only renames (both already draw off the
+    same branches_list / order_statuses context the base class supplies);
+    Type and Search In each gain a Credit Note option; a From/To Date pair
+    is added ahead of Search, defaulting to today (today_display) the same
+    way a real search bar opens scoped to "today" until the user widens it;
+    and the Rent Bill/Direct Bill tabs gain an All (default) and a Credit
+    Note tab, each with its own KPI tiles and table, mirroring the
+    Rent/Direct Bill pair with real data still awaiting client transactions
+    (module docstring)."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(
+            {
+                "today_display": datetime.date.today().strftime("%d %b %Y"),
+            }
+        )
+        return context
 
 
 class SearchOrderView(LiveScreenView):

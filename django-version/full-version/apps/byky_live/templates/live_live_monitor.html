@@ -17,16 +17,35 @@ client data), so inventing sample orders here would mean inventing money
 figures (CLAUDE.md 12). Real filters, tabs and column headers render; the
 body shows the awaiting-data state, the same treatment IMS's Live RFID
 Monitoring and Inventory System Alerts screens already use.
+
+RMS WEB APK UI.xlsx feedback: Location -> Branch and Order Status -> Type
+are label-only renames; Type and Search In both gain a Credit Note option;
+a From/To Date pair (flatpickr, defaulting to today) sits ahead of Search;
+and the tab row above the grid gains All (default) and Credit Note
+alongside Rent Bill/Direct Bill. Credit Note's own tiles/columns are a
+credit-note shape (Credit Note Number, Amount, Reason), not the
+vehicle/order shape the bill tabs use -- see views.py for why.
 {% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
 
 {% block page_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
 {% endblock page_css %}
 
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
 {% block page_js %}
 {{ block.super }}
 <script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-live-monitor.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
@@ -68,16 +87,16 @@ Monitoring and Inventory System Alerts screens already use.
           </select>
         </div>
         <div class="scr-field">
-          <label class="scr-label">Location</label>
+          <label class="scr-label">Branch</label>
           <select class="scr-input">
-            <option value="">All Locations</option>
+            <option value="">All Branches</option>
             {% for b in branches_list %}<option>{{ b.name }}</option>{% endfor %}
           </select>
         </div>
         <div class="scr-field">
-          <label class="scr-label">Order Status</label>
+          <label class="scr-label">Type</label>
           <select class="scr-input">
-            <option value="">All Status</option>
+            <option value="">All Types</option>
             {% for s in order_statuses %}<option>{{ s }}</option>{% endfor %}
           </select>
         </div>
@@ -86,11 +105,20 @@ Monitoring and Inventory System Alerts screens already use.
           <select class="scr-input">
             <option>Order Number</option>
             <option>Customer Name</option>
+            <option>Credit Note Number</option>
           </select>
         </div>
         <div class="scr-field">
           <label class="scr-label">Search Type</label>
           <input type="text" class="scr-input" placeholder="Type to search" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">From Date</label>
+          <input type="text" class="scr-input byky-date" value="{{ today_display }}" placeholder="Select date" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">To Date</label>
+          <input type="text" class="scr-input byky-date" value="{{ today_display }}" placeholder="Select date" />
         </div>
         <div class="scr-field" style="align-self:end">
           <button type="button" class="scr-btn" style="width:100%; justify-content:center">
@@ -105,11 +133,59 @@ Monitoring and Inventory System Alerts screens already use.
   <div class="scr-card">
 
     <div class="scr-content-tabs" data-scr-tabgroup="bill">
-      <button type="button" class="scr-content-tab is-on" data-tab="rent">Rent Bill</button>
+      <button type="button" class="scr-content-tab is-on" data-tab="all">All</button>
+      <button type="button" class="scr-content-tab" data-tab="rent">Rent Bill</button>
       <button type="button" class="scr-content-tab" data-tab="direct">Direct Bill</button>
+      <button type="button" class="scr-content-tab" data-tab="creditnote">Credit Note</button>
     </div>
 
-    <div class="scr-panel" data-tabgroup="bill" data-tab="rent">
+    <div class="scr-panel" data-tabgroup="bill" data-tab="all">
+      <div style="display:flex; flex-wrap:wrap; gap:14px; padding:18px 20px; border-bottom:1px solid #f0eff7">
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Vehicles</small><span style="font-size:18px; font-weight:700">0</span></div>
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Total Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Cancelled Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Bill Amount Collected</small><span style="font-size:18px; font-weight:700">AED 0.00</span></div>
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">No Of Credit Note</small><span style="font-size:18px; font-weight:700">0</span></div>
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Credit Note Amount</small><span style="font-size:18px; font-weight:700">AED 0.00</span></div>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Order Number</th>
+              <th>Order Date &amp; Time</th>
+              <th>Station</th>
+              <th>Open By</th>
+              <th>Customer</th>
+              <th>Collected</th>
+              <th>Fare</th>
+              <th>Bill</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="10" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No orders yet</div>
+                    <p class="scr-empty-sub">This screen is ready &mdash; running orders across every type will appear here once the rental engine goes live.</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="bill" data-tab="rent" hidden>
       <div style="display:flex; flex-wrap:wrap; gap:14px; padding:18px 20px; border-bottom:1px solid #f0eff7">
         <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Vehicles</small><span style="font-size:18px; font-weight:700">0</span></div>
         <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Running Orders</small><span style="font-size:18px; font-weight:700">0</span></div>
@@ -188,6 +264,45 @@ Monitoring and Inventory System Alerts screens already use.
                   <div>
                     <div class="scr-empty-title">No direct-bill orders yet</div>
                     <p class="scr-empty-sub">This screen is ready &mdash; running direct-bill orders will appear here once the rental engine goes live.</p>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="scr-panel" data-tabgroup="bill" data-tab="creditnote" hidden>
+      <div style="display:flex; flex-wrap:wrap; gap:14px; padding:18px 20px; border-bottom:1px solid #f0eff7">
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">No Of Credit Note</small><span style="font-size:18px; font-weight:700">0</span></div>
+        <div style="flex:1 1 160px"><small style="display:block; color:#9490bb; font-size:10.5px; text-transform:uppercase; letter-spacing:0.5px">Credit Note Amount</small><span style="font-size:18px; font-weight:700">AED 0.00</span></div>
+      </div>
+
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th>Credit Note Number</th>
+              <th>Date &amp; Time</th>
+              <th>Station</th>
+              <th>Issued By</th>
+              <th>Customer</th>
+              <th>Amount</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="8" style="padding:0">
+                <div class="scr-empty">
+                  <span class="scr-empty-ico">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5V5a2 2 0 0 1 2-2h13v18H6a2 2 0 0 1-2-2M8 7h7M8 11h7"></path></svg>
+                  </span>
+                  <div>
+                    <div class="scr-empty-title">No credit notes yet</div>
+                    <p class="scr-empty-sub">This screen is ready &mdash; issued credit notes will appear here once the rental engine goes live.</p>
                   </div>
                 </div>
               </td>

@@ -336,6 +336,24 @@ _DEMO_TRANSFERS = [
             {"when": "01 Sep 2026, 02:47 PM", "who": "Fatima Al Zaabi", "change": "Dispatch date confirmed and driver assigned."},
         ],
     },
+    {
+        # A second demo transfer, left Pending, so rows 49/50's Approve/
+        # Reject workflow (RMS -> ERP sync gate) has something to act on --
+        # TRN2026001 above is already Completed, which would leave the new
+        # actions permanently invisible in the walkthrough otherwise.
+        "doc_no": "TRN2026002",
+        "from_branch": "Al Barsha Pond Park",
+        "to_branch": "Majaz 1",
+        "event_location": "",
+        "dispatch_date": "10 Sep 2026",
+        "driver": "Suresh",
+        "remarks": "Balancing stock ahead of the weekend",
+        "items": ["KB160", "KB188"],
+        "status": "Pending",
+        "history": [
+            {"when": "10 Sep 2026, 11:02 AM", "who": "Suresh", "change": "Transfer created with 2 items (KB160, KB188)."},
+        ],
+    },
 ]
 
 

@@ -15,7 +15,23 @@ drawer_transfer spec is gone -- its only real field was a plain "Items
 Count" number, not the cart-with-add-more a transfer's items actually
 need). Edit is now a link to the full-page ims_vehicle_transfer_edit.html,
 which reuses New Transfer's layout and item pool.
+
+Row 49: a Pending transfer's kebab gains Approve/Reject alongside Edit --
+a one-time decision (byky-ims-transfer-list.js) that locks the row
+afterwards, so a decided transfer never offers Edit/Delete/Approve/Reject
+again. TRN2026002 in the demo data is left Pending specifically so this
+is visible; TRN2026001 is already Completed and shows the locked state.
 {% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
+{% endblock vendor_js %}
 
 {% block page_css %}
 {{ block.super }}
@@ -25,6 +41,7 @@ which reuses New Transfer's layout and item pool.
 {% block page_js %}
 {{ block.super }}
 <script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-ims-transfer-list.js' %}"></script>
 {% endblock page_js %}
 
 {% block content %}
@@ -114,14 +131,15 @@ which reuses New Transfer's layout and item pool.
             <td class="scr-contact">{{ t.event_location|default:"—" }}</td>
             <td class="scr-contact">{{ t.dispatch_date }}</td>
             <td class="scr-contact">{{ t.items_display }}</td>
-            <td>
+            <td data-status-cell>
               {% if t.status == 'Completed' %}<span class="scr-badge scr-badge-active"><i></i>Completed</span>
               {% elif t.status == 'In-Transit' %}<span class="scr-badge scr-badge-pending"><i></i>In-Transit</span>
               {% elif t.status == 'Rejected' %}<span class="scr-badge scr-badge-inactive"><i></i>Rejected</span>
               {% else %}<span class="scr-badge scr-badge-pending"><i></i>Pending</span>{% endif %}
             </td>
             <td>
-              <div class="scr-row-actions">
+              <div class="scr-row-actions" data-transfer-actions>
+                {% if t.status == 'Pending' %}
                 <div class="scr-menu-wrap">
                   <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
@@ -131,12 +149,23 @@ which reuses New Transfer's layout and item pool.
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
                       Edit
                     </a>
+                    <button type="button" class="scr-menu-item" data-transfer-approve>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+                      Approve
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" data-transfer-reject>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+                      Reject
+                    </button>
                     <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
                       Delete
                     </button>
                   </div>
                 </div>
+                {% else %}
+                <span class="scr-help" style="margin:0" title="Approve/Reject is one-time -- Edit and Delete lock once a decision is made">Locked</span>
+                {% endif %}
               </div>
             </td>
           </tr>

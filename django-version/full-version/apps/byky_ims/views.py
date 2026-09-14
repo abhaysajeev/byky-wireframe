@@ -219,6 +219,25 @@ class TransferFormView(ImsScreenView):
         return context
 
 
+class TransferEditView(TransferFormView):
+    """Row 48's UAT remarks: editing a transfer needs its selected vehicles
+    as a removable cart plus an Add action to pick more from the same From
+    Branch's pool, and a history log of edits. Reuses TransferFormView's
+    full-page layout and item pool wholesale -- only the loaded record and
+    its cart/history are new."""
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        doc_no = self.kwargs.get("doc_no")
+        context.update(
+            {
+                "doc_no": doc_no,
+                "transfer_detail": data.transfer_detail(doc_no),
+            }
+        )
+        return context
+
+
 class BrandView(ImsScreenView):
     """FSD 3.4. Rows are demo data -- see data._DEMO_BRANDS."""
 

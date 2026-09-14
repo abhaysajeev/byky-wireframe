@@ -327,6 +327,14 @@ _DEMO_TRANSFERS = [
         "remarks": "More customer visit in gate 4",
         "items": ["KB259", "KB276", "BE118"],
         "status": "Completed",
+        # Illustrative edit history for the Transfer Edit page's history log
+        # (row 48's UAT remarks) -- this demo record is the only transfer
+        # that exists, so it's the only one with a log; a real one would
+        # grow an entry per save, which this wireframe doesn't persist.
+        "history": [
+            {"when": "01 Sep 2026, 09:14 AM", "who": "Jaibu", "change": "Transfer created with 3 items (KB259, KB276, BE118)."},
+            {"when": "01 Sep 2026, 02:47 PM", "who": "Fatima Al Zaabi", "change": "Dispatch date confirmed and driver assigned."},
+        ],
     },
 ]
 
@@ -335,6 +343,31 @@ def transfers():
     """Inter-branch transfer documents (FSD 3.7). Otherwise honestly empty --
     see _DEMO_TRANSFERS above for the one requested exception."""
     return [dict(t) for t in _DEMO_TRANSFERS]
+
+
+def transfer_detail(doc_no):
+    """A single transfer's full detail, items resolved against
+    transferable_items(), for the Transfer Edit page (row 48's UAT
+    remarks: cart view + add-more + history log)."""
+    record = next((t for t in _DEMO_TRANSFERS if t["doc_no"] == doc_no), None)
+    if not record:
+        return None
+    detail = dict(record)
+    pool = {i["code"]: i for i in transferable_items()}
+    detail["cart"] = [pool[code] for code in record["items"] if code in pool]
+    # Derived, not stored -- infer from whichever destination field this
+    # record actually has set rather than duplicating the state. Warehouse
+    # destinations (To Maintenance/To Storage/Dismissed) share one field, so
+    # they can't be told apart this way; no demo record needs that today.
+    if record.get("to_branch"):
+        detail["transfer_type"] = "Branch to Branch"
+    elif record.get("event_location"):
+        detail["transfer_type"] = "To Events"
+    elif record.get("to_warehouse"):
+        detail["transfer_type"] = "To Maintenance"
+    else:
+        detail["transfer_type"] = ""
+    return detail
 
 
 def unmapped_vehicles():

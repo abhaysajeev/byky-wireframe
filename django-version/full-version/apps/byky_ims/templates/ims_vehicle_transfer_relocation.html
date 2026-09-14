@@ -9,6 +9,12 @@ byky-screen-design-system.md and cms_department_management.html for the
 zero-data Tier A reference). The client's source files contain no records for
 this entity, so the grid shows the awaiting-data state rather than invented
 rows.
+
+Row 48's UAT remarks: Edit no longer opens a small drawer (the old
+drawer_transfer spec is gone -- its only real field was a plain "Items
+Count" number, not the cart-with-add-more a transfer's items actually
+need). Edit is now a link to the full-page ims_vehicle_transfer_edit.html,
+which reuses New Transfer's layout and item pool.
 {% endcomment %}
 
 {% block page_css %}
@@ -121,10 +127,10 @@ rows.
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
                   </button>
                   <div class="scr-menu" hidden>
-                    <button type="button" class="scr-menu-item" data-scr-open="transfer:edit">
+                    <a href="{% url 'ims-vehicle-transfer-edit' doc_no=t.doc_no %}" class="scr-menu-item">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
                       Edit
-                    </button>
+                    </a>
                     <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
                       Delete
@@ -168,6 +174,4 @@ rows.
     </div>
   </div>
 </div>
-
-{% include "byky/partials/drawer.html" with spec=drawer_transfer module_label="Inventory · Transfer" %}
 {% endblock %}

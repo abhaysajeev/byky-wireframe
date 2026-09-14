@@ -1,0 +1,360 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Edit Transfer {{ doc_no }} - Inventory{% endblock title %}
+
+{% comment %}
+Row 48's UAT remarks (client's feedback doc): editing a transfer needs its
+selected vehicles as a removable cart, an Add action back into the source
+branch's pool (checkbox selection, same shape as New Transfer's item
+picker), and a history log of edits. A drawer's single "Items Count"
+number field (the old drawer_transfer spec) couldn't hold any of that, so
+Edit is now this full page instead -- same layout family as
+ims_vehicle_transfer_new.html, reusing its item pool wholesale.
+
+No transfer has ever actually been edited (nothing persists in this
+wireframe phase), so the history log below is illustrative demo data tied
+to the one seeded transfer (apps/byky_ims/data.py's _DEMO_TRANSFERS), not
+a live audit trail.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-ims-transfer-edit.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Inventory</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <a href="{% url 'ims-vehicle-transfer-relocation' %}">Inventory Transfer &amp; Return</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>{{ doc_no }}</b>
+      </div>
+      <h1 class="scr-title">Edit Transfer {{ doc_no }}</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        Back to list
+      </a>
+    </div>
+  </div>
+
+  {% if transfer_detail %}
+  <div class="scr-banner scr-banner-success" id="map-success-banner" hidden>
+    <span class="scr-banner-icon">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="m8 12 3 3 5-6"></path></svg>
+    </span>
+    <span class="scr-banner-text" id="map-success-text">Transfer updated successfully.</span>
+    <button type="button" class="scr-banner-close" aria-label="Dismiss">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+    </button>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-section">
+      <div class="scr-section-head">
+        <h3 class="scr-section-title">1. Transfer details</h3>
+        <div class="scr-section-rule"></div>
+      </div>
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Transfer Doc. No</label>
+          <input type="text" class="scr-input" value="{{ transfer_detail.doc_no }}" readonly />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Transfer Type<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="transfer_type" id="transfer-type">
+            <option value="">Select</option>
+            {% for t in transfer_types %}<option {% if t == transfer_detail.transfer_type %}selected{% endif %}>{{ t }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">From Branch</label>
+          <input type="text" class="scr-input" value="{{ transfer_detail.from_branch }}" readonly />
+          <div class="scr-help">The source branch can't change once a transfer is created &mdash; its items come from here.</div>
+        </div>
+
+        {% comment %}One destination per transfer type, swapped by data-scr-show-if -- same mechanism as New Transfer.{% endcomment %}
+        <div class="scr-field" data-scr-show-if="transfer_type:Branch to Branch" {% if transfer_detail.transfer_type != "Branch to Branch" %}hidden{% endif %}>
+          <label class="scr-label">To Branch<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="to_branch">
+            <option value="">Select</option>
+            {% for b in branches_list %}<option {% if b.name == transfer_detail.to_branch %}selected{% endif %}>{{ b.name }}</option>{% endfor %}
+          </select>
+        </div>
+        <div class="scr-field" data-scr-show-if="transfer_type:To Maintenance|To Storage|Dismissed" {% if transfer_detail.transfer_type != "To Maintenance" and transfer_detail.transfer_type != "To Storage" and transfer_detail.transfer_type != "Dismissed" %}hidden{% endif %}>
+          <label class="scr-label">To Warehouse<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="to_warehouse">
+            <option value="">Select</option>
+            {% for w in warehouses_list %}<option>{{ w.name }}</option>{% endfor %}
+          </select>
+          {% if not warehouses_list %}<div class="scr-help">No branch is registered as a warehouse yet &mdash; this fills itself once one is.</div>{% endif %}
+        </div>
+        <div class="scr-field" data-scr-show-if="transfer_type:To Events" {% if transfer_detail.transfer_type != "To Events" %}hidden{% endif %}>
+          <label class="scr-label">Event Location<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="event_location">
+            <option value="">Select</option>
+            {% for e in event_locations %}<option {% if e.name == transfer_detail.event_location %}selected{% endif %}>{{ e.name }}</option>{% endfor %}
+          </select>
+          {% if not event_locations %}<div class="scr-help">Event venues will appear here once they are added.</div>{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card" id="cart-card" data-scr-noun-singular="item" data-scr-noun-plural="items">
+    <div class="scr-toolbar">
+      <div>
+        <h3 class="scr-form-title" style="margin-bottom:2px">2. Selected vehicles &amp; assets</h3>
+        <p class="scr-form-sub" style="margin:0">The cart for this transfer &mdash; remove an item, or add more from {{ transfer_detail.from_branch }}.</p>
+      </div>
+      <div style="flex:1"></div>
+      <span class="scr-toolbar-count" id="cart-count">{{ transfer_detail.cart|length }} item{{ transfer_detail.cart|length|pluralize }}</span>
+      <button type="button" class="scr-btn-primary" id="cart-add-toggle">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Items
+      </button>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Vehicle Type</th>
+            <th>Tag / EPC</th>
+            <th style="width:50px"></th>
+          </tr>
+        </thead>
+        <tbody id="cart-rows">
+          {% for i in transfer_detail.cart %}
+          <tr class="scr-row" data-code="{{ i.code }}">
+            <td><span class="scr-code">{{ i.code }}</span></td>
+            <td style="font-weight:600">{{ i.name }}</td>
+            <td><span class="scr-badge scr-badge-pending"><i></i>{{ i.item_type }}</span></td>
+            <td class="scr-contact">{{ i.category }}</td>
+            <td class="scr-contact">{{ i.vtype }}</td>
+            <td><span class="scr-code">{{ i.rfid }}</span></td>
+            <td style="text-align:right">
+              <button type="button" class="scr-icon-btn" title="Remove from cart" data-cart-remove>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+              </button>
+            </td>
+          </tr>
+          {% empty %}
+          <tr id="cart-empty-row">
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4zM4 7l2-3h12l2 3"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">Cart is empty</div>
+                  <p class="scr-empty-sub">Use Add Items above to pick from {{ transfer_detail.from_branch }}.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  {% comment %}
+  Add-items panel -- hidden until "Add Items" is clicked. Same lazy-pool
+  approach as New Transfer (byky-ims-transfer.js's transfer-pool-data): the
+  full branch pool is handed over as JSON, not rendered as rows, and
+  byky-ims-transfer-edit.js filters it to this transfer's From Branch,
+  the chosen Inventory Type, and excludes whatever is already in the cart.
+  {% endcomment %}
+  <div class="scr-card" id="add-items-card" hidden data-scr-noun-singular="item" data-scr-noun-plural="items" data-from-branch="{{ transfer_detail.from_branch }}">
+    <div class="scr-toolbar">
+      <div>
+        <h3 class="scr-form-title" style="margin-bottom:2px">Add from {{ transfer_detail.from_branch }}</h3>
+        <p class="scr-form-sub" style="margin:0" id="add-items-hint">Choose an Inventory Type to see what's available.</p>
+      </div>
+      <div style="flex:1"></div>
+      <div class="scr-field" style="margin:0; min-width:180px">
+        <select class="scr-input" id="add-items-type">
+          <option value="">Inventory Type</option>
+          {% for t in item_types %}<option>{{ t }}</option>{% endfor %}
+        </select>
+      </div>
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search code, name or tag" />
+      </div>
+      <span class="scr-toolbar-count" id="add-items-count">0 items</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:36px"></th>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Category</th>
+            <th>Vehicle Type</th>
+            <th>Tag / EPC</th>
+          </tr>
+        </thead>
+        <tbody id="add-items-rows">
+          <tr>
+            <td colspan="7" style="padding:0">
+              <div class="scr-empty">
+                <span class="scr-empty-ico">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+                </span>
+                <div>
+                  <div class="scr-empty-title">Pick an Inventory Type</div>
+                  <p class="scr-empty-sub">Vehicles or assets still at {{ transfer_detail.from_branch }} will appear here.</p>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    {{ items|json_script:"add-items-pool-data" }}
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing 0 of 0</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="scr-form-foot">
+      <div style="flex:1"></div>
+      <button type="button" class="scr-btn-secondary" id="add-items-cancel">Cancel</button>
+      <button type="button" class="scr-btn-primary" id="add-items-confirm" disabled>Add Selected</button>
+    </div>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-section">
+      <div class="scr-section-head">
+        <h3 class="scr-section-title">3. Dispatch</h3>
+        <div class="scr-section-rule"></div>
+      </div>
+      <div class="scr-grid">
+        <div class="scr-field">
+          <label class="scr-label">Dispatch Date</label>
+          <input type="text" class="scr-input byky-date" data-field="dispatch_date" value="{{ transfer_detail.dispatch_date }}" placeholder="Select date" />
+        </div>
+        <div class="scr-field">
+          <label class="scr-label">Driver Name</label>
+          <input type="text" class="scr-input" data-field="driver_name" value="{{ transfer_detail.driver }}" placeholder="Enter driver name" />
+        </div>
+        <div class="scr-field" style="grid-column:span 2">
+          <label class="scr-label">Remarks</label>
+          <textarea class="scr-input" rows="3" data-field="remarks" placeholder="Anything the receiving end should know">{{ transfer_detail.remarks }}</textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-section" style="margin-bottom:0">
+      <div class="scr-section-head">
+        <h3 class="scr-section-title">4. History log</h3>
+        <div class="scr-section-rule"></div>
+      </div>
+      {% if transfer_detail.history %}
+      <div class="scr-table-scroll scr-sb">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:200px">When</th>
+              <th style="width:200px">Who</th>
+              <th>Change</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for h in transfer_detail.history %}
+            <tr>
+              <td class="scr-contact">{{ h.when }}</td>
+              <td class="scr-contact">{{ h.who }}</td>
+              <td class="scr-contact">{{ h.change }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="scr-empty" style="padding:32px 16px">
+        <span class="scr-empty-ico">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+        </span>
+        <div>
+          <div class="scr-empty-title">No edits logged yet</div>
+          <p class="scr-empty-sub">Every save will add an entry here.</p>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="scr-card scr-form-body">
+    <div class="scr-form-foot">
+      <div style="flex:1"></div>
+      <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn-secondary">Cancel</a>
+      <button type="button" class="scr-btn-primary">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="scr-card">
+    <div class="scr-empty" style="padding:40px 20px">
+      <span class="scr-empty-ico">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+      </span>
+      <div>
+        <div class="scr-empty-title">Transfer not found</div>
+        <p class="scr-empty-sub">"{{ doc_no }}" doesn't match any transfer on record.</p>
+      </div>
+      <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn-primary">Back to Inventory Transfer &amp; Return</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

@@ -166,6 +166,20 @@ urlpatterns = [
         name="ims-vehicle-transfer-new",
     ),
     path(
+        "ims/vehicle-transfer-relocation/<str:doc_no>/edit/",
+        views.TransferEditView.as_view(
+            template_name="ims_vehicle_transfer_edit.html",
+            screen_no="3.7a",
+            screen_title="Edit Transfer",
+            module_label="Inventory",
+            tier="A",
+            phase=3,
+            purpose="Edit an existing transfer's cart of vehicles and assets, and review its edit history.",
+            layout="Full page: transfer header, a removable cart of selected items with an Add action back into the source branch's pool, dispatch details, and a history log.",
+        ),
+        name="ims-vehicle-transfer-edit",
+    ),
+    path(
         "ims/vehicle-transfer-relocation/return/",
         views.TransferFormView.as_view(
             template_name="ims_vehicle_transfer_return.html",

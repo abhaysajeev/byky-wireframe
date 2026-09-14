@@ -703,75 +703,6 @@ TIER = {
     ]
 }
 
-TRANSFER = {
-    "drawer_id": "drawerTransfer",
-    "scr_name": "transfer",
-    "add_label": "New Transfer",
-    "title_field": "name",
-    "sections": [
-        {
-            "title": "",
-            "fields": [
-                {
-                    "id": "doc_no",
-                    "label": "Transfer Doc No",
-                    "kind": "text",
-                    "required": True
-                },
-                {
-                    "id": "from_branch",
-                    "label": "From Branch",
-                    "kind": "select",
-                    "required": True,
-                    "options_from": "branches_list",
-                    "option_key": "name"
-                },
-                {
-                    "id": "to_branch",
-                    "label": "To Branch",
-                    "kind": "select",
-                    "required": True,
-                    "options_from": "branches_list",
-                    "option_key": "name"
-                },
-                {
-                    "id": "event_location",
-                    "label": "Event Location",
-                    "kind": "select",
-                    "required": False,
-                    "options_from": "event_locations_list",
-                    "help": "Only for a transfer going to or from an event, not a branch."
-                },
-                {
-                    "id": "dispatch_date",
-                    "label": "Dispatch Date",
-                    "kind": "date",
-                    "required": False
-                },
-                {
-                    "id": "driver",
-                    "label": "Driver Name",
-                    "kind": "text",
-                    "required": False
-                },
-                {
-                    "id": "items_count",
-                    "label": "Items Count",
-                    "kind": "number",
-                    "required": False
-                },
-                {
-                    "id": "remarks",
-                    "label": "Remarks",
-                    "kind": "textarea",
-                    "required": False,
-                    "width": 12
-                }
-            ]
-        }
-    ]
-}
-
 UNIT = {
     "drawer_id": "drawerUnit",
     "scr_name": "unit",
@@ -829,8 +760,6 @@ SPECS = {
     "drawer_subcategory": SUBCATEGORY,
 
     "drawer_tier": TIER,
-
-    "drawer_transfer": TRANSFER,
 
     "drawer_unit": UNIT,
 

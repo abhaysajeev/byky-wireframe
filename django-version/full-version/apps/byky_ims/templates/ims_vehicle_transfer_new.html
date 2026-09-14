@@ -12,9 +12,20 @@ Same shape and the same behaviour family as Map Vehicle / Map Asset. The
 destination field swaps with the transfer type through data-scr-show-if, the
 shared conditional-visibility attribute -- no per-screen show/hide logic.
 
-Warehouses and event locations are empty today: all 36 stations in the client's
-data are Branch Offices and no venues have been supplied. Those dropdowns say
-so rather than offering invented destinations (CLAUDE.md 12).
+Warehouses are empty today: all 36 stations in the client's data are Branch
+Offices. That dropdown says so rather than offering an invented destination
+(CLAUDE.md 12). Event Location now reads a real master (Company · Event
+Location).
+
+Inventory Type moved from a section-2 toolbar filter into section 1
+(Transfer details) as a required field alongside From Branch, per a later
+follow-up -- and the item pool (1,060+ vehicles and assets across every
+branch) is no longer rendered as rows on page load: it's handed to
+byky-ims-transfer.js as JSON (transfer-pool-data), which builds rows only
+once both Inventory Type and From Branch are chosen, scoped to just that
+combination. The old behaviour put every item from every branch in the DOM
+regardless of what was picked, flagged as a page-hang risk as the fleet
+grows.
 {% endcomment %}
 
 {% block vendor_css %}
@@ -104,6 +115,13 @@ byky-ims-transfer.js only adds what a transfer needs on top.
           </select>
           <div class="scr-help">The pool below lists what this branch holds.</div>
         </div>
+        <div class="scr-field">
+          <label class="scr-label">Inventory Type<span class="scr-required">*</span></label>
+          <select class="scr-input" data-field="inventory_type" id="transfer-inventory-type">
+            <option value="">Select</option>
+            {% for t in item_types %}<option>{{ t }}</option>{% endfor %}
+          </select>
+        </div>
 
         {% comment %}One destination per transfer type, swapped by data-scr-show-if.{% endcomment %}
         <div class="scr-field" data-scr-show-if="transfer_type:Branch to Branch" hidden>
@@ -137,24 +155,13 @@ byky-ims-transfer.js only adds what a transfer needs on top.
     <div class="scr-toolbar">
       <div>
         <h3 class="scr-form-title" style="margin-bottom:2px">2. Select vehicles &amp; assets</h3>
-        <p class="scr-form-sub" style="margin:0" id="transfer-pool-hint">Choose a From Branch to see what it holds.</p>
+        <p class="scr-form-sub" style="margin:0" id="transfer-pool-hint">Choose an Inventory Type and a From Branch above to see what it holds.</p>
       </div>
       <div style="flex:1"></div>
 
       <div class="scr-search">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
         <input type="text" placeholder="Search code, name or tag" />
-      </div>
-
-      <div class="scr-filter-wrap" data-filter-key="itemtype">
-        <button type="button" class="scr-filter-btn">
-          <span class="scr-filter-label">All items</span>
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
-        </button>
-        <div class="scr-filter-menu" hidden>
-          <button type="button" class="scr-filter-opt is-active" data-value="">All items</button>
-          {% for t in item_types %}<button type="button" class="scr-filter-opt" data-value="{{ t }}">{{ t }}s</button>{% endfor %}
-        </div>
       </div>
 
       <div class="scr-filter-wrap" data-filter-key="category">
@@ -193,7 +200,7 @@ byky-ims-transfer.js only adds what a transfer needs on top.
         </div>
       </div>
 
-      <span class="scr-toolbar-count">{{ items|length }} items</span>
+      <span class="scr-toolbar-count" id="transfer-pool-count">0 items</span>
     </div>
 
     <div class="scr-table-scroll scr-sb">
@@ -209,18 +216,7 @@ byky-ims-transfer.js only adds what a transfer needs on top.
             <th>Tag / EPC</th>
           </tr>
         </thead>
-        <tbody>
-          {% for i in items %}
-          <tr class="scr-row" data-search="{{ i.code|lower }} {{ i.name|lower }} {{ i.rfid|lower }}" data-branch="{{ i.branch }}" data-itemtype="{{ i.item_type }}" data-category="{{ i.category }}" data-vtype="{{ i.vtype }}">
-            <td><input type="checkbox" data-map-check value="{{ i.code }}"></td>
-            <td><span class="scr-code">{{ i.code }}</span></td>
-            <td style="font-weight:600">{{ i.name }}</td>
-            <td><span class="scr-badge scr-badge-pending"><i></i>{{ i.item_type }}</span></td>
-            <td class="scr-contact">{{ i.category }}</td>
-            <td class="scr-contact">{{ i.vtype }}</td>
-            <td><span class="scr-code">{{ i.rfid }}</span></td>
-          </tr>
-          {% empty %}
+        <tbody id="transfer-pool-rows">
           <tr>
             <td colspan="7" style="padding:0">
               <div class="scr-empty">
@@ -228,19 +224,27 @@ byky-ims-transfer.js only adds what a transfer needs on top.
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16v12H4zM4 7l2-3h12l2 3"></path></svg>
                 </span>
                 <div>
-                  <div class="scr-empty-title">No items at this branch</div>
-                  <p class="scr-empty-sub">Pick a From Branch above to list what it holds.</p>
+                  <div class="scr-empty-title">Select filters to load items</div>
+                  <p class="scr-empty-sub">Pick an Inventory Type and a From Branch above to list what it holds.</p>
                 </div>
               </div>
             </td>
           </tr>
-          {% endfor %}
         </tbody>
       </table>
     </div>
 
+    {% comment %}
+    The full pool (1,060+ vehicles and assets) is never rendered as rows up
+    front -- only handed to byky-ims-transfer.js as data, which builds rows
+    for the current From Branch + Inventory Type once both are chosen. This
+    replaces the old always-rendered table, which put every item from every
+    branch in the DOM on load regardless of what the user had picked.
+    {% endcomment %}
+    {{ items|json_script:"transfer-pool-data" }}
+
     <div class="scr-pager">
-      <span class="scr-pager-info">Showing {{ items|length }} of {{ items|length }}</span>
+      <span class="scr-pager-info" id="transfer-pool-pager-info">Showing 0 of 0</span>
       <div class="scr-pager-nav">
         <button type="button" class="scr-pager-btn" disabled>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>

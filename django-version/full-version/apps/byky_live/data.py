@@ -23,16 +23,19 @@ Image Sharing carries no money and ties naturally to real stations and
 staff, so it is populated the same way Device Mapping is: real station and
 employee names, deterministic (seeded) so the numbers never jump between
 page loads.
+
+RMS WEB APK UI.xlsx feedback dropped this screen's Approved/Awaiting
+review/Rejected split entirely (no more Status column, no more approve/
+reject actions -- a shared photo is either on the list or deleted from it),
+so shared_images() no longer carries a status field and counts() only
+reports the total.
 """
 
 import datetime
-import hashlib
 
 from apps.byky_core import seed
 
 ORDER_STATUSES = ["Running", "Received", "Cancelled", "Credit Note"]
-
-IMAGE_APPROVAL_STATUSES = ["Approved", "Not Approved", "Rejected"]
 
 _ORDER_ROW_STATUSES = ["Running", "Running", "Received", "Cancelled", "Running"]
 
@@ -86,19 +89,24 @@ def order_kpis(rows):
 
 def shared_images():
     """Deterministic demo rows: a photo shared from a real station by a real
-    staff member, awaiting review. See module docstring -- no money involved,
-    so this one is populated rather than left as an awaiting-data screen."""
+    staff member. See module docstring -- no money involved, so this one is
+    populated rather than left as an awaiting-data screen."""
     out = []
+    today = datetime.date.today()
     for i, st in enumerate(seed.STATIONS[:10]):
         emp = seed.EMPLOYEES[(i * 7) % len(seed.EMPLOYEES)]
-        h = hashlib.md5(st["code"].encode()).hexdigest()
+        taken = today - datetime.timedelta(days=i)
         out.append(
             {
                 "id": i + 1,
                 "branch": st["name"],
                 "shared_by": f'{emp["name"]} ({emp["emp_no"]})',
                 "remarks": "",
-                "status": IMAGE_APPROVAL_STATUSES[int(h[:2], 16) % 3],
+                "taken_at": (
+                    taken.strftime("%d/%m/%Y")
+                    + " " + f"{(8 + i) % 12 + 1:02d}:{(i * 11) % 60:02d} "
+                    + ("AM" if i % 2 == 0 else "PM")
+                ),
             }
         )
     return out
@@ -107,7 +115,4 @@ def shared_images():
 def counts(images):
     return {
         "total": len(images),
-        "approved": sum(1 for i in images if i["status"] == "Approved"),
-        "pending": sum(1 for i in images if i["status"] == "Not Approved"),
-        "rejected": sum(1 for i in images if i["status"] == "Rejected"),
     }

@@ -71,6 +71,18 @@ class SearchOrderView(LiveScreenView):
 
 
 class ImageSharingView(LiveScreenView):
+    """RMS WEB APK UI.xlsx feedback on this screen: the Approved/Awaiting
+    review/Rejected split is gone entirely -- no Status column, no Status
+    filter, no per-row Approve/Reject (a shared photo is either on the list
+    or deleted from it). Branch and From/To Date replace Status as the
+    header filters. Each row keeps a standalone View button and gains a
+    kebab holding only Delete from Database; a Select-All checkbox and a
+    per-row checkbox column drive a bulk Delete from Database action
+    (byky-image-sharing.js) for handling several photos at once. The new
+    Station Count KPI tracks distinct branches among the checked rows
+    live, so it starts at 0 and is entirely JS-driven -- see that same
+    file."""
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         images = data.shared_images()
@@ -78,7 +90,6 @@ class ImageSharingView(LiveScreenView):
             {
                 "images": images,
                 "counts": data.counts(images),
-                "approval_statuses": data.IMAGE_APPROVAL_STATUSES,
             }
         )
         return context

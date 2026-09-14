@@ -9,8 +9,13 @@
 
 (function () {
   if (typeof flatpickr !== 'undefined') {
-    document.querySelectorAll('.byky-date').forEach(el =>
+    document.querySelectorAll('.byky-date:not(.byky-datetime)').forEach(el =>
       flatpickr(el, { dateFormat: 'd M Y', allowInput: true })
+    );
+    // Duty Roster's shift Start/End fields (drawer.html's "datetime" kind)
+    // need a time-of-day alongside the date -- same picker, enableTime on.
+    document.querySelectorAll('.byky-datetime').forEach(el =>
+      flatpickr(el, { dateFormat: 'd M Y, H:i', enableTime: true, time_24hr: true, allowInput: true })
     );
   }
 

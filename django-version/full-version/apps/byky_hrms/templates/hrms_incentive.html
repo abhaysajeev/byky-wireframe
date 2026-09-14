@@ -1,0 +1,162 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Incentive - Human Resources{% endblock title %}
+
+{% comment %}
+RMS WEB APK UI.xlsx feedback -- new module, not one of the FSD screens.
+Built from the client's incentive.html mockup (byky Docs/new html/), rebuilt
+on the shared byky-screen.css/js .scr-* system per byky-screen-design-system.md,
+matching hrms_employee_designation_master.html's list+drawer shape.
+
+The mockup's own full-page "Add Incentive Plan" builder becomes a wide
+drawer (byky/partials/drawer.html) per this project's list+drawer
+convention. See apps/byky_hrms/data.py's module note above
+incentive_user_types() for how the mockup's invented user-type list
+(Supervisor, Warehouse Staff, Accountant, Manager...) was reconciled
+against the real 9-designation master -- nothing invented, every dropdown
+option here is a real designation title.
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-hrms-incentive.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Human Resources</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Incentive</b>
+      </div>
+      <h1 class="scr-title">Incentive</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="incentive-plan:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Incentive Plan
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12 12 3.4 4.4 12 12 20.6zM12 8v.01M12 12v4"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ incentive_counts.total }}</div><div class="scr-tile-lab">Total incentive plans</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ incentive_counts.types_covered }}</div><div class="scr-tile-lab">User types covered</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M17 7.5c0-1.9-2.2-3.5-5-3.5s-5 1.6-5 3.5 2.2 3 5 3.5 5 1.6 5 3.5-2.2 3.5-5 3.5-5-1.6-5-3.5"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ incentive_counts.avg_pct }}%</div><div class="scr-tile-lab">Avg. % of collection per plan</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8a5 5 0 1 0-10 0M4 8h16v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ incentive_counts.split_rows }}</div><div class="scr-tile-lab">Rows set to split equally</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="plan" data-scr-noun-plural="plans">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search plan code or name" />
+      </div>
+      <span class="scr-toolbar-count">{{ incentive_plans|length }} plans</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Plan Name</th>
+            <th>User Types</th>
+            <th>Total % of Collection</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in incentive_plans %}
+          <tr class="scr-row" data-search="{{ p.code|lower }} {{ p.name|lower }}" data-record-id="{{ p.json_id }}">
+            <td><span class="scr-code">{{ p.code }}</span></td>
+            <td style="font-weight:600">{{ p.name }}</td>
+            <td>
+              {% for t in p.types|slice:":3" %}<span class="scr-badge {% if t == "Cashier with RMS Login" or t == "Cashier without RMS Login" or t == "Labour" %}scr-badge-approved{% else %}scr-badge-rejected{% endif %}" style="margin-right:4px"><i></i>{{ t }}</span>{% endfor %}
+              {% if p.types|length > 3 %}<span class="scr-badge scr-badge-rejected">+{{ p.types|length|add:"-3" }} more</span>{% endif %}
+            </td>
+            <td><span class="scr-alloc-badge{% if p.total_pct > 100 %} is-warn{% endif %}">{{ p.total_pct }}%</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <button type="button" class="scr-icon-btn" title="View breakdown" data-bs-toggle="modal" data-bs-target="#scr-records-modal"
+                        data-scr-view="{{ p.breakdown_json_id }}"
+                        data-scr-view-title="{{ p.name }} — Breakdown"
+                        data-scr-view-columns='["type","target_pct_display","dividend_label"]'
+                        data-scr-view-labels='["User Type","% of Collection","Dividend"]'>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                </button>
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <button type="button" class="scr-menu-item" data-scr-open="incentive-plan:edit">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {{ p.fields_json|json_script:p.json_id }}
+          {{ p.breakdown_view|json_script:p.breakdown_json_id }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ incentive_plans|length }} of {{ incentive_plans|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{{ incentive_user_types_list|json_script:"incentive-user-types-data" }}
+{% include "byky/partials/drawer.html" with spec=drawer_incentive_plan module_label="Human Resources · Incentive" %}
+{% include "byky/partials/records_modal.html" %}
+{% endblock %}

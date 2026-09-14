@@ -69,23 +69,58 @@
    "slug": "hrms",
    "badge": [
     "label-secondary",
-    "4"
+    "11"
    ],
    "submenu": [
-    {
-     "url": "hrms-employee-designation-master",
-     "name": "Designation",
-     "slug": "hrms-employee-designation-master"
-    },
     {
      "url": "hrms-employee-personal-data",
      "name": "Employee",
      "slug": "hrms-employee-personal-data"
     },
     {
+     "url": "hrms-employee-temporary-address",
+     "name": "Temporary Address",
+     "slug": "hrms-employee-temporary-address"
+    },
+    {
+     "url": "hrms-employee-designation-master",
+     "name": "Designation",
+     "slug": "hrms-employee-designation-master"
+    },
+    {
+     "url": "hrms-employee-grade-master",
+     "name": "Grade Master",
+     "slug": "hrms-employee-grade-master"
+    },
+    {
      "url": "hrms-employee-block-unblock",
      "name": "Employee Block / Unblock",
      "slug": "hrms-employee-block-unblock"
+    },
+    {
+     "url": "hrms-duty-roster",
+     "name": "Duty Roster",
+     "slug": "hrms-duty-roster"
+    },
+    {
+     "url": "hrms-incentive",
+     "name": "Incentive",
+     "slug": "hrms-incentive"
+    },
+    {
+     "url": "hrms-incentive-branch-mapping",
+     "name": "Incentive Branch Mapping",
+     "slug": "hrms-incentive-branch-mapping"
+    },
+    {
+     "url": "hrms-target",
+     "name": "Target",
+     "slug": "hrms-target"
+    },
+    {
+     "url": "hrms-target-branch-mapping",
+     "name": "Target Branch Mapping",
+     "slug": "hrms-target-branch-mapping"
     },
     {
      "url": "hrms-hrms-privileges",

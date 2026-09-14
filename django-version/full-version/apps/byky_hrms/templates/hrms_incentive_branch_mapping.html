@@ -1,0 +1,175 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Incentive Branch Mapping - Human Resources{% endblock title %}
+
+{% comment %}
+RMS WEB APK UI.xlsx feedback -- new module, not one of the FSD screens.
+Built from the client's incentive-branch-mapping.html mockup (byky Docs/new
+html/), rebuilt on the shared byky-screen.css/js .scr-* system. The
+mockup's own full-page builder becomes a wide drawer, per this project's
+list+drawer convention. Country draws from the real countries_list (UAE +
+Kuwait) rather than the mockup's hardcoded UAE-only assumption.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
+<script src="{% static 'js/byky-hrms-branch-mapping.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Human Resources</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Incentive Branch Mapping</b>
+      </div>
+      <h1 class="scr-title">Incentive Branch Mapping</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="incentive-branch-mapping:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Mapping
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"></rect><path d="M3 9h18M9 21V9"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ mapping_counts.total }}</div><div class="scr-tile-lab">Total mappings</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4.4-4-7-7.4-7-10.5A7 7 0 0 1 19 10.5c0 3.1-2.6 6.5-7 10.5Z"></path><circle cx="12" cy="10.5" r="2.5"></circle></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ mapping_counts.unique_branches }}</div><div class="scr-tile-lab">Unique branches mapped</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.6 12 12 3.4 4.4 12 12 20.6zM12 8v.01M12 12v4"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ mapping_counts.plans_in_use }}</div><div class="scr-tile-lab">Incentive plans in use</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3.5 2"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ mapping_counts.expiring_soon }}</div><div class="scr-tile-lab">Expiring within 30 days</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="mapping" data-scr-noun-plural="mappings">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search mapping code or name" />
+      </div>
+      <span class="scr-toolbar-count">{{ incentive_branch_mappings|length }} mappings</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Mapping Name</th>
+            <th>Incentive Plan</th>
+            <th>Branches</th>
+            <th>Validity</th>
+            <th>Priority</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for m in incentive_branch_mappings %}
+          <tr class="scr-row" data-search="{{ m.code|lower }} {{ m.name|lower }}" data-record-id="{{ m.json_id }}">
+            <td><span class="scr-code">{{ m.code }}</span></td>
+            <td style="font-weight:600">{{ m.name }}</td>
+            <td class="scr-contact">
+              {% if m.plan %}<span class="scr-code">{{ m.plan.code }}</span> {{ m.plan.name }}{% else %}<span class="scr-badge scr-badge-rejected">Plan removed</span>{% endif %}
+            </td>
+            <td>
+              <button type="button" class="scr-count-link" data-bs-toggle="modal" data-bs-target="#scr-records-modal"
+                      data-scr-view="{{ m.branches_json_id }}"
+                      data-scr-view-title="{{ m.name }} — Branches"
+                      data-scr-view-columns='["name","location"]'
+                      data-scr-view-labels='["Branch","Emirate"]'>
+                {% if m.all_branches %}All Branches ({{ m.branch_names|length }}){% else %}{{ m.branch_names|length }} branch{{ m.branch_names|length|pluralize }}{% endif %}
+              </button>
+            </td>
+            <td class="scr-contact">
+              {{ m.valid_from|date:"d M Y" }} – {{ m.valid_to|date:"d M Y" }}
+              {% if m.expiring %}<span class="scr-expiring">Expiring soon</span>{% endif %}
+            </td>
+            <td><span class="scr-prio {% if m.priority <= 3 %}scr-prio-high{% elif m.priority <= 7 %}scr-prio-medium{% else %}scr-prio-low{% endif %}">P{{ m.priority }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <button type="button" class="scr-menu-item" data-scr-open="incentive-branch-mapping:edit">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {{ m.fields_json|json_script:m.json_id }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ incentive_branch_mappings|length }} of {{ incentive_branch_mappings|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% for m in incentive_branch_mappings %}{{ m.branch_objects|json_script:m.branches_json_id }}{% endfor %}
+{{ incentive_plans_for_combo|json_script:"incentive-plans-data" }}
+{{ branch_emirate_map|json_script:"branch-emirate-map" }}
+{% include "byky/partials/drawer.html" with spec=drawer_incentive_branch_mapping module_label="Human Resources · Incentive Branch Mapping" %}
+{% include "byky/partials/records_modal.html" %}
+{% endblock %}

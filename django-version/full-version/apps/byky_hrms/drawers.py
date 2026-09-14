@@ -402,6 +402,185 @@ GRADE = {
 }
 
 
+# RMS WEB APK UI.xlsx feedback -- "new html" client mockups, not FSD screens.
+# See apps/byky_hrms/data.py's module note above INCENTIVE_PLAN's data
+# functions for how the mockup's invented user-type list was reconciled
+# against the real designation master.
+INCENTIVE_PLAN = {
+    "drawer_id": "drawerIncentivePlan",
+    "scr_name": "incentive-plan",
+    "add_label": "Add Incentive Plan",
+    "title_field": "name",
+    "size": "wide",
+    "sections": [
+        {
+            "title": "Plan Details",
+            "fields": [
+                {"id": "code", "label": "Incentive Profile Code", "kind": "text", "required": True, "lock_on_edit": True, "readonly": True},
+                {"id": "name", "label": "Incentive Profile Name", "kind": "text", "required": True},
+            ],
+        },
+        {
+            "title": "User Types",
+            "note": "Cashier with RMS Login, Cashier without RMS Login, and Labour are listed first since most plans start there; every other designation from the HR module follows in headcount order.",
+            "fields": [
+                {
+                    "id": "user_types",
+                    "label": "User Type(s)",
+                    "kind": "multiselect",
+                    "required": True,
+                    "options_from": "incentive_user_types_list",
+                    "option_key": "title",
+                    "placeholder": "Select user type(s)",
+                },
+            ],
+        },
+        {
+            "title": "% of Collection & Dividend",
+            "note": "If a branch achieves its target, employees who worked there that month are eligible for incentive, paid from the branch's total collection. Since staff can move between branches day to day (via Duty Roster), it's worked out on a daily pro-rated basis, with each row's dividend rule deciding how that day's share is divided.",
+            "fields": [
+                {"id": "breakdown", "label": "", "kind": "custom"},
+            ],
+        },
+    ],
+}
+
+
+INCENTIVE_BRANCH_MAPPING = {
+    "drawer_id": "drawerIncentiveBranchMapping",
+    "scr_name": "incentive-branch-mapping",
+    "add_label": "Add Mapping",
+    "title_field": "name",
+    "size": "wide",
+    "sections": [
+        {
+            "title": "Mapping Details",
+            "fields": [
+                {"id": "code", "label": "Mapping Code", "kind": "text", "required": True, "lock_on_edit": True, "readonly": True},
+                {"id": "name", "label": "Mapping Name", "kind": "text", "required": True, "placeholder": "Enter mapping name"},
+            ],
+        },
+        {
+            "title": "Branch Selection",
+            "fields": [
+                {"id": "country", "label": "Country", "kind": "select", "required": True, "options_from": "countries_list", "option_key": "name"},
+                {"id": "emirate", "label": "Emirate", "kind": "select", "options_from": "states_list", "option_key": "name", "help": "All Emirates if left blank."},
+                {"id": "all_branches", "label": "", "kind": "checkbox", "placeholder": "All Branches"},
+                {
+                    "id": "branches", "label": "Branches", "kind": "multiselect", "required": True,
+                    "options_from": "branches_list", "option_key": "name", "placeholder": "Select branch(es)",
+                    "show_if": "all_branches:no",
+                },
+            ],
+        },
+        {
+            "title": "Incentive Plan & Validity",
+            "fields": [
+                {"id": "plan_key", "label": "Incentive Plan", "kind": "combo", "required": True, "combo_source": "incentive-plans-data", "combo_key": "name", "combo_sub": "code", "placeholder": "Search plan by code or name..."},
+                {"id": "valid_from", "label": "Valid From", "kind": "date", "required": True},
+                {"id": "valid_to", "label": "Valid To", "kind": "date", "required": True},
+            ],
+        },
+        {
+            "title": "Priority",
+            "fields": [
+                {
+                    "id": "priority", "label": "Priority (1 – 10)", "kind": "select", "required": True,
+                    "options": [str(n) for n in range(1, 11)], "default": "5",
+                    "help": "1 = highest priority. If a branch has more than one active incentive mapping at the same time, the mapping with the lowest priority number is the one applied.",
+                },
+            ],
+        },
+    ],
+}
+
+
+TARGET_BRANCH_MAPPING = {
+    "drawer_id": "drawerTargetBranchMapping",
+    "scr_name": "target-branch-mapping",
+    "add_label": "Add Mapping",
+    "title_field": "name",
+    "size": "wide",
+    "sections": [
+        {
+            "title": "Mapping Details",
+            "fields": [
+                {"id": "code", "label": "Mapping Code", "kind": "text", "required": True, "lock_on_edit": True, "readonly": True},
+                {"id": "name", "label": "Mapping Name", "kind": "text", "required": True, "placeholder": "Enter mapping name"},
+            ],
+        },
+        {
+            "title": "Branch Selection",
+            "fields": [
+                {"id": "country", "label": "Country", "kind": "select", "required": True, "options_from": "countries_list", "option_key": "name"},
+                {"id": "emirate", "label": "Emirate", "kind": "select", "options_from": "states_list", "option_key": "name", "help": "All Emirates if left blank."},
+                {"id": "all_branches", "label": "", "kind": "checkbox", "placeholder": "All Branches"},
+                {
+                    "id": "branches", "label": "Branches", "kind": "multiselect", "required": True,
+                    "options_from": "branches_list", "option_key": "name", "placeholder": "Select branch(es)",
+                    "show_if": "all_branches:no",
+                },
+            ],
+        },
+        {
+            "title": "Target Profile & Validity",
+            "fields": [
+                {"id": "profile_key", "label": "Target Profile", "kind": "combo", "required": True, "combo_source": "target-profiles-data", "combo_key": "name", "combo_sub": "code", "placeholder": "Search profile by code or name..."},
+                {"id": "valid_from", "label": "Valid From", "kind": "date", "required": True},
+                {"id": "valid_to", "label": "Valid To", "kind": "date", "required": True},
+            ],
+        },
+        {
+            "title": "Priority",
+            "fields": [
+                {
+                    "id": "priority", "label": "Priority (1 – 10)", "kind": "select", "required": True,
+                    "options": [str(n) for n in range(1, 11)], "default": "5",
+                    "help": "1 = highest priority. If a branch has more than one active target mapping at the same time, the mapping with the lowest priority number is the one applied.",
+                },
+            ],
+        },
+    ],
+}
+
+
+TARGET_PROFILE = {
+    "drawer_id": "drawerTargetProfile",
+    "scr_name": "target-profile",
+    "add_label": "Add Target Profile",
+    "title_field": "name",
+    "size": "wide",
+    "sections": [
+        {
+            "title": "Profile Type & Period",
+            "fields": [
+                {"id": "type", "label": "", "kind": "custom"},
+                {"id": "year", "label": "Year", "kind": "select", "options": ["2025", "2026", "2027"], "default": "2026", "show_if": "type:Yearly|Monthly|Daily"},
+                {"id": "months", "label": "Month(s)", "kind": "multiselect", "options": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "placeholder": "Select month(s)", "show_if": "type:Monthly"},
+                {"id": "month", "label": "Month", "kind": "select", "options": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"], "show_if": "type:Daily"},
+                {"id": "day", "label": "Day", "kind": "select", "options": [str(n) for n in range(1, 32)], "show_if": "type:Daily"},
+                {"id": "from_date", "label": "From Date", "kind": "date", "show_if": "type:Custom Date Range"},
+                {"id": "to_date", "label": "To Date", "kind": "date", "show_if": "type:Custom Date Range"},
+            ],
+        },
+        {
+            "title": "Profile Details",
+            "fields": [
+                {"id": "code", "label": "Target Profile Code", "kind": "text", "required": True, "placeholder": "e.g. TP-2026-001"},
+                {"id": "name", "label": "Target Profile Name", "kind": "text", "required": True, "placeholder": "Enter target profile name"},
+            ],
+        },
+        {
+            "title": "Targets",
+            "fields": [
+                {"id": "collection_target", "label": "Total Collection Target (AED)", "kind": "number", "required": True, "placeholder": "Enter total collection target"},
+                {"id": "customer_target", "label": "New Customer Target (count)", "kind": "number", "required": True, "placeholder": "Enter new customer target"},
+            ],
+        },
+    ],
+}
+
+
 # template variable -> spec, for the view to resolve in one call
 SPECS = {
 
@@ -412,5 +591,13 @@ SPECS = {
     "drawer_employee": EMPLOYEE,
 
     "drawer_grade": GRADE,
+
+    "drawer_incentive_plan": INCENTIVE_PLAN,
+
+    "drawer_incentive_branch_mapping": INCENTIVE_BRANCH_MAPPING,
+
+    "drawer_target_branch_mapping": TARGET_BRANCH_MAPPING,
+
+    "drawer_target_profile": TARGET_PROFILE,
 
 }

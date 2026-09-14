@@ -356,6 +356,14 @@ perfect-scrollbar, shepherd, jstree, sortablejs, swiper, jquery-repeater, raty-j
 
 **If a need is covered by this list, adding another library is a defect.**
 
+**One documented exception: `xlsx` (SheetJS), `src/assets/vendor/libs/xlsx/`.**
+HRMS Duty Roster's Bulk Import needs to both *read* and *write* real `.xlsx`
+files client-side (download a sample template, export the current roster,
+parse an uploaded file back) — nothing in the list above does both;
+DataTables' own Buttons/Excel export only writes. Vendored locally (not
+CDN), loaded only in `hrms_duty_roster.html`'s own `vendor_js` block, per
+the perf rules in §16.
+
 ---
 
 ## 6. BYKY App Structure

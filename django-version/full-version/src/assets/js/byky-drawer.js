@@ -180,7 +180,8 @@
         var key = spec.slice(0, sep);
         var wants = spec.slice(sep + 1).split('|');
         var input = drawer.querySelector('[data-field="' + key + '"]');
-        var show = !!input && wants.indexOf(input.value) > -1;
+        var inputValue = input && input.type === 'checkbox' ? (input.checked ? 'yes' : 'no') : (input && input.value);
+        var show = !!input && wants.indexOf(inputValue) > -1;
         field.hidden = !show;
         /* a hidden field must not keep a value that no longer applies */
         if (!show) {

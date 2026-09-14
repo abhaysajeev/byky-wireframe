@@ -1,0 +1,39 @@
+{% comment %}
+Shared "view one record" modal for any .scr-* screen (byky-screen.css/js) --
+records_modal.html's sibling for a single record's fields (key/value rows)
+rather than a table of several records. First use: Duty Roster's Day
+Details popup. Include once per page:
+
+  {% include "byky/partials/detail_modal.html" %}
+
+Then any trigger opens it populated from one json_script'd record:
+
+  {{ day.fields_json|json_script:day.json_id }}
+  <button type="button" data-bs-toggle="modal" data-bs-target="#scr-detail-modal"
+          data-scr-detail="{{ day.json_id }}"
+          data-scr-detail-title="{{ day.employee_name }}"
+          data-scr-detail-fields='[["employee","Employee"],["date_label","Date & Time"],["status","Status"],["branch","Branch"],["shift1_label","Shift 1"],["shift2_label","Shift 2"]]'>
+    View
+  </button>
+
+byky-screen.js populates the rows on show.bs.modal, reading the triggering
+button via event.relatedTarget -- a field whose value is empty/None is
+skipped rather than shown as a blank row.
+{% endcomment %}
+<div class="modal fade scr-records-modal" id="scr-detail-modal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="scr-detail-modal-title">Details</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="scr-detail-rows" id="scr-detail-rows"></div>
+        <div class="scr-records-empty" id="scr-detail-empty" hidden>No details.</div>
+      </div>
+      <div class="modal-footer" id="scr-detail-footer">
+        <button type="button" class="scr-btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>

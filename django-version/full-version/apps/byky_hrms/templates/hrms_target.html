@@ -1,0 +1,174 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}Target - Human Resources{% endblock title %}
+
+{% comment %}
+RMS WEB APK UI.xlsx feedback -- new module, not one of the FSD screens.
+Built from the client's target.html mockup (byky Docs/new html/), rebuilt on
+the shared byky-screen.css/js .scr-* system. The mockup's own 4-way
+segmented Yearly/Monthly/Daily/Custom Date Range toggle is reproduced inside
+the wide Add/Edit drawer (byky-hrms-target.js renders it into the drawer's
+"custom" field slot). Branch mapping stays read-only here -- a preview of
+Target Branch Mapping's own data -- exactly matching the mockup's own
+"coming in the next update" language.
+{% endcomment %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+<script src="{% static 'js/byky-hrms.js' %}"></script>
+<script src="{% static 'js/byky-hrms-target.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Human Resources</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>Target</b>
+      </div>
+      <h1 class="scr-title">Target</h1>
+      <p class="scr-sub">{{ purpose }}</p>
+    </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="target-profile:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Add Target Profile
+      </button>
+    </div>
+  </div>
+
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-red">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><circle cx="12" cy="12" r="4"></circle><circle cx="12" cy="12" r="0.6"></circle></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ target_counts.total }}</div><div class="scr-tile-lab">Total target profiles</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M17 7.5c0-1.9-2.2-3.5-5-3.5s-5 1.6-5 3.5 2.2 3 5 3.5 5 1.6 5 3.5-2.2 3.5-5 3.5-5-1.6-5-3.5"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">AED {{ target_counts.combined_collection|floatformat:0 }}</div><div class="scr-tile-lab">Combined collection target</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M17 20v-1.6a3.4 3.4 0 0 0-3.4-3.4H9.4A3.4 3.4 0 0 0 6 18.4V20M11.5 12a3.6 3.6 0 1 0 0-7.2 3.6 3.6 0 0 0 0 7.2M21 20v-1.4a3 3 0 0 0-2.3-2.9M16.6 5a3 3 0 0 1 0 5.8"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ target_counts.combined_customers }}</div><div class="scr-tile-lab">Combined new-customer target</div></div>
+    </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-amber">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c-4.4-4-7-7.4-7-10.5A7 7 0 0 1 19 10.5c0 3.1-2.6 6.5-7 10.5Z"></path><circle cx="12" cy="10.5" r="2.5"></circle></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ target_counts.unmapped }}</div><div class="scr-tile-lab">Profiles not yet mapped</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="profile" data-scr-noun-plural="profiles">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search profile code or name" />
+      </div>
+      <span class="scr-toolbar-count">{{ target_profiles|length }} profiles</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Profile Name</th>
+            <th>Type</th>
+            <th>Period</th>
+            <th>Collection Target</th>
+            <th>New Customer Target</th>
+            <th>Mapped Branches</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in target_profiles %}
+          <tr class="scr-row" data-search="{{ p.code|lower }} {{ p.name|lower }}" data-record-id="{{ p.json_id }}">
+            <td><span class="scr-code">{{ p.code }}</span></td>
+            <td style="font-weight:600">{{ p.name }}</td>
+            <td><span class="scr-badge {% if p.type == 'Yearly' %}scr-badge-approved{% elif p.type == 'Daily' %}scr-badge-pending{% else %}scr-badge-rejected{% endif %}"><i></i>{{ p.type }}</span></td>
+            <td class="scr-contact">{{ p.period_display }}</td>
+            <td class="scr-contact">AED {{ p.collection_target|floatformat:0 }}</td>
+            <td class="scr-contact">{{ p.customer_target }}</td>
+            <td>
+              {% if p.mapped_branches %}
+              <button type="button" class="scr-count-link" data-bs-toggle="modal" data-bs-target="#scr-records-modal"
+                      data-scr-view="{{ p.mapped_json_id }}"
+                      data-scr-view-title="{{ p.name }} — Mapped Branches"
+                      data-scr-view-columns='["name","location"]'
+                      data-scr-view-labels='["Branch","Emirate"]'>{{ p.mapped_branches|length }} branch{{ p.mapped_branches|length|pluralize }}</button>
+              {% else %}
+              <span class="scr-contact" style="color:#c3bfd8">Not mapped</span>
+              {% endif %}
+            </td>
+            <td>
+              <div class="scr-row-actions">
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <button type="button" class="scr-menu-item" data-scr-open="target-profile:edit">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {{ p.fields_json|json_script:p.json_id }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ target_profiles|length }} of {{ target_profiles|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% for p in target_profiles %}{{ p.mapped_branch_objects|json_script:p.mapped_json_id }}{% endfor %}
+{% include "byky/partials/drawer.html" with spec=drawer_target_profile module_label="Human Resources · Target" %}
+{% include "byky/partials/records_modal.html" %}
+{% endblock %}

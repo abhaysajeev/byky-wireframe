@@ -921,4 +921,139 @@
       });
     }
   }
+
+  /* ── shared "view one record" modal (data-scr-detail) ─────────────
+     records_modal.html's sibling for a single record's key/value fields
+     rather than a table of several -- see byky/partials/detail_modal.html
+     for the trigger contract. */
+  var detailModal = document.getElementById('scr-detail-modal');
+  if (detailModal) {
+    var dmTitle = document.getElementById('scr-detail-modal-title');
+    var dmRows = document.getElementById('scr-detail-rows');
+    var dmEmpty = document.getElementById('scr-detail-empty');
+
+    detailModal.addEventListener('show.bs.modal', function (e) {
+      var btn = e.relatedTarget;
+      if (!btn) return;
+      var node = document.getElementById(btn.dataset.scrDetail);
+      var record = {};
+      try { record = node ? JSON.parse(node.textContent) : {}; } catch (err) { record = {}; }
+      var fields = [];
+      try { fields = JSON.parse(btn.dataset.scrDetailFields || '[]'); } catch (err2) { fields = []; }
+
+      if (dmTitle) dmTitle.textContent = btn.dataset.scrDetailTitle || 'Details';
+
+      dmRows.innerHTML = '';
+      var shown = 0;
+      fields.forEach(function (pair) {
+        var key = pair[0], label = pair[1];
+        var value = record[key];
+        if (value === null || value === undefined || value === '') return;
+        shown++;
+        var row = document.createElement('div');
+        row.className = 'scr-detail-row';
+        var l = document.createElement('span');
+        l.className = 'scr-detail-label';
+        l.textContent = label;
+        var v = document.createElement('span');
+        v.className = 'scr-detail-value';
+        v.textContent = value;
+        row.appendChild(l);
+        row.appendChild(v);
+        dmRows.appendChild(row);
+      });
+      if (dmEmpty) dmEmpty.hidden = shown > 0;
+    });
+  }
+
+  /* ── search-combo (data-scr-combo, byky/partials/drawer.html's "combo"
+     kind) ────────────────────────────────────────────────────────────
+     A text input that filters a page-level json_script'd record list as
+     you type, e.g. Duty Roster's employee search, Incentive Branch
+     Mapping's plan search. data-combo-source names the json_script id;
+     data-combo-key the field to match/display; data-combo-sub an optional
+     second field shown alongside it. The hidden input (data-field, so it
+     participates in the normal drawer fill/prefill cycle) is set to the
+     chosen record's combo-key value. Re-initialised on every drawer open
+     (shown.bs.offcanvas) so edit-mode prefill can re-sync the visible text
+     from whatever value byky-drawer.js just wrote into the hidden field. */
+  function initScrCombos(scope) {
+    (scope || document).querySelectorAll('[data-scr-combo]').forEach(function (wrap) {
+      if (wrap.__bykyComboInit) { wrap.__bykyComboSync(); return; }
+      wrap.__bykyComboInit = true;
+
+      var input = wrap.querySelector('.scr-combo-input');
+      var list = wrap.querySelector('.scr-combo-list');
+      var hidden = wrap.querySelector('input[type="hidden"]');
+      var sourceEl = document.getElementById(wrap.dataset.comboSource);
+      var key = wrap.dataset.comboKey || 'name';
+      var subKey = wrap.dataset.comboSub || '';
+      var records = [];
+      try { records = sourceEl ? JSON.parse(sourceEl.textContent) : []; } catch (err) { records = []; }
+
+      function label(rec) {
+        var main = rec[key] || '';
+        var sub = subKey ? rec[subKey] : '';
+        return sub ? main + ' — ' + sub : main;
+      }
+
+      function render(items) {
+        list.innerHTML = '';
+        if (!items.length) {
+          var empty = document.createElement('div');
+          empty.className = 'scr-combo-empty';
+          empty.textContent = 'No matches';
+          list.appendChild(empty);
+          list.hidden = false;
+          return;
+        }
+        items.slice(0, 30).forEach(function (rec) {
+          var row = document.createElement('div');
+          row.className = 'scr-combo-item';
+          var main = document.createElement('span');
+          main.className = 'scr-combo-item-main';
+          main.textContent = rec[key] || '';
+          row.appendChild(main);
+          if (subKey && rec[subKey]) {
+            var sub = document.createElement('span');
+            sub.className = 'scr-combo-item-sub';
+            sub.textContent = rec[subKey];
+            row.appendChild(sub);
+          }
+          row.addEventListener('mousedown', function (e) {
+            e.preventDefault();
+            if (hidden) hidden.value = rec[key] || '';
+            input.value = label(rec);
+            list.hidden = true;
+            hidden && hidden.dispatchEvent(new Event('change', { bubbles: true }));
+          });
+          list.appendChild(row);
+        });
+        list.hidden = false;
+      }
+
+      input.addEventListener('input', function () {
+        var q = input.value.trim().toLowerCase();
+        if (hidden && !q) hidden.value = '';
+        var items = !q ? records : records.filter(function (rec) {
+          return (String(rec[key] || '').toLowerCase().indexOf(q) > -1)
+            || (subKey && String(rec[subKey] || '').toLowerCase().indexOf(q) > -1);
+        });
+        render(items);
+      });
+      input.addEventListener('focus', function () { render(records); });
+      document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target)) list.hidden = true;
+      });
+
+      wrap.__bykyComboSync = function () {
+        var rec = hidden && hidden.value ? records.filter(function (r) { return (r[key] || '') === hidden.value; })[0] : null;
+        input.value = rec ? label(rec) : '';
+      };
+    });
+  }
+  initScrCombos();
+  document.addEventListener('shown.bs.offcanvas', function (e) {
+    if (e.target) initScrCombos(e.target);
+  });
 })();

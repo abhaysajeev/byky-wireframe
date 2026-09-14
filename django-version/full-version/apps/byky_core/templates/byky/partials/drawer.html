@@ -15,7 +15,16 @@ spec.size        "compact" | "standard" | "wide" | omitted  (optional)
 module_label     overline text, e.g. "Inventory · Vehicles" (optional)
 
 field keys: id, label, kind, required, placeholder, options/resolved, width, help
-kind: text | select | date | textarea | number | file | checkbox
+kind: text | select | date | textarea | number | file | checkbox | checkgroup |
+      radio | multiselect | combo | datetime | custom
+kind "combo"     type-to-filter single-select over a richer record list than a
+                 plain <select> can label -- f.combo_source names a page-level
+                 json_script id (an array of objects), f.combo_key the field to
+                 match/display (default "name"), f.combo_sub an optional second
+                 field shown alongside it (e.g. an employee code)
+kind "datetime"  like "date" but with a time-of-day component
+kind "custom"    reserves an empty slot (data-days-host) the page's own JS
+                 fills -- for a field whose row count/shape varies per record
 field.default    a select's pre-chosen option in Add mode (must match one of
                  its resolved options exactly); ignored in Edit mode, where
                  the record's own value always wins
@@ -188,6 +197,33 @@ field.readonly       always read-only -- a value this screen displays but
 
             {% elif f.kind == "number" %}
               <input type="number" step="any" id="{{ f.id }}" class="byky-input" data-field="{{ f.id }}"{% if f.readonly %} readonly{% endif %} placeholder="Enter {{ f.label|lower }}" />
+
+            {% comment %}
+            combo/datetime/custom exist for the HRMS mockup screens (Duty
+            Roster, Incentive Branch Mapping, Target Branch Mapping) --
+            combo is a type-to-filter single-select over a page-level record
+            list too rich for a plain <select> (it needs a subtitle, e.g. an
+            employee's code next to their name); datetime is `date` plus a
+            time-of-day; custom is an escape hatch for a field whose row
+            count/shape genuinely varies (Duty Roster's day-by-day builder,
+            Incentive's per-user-type breakdown table) -- the page's own JS
+            owns everything inside it, the drawer only reserves the slot.
+            {% endcomment %}
+            {% elif f.kind == "combo" %}
+              <div class="scr-combo" data-scr-combo="{{ f.id }}" data-combo-source="{{ f.combo_source }}" data-combo-key="{{ f.combo_key|default:'name' }}" data-combo-sub="{{ f.combo_sub|default:'' }}">
+                <input type="text" class="byky-input scr-combo-input" placeholder="{{ f.placeholder|default:'Search...' }}" autocomplete="off" />
+                <div class="scr-combo-list" hidden></div>
+                <input type="hidden" id="{{ f.id }}" data-field="{{ f.id }}" />
+              </div>
+
+            {% elif f.kind == "datetime" %}
+              <div class="byky-select-wrap">
+                <input type="text" id="{{ f.id }}" class="byky-input byky-date byky-datetime has-affix" data-field="{{ f.id }}"{% if f.readonly %} readonly{% endif %} placeholder="Select date &amp; time" />
+                <svg class="byky-date-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1M8 3v4M16 3v4M4 11h16"></path></svg>
+              </div>
+
+            {% elif f.kind == "custom" %}
+              <div class="byky-days-host" data-days-host="{{ f.id }}"></div>
 
             {% else %}
               <input type="text" id="{{ f.id }}" class="byky-input" data-field="{{ f.id }}"{% if f.lock_on_edit %} data-lock-on-edit="true"{% endif %}{% if f.readonly %} readonly{% endif %} placeholder="{{ f.placeholder|default_if_none:'' }}{% if not f.placeholder %}Enter {{ f.label|lower }}{% endif %}" />

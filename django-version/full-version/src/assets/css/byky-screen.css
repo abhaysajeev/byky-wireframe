@@ -617,3 +617,102 @@ textarea.scr-drawer-input { height: auto; min-height: 72px; padding: 10px 13px; 
 }
 .scr-upload:hover { border-color: #c2141a; color: #c2141a; background: #fff; }
 .scr-upload span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ── search-combo (type-to-filter single-select) ──────────────────────
+   Added for the HRMS Duty Roster/Incentive Branch Mapping/Target Branch
+   Mapping screens -- a plain <select> can't show a second line (an employee
+   code, a plan's % pill) next to each option, so this filters a richer
+   record list as you type. Works both as a drawer field (byky/partials/
+   drawer.html's "combo" kind) and a bare toolbar filter. */
+.scr-combo { position: relative; }
+.scr-combo-input { width: 100%; }
+.scr-combo-list {
+  position: absolute; top: calc(100% + 4px); left: 0; right: 0; z-index: 1091;
+  background: #fff; border: 1px solid #eeedf5; border-radius: 12px;
+  box-shadow: 0 18px 40px -18px rgba(26, 22, 64, 0.45); padding: 6px;
+  max-height: 240px; overflow-y: auto;
+}
+.scr-combo-list[hidden] { display: none; }
+.scr-combo-item { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding: 8px 10px; border-radius: 8px; cursor: pointer; }
+.scr-combo-item:hover, .scr-combo-item.is-active { background: #faf9fd; }
+.scr-combo-item-main { font-size: 12.5px; font-weight: 600; color: #1a1640; }
+.scr-combo-item-sub { font-size: 11px; color: #9490bb; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.scr-combo-empty { padding: 10px; font-size: 12px; color: #a9a6c4; text-align: center; }
+
+/* ── priority pill (P1 - P10) ─────────────────────────────────────────
+   Incentive/Target Branch Mapping: 1 = highest priority, 10 = lowest. */
+.scr-prio { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 4px 9px; border-radius: 99px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.scr-prio-high { background: #fdeced; color: #c2141a; }
+.scr-prio-medium { background: #fdf3e3; color: #8a5300; }
+.scr-prio-low { background: #f4f3f9; color: #6b6790; }
+
+/* ── "expiring soon" tag ──────────────────────────────────────────────
+   Sits next to a validity date range when valid_to is within 30 days of
+   this screen's fixed reference "today". */
+.scr-expiring { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 600; padding: 3px 8px; border-radius: 99px; background: #fdf3e3; color: #8a5300; border: 1px solid #f3dcae; margin-inline-start: 6px; white-space: nowrap; }
+
+/* ── allocation-total badge ───────────────────────────────────────────
+   Incentive's running "total % of collection" -- neutral until a plan's
+   rows sum past 100%, then it warns instead of silently being wrong. */
+.scr-alloc-badge { display: inline-flex; align-items: center; font-size: 12px; font-weight: 700; padding: 5px 11px; border-radius: 99px; background: #eaf1fd; color: #2b52a0; font-variant-numeric: tabular-nums; }
+.scr-alloc-badge.is-warn { background: #fdeced; color: #c2141a; }
+
+/* ── duty-count badge pair (Duty Roster State Wise grid) ──────────────
+   "2C" cashiers on duty / "3L" labour on duty, clickable to open the
+   Branch-Day records modal for that cell. */
+.scr-duty-badges { display: flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+.scr-duty-badge { border: none; cursor: pointer; font-size: 10.5px; font-weight: 700; padding: 3px 7px; border-radius: 7px; font-variant-numeric: tabular-nums; transition: filter 0.14s; }
+.scr-duty-badge:hover { filter: brightness(0.96); }
+.scr-duty-badge-c { background: #eaf1fd; color: #2b52a0; }
+.scr-duty-badge-l { background: #e9f8f0; color: #14764a; }
+.scr-duty-badge-empty { font-size: 11px; color: #c3bfd8; }
+
+/* ── month calendar grid (Duty Roster Employee View) ──────────────────
+   7-column CSS grid; each cell shows a status pill, shift time, branch and
+   a hover-reveal edit pencil. */
+.scr-cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; padding: 18px 20px; }
+.scr-cal-dow { font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase; color: #a9a6c4; text-align: center; padding-bottom: 4px; }
+.scr-cal-cell {
+  position: relative; min-height: 84px; border: 1px solid #f0eff7; border-radius: 11px; padding: 8px;
+  display: flex; flex-direction: column; gap: 4px; background: #fff; cursor: pointer; transition: border-color 0.14s;
+}
+.scr-cal-cell:hover { border-color: #d9d5ea; }
+.scr-cal-cell.is-today { border-color: #f3c3c5; background: #fdf5f5; }
+.scr-cal-date { font-size: 11.5px; font-weight: 700; color: #4b4770; }
+.scr-cal-cell .scr-badge { font-size: 9.5px; padding: 3px 7px; align-self: flex-start; }
+.scr-cal-shift { font-size: 10px; color: #9490bb; font-variant-numeric: tabular-nums; }
+.scr-cal-branch { font-size: 10px; color: #9490bb; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.scr-cal-edit {
+  position: absolute; top: 6px; right: 6px; width: 22px; height: 22px; border-radius: 7px; border: none;
+  background: #fff; color: #6b6790; display: grid; place-items: center; opacity: 0; transition: opacity 0.14s;
+  box-shadow: 0 2px 8px -2px rgba(26, 22, 64, 0.25); cursor: pointer;
+}
+.scr-cal-cell:hover .scr-cal-edit { opacity: 1; }
+
+/* ── week-block / day-column grid (Duty Roster Branch Roster + Add
+   Weekly Branch Roster drawer) ───────────────────────────────────────
+   7 day-cards in a row; each lists assigned staff as small removable
+   chips. Horizontally scrollable under 1024px per CLAUDE.md 4.6. */
+.scr-wk-grid { display: flex; gap: 10px; padding: 18px 20px; overflow-x: auto; }
+.scr-wk-day-card { flex: 1 1 150px; min-width: 150px; border: 1px solid #f0eff7; border-radius: 12px; background: #fbfaff; padding: 10px; display: flex; flex-direction: column; gap: 6px; }
+.scr-wk-day-head { font-size: 11px; font-weight: 700; color: #4b4770; }
+.scr-wk-day-date { font-size: 10px; color: #9490bb; margin-bottom: 4px; }
+.scr-wk-chip { display: flex; align-items: center; justify-content: space-between; gap: 6px; background: #fff; border: 1px solid #eeedf5; border-radius: 8px; padding: 6px 8px; font-size: 11px; }
+.scr-wk-chip-name { font-weight: 600; color: #1a1640; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.scr-wk-chip-time { font-size: 10px; color: #9490bb; font-variant-numeric: tabular-nums; }
+.scr-wk-chip-x { border: none; background: transparent; color: #c3bfd8; cursor: pointer; flex: 0 0 auto; display: grid; place-items: center; }
+.scr-wk-chip-x:hover { color: #c2141a; }
+.scr-wk-add { border: 1px dashed #d9d5ea; border-radius: 8px; background: transparent; color: #6b6790; font-size: 10.5px; font-weight: 600; padding: 6px 8px; cursor: pointer; text-align: center; }
+.scr-wk-add:hover { border-color: #c2141a; color: #c2141a; }
+
+/* ── header action menu (reuses .scr-menu-wrap/.scr-menu, repurposed
+   for a page-level split-button rather than a row's kebab) ──────────── */
+.scr-head-actions .scr-menu-wrap { position: relative; }
+.scr-head-actions .scr-menu { position: absolute; top: calc(100% + 6px); right: 0; left: auto; }
+
+/* ── generic key/value detail modal (byky/partials/detail_modal.html) ── */
+.scr-detail-rows { display: flex; flex-direction: column; gap: 0; }
+.scr-detail-row { display: flex; justify-content: space-between; gap: 16px; padding: 10px 0; border-bottom: 1px solid #f6f5fc; }
+.scr-detail-row:last-child { border-bottom: none; }
+.scr-detail-label { font-size: 11.5px; color: #9490bb; font-weight: 500; }
+.scr-detail-value { font-size: 12.5px; color: #1a1640; font-weight: 600; text-align: right; }

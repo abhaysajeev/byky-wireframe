@@ -1,7 +1,7 @@
 /**
  * Edit Transfer -- row 48's UAT remarks (client's feedback doc).
  *
- * Two independent pieces, both frontend-only (CLAUDE.md 1 -- nothing here
+ * Three independent pieces, all frontend-only (CLAUDE.md 1 -- nothing here
  * persists past the page session):
  *
  * 1. Cart -- the transfer's currently selected items, server-rendered as
@@ -13,6 +13,11 @@
  *    filtered by the chosen Inventory Type and with anything already in
  *    the cart excluded. Checking rows there and confirming moves them
  *    into the cart above.
+ * 3. Approve / Reject (row 49) -- also available on this page, not only
+ *    the list view's kebab (byky-ims-transfer-list.js has the list-row
+ *    version). Instant, no confirm dialog; locks the page afterwards --
+ *    Save Changes, cart Remove and Add Items all disable, matching "once
+ *    its done, then dont allow to edit/delete."
  */
 
 'use strict';
@@ -175,6 +180,57 @@
       updateCartCount();
       renderAddPool();
       if (addHint) addHint.textContent = 'Added ' + checked.length + ' item' + (checked.length === 1 ? '' : 's') + ' to the cart.';
+    });
+  }
+
+  // ── Approve / Reject (row 49) -- also available here, not only the list
+  // view's kebab. Instant, no confirm dialog; locks the page against
+  // further edits once decided, same as the list row does.
+  var decisionActions = document.getElementById('decision-actions');
+  var saveBtn = document.getElementById('save-changes-btn');
+
+  function toast(text) {
+    if (typeof Swal === 'undefined') return;
+    Swal.fire({
+      text: text,
+      icon: 'success',
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2500,
+      timerProgressBar: true
+    });
+  }
+
+  function lockPage(status, badgeClass, message) {
+    var statusCell = document.querySelector('[data-status-cell]');
+    var badge = statusCell && statusCell.querySelector('.scr-badge');
+    if (badge) {
+      badge.className = 'scr-badge ' + badgeClass;
+      badge.innerHTML = '<i></i>' + status;
+    }
+    if (saveBtn) saveBtn.disabled = true;
+    if (addToggle) addToggle.hidden = true;
+    cartRows.querySelectorAll('[data-cart-remove]').forEach(function (btn) { btn.hidden = true; });
+    if (decisionActions) {
+      var span = decisionActions.querySelector('.scr-help');
+      if (span) span.textContent = message;
+      var approveBtn = decisionActions.querySelector('[data-transfer-approve]');
+      var rejectBtn = decisionActions.querySelector('[data-transfer-reject]');
+      if (approveBtn) approveBtn.remove();
+      if (rejectBtn) rejectBtn.remove();
+    }
+  }
+
+  if (decisionActions) {
+    decisionActions.addEventListener('click', function (e) {
+      if (e.target.closest('[data-transfer-approve]')) {
+        lockPage('Completed', 'scr-badge-active', 'This transfer has been decided and is locked against further edits.');
+        toast('Transfer ' + (document.querySelector('.scr-crumb b') ? document.querySelector('.scr-crumb b').textContent.trim() : '') + ' approved and synced with ERP.');
+      } else if (e.target.closest('[data-transfer-reject]')) {
+        lockPage('Rejected', 'scr-badge-inactive', 'This transfer has been decided and is locked against further edits.');
+        toast('Transfer rejected.');
+      }
     });
   }
 

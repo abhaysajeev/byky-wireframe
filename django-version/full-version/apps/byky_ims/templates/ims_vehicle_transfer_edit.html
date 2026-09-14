@@ -21,11 +21,13 @@ a live audit trail.
 {% block vendor_css %}
 {{ block.super }}
 <link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/sweetalert2/sweetalert2.css' %}" />
 {% endblock vendor_css %}
 
 {% block vendor_js %}
 {{ block.super }}
 <script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/sweetalert2/sweetalert2.js' %}"></script>
 {% endblock vendor_js %}
 
 {% block page_css %}
@@ -51,7 +53,17 @@ a live audit trail.
         <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
         <b>{{ doc_no }}</b>
       </div>
-      <h1 class="scr-title">Edit Transfer {{ doc_no }}</h1>
+      <div style="display:flex; align-items:center; gap:10px">
+        <h1 class="scr-title">Edit Transfer {{ doc_no }}</h1>
+        {% if transfer_detail %}
+        <span data-status-cell>
+          {% if transfer_detail.status == 'Completed' %}<span class="scr-badge scr-badge-active"><i></i>Completed</span>
+          {% elif transfer_detail.status == 'In-Transit' %}<span class="scr-badge scr-badge-pending"><i></i>In-Transit</span>
+          {% elif transfer_detail.status == 'Rejected' %}<span class="scr-badge scr-badge-inactive"><i></i>Rejected</span>
+          {% else %}<span class="scr-badge scr-badge-pending"><i></i>Pending</span>{% endif %}
+        </span>
+        {% endif %}
+      </div>
       <p class="scr-sub">{{ purpose }}</p>
     </div>
     <div class="scr-head-actions">
@@ -332,10 +344,24 @@ a live audit trail.
   </div>
 
   <div class="scr-card scr-form-body">
-    <div class="scr-form-foot">
+    <div class="scr-form-foot" id="decision-actions">
+      {% if transfer_detail.status == "Pending" %}
+      <span class="scr-help" style="margin:0">Approve/Reject is one-time &mdash; the transfer locks against further edits once decided.</span>
       <div style="flex:1"></div>
+      <button type="button" class="scr-btn-danger" data-transfer-reject>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>
+        Reject
+      </button>
+      <button type="button" class="scr-btn-success" data-transfer-approve>
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+        Approve
+      </button>
+      {% else %}
+      <span class="scr-help" style="margin:0">This transfer has been decided and is locked against further edits.</span>
+      <div style="flex:1"></div>
+      {% endif %}
       <a href="{% url 'ims-vehicle-transfer-relocation' %}" class="scr-btn-secondary">Cancel</a>
-      <button type="button" class="scr-btn-primary">
+      <button type="button" class="scr-btn-primary" id="save-changes-btn" {% if transfer_detail.status != "Pending" %}disabled{% endif %}>
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
         Save Changes
       </button>

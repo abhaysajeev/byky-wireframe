@@ -213,3 +213,54 @@ def device_settings_counts(rows):
         "pending": sum(1 for r in rows if r["approval_status"] == "Pending"),
         "rejected": sum(1 for r in rows if r["approval_status"] == "Rejected"),
     }
+
+
+_APK_RELEASE_NOTES = [
+    "Fixes a receipt printer timeout on slow Bluetooth pairing and speeds up the daily sync check.",
+    "Adds offline queueing for card payments so a lost connection no longer blocks checkout.",
+    "Improves barcode scan accuracy in direct sunlight and reduces app cold-start time.",
+    "Patches a crash on the shift-close screen when the cashier test slot runs past midnight.",
+    "General stability fixes and updated station list caching.",
+]
+
+
+def apk_builds():
+    """Upload history for row 53's list view (Upload APK) -- past builds are
+    real rows on a grid now, not a single always-open form. The currently
+    active version (APK_VERSION) is just the newest row here, not a special
+    case, so it goes through the same list+drawer Edit/Delete kebab as every
+    older build. Release notes are representative wireframe copy, the same
+    spirit as the demo MAC addresses in devices() above -- not claimed to be
+    the client's real changelog."""
+    versions = [APK_VERSION, APK_VERSION_PREV, "1.12.77", "1.12.76", "1.12.75"]
+    today = datetime.date.today()
+    out = []
+    for i, v in enumerate(versions):
+        release_date = today - datetime.timedelta(days=i * 18 + 2)
+        emp = seed.EMPLOYEES[i % len(seed.EMPLOYEES)]
+        out.append(
+            {
+                "version": v,
+                "release_date": release_date.strftime("%d/%m/%Y"),
+                "uploaded_by": f"{emp['name']} ({emp['emp_no']})",
+                "file_name": f"byky-pos-{v}.apk",
+                "file_size_mb": round(18.4 + i * 0.3, 1),
+                "status": "Active" if v == APK_VERSION else "Inactive",
+                "release_notes": _APK_RELEASE_NOTES[i % len(_APK_RELEASE_NOTES)],
+            }
+        )
+    return out
+
+
+def apk_build_detail(version):
+    for b in apk_builds():
+        if b["version"] == version:
+            return b
+    return None
+
+
+def apk_build_counts(rows):
+    return {
+        "total": len(rows),
+        "active": sum(1 for r in rows if r["status"] == "Active"),
+    }

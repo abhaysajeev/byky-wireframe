@@ -274,11 +274,70 @@ class DeviceSettingsView(DeviceScreenView):
 
 
 class UploadApkView(DeviceScreenView):
+    """Row 53 of the client's feedback doc: rebuilt from a single
+    always-open upload form into a real Tier A list -- every past build is
+    its own row (Version, Release Date, Uploaded By, Status) with a kebab
+    of View/Edit/Delete, and "Upload New APK" opens the same upload form as
+    a drawer instead of it always sitting open on the page. View goes to a
+    full read-only detail page (device_upload_apk_detail.html), the same
+    split Device Approval's own View action uses, since a build's release
+    notes need more room than a drawer row gives them."""
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        rows = data.apk_builds()
+        for i, b in enumerate(rows):
+            b["json_id"] = f"scr-record-apk-{i}"
+            b["fields_json"] = {
+                "version": b["version"],
+                "release_notes": b["release_notes"],
+            }
         context.update(
             {
+                "apk_builds": rows,
+                "apk_counts": data.apk_build_counts(rows),
                 "current_apk_version": data.APK_VERSION,
+                "spec": {
+                    "scr_name": "apk",
+                    "title_field": "version",
+                    "add_label": "Upload New APK",
+                    "drawer_id": "offcanvasUploadApk",
+                    "sections": [
+                        {
+                            "title": "",
+                            "fields": [
+                                {
+                                    "id": "apk_file",
+                                    "label": "APK File",
+                                    "kind": "file",
+                                    "required": True,
+                                    "help": ".apk file from local disk. Devices fetch and install it from here on their next update check.",
+                                },
+                                {
+                                    "id": "version",
+                                    "label": "Version Code",
+                                    "kind": "text",
+                                    "required": True,
+                                    "lock_on_edit": True,
+                                },
+                                {"id": "release_notes", "label": "Release Notes", "kind": "textarea"},
+                            ],
+                        }
+                    ],
+                },
+            }
+        )
+        return context
+
+
+class UploadApkDetailView(DeviceScreenView):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        version = self.kwargs.get("version")
+        context.update(
+            {
+                "version": version,
+                "build_detail": data.apk_build_detail(version),
             }
         )
         return context

@@ -6,12 +6,17 @@
 {% comment %}
 New module, not one of the 16 FSD modules -- requested against the client's
 RMS Web feedback doc (RMS WEB 07.09.2026-1.pdf, "Device Management" page).
-Was a modal hanging off Device Settings' "More Actions" menu; promoted to
-its own top-level sidebar entry (row 53) now that menu is gone (row 51).
-Same fields and copy as the old modal, just as a first-class page: the
-fleet's Android devices poll this build and self-update from it, which is
-why Version Code and the currently-active build are both shown here rather
-than only the upload form.
+Row 53 (RMS WEB APK UI.xlsx): rebuilt again, from a single always-open
+upload form into a real Tier A list -- every past build is its own row,
+with a kebab of View/Edit/Delete, matching the list+drawer pattern the rest
+of the module (Device Mapping, Device Settings) already uses. "Upload New
+APK" opens the same form as a drawer (byky/partials/drawer.html) instead of
+it always sitting open on the page.
+
+View opens a full read-only detail page (device_upload_apk_detail.html),
+not a drawer -- the same split Device Approval's own View action uses,
+since a build's release notes read better with room than a drawer row
+gives them.
 
 Frontend-only, per CLAUDE.md 1: the file is accepted client-side, nothing
 uploads anywhere in this wireframe.
@@ -40,58 +45,102 @@ uploads anywhere in this wireframe.
       <h1 class="scr-title">Upload APK</h1>
       <p class="scr-sub">{{ purpose }}</p>
     </div>
-  </div>
-
-  <div class="scr-card">
-    <div class="scr-form-head">
-      <div>
-        <div class="scr-form-title-row">
-          <h2 class="scr-form-title">Current Build</h2>
-          <span class="scr-form-badge">Active</span>
-        </div>
-        <p class="scr-form-sub">The build every device on the fleet is currently running or updating to.</p>
-      </div>
-    </div>
-    <div class="scr-form-body">
-      <div class="scr-grid">
-        <div class="scr-field">
-          <label class="scr-label">Version Code</label>
-          <input type="text" class="scr-input" value="{{ current_apk_version }}" readonly />
-        </div>
-      </div>
+    <div class="scr-head-actions">
+      <button type="button" class="scr-btn-primary" data-scr-open="apk:add">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>
+        Upload New APK
+      </button>
     </div>
   </div>
 
-  <div class="scr-card">
-    <div class="scr-form-head">
-      <div>
-        <div class="scr-form-title-row"><h2 class="scr-form-title">Publish New Build</h2></div>
-        <p class="scr-form-sub">Devices poll this build and self-update once it's marked active.</p>
-      </div>
+  <div class="scr-tiles">
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-blue">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ apk_counts.total }}</div><div class="scr-tile-lab">Builds uploaded</div></div>
     </div>
-    <div class="scr-form-body">
-      <div class="scr-grid">
-        <div class="scr-field" style="grid-column:1 / -1">
-          <label class="scr-label">APK File<span class="scr-required">*</span></label>
-          <input type="file" class="scr-input" accept=".apk" style="padding:8px 12px; height:auto" />
-          <div class="scr-help">.apk file from local disk. Devices fetch and install it from here on their next update check.</div>
-        </div>
-        <div class="scr-field">
-          <label class="scr-label">Version Code<span class="scr-required">*</span></label>
-          <input type="text" class="scr-input" />
-        </div>
-        <div class="scr-field" style="grid-column:1 / -1">
-          <label class="scr-label">Release Notes</label>
-          <textarea class="scr-input" rows="3" style="height:auto; padding:10px 12px"></textarea>
-        </div>
+    <div class="scr-tile">
+      <span class="scr-tile-ico scr-tile-ico-green">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="m5 13 4 4L19 7"></path></svg>
+      </span>
+      <div><div class="scr-tile-val">{{ current_apk_version }}</div><div class="scr-tile-lab">Active build</div></div>
+    </div>
+  </div>
+
+  <div class="scr-card" data-scr-noun-singular="build" data-scr-noun-plural="builds">
+    <div class="scr-toolbar">
+      <div class="scr-search">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#9490bb" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.6-3.6"></path></svg>
+        <input type="text" placeholder="Search version or uploaded by" />
       </div>
-      <div class="scr-form-foot">
-        <div class="scr-form-actions" style="margin-left:auto">
-          <button type="button" class="scr-btn-secondary">Cancel</button>
-          <button type="button" class="scr-btn-primary">Upload &amp; Publish</button>
-        </div>
+      <span class="scr-toolbar-count">{{ apk_builds|length }} builds</span>
+    </div>
+
+    <div class="scr-table-scroll scr-sb">
+      <table>
+        <thead>
+          <tr>
+            <th>Version Code</th>
+            <th>Release Date</th>
+            <th>Uploaded By</th>
+            <th>File</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in apk_builds %}
+          <tr class="scr-row" data-search="{{ b.version|lower }} {{ b.uploaded_by|lower }}" data-record-id="{{ b.json_id }}">
+            <td><span class="scr-code">{{ b.version }}</span></td>
+            <td class="scr-contact">{{ b.release_date }}</td>
+            <td class="scr-contact">{{ b.uploaded_by }}</td>
+            <td class="scr-contact">{{ b.file_name }} · {{ b.file_size_mb }} MB</td>
+            <td><span class="scr-badge {% if b.status == 'Active' %}scr-badge-approved{% else %}scr-badge-pending{% endif %}"><i></i>{{ b.status }}</span></td>
+            <td>
+              <div class="scr-row-actions">
+                <div class="scr-menu-wrap">
+                  <button type="button" class="scr-icon-btn" title="More" data-scr-menu-toggle>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.6"></circle><circle cx="12" cy="12" r="1.6"></circle><circle cx="12" cy="19" r="1.6"></circle></svg>
+                  </button>
+                  <div class="scr-menu" hidden>
+                    <a class="scr-menu-item" href="{% url 'device-upload-apk-detail' version=b.version %}">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                      View
+                    </a>
+                    <button type="button" class="scr-menu-item" data-scr-open="apk:edit">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4l10-10a2.1 2.1 0 0 0-3-3L5 17z"></path><path d="M14.5 6.5 17.5 9.5"></path></svg>
+                      Edit
+                    </button>
+                    <button type="button" class="scr-menu-item scr-menu-item-danger" title="Not wired in this demo">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m3 0-1 13a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12ZM10 11v6M14 11v6"></path></svg>
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </tr>
+          {{ b.fields_json|json_script:b.json_id }}
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="scr-pager">
+      <span class="scr-pager-info">Showing {{ apk_builds|length }} of {{ apk_builds|length }}</span>
+      <div class="scr-pager-nav">
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m14 6-6 6 6 6"></path></svg>
+        </button>
+        <span class="scr-pager-current">1</span>
+        <button type="button" class="scr-pager-btn" disabled>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 6 6 6-6 6"></path></svg>
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+{% include "byky/partials/drawer.html" with spec=spec module_label="Device Management · Upload APK" %}
 {% endblock %}

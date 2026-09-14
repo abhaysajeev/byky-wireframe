@@ -1,0 +1,117 @@
+{% extends layout_path %}
+{% load static %}
+
+{% block title %}APK {{ version }} - Device Management{% endblock title %}
+
+{% comment %}
+Full detail of one uploaded APK build -- reachable from Upload APK's own
+View action. Not a drawer: release notes and file detail read better with
+full width than a drawer row gives them, the same split Device Approval's
+own View action uses (device_device_approval_detail.html is the structural
+twin in this module).
+{% endcomment %}
+
+{% block page_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'css/byky-screen.css' %}" />
+{% endblock page_css %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/byky-screen.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<div class="scr">
+
+  <div class="scr-head">
+    <div>
+      <div class="scr-crumb">
+        <span>Device Management</span>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <a href="{% url 'device-upload-apk' %}">Upload APK</a>
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"></path></svg>
+        <b>{{ version }}</b>
+      </div>
+      <h1 class="scr-title">APK {{ version }}</h1>
+      <p class="scr-sub">Full detail of this uploaded build.</p>
+    </div>
+    <div class="scr-head-actions">
+      <a href="{% url 'device-upload-apk' %}" class="scr-btn">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"></path></svg>
+        Back to list
+      </a>
+    </div>
+  </div>
+
+  {% if build_detail %}
+  <div class="scr-card">
+    <div class="scr-form-head">
+      <div>
+        <div class="scr-form-title-row">
+          <h2 class="scr-form-title">{{ build_detail.version }}</h2>
+          <span class="scr-badge {% if build_detail.status == 'Active' %}scr-badge-approved{% else %}scr-badge-pending{% endif %}"><i></i>{{ build_detail.status }}</span>
+        </div>
+        <p class="scr-form-sub">Released {{ build_detail.release_date }} by {{ build_detail.uploaded_by }}.</p>
+      </div>
+    </div>
+
+    <div class="scr-form-body">
+      <div class="scr-section">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Build</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field">
+            <label class="scr-label">Version Code</label>
+            <input type="text" class="scr-input" value="{{ build_detail.version }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Release Date</label>
+            <input type="text" class="scr-input" value="{{ build_detail.release_date }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">Uploaded By</label>
+            <input type="text" class="scr-input" value="{{ build_detail.uploaded_by }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">File Name</label>
+            <input type="text" class="scr-input" value="{{ build_detail.file_name }}" readonly />
+          </div>
+          <div class="scr-field">
+            <label class="scr-label">File Size</label>
+            <input type="text" class="scr-input" value="{{ build_detail.file_size_mb }} MB" readonly />
+          </div>
+        </div>
+      </div>
+
+      <div class="scr-section" style="margin-bottom:0">
+        <div class="scr-section-head">
+          <h3 class="scr-section-title">Release Notes</h3>
+          <div class="scr-section-rule"></div>
+        </div>
+        <div class="scr-grid">
+          <div class="scr-field" style="grid-column:1 / -1">
+            <textarea class="scr-input" rows="4" style="height:auto; padding:10px 12px" readonly>{{ build_detail.release_notes }}</textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% else %}
+  <div class="scr-card">
+    <div class="scr-empty" style="padding:40px 20px">
+      <span class="scr-empty-ico">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#a9a6c4" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5"></path><path d="M12 16h.01"></path></svg>
+      </span>
+      <div>
+        <div class="scr-empty-title">Build not found</div>
+        <p class="scr-empty-sub">"{{ version }}" doesn't match any uploaded build.</p>
+      </div>
+      <a href="{% url 'device-upload-apk' %}" class="scr-btn-primary">Back to Upload APK</a>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

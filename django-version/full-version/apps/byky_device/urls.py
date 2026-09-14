@@ -62,4 +62,15 @@ urlpatterns = [
         ),
         name="device-upload-apk",
     ),
+    path(
+        "device/upload-apk/<str:version>/",
+        views.UploadApkDetailView.as_view(
+            template_name="device_upload_apk_detail.html",
+            screen_title="APK Build Detail",
+            module_label="Device Management",
+            tier="A",
+            purpose="Full detail of one uploaded APK build, read-only.",
+        ),
+        name="device-upload-apk-detail",
+    ),
 ]
